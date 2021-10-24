@@ -8,6 +8,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
 wa.create({headless: false}).then(client => start(client));
+// Constant storing phone numbers of trusted members.
 const test = {"יצקן": "972543293155",
 "אריאל": "972543293155",
 "ארבל": "972509022456",
@@ -21,6 +22,9 @@ const test = {"יצקן": "972543293155",
 "איתן" : "972586809911"
 }
 
+/*
+A function to begin the client and wait for a message to be sent.
+*/
 function start(client) {
     client.onMessage(async message => {
         if (message.quotedMsgObj == null){
@@ -33,6 +37,11 @@ function start(client) {
     });
 }
 
+/*
+A function to check whther or not the given text contains a filter keyword.
+Input: Given text, client that has recieved the text (Bot), Id of the chat in which the text was sent, Id of the message that is being checked.
+Output: 
+*/
 async function addOrDelFilterToDB(text, client, chatId, messageId) {
     let flag = 0;
     if (text.includes("הסר")){
