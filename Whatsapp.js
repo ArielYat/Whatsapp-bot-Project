@@ -136,12 +136,12 @@ async function check(client, isquoted, chatId, text, userId, messageId){
 	}
     await  stripLinkFromtext(client, chatId, text, messageId);
 
-    if (text.includes("הוסף פילטר") || text.includes("הסר פילטר") ) {
+    if (text.startsWith("הוסף פילטר") || text.startsWith("הסר פילטר" ) || text.startsWith("ערוך פילטר" )) {
             await addOrDelFilterToDB(text, client, chatId, messageId);
             return 0;
     }
     
-    if(text.includes("הראה פילטרים")){
+    if(text.startsWith("הראה פילטרים")){
         await ShowFilters(client, chatId);
     }
     else{
