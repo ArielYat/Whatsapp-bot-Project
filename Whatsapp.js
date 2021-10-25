@@ -48,9 +48,12 @@ async function addOrDelFilterToDB(text, client, chatId, messageId) {
         flag = 1;
         text  = text.replace("הסר פילטר", "");
     }
-    else{
+    else if (text.includes("הוסף")){
         flag = 2;
         text  = text.replace("הוסף פילטר", "");
+    } else {
+	flag = 3;
+	text = text.replace ("ערוך פילטר", "");
     }
 
     if(text.includes("-") || flag === 1){
@@ -68,14 +71,26 @@ async function addOrDelFilterToDB(text, client, chatId, messageId) {
                     if (err) throw err;
                 });
                 client.reply(chatId, "הפילטר " + myArr[0] + " נוסף בהצלחה", messageId)
-            } else {
+            } else if (flag == 1){
                 const myquery = {filter: myArr[0].trim()};
                 dbo.collection(chatId).deleteOne(myquery, function (err, obj) {
                     if (err) throw err;
                 });
                 if (err) throw err;
                 client.reply(chatId, "הפילטר " + myArr[0] + " הוסר בהצלחה", messageId);
-            }
+            } else {
+		//TODO: Make this part of the code not suck by adding an editFilter(filterName, newResponse) method to the filter object thingy which exists somewhere (I hope), but I can't seem to find it.
+		const myquery = {filter: myArr[0].trim()};
+                dbo.collection(chatId).deleteOne(myquery, function (err, obj) {
+                    if (err) throw err;
+                });
+                if (err) throw err;
+		const myobj = {filter: myArr[0].trim(), filter_reply: myArr[1].trim()};
+                dbo.collection(chatId).insertOne(myobj, function (err, res) {
+                    if (err) throw err;
+                });
+                client.reply(chatId, "הפילטר " + myArr[0] + " נערך בהצלחה", messageId)
+	    }	
             });
     }
     else{
