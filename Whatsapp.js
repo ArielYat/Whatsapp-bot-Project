@@ -6,6 +6,7 @@ const theSameKey = defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a47
 const sleep = require('sleep');
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
+const restUsers = [];
 
 wa.create({headless: false}).then(client => start(client));
 // Constant storing phone numbers of trusted members.
@@ -136,12 +137,40 @@ async function check(client, isquoted, chatId, text, userId, messageId){
 		return -1;
 	}
     await  stripLinkFromtext(client, chatId, text, messageId);
+    if (text.startsWith("הוסף פילטר") || text.startsWith("הסר פילטר") || text.startsWith("ערוך פילטר")){
+        if(restUsers.includes(userId)){
+            await client.sendText(chatId, "אתה לא רשאי להוסיף ולהסיר פילטרים בוט");
+            return;
+        }
 
-    if (text.startsWith("הוסף פילטר") || text.startsWith("הסר פילטר" ) || text.startsWith("ערוך פילטר" )) {
-            await addOrDelFilterToDB(text, client, chatId, messageId);
-            return 0;
+        await addOrDelFilterToDB(text, client, chatId, messageId);
+        return 0;
     }
-    
+
+    if(text.startsWith("חסום גישה")){
+        if(userId == "972543293155@c.us"){
+            restUsers.push(quotedParticipant);
+            await client.sendReplyWithMentions(chatId, "המשתמש @" + quotedParticipant + " נחסם בהצלחה ")
+            return;
+        }
+        else{
+            await client.sendText(chatId, "רק המאסטר שלי יכול לחסום גישה");
+        }
+        
+    }
+
+    if(text.startsWith("אפשר גישה")){
+        if(userId == "972543293155@c.us"){
+            const userIdIndex = restUsers.indexOf(quotedParticipant);
+            restUsers.splice(userIdIndex, 1);
+            await client.sendReplyWithMentions(chatId, "המשתמש @" + quotedParticipant + " שוחרר בהצלחה ")
+            return;
+        }
+        else{
+            await client.sendText(chatId, "רק המאסטר שלי יכול לאפשר גישה");
+        }
+        
+    }
     if(text.startsWith("הראה פילטרים")){
         await ShowFilters(client, chatId);
     }
