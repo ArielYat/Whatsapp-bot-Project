@@ -28,7 +28,9 @@ async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMe
     let stringWithMultiTagNames = "";
     if (text_Array[2].startsWith("ו")){
         for (let i = 1; i < text_Array.length; i++) {
-            stringWithMultiTagNames += "@"+ phoneDict[text_Array[i].replace("ו", "")];
+            if(phoneDict[text_Array[i].replace("ו", "")] != null){
+                stringWithMultiTagNames += "@"+ phoneDict[text_Array[i].replace("ו", "")];
+            }
         }
         await client.sendReplyWithMentions(chatID, stringWithMultiTagNames, messageSenderId)
     }
@@ -36,7 +38,12 @@ async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMe
         //remove tag and name of the member from the message
         let messageForSend = textMessage.replace(text_Array[1], "");
         messageForSend = messageForSend.replace("תייג", "");
-        await client.sendReplyWithMentions(chatID, "@" + phoneDict[text_Array[1]] + "" + messageForSend, messageSenderId);
+        if(phoneDict[text_Array[1]] != null){
+            await client.sendReplyWithMentions(chatID, "@" + phoneDict[text_Array[1]] + "" + messageForSend, messageSenderId);
+        }
+        else{
+            await client.reply(chatID, "המשתמש שניסית לתייג לא קיים במאגר שלי", messageSenderId);
+        }
     }
 }
 //input client, message
@@ -44,7 +51,7 @@ async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMe
 async function CheckIfMessageContainTag(client, message) {
     let textMessage = message.body;
     const chatID = message.chat.id;
-    let messageSenderId = null;
+    let messageSenderId = message.id;
     if (message.quotedMsg != null){
         messageSenderId = message.quotedMsg.id;
     }
@@ -56,6 +63,9 @@ async function CheckIfMessageContainTag(client, message) {
         }
         else if(text_Array[1] in phoneDict){
             await client.sendReplyWithMentions(chatID, "@" + phoneDict[text_Array[1]], messageSenderId);
+        }
+        else{
+            await client.sendReplyWithMentions(chatID, "אני לא בטוח את מי אתה מנסה לתייג, אבל הוא לא קיים במאגר שלי", messageSenderId);
         }
     }
 
@@ -188,7 +198,7 @@ async function HandleFilters(client, message) {
     const chatID = message.chat.id;
     const messageId = message.id;
     const author = message.sender.id
-    if (!(author in bannedUsers)) {
+    if (!(bannedUsers.includes(author))) {
         if (textMessage.startsWith("הוסף פילטר")) {
             const trimmedMessage = textMessage.replace("הוסף פילטר", "").trim();
             await checkFilterAndAdd(client, chatID, trimmedMessage, messageId);
@@ -200,6 +210,9 @@ async function HandleFilters(client, message) {
         else if (textMessage.startsWith("ערוך פילטר")) {
             const trimmedMessage = textMessage.replace("ערוך פילטר", "").trim();
             await checkFilterAndEdit(client, chatID, trimmedMessage, messageId);
+        }
+        else{
+            await responseWithFilterIfExist(client, message)
         }
     }
 }
@@ -231,7 +244,7 @@ async function banUsers(client, message) {
         if (textMessage.startsWith("חסום גישה")) {
             if (userID == "972543293155@c.us") {
                 bannedUsers.push(responseAuthor);
-                await client.sendTextWithMentions(chatID,  "המשתמש " + responseAuthor + "\n נחסם בהצלחה \n, may god will mercy your soul", messageId);
+                await client.sendReplyWithMentions(chatID,  "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
             }
             else {
                 client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
@@ -242,7 +255,7 @@ async function banUsers(client, message) {
             if (userID == "972543293155@c.us") {
                 const userIdIndex = bannedUsers.indexOf(responseAuthor);
                 bannedUsers.splice(userIdIndex, 1);
-                await client.sendTextWithMentions(chatID, "המשתמש " + responseAuthor + "\n שוחרר בהצלחה", messageId);
+                await client.sendReplyWithMentions(chatID,  "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
             }
             else{
                 await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
@@ -268,11 +281,12 @@ async function responseWithFilterIfExist(client, message) {
 
 function start(client) {
     client.onMessage(async message => {
-        await CheckIfMessageContainTag(client, message);
-        await stripLinks(client, message);
-        await responseWithFilterIfExist(client, message)
-        await HandleFilters(client, message);
-        await responseWithFilters(client, message);
-        await banUsers(client, message)
+        if(message.body != null){
+            await CheckIfMessageContainTag(client, message);
+            await stripLinks(client, message);
+            await banUsers(client, message);
+            await HandleFilters(client, message);
+            await responseWithFilters(client, message);
+        }
     });
 }

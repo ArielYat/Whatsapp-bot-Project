@@ -2,3 +2,8 @@ node_modules
 package-lock.json
 session.data.json
 logs
+
+# managed by open-wa
+**.data.json
+**.node-persist**
+# end managed by open-wa
