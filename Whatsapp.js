@@ -92,44 +92,46 @@ async function stripLinks(client, message) {
 
 function parseAndAnswerResults(client, chatID, res, url, messageId) {
     let prettyStringForAnswer = "";
-    const parsedRes = JSON.parse(res);
-    let counter = 0;
-    const dataParsed = parsedRes.data.attributes.last_analysis_results;
-    for(let attribute in dataParsed){
-        if (dataParsed[attribute].result != "clean" && dataParsed[attribute].result != "unrated"){
-            prettyStringForAnswer += (attribute+": "+dataParsed[attribute].result) + "\n";
-            counter++;
+    try{
+        const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
+        let counter = 0;
+        const dataParsed = parsedRes.data.attributes.last_analysis_results;
+        for(let attribute in dataParsed){
+            if (dataParsed[attribute].result != "clean" && dataParsed[attribute].result != "unrated"){
+                prettyStringForAnswer += (attribute+": "+dataParsed[attribute].result) + "\n";
+                counter++;
+            }
         }
+        prettyStringForAnswer+= "\n" + counter + " Anti virus engines detected this link as malicious";
+        client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
+    } catch(error){
+        client.reply(chatID, "" + error, messageId);
     }
-    prettyStringForAnswer+= "\n" + counter + " Anti virus engines detected this link as malicious";
-    client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
 }
 
 async function checkUrls(client, chatID, url, messageId){
     await client.reply(chatID, url + "\n" + "בודק", messageId);
     const hashed = nvt.sha256(url)
     //TODO: make this code pretty
-    const theSameObject = defaultTimedInstance.urlLookup(hashed, function(err, res){
+    const theSameObject = defaultTimedInstance.urlLookup(hashed, function(err, res) {
         if (err) {
-            const theSameObject1 = defaultTimedInstance.initialScanURL(url, function(err, res){
-                if (err){
+            const theSameObject1 = defaultTimedInstance.initialScanURL(url, function (err, res) {
+                if (err) {
                     client.reply(chatID, "שגיאה בהעלאת הקישור", messageId);
-                    return;
                 }
-                sleep.sleep(5);
-                const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function(err, res){
-                    if (err) {
-                        client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
-                        return;
-                    }
-                    parseAndAnswerResults(client, res, url, chatID, messageId);
-                });
+                else {
+                    sleep.sleep(5)
+                    const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
+                        if (err)
+                            client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
+                        else
+                            parseAndAnswerResults(client, chatID, res, url, messageId);
+                    });
+                }
             });
         }
-        else{
+        else
             parseAndAnswerResults(client, chatID, res, url, messageId);
-        }
-
     });
 
 }
