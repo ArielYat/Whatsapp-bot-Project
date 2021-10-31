@@ -378,7 +378,7 @@ async function responseWithFilterIfExist(client, message) {
         //will make function of reply_message
         for (let i = 0; i < result.length; i++) {
             if(textMessage.includes(result[i].filter)){
-                client.reply(chatID, result[i].filter_reply, messageId);
+                client.sendReplyWithMentions(chatID, result[i].filter_reply, messageId);
             }
         }
     });
