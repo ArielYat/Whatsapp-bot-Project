@@ -7,6 +7,7 @@ const sleep = require('sleep');
 const DAL = require("./DataBase");
 const bannedUsers = [];
 
+/*
 const phoneDict = {"יצקן": "972543293155",
     "אריאל": "972543293155",
     "ארבל": "972509022456",
@@ -23,54 +24,147 @@ const phoneDict = {"יצקן": "972543293155",
     "אסף" : "972506666641",
     "שבתאי" : "972586715880"
 }
+*/
 
 wa.create({headless: false}).then(client => start(client));
 
 //check if message contain multi names
-async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMessage, messageSenderId) {
+async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMessage, messageSenderId, number) {
     let stringWithMultiTagNames = "";
     if (text_Array[2].startsWith("ו")){
-        for (let i = 1; i < text_Array.length; i++) {
-            if(phoneDict[text_Array[i].replace("ו", "")] != null){
-                stringWithMultiTagNames += "@"+ phoneDict[text_Array[i].replace("ו", "")];
+        await DAL.ReturnGroupsExistOnDataBase(chatID, function (result){
+            for (let i = 1; i < text_Array.length; i++) {
+                let person = text_Array[i].replace("ו", "");
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].groupID === chatID) {
+                        const res = result[i];
+                        if (person === res.Name) {
+                            stringWithMultiTagNames += "@" + res.Number;
+                        }
+                    }
+                }
             }
-        }
-        await client.sendReplyWithMentions(chatID, stringWithMultiTagNames, messageSenderId)
+            console.log(stringWithMultiTagNames);
+            client.sendReplyWithMentions(chatID, stringWithMultiTagNames, messageSenderId)
+        });
     }
     else{
         //remove tag and name of the member from the message
         let messageForSend = textMessage.replace(text_Array[1], "");
         messageForSend = messageForSend.replace("תייג", "");
-        if(phoneDict[text_Array[1]] != null){
-            await client.sendReplyWithMentions(chatID, "@" + phoneDict[text_Array[1]] + "" + messageForSend, messageSenderId);
-        }
-        else{
-            await client.reply(chatID, "המשתמש שניסית לתייג לא קיים במאגר שלי", messageSenderId);
-        }
+        await client.sendReplyWithMentions(chatID, "@" + number + "" + messageForSend, messageSenderId);
     }
 }
-//input client, message
-//check if message body contain name of on the trusted persons of the group
-async function CheckIfMessageContainTag(client, message) {
+
+async function checkGroupTagListMembers(client, chatID, textMessage, messageSenderId) {
+    const text_Array = textMessage.split(" ");
+    await DAL.ReturnGroupsExistOnDataBase(chatID, function (result){
+        for (let i = 0; i < result.length; i++) {
+            if (result[i].groupID === chatID ){
+                const res = result[i];
+                if(text_Array[1] === res.Name){
+                    CheckIfMessageContainTag(client, chatID, textMessage, messageSenderId, text_Array, res);
+                    return;
+                }
+            }
+        }
+        client.reply(chatID, "האדם לא מופיע במאגר של קבוצה זו", messageSenderId)
+    });
+}
+
+async function CheckIfMessageContainTag(client, chatID, textMessage, messageSenderId, text_Array, res){
+    //if message is longer then one word, message has sent to check multi names func
+    if (text_Array.length > 2){
+        await CheckIfMessageContainMultiTags(client, chatID, text_Array, textMessage, messageSenderId, res.Number);
+    }
+    else {
+        await client.sendReplyWithMentions(chatID, "@" + res.Number, messageSenderId);
+    }
+}
+
+async function addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage){
+    if(!(trimmedMessage.includes("-"))){
+        await client.sendText(chatID, "אני חייב שיהיה - בהודעה בשביל להוסיף מישהו לתיוג");
+    }
+
+    else {
+        const array_Message = trimmedMessage.split("-");
+        const tag = array_Message[0].trim();
+        const tagNumber = array_Message[1].trim();
+        await DAL.addTagToDataBase(tag, tagNumber, chatID, function (tag) {
+            client.reply(chatID, "האדם " + tag + " נוסף בהצלחה", messageId);
+        });
+    }
+}
+async function remMemberFromTag(client, chatID, tag, messageId) {
+    await DAL.checkIfTagExist(tag, chatID, function (error, tag, chatID) {
+        if(error){
+            client.reply(chatID,  "אני לא חושב שאני יכול למחוק תיוג של אדם שלא מוגדר במערכת", messageId);
+        }
+        else{
+            DAL.remTagFromDB(tag, chatID, function (tag) {
+                client.reply(chatID, "התיוג של האדם " + tag + " נמחק בהצלחה", messageId);
+            });
+        }
+    });
+
+}
+
+async function responseWithTagList(client, message) {
+    const textMessage = message.body;
+    const chatID = message.chat.id;
+    const messageId = message.id;
+    let messageSenderId = message.id;
+    if (message.quotedMsg != null) {
+        messageSenderId = message.quotedMsg.id;
+    }
+
+    let tagMessage = "";
+    let tagEveryOne = "";
+    if(textMessage.startsWith("הראה רשימת חברים לתיוג")){
+        await DAL.returnAllTagsWIthResponse(chatID, function (result){
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].groupID === chatID) {
+                    const res = result[i];
+                    tagMessage += ("" + res.Name + " - " + res.Number+ "\n");
+                }
+            }
+            client.reply(chatID, tagMessage, messageId);
+        });
+    }
+    else if(textMessage.startsWith("תיוג כולם")){
+        await DAL.returnAllTagsWIthResponse(chatID, function (result){
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].groupID === chatID) {
+                    const res = result[i];
+                    tagEveryOne += ("@" + res.Number + " \n");
+                }
+            }
+            client.sendReplyWithMentions(chatID, tagEveryOne, messageSenderId);
+        });
+    }
+}
+
+async function handleTag(client, message) {
     let textMessage = message.body;
     const chatID = message.chat.id;
+    let messageId = message.id;
     let messageSenderId = message.id;
     if (message.quotedMsg != null){
         messageSenderId = message.quotedMsg.id;
     }
     if (textMessage.startsWith("תייג")){
-        const text_Array = textMessage.split(" ");
-        //if message is longer then one word, message has sent to check multi names func
-        if (text_Array.length > 2){
-            await CheckIfMessageContainMultiTags(client, chatID, text_Array, textMessage, messageSenderId);
-        }
-        else if(text_Array[1] in phoneDict){
-            await client.sendReplyWithMentions(chatID, "@" + phoneDict[text_Array[1]], messageSenderId);
-        }
-        else{
-            await client.sendReplyWithMentions(chatID, "אני לא בטוח את מי אתה מנסה לתייג, אבל הוא לא קיים במאגר שלי", messageSenderId);
-        }
+        await checkGroupTagListMembers(client, chatID, textMessage, messageSenderId);
     }
+    else if(textMessage.startsWith("הוסף חבר לתיוג")){
+        const trimmedMessage = textMessage.replace("הוסף חבר לתיוג", "").trim();
+        await addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage);
+    }
+    else if(textMessage.startsWith("הסר חבר מתיוג")){
+        const trimmedMessage = textMessage.replace("הסר חבר מתיוג", "").trim();
+        await remMemberFromTag(client, chatID, trimmedMessage, messageId);
+    }
+
 
 }
 
@@ -118,16 +212,22 @@ async function checkUrls(client, chatID, url, messageId){
             const theSameObject1 = defaultTimedInstance.initialScanURL(url, function (err, res) {
                 if (err) {
                     client.reply(chatID, "שגיאה בהעלאת הקישור", messageId);
+                    return
                 }
-                else {
-                    sleep.sleep(5)
-                    const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
-                        if (err)
-                            client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
-                        else
-                            parseAndAnswerResults(client, chatID, res, url, messageId);
-                    });
-                }
+                const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
+                    if (err){
+                        const hashed = nvt.sha256(url.toLowerCase());
+                        const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
+                            if(err){
+                                client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
+                                return;
+                            }
+                            parseAndAnswerResults(client, chatID, res, url.toLowerCase(), messageId);
+                        });
+                    }
+                    else
+                        parseAndAnswerResults(client, chatID, res, url, messageId);
+                });
             });
         }
         else
@@ -287,11 +387,12 @@ async function responseWithFilterIfExist(client, message) {
 function start(client) {
     client.onMessage(async message => {
         if(message.body != null){
-            await CheckIfMessageContainTag(client, message);
+            await handleTag(client, message);
             await stripLinks(client, message);
             await banUsers(client, message);
             await HandleFilters(client, message);
             await responseWithFilters(client, message);
+            await responseWithTagList(client, message);
         }
     });
 }
