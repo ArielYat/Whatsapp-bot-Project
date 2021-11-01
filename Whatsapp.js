@@ -368,11 +368,7 @@ async function banUsers(client, message) {
 
     }
 }
-async function checkRegexForFilter(textMessage, word){
-    let regex = new RegExp("[^|.][" + word + "]+$", "g");
-    console.log(regex.test(textMessage));
 
-}
 async function responseWithFilterIfExist(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
@@ -382,11 +378,13 @@ async function responseWithFilterIfExist(client, message) {
         for (let i = 0; i < result.length; i++) {
             const word = result[i].filter;
             const location = textMessage.indexOf(word);
-            if((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(textMessage[location-1])) )&&
-                ( location + word.length  >= textMessage.length ||
-                    !((/[A-Z\a-z\u0590-\u05fe]/).test(textMessage[location+word.length])))){
+            if(textMessage.includes(result[i].filter)) {
+                if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(textMessage[location - 1]))) &&
+                    (location + word.length >= textMessage.length ||
+                        !((/[A-Z\a-z\u0590-\u05fe]/).test(textMessage[location + word.length])))) {
 
-                client.sendReplyWithMentions(chatID, result[i].filter_reply, messageId);
+                    client.sendReplyWithMentions(chatID, result[i].filter_reply, messageId);
+                }
             }
         }
     });
