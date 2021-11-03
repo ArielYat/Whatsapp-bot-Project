@@ -235,6 +235,29 @@ async function checkUrls(client, chatID, url, messageId){
 
 }
 
+//TODO: make this code more pretty and add global func for check on tags;
+async function replaceBracketsWithTag(filter, filter_replay, chatID, callback) {
+    const regex = new RegExp('\\[(.*?)\\]', "g");
+    await DAL.returnAllTagsWIthResponse(chatID, function (result) {
+        for (let i = 0; i < result.length; i++) {
+            if (result[i].groupID === chatID) {
+                const res = result[i];
+                let regexTemp = filter_replay.match(regex);
+                if (regexTemp != null){
+                    for (let j = 0; j < regexTemp.length; j++) {
+                        let regexTempTest = regexTemp[j].replace("[", "");
+                        regexTempTest = regexTempTest.replace("]", "");
+                        if(regexTempTest === res.Name){
+                            filter_replay = filter_replay.replace(regexTemp[j], "@" + res.Number);
+                        }
+
+                    }
+                }
+            }
+        }
+        callback(filter, filter_replay, chatID);
+    });
+}
 
 async function checkFilterAndAdd(client, chatID, trimmedMessage, messageId) {
     if(!(trimmedMessage.includes("-"))){
@@ -250,8 +273,10 @@ async function checkFilterAndAdd(client, chatID, trimmedMessage, messageId) {
                     client.reply(chatID, "הפילטר " + filter + " כבר קיים הערך שלו הוא " + filter_replay + " רוצה לשנות? ", messageId);
                 }
                 else{
-                    DAL.addToDataBase(filter, filter_replay, chatID, function (filter){
-                        client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageId);
+                    replaceBracketsWithTag(filter, filter_replay, chatID, function (filter, filter_replay, chatID) {
+                        DAL.addToDataBase(filter, filter_replay, chatID, function (filter){
+                            client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageId);
+                        });
                     });
                 }
 
@@ -288,8 +313,10 @@ async function checkFilterAndEdit(client, chatID, trimmedMessage, messageId) {
                 client.reply(chatID, "אי אפשר לערוך פילטר שלא קיים",messageId);
             }
             else{
-                DAL.editONDataBase(filter, filter_replay, chatID, function (filter){
-                    client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageId);
+                replaceBracketsWithTag(filter, filter_replay, chatID, function (filter, filter_replay, chatID) {
+                    DAL.editONDataBase(filter, filter_replay, chatID, function (filter){
+                        client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageId);
+                    });
                 });
             }
 
