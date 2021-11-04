@@ -417,6 +417,29 @@ async function responseWithFilterIfExist(client, message) {
     });
 }
 
+async function handleStickers(client, message) {
+    const textMessage = message.body;
+
+    if(textMessage.startsWith("הפוך לסטיקר")){
+        if (message.quotedMsg != null) {
+            const quotedMsg = message.quotedMsg;
+            if (quotedMsg.mimetype) {
+                const mediaData = await client.decryptMedia(quotedMsg);
+                await client.sendImageAsSticker(
+                    message.from,
+                    mediaData
+                )
+            }
+            else{
+                client.reply(message.from, "אני חושש שאי אפשר להפוך הודעה זו לסטיקר", message.id);
+            }
+        }
+        else{
+            client.reply(message.from, "אתה אומר לי להפוך משהו לסטיקר אבל אתה לא אומר לי את מה", message.id);
+        }
+    }
+}
+
 function start(client) {
     client.onMessage(async message => {
         if(message.body != null){
@@ -426,6 +449,7 @@ function start(client) {
             await HandleFilters(client, message);
             await responseWithFilters(client, message);
             await responseWithTagList(client, message);
+            await handleStickers(client, message);
         }
     });
 }
