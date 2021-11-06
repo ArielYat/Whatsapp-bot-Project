@@ -208,25 +208,25 @@ async function checkUrls(client, chatID, url, messageId){
     //TODO: make this code pretty
     const theSameObject = defaultTimedInstance.urlLookup(hashed, function(err, res) {
         if (err) {
-            const theSameObject1 = defaultTimedInstance.initialScanURL(url, function (err, res) {
+            const theSameObject = defaultTimedInstance.initialScanURL(url, function (err, res) {
                 if (err) {
                     client.reply(chatID, "שגיאה בהעלאת הקישור", messageId);
-                    return
                 }
-                const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
-                    if (err){
-                        const hashed = nvt.sha256(url.toLowerCase());
-                        const theSameObject2 = defaultTimedInstance.urlLookup(hashed, function (err, res) {
-                            if(err){
-                                client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
-                                return;
-                            }
-                            parseAndAnswerResults(client, chatID, res, url.toLowerCase(), messageId);
-                        });
-                    }
-                    else
-                        parseAndAnswerResults(client, chatID, res, url, messageId);
-                });
+                else if(res){
+                    const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
+                    const hashed = id.match("-(.)+-")[0];
+                    const hashedAfterRegex = hashed.replace(/-/g, "");
+                    const theSameObject = defaultTimedInstance.urlLookup(hashedAfterRegex, function (err, res) {
+                        if(err){
+                            client.reply(chatID, "שגיאה בבדיקת הקישור", messageId);
+                        }
+                        else if(res){
+                            parseAndAnswerResults(client, chatID, res, url, messageId);
+                        }
+                    });
+
+                }
+
             });
         }
         else
