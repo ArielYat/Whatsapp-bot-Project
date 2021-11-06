@@ -5,6 +5,7 @@ const defaultTimedInstance = nvt.makeAPI();
 const theSameKey = defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a471c40dd0c3229e018968951d9ddc2408f");
 const sleep = require('sleep');
 const DAL = require("./DataBase");
+const time = require("sleep");
 const bannedUsers = [];
 
 /*
@@ -213,6 +214,7 @@ async function checkUrls(client, chatID, url, messageId){
                     client.reply(chatID, "שגיאה בהעלאת הקישור", messageId);
                 }
                 else if(res){
+                    time.sleep(10);
                     const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
                     const hashed = id.match("-(.)+-")[0];
                     const hashedAfterRegex = hashed.replace(/-/g, "");
