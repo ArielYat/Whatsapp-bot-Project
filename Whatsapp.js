@@ -425,7 +425,7 @@ async function handleStickers(client, message) {
     if(textMessage.startsWith("הפוך לסטיקר")){
         if (message.quotedMsg != null) {
             const quotedMsg = message.quotedMsg;
-            if (quotedMsg.mimetype) {
+            if (message.quotedMsg.type === "image") {
                 const mediaData = await client.decryptMedia(quotedMsg);
                 await client.sendImageAsSticker(
                     message.from,
