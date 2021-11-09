@@ -52,6 +52,7 @@ async function CheckIfMessageContainMultiTags(client, chatID, text_Array, textMe
         //remove tag and name of the member from the message
         let messageForSend = textMessage.replace(text_Array[1], "");
         messageForSend = messageForSend.replace("תייג", "");
+        messageForSend = messageForSend.replace(" ", "");
         await client.sendReplyWithMentions(chatID, "@" + number + "" + messageForSend, messageSenderId);
     }
 }
@@ -82,7 +83,7 @@ async function CheckIfMessageContainTag(client, chatID, textMessage, messageSend
     }
 }
 
-async function addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage){
+async function addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage, groupMembersArray){
     if(!(trimmedMessage.includes("-"))){
         await client.sendText(chatID, "אני חייב שיהיה - בהודעה בשביל להוסיף מישהו לתיוג");
     }
@@ -91,9 +92,14 @@ async function addMemberForTag(client, chatID, textMessage, messageId, trimmedMe
         const array_Message = trimmedMessage.split("-");
         const tag = array_Message[0].trim();
         const tagNumber = array_Message[1].trim();
-        await DAL.addTagToDataBase(tag, tagNumber, chatID, function (tag) {
-            client.reply(chatID, "האדם " + tag + " נוסף בהצלחה", messageId);
-        });
+        if(groupMembersArray!=null && groupMembersArray.includes(tagNumber+"@c.us")) {
+            await DAL.addTagToDataBase(tag, tagNumber, chatID, function (tag) {
+                client.reply(chatID, "האדם " + tag + " נוסף בהצלחה", messageId);
+            });
+        }
+        else{
+            client.reply(chatID, "המספר לא קיים בקבוצה זו", messageId);
+        }
     }
 }
 async function remMemberFromTag(client, chatID, tag, messageId) {
@@ -146,6 +152,11 @@ async function responseWithTagList(client, message) {
 }
 
 async function handleTag(client, message) {
+    let groupMembersArray = null;
+    if(message.chat.isGroup) {
+        groupMembersArray = await client.getGroupMembersId(message.chat.id);
+    }
+
     let textMessage = message.body;
     const chatID = message.chat.id;
     let messageId = message.id;
@@ -158,7 +169,7 @@ async function handleTag(client, message) {
     }
     else if(textMessage.startsWith("הוסף חבר לתיוג")){
         const trimmedMessage = textMessage.replace("הוסף חבר לתיוג", "").trim();
-        await addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage);
+        await addMemberForTag(client, chatID, textMessage, messageId, trimmedMessage, groupMembersArray);
     }
     else if(textMessage.startsWith("הסר חבר מתיוג")){
         const trimmedMessage = textMessage.replace("הסר חבר מתיוג", "").trim();
