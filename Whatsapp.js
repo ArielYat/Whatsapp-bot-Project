@@ -276,7 +276,7 @@ async function checkFilterAndAdd(client, chatID, trimmedMessage, messageId) {
     if(!(trimmedMessage.includes("-"))){
         await client.sendText(chatID, "מממ השתמשת במקף כמו שאתה אמור לעשות?");
     }
-    else{
+    else {
         const array_Message = trimmedMessage.split("-");
         const filter = array_Message[0].trim();
         const filter_replay = array_Message[1].trim();
@@ -337,11 +337,18 @@ async function checkFilterAndEdit(client, chatID, trimmedMessage, messageId) {
     }
 }
 
+
+
 async function HandleFilters(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
     const messageId = message.id;
     const author = message.sender.id
+    let quotedMsg = null;
+    if(message.quotedMsg != null){
+        quotedMsg = message.quotedMsg;
+    }
+
     if (!(bannedUsers.includes(author))) {
         if (textMessage.startsWith("הוסף פילטר")) {
             const trimmedMessage = textMessage.replace("הוסף פילטר", "").trim();
@@ -413,7 +420,11 @@ async function responseWithFilterIfExist(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
     const messageId = message.id;
-    await DAL.returnFilterReply(chatID, textMessage, function (result) {
+    await DAL.returnFilterReply(chatID, textMessage, function (error,   result) {
+        if(error){
+            client.reply(chatID, "שגיאה בהתחברות כנראה שלמוהנדס הייתה פאשלה", messageId);
+            return;
+        }
         //will make function of reply_message
         for (let i = 0; i < result.length; i++) {
             const word = result[i].filter;
