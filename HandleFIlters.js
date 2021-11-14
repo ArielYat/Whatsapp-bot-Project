@@ -96,7 +96,7 @@ class FIH {
             client.reply(chatID, "אני לא הבנתי את ההודעה שלך, אתה בטוח שהשתמשת במקף?", messageID);
         }
     }
-    static async checkFilters(client, bodyText, chatID, quotedMsgID, groupsDict) {
+    static async checkFilters(client, bodyText, chatID, messageID, groupsDict) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;
             for (const word in filters) {
@@ -105,7 +105,7 @@ class FIH {
                     if ((location <= 0 || !((/(?![ושל])[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                         (location + word.length >= bodyText.length ||
                             !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
-                        await client.sendReplyWithMentions(chatID, filters[word], quotedMsgID);
+                        await client.sendReplyWithMentions(chatID, filters[word], messageID);
                     }
                 }
             }

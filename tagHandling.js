@@ -87,6 +87,21 @@ class TAG{
             await client.reply(chatID, stringForSending, messageID);
         }
     }
+    static async tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict){
+        bodyText = bodyText.replace("תייג כולם", "");
+        if (chatID in groupsDict){
+            let stringForSending = "";
+            let tags = groupsDict[chatID].tags;
+            Object.entries(tags).forEach(([key, value]) => {
+                stringForSending += "@" + value + "\n";
+            });
+            stringForSending += bodyText;
+            await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
+        }
+        else{
+            await client.reply(chatID, "אין בקבוצה זו אנשים לתיוג", messageID);
+        }
+    }
 }
 
 module .exports = TAG;

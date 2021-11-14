@@ -13,10 +13,6 @@ async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
-    let quotedMsgID = messageID;
-    if(message.quotedMsg != null){
-        quotedMsgID = message.quotedMsg.id;
-    }
 
     if(bodyText.startsWith("הוסף פילטר")){
         await FIH.add(client, bodyText, chatID, messageID, groupsDict);
@@ -32,7 +28,7 @@ async function handleFilters(client, message) {
     }
 
     else{
-        await FIH.checkFilters(client, bodyText, chatID, quotedMsgID, groupsDict);
+        await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict);
     }
 }
 
@@ -58,7 +54,9 @@ async function handleTags(client, message) {
     else if(bodyText.startsWith("הראה רשימת חברים לתיוג")) {
         await TAG.showTags(client, chatID, messageID, groupsDict);
     }
-
+    else if(bodyText.startsWith("תייג כולם")){
+        await TAG.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
+    }
     else if (bodyText.startsWith("תייג")){
         await TAG.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
