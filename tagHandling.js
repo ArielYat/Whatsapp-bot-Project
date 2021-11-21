@@ -50,7 +50,7 @@ class TAG{
     }
 
     static async checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
-        bodyText = bodyText.replace("תייג", "");
+        bodyText = bodyText.replace("תייג ", "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
         let counter = 0;
