@@ -5,6 +5,9 @@ const TAG = require("./tagHandling");
 const HURL = require("./URLHandle");
 const wa = require("@open-wa/wa-automate");
 let groupsDict = {};
+let restGroups = [];
+let restUsers = [];
+
 DBH.GetAllGroupsFromDB(groupsDict, function (groupsDict){
     wa.create({headless: false}).then(client => start(client));
 });
@@ -57,7 +60,7 @@ async function handleTags(client, message) {
     else if(bodyText.startsWith("תייג כולם")){
         await TAG.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("תייג")){
+    else if (bodyText.startsWith("תייג ")){
         await TAG.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
 }
@@ -84,11 +87,75 @@ async function handleStickers(client, message) {
     }
 }
 
+async function handleUserRest(client, message) {
+    const textMessage = message.body;
+    const chatID = message.chat.id;
+    const messageId = message.id;
+
+    if (message.quotedMsg != null) {
+        const responseAuthor = message.quotedMsg.author;
+        const userID = message.sender.id;
+        if (textMessage.startsWith("חסום גישה למשתמש")) {
+            if (userID === "972543293155@c.us") {
+                restUsers.push(responseAuthor);
+                await client.sendReplyWithMentions(chatID,  "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
+            }
+            else {
+                client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
+            }
+        }
+
+        if(textMessage.startsWith("אפשר גישה למשתמש")) {
+            if (userID === "972543293155@c.us") {
+                const userIdIndex = restGroups.indexOf(responseAuthor);
+                restGroups.splice(userIdIndex, 1);
+                await client.sendReplyWithMentions(chatID,  "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
+            }
+            else{
+                await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
+            }
+        }
+    }
+}
+async function handleGroupRest(client, message) {
+    const textMessage = message.body;
+    const chatID = message.chat.id;
+    const messageId = message.id;
+    const responseGroupId = message.chat.id;
+    const userID = message.sender.id;
+    if (textMessage.startsWith("חסימת קבוצה")) {
+        if (userID === "972543293155@c.us") {
+            restGroups.push(responseGroupId);
+            await client.reply(chatID,  "הקבוצה נחסמה בהצלחה", messageId);
+        }
+        else {
+            client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
+        }
+    }
+
+    if(textMessage.startsWith("שחרור קבוצה")) {
+        if (userID === "972543293155@c.us") {
+            const groupIdIndex = restGroups.indexOf(responseGroupId);
+            restGroups.splice(groupIdIndex, 1);
+            await client.reply(chatID,  "הקבוצה שוחררה בהצלחה", messageId);
+        }
+        else{
+            await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
+        }
+    }
+}
+
 function start(client) {
     client.onMessage(async message => {
-        await handleFilters(client, message);
-        await handleTags(client, message);
-        await handleStickers(client, message);
-        await HURL.stripLinks(client, message);
+        await handleUserRest(client, message);
+        await handleGroupRest(client, message);
+        if(!restUsers.includes(message.author)){
+            if(!restGroups.includes(message.chat.id)) {
+                await handleFilters(client, message);
+            }
+                await handleTags(client, message);
+                await handleStickers(client, message);
+                await HURL.stripLinks(client, message);
+        }
     });
 }
