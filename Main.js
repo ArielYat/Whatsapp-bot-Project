@@ -107,8 +107,8 @@ async function handleUserRest(client, message) {
 
         if(textMessage.startsWith("אפשר גישה למשתמש")) {
             if (userID === "972543293155@c.us") {
-                const userIdIndex = restGroups.indexOf(responseAuthor);
-                restGroups.splice(userIdIndex, 1);
+                const userIdIndex = restUsers.indexOf(responseAuthor);
+                restUsers.splice(userIdIndex, 1);
                 await client.sendReplyWithMentions(chatID,  "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
             }
             else{
