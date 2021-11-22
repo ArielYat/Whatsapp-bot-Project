@@ -147,15 +147,17 @@ async function handleGroupRest(client, message) {
 
 function start(client) {
     client.onMessage(async message => {
-        await handleUserRest(client, message);
-        await handleGroupRest(client, message);
-        if(!restUsers.includes(message.author)){
-            if(!restGroups.includes(message.chat.id)) {
-                await handleFilters(client, message);
-            }
+        if(message != null) {
+            await handleUserRest(client, message);
+            await handleGroupRest(client, message);
+            if (!restUsers.includes(message.author)) {
+                if (!restGroups.includes(message.chat.id)) {
+                    await handleFilters(client, message);
+                }
                 await handleTags(client, message);
                 await handleStickers(client, message);
                 await HURL.stripLinks(client, message);
+            }
         }
     });
 }
