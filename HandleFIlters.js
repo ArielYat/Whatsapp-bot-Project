@@ -33,7 +33,7 @@ class FIH {
                 });
             }
             else {
-                client.reply(chatID, "הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב \n ערוך פילטר"
+                client.reply(chatID, " הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב \n ערוך פילטר"
                     + filter + " - " + filter_reply, messageID);
             }
         }
