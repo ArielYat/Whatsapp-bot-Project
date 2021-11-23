@@ -1,6 +1,7 @@
 const wa = require('@open-wa/wa-automate');
 class group{
     #groupID;
+    #filterCounter = 0;
     #filters;
     #tags;
     constructor(groupID) {
@@ -18,6 +19,11 @@ class group{
             return false;
         }
     }
+
+    addToFilterCounter(){
+        this.#filterCounter++;
+    }
+
 
     delFilters(filter){
         if(this.#filters.hasOwnProperty(filter)){
@@ -49,11 +55,18 @@ class group{
         }
     }
 
+    filterCounterRest(){
+        this.#filterCounter = 0;
+    }
+
     get filters(){
         return this.#filters;
     }
     get tags(){
         return this.#tags;
+    }
+    get filterCounter(){
+        return this.#filterCounter;
     }
 }
 
