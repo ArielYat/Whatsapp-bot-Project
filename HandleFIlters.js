@@ -1,6 +1,7 @@
 const group = require("./group");
 const DBH = require("./DBHandle");
 const regex = new RegExp('\\[(.*?)\\]', "g");
+
 class FIH {
     //add filter to DB
     static async add(client, bodyText, chatID, messageID, groupsDict) {
@@ -32,7 +33,8 @@ class FIH {
                 });
             }
             else {
-                client.reply(chatID, "הפילטר " + filter + " כבר קיים במאגר של קבוצה זו האם אתה רוצה לערוך אותו?", messageID);
+                client.reply(chatID, "הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב \n ערוך פילטר"
+                    + filter + " - " + filter_reply, messageID);
             }
         }
         else {
@@ -93,7 +95,7 @@ class FIH {
             }
         }
         else {
-            client.reply(chatID, "אני לא הבנתי את ההודעה שלך, אתה בטוח שהשתמשת במקף?", messageID);
+            client.reply(chatID, "כבודו אתה בטוח שהשתמשת במקף?", messageID);
         }
     }
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict) {
@@ -105,6 +107,7 @@ class FIH {
                     if ((location <= 0 || !((/(?![ושל])[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                         (location + word.length >= bodyText.length ||
                             !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
+                        groupsDict[chatID].addToFilterCounter();
                         await client.sendReplyWithMentions(chatID, filters[word], messageID);
                     }
                 }
