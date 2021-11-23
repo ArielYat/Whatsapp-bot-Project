@@ -11,7 +11,7 @@ const the_interval = 5 * 60 * 1000;
 const limitFilter = 25;
 
 DBH.GetAllGroupsFromDB(groupsDict, function (groupsDict){
-    wa.create({headless: false}).then(client => start(client));
+    wa.create({headless: false, multiDevice:true}).then(client => start(client));
 });
 
 async function handleFilters(client, message) {
@@ -169,7 +169,7 @@ async function sendHelp(client, message) {
     }
     if(message.body.startsWith("רשימת פקודות"))
     {
-        await client.reply("הוסף פילטר [פילטר] - [תשובה]" +
+        await client.reply(message.chat.id, "הוסף פילטר [פילטר] - [תשובה]" +
             " \n לדוגמה: הוסף פילטר אוכל - בננה " +
             "\n הסר פילטר [פילטר]" +
             "\n לדוגמה הסר פילטר אוכל" +
@@ -186,7 +186,7 @@ async function sendHelp(client, message) {
             "\n הראה פילטרים = מראה את רשימת הפילטרים" +
             "\n הראה רשימת חברים לתיוג = מראה את רשימת החברים לתיוג" +
             "\n בהוספת פילטר אפשר להשתמש גם ב[שם] בשביל לתייג מישהו בפילטר לדוגמה" +
-            "\n הוסף פילטר משה - אוכל [יוסי] יענה למשה אוכל @יוסי ויתייג את יוסי", messageID);
+            "\n הוסף פילטר משה - אוכל [יוסי] יענה אוכל @יוסי ויתייג את יוסי", messageID);
     }
 }
 
