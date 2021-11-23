@@ -7,6 +7,8 @@ const wa = require("@open-wa/wa-automate");
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
+const the_interval = 5 * 60 * 1000;
+const limitFilter = 25;
 
 DBH.GetAllGroupsFromDB(groupsDict, function (groupsDict){
     wa.create({headless: false}).then(client => start(client));
@@ -31,7 +33,13 @@ async function handleFilters(client, message) {
     }
 
     else{
-        await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict);
+        if(groupsDict[chatID].filterCounter < limitFilter) {
+            await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict);
+        }
+        else if(groupsDict[chatID].filterCounter === limitFilter){
+            await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני נח ל5 דקות מפילטרים");
+            groupsDict[chatID].addToFilterCounter();
+        }
     }
 }
 
@@ -78,7 +86,7 @@ async function handleStickers(client, message) {
                 )
             }
             else{
-                client.reply(message.from, "אני חושש שאי אפשר להפוך הודעה זו לסטיקר", message.id);
+                client.reply(message.from, "טיפש אי אפשר להפוך משהו שהוא לא תמונה לסטיקר", message.id);
             }
         }
         else{
@@ -145,18 +153,54 @@ async function handleGroupRest(client, message) {
     }
 }
 
+setInterval(function() {
+    for(let group in groupsDict){
+        groupsDict[group].filterCounterRest();
+    }
+}, the_interval);
+
+async function sendHelp(client, message) {
+    let messageID = null;
+    if(message.quotedMsg != null){
+        messageID = message.quotedMsg.id;
+    }
+    else{
+        messageID = message.id;
+    }
+    if(message.body.startsWith("רשימת פקודות"))
+    {
+        await client.reply("הוסף פילטר [פילטר] - [תשובה]" +
+            " \n לדוגמה: הוסף פילטר אוכל - בננה " +
+            "\n הסר פילטר [פילטר]" +
+            "\n לדוגמה הסר פילטר אוכל" +
+            "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
+            "\n לדוגמה ערוך פילטר אוכל - אפרסק" +
+            "\n תייג [אדם]" +
+            "\n לדוגמה תייג יוסי" +
+            "\n הוסף חבר לתיוג [שם] - [מספר טלפון]" +
+            "\n לדוגמה הוסף חבר לתיוג [יוסי] - 972541234567" +
+            "\n הסר מחבר תיוג [שם]" +
+            "\n לדוגמה הסר חבר מתיוג יוסי" +
+            "\n תייג כולם = מתייגת את כל האנשים הנמצאים בקבוצה" +
+            "\n הפוך לסטיקר = הופך לסטיקר את התמונה המסומנת" +
+            "\n הראה פילטרים = מראה את רשימת הפילטרים" +
+            "\n הראה רשימת חברים לתיוג = מראה את רשימת החברים לתיוג" +
+            "\n בהוספת פילטר אפשר להשתמש גם ב[שם] בשביל לתייג מישהו בפילטר לדוגמה" +
+            "\n הוסף פילטר משה - אוכל [יוסי] יענה למשה אוכל @יוסי ויתייג את יוסי", messageID);
+    }
+}
+
 function start(client) {
     client.onMessage(async message => {
         if(message != null) {
             await handleUserRest(client, message);
             await handleGroupRest(client, message);
-            if (!restUsers.includes(message.author)) {
-                if (!restGroups.includes(message.chat.id)) {
-                    await handleFilters(client, message);
-                }
+            if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id)) {
+                await handleFilters(client, message);
                 await handleTags(client, message);
                 await handleStickers(client, message);
                 await HURL.stripLinks(client, message);
+                await sendHelp(client, message);
             }
         }
     });
