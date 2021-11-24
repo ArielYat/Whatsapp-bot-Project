@@ -104,7 +104,7 @@ class FIH {
             for (const word in filters) {
                 const location = bodyText.indexOf(word);
                 if (bodyText.includes(word)) {
-                    if ((location <= 0 || !((/(?![ושל])[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
+                    if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                         (location + word.length >= bodyText.length ||
                             !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
                         groupsDict[chatID].addToFilterCounter();
