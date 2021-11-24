@@ -9,16 +9,17 @@ class HURL {
         const textMessage = message.body;
         const chatID = message.chat.id;
         const messageId = message.id;
-
-        const found = textMessage.match(urlRegex);
-        if (found == null) {
-            return;
+        if(textMessage.includes("סרוק ")) {
+            const found = textMessage.match(urlRegex);
+            if (found == null) {
+                return;
+            }
+            found.forEach(function (url, index) {
+                url.slice(-1) != "/" ? url = url + "/" : console.log("moshe");
+                url = url.charAt(0).toLowerCase() + url.slice(1);
+                HURL.checkUrls(client, chatID, url, messageId);
+            });
         }
-        found.forEach(function (url, index) {
-            url.slice(-1) != "/" ? url = url + "/" : console.log("moshe");
-            url = url.charAt(0).toLowerCase() + url.slice(1);
-            HURL.checkUrls(client, chatID, url, messageId);
-        });
     }
 
     static async parseAndAnswerResults(client, chatID, res, url, messageId) {
