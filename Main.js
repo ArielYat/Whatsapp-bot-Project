@@ -7,8 +7,8 @@ const wa = require("@open-wa/wa-automate");
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
-const the_interval = 5 * 60 * 1000;
-const limitFilter = 25;
+const the_interval = 10 * 60 * 1000;
+const limitFilter = 15;
 
 DBH.GetAllGroupsFromDB(groupsDict, function (groupsDict){
     wa.create({headless: false, multiDevice:true}).then(client => start(client));
@@ -38,7 +38,7 @@ async function handleFilters(client, message) {
                 await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict);
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
-                await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני נח ל5 דקות מפילטרים");
+                await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
                 groupsDict[chatID].addToFilterCounter();
             }
         }
