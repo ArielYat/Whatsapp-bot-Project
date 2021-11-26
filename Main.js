@@ -7,13 +7,17 @@ const wa = require("@open-wa/wa-automate");
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
+let restGroupsAuto = [];
 const the_interval = 10 * 60 * 1000;
 const limitFilter = 15;
 
+//get all groups from mongoDB and make instance of group object to every group
 DBH.GetAllGroupsFromDB(groupsDict, function (groupsDict){
     wa.create({headless: false, multiDevice:true}).then(client => start(client));
 });
 
+//input client message
+//handling filters - add filters, remove filter, edit filters and response to filters
 async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
@@ -40,11 +44,13 @@ async function handleFilters(client, message) {
             else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
                 groupsDict[chatID].addToFilterCounter();
+                restGroupsAuto.push(chatID);
             }
         }
     }
 }
 
+//handling Tags - add tag to dict remove tag  tag everyone and answer to tag
 async function handleTags(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
@@ -74,6 +80,8 @@ async function handleTags(client, message) {
         await TAG.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
 }
+
+//convertPhotoToASticker
 async function handleStickers(client, message) {
     const textMessage = message.body;
 
@@ -84,7 +92,7 @@ async function handleStickers(client, message) {
                 const mediaData = await client.decryptMedia(quotedMsg);
                 await client.sendImageAsSticker(
                     message.from,
-                    mediaData
+                    mediaData, {author: "אלכסנדר הגדול", pack: "חצול"}
                 )
             }
             else{
@@ -96,7 +104,7 @@ async function handleStickers(client, message) {
         }
     }
 }
-
+//handle User Rest
 async function handleUserRest(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
@@ -127,6 +135,7 @@ async function handleUserRest(client, message) {
         }
     }
 }
+//handle group Rest
 async function handleGroupRest(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
@@ -155,12 +164,17 @@ async function handleGroupRest(client, message) {
     }
 }
 
+//reset groups filter counter to 0 every 10 min
 setInterval(function() {
+    while(restGroupsAuto.length > 0) {
+        restGroupsAuto.pop();
+    }
     for(let group in groupsDict){
         groupsDict[group].filterCounterRest();
     }
 }, the_interval);
 
+//send all options of the bot menu
 async function sendHelp(client, message) {
     let messageID = null;
     if(message.quotedMsg != null){
@@ -197,7 +211,8 @@ function start(client) {
         if(message != null) {
             await handleUserRest(client, message);
             await handleGroupRest(client, message);
-            if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id)) {
+            if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id) &&
+                !restGroupsAuto.includes(message.chat.id)) {
                 await handleFilters(client, message);
                 await handleTags(client, message);
                 await handleStickers(client, message);
