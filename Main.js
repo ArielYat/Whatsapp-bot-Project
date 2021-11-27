@@ -8,7 +8,8 @@ let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
 let restGroupsAuto = [];
-const the_interval = 10 * 60 * 1000;
+const the_interval_pop = 10 * 60 * 1000;
+const the_interval_reset = 3 * 60 * 1000;
 const limitFilter = 15;
 
 //get all groups from mongoDB and make instance of group object to every group
@@ -163,16 +164,19 @@ async function handleGroupRest(client, message) {
         }
     }
 }
+//reset counter of filters of all groups every 3 min
+setInterval(function() {
+    for(let group in groupsDict){
+        groupsDict[group].filterCounterRest();
+    }
+}, the_interval_pop);
 
-//reset groups filter counter to 0 every 10 min
+//unlock all groups from rest list every 10 min
 setInterval(function() {
     while(restGroupsAuto.length > 0) {
         restGroupsAuto.pop();
     }
-    for(let group in groupsDict){
-        groupsDict[group].filterCounterRest();
-    }
-}, the_interval);
+}, the_interval_reset);
 
 //send all options of the bot menu
 async function sendHelp(client, message) {
