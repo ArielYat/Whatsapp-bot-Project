@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
 class HDB {
-    static async addArgsToDB(key, value, ID, filterOrTags, callback) {
+    static async addArgsToDB(key, value1, value2, ID, filterOrTagsOrBirthday, callback) {
         let objectToAddToDataBase = null;
         MongoClient.connect(url, function (err, db) {
             if (err) {
@@ -11,12 +11,14 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTags === "filters") {
-                objectToAddToDataBase = { ID: ID, filter: key, filter_reply: value };
-            } else if (filterOrTags === "tags") {
-                objectToAddToDataBase = { ID: ID, name: key, phone_number: value };
+            if (filterOrTagsOrBirthday === "filter") {
+                objectToAddToDataBase = { ID: ID, filter: key, filter_reply: value1 };
+            } else if (filterOrTagsOrBirthday === "tag") {
+                objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
+            } else if (filterOrTagsOrBirthday === "birthday") {
+                objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2 };
             }
-            dbo.collection(filterOrTags + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
+            dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {
                     console.log(err + "addArgsToDB-insertOne");
                     return;
@@ -26,7 +28,7 @@ class HDB {
             });
         });
     }
-    static async delArgsFromDB(key, ID, filterOrTags, callback) {
+    static async delArgsFromDB(key, ID, filterOrTagsOrBirthday, callback) {
         let objectToDelToDataBase = null;
         MongoClient.connect(url, function (err, db) {
             if (err) {
@@ -34,12 +36,14 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTags === "filters") {
+            if (filterOrTagsOrBirthday === "filters") {
                 objectToDelToDataBase = { ID: ID, filter: key };
-            } else if (filterOrTags === "tags") {
+            } else if (filterOrTagsOrBirthday === "tags") {
+                objectToDelToDataBase = { ID: ID, name: key };
+            } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToDelToDataBase = { ID: ID, name: key };
             }
-            dbo.collection(filterOrTags + "-groups").deleteOne(objectToDelToDataBase, function (err, res) {
+            dbo.collection(filterOrTagsOrBirthday + "-groups").deleteOne(objectToDelToDataBase, function (err, res) {
                 if (err) {
                     console.log(err + "delArgsFromDB-deleteOne");
                     return;

@@ -3,8 +3,7 @@ const HDB = require("./HandleDB");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
-    //add filter to DB
-    static async add(client, bodyText, chatID, messageID, groupsDict) {
+    static async addFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הוסף פילטר", "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
@@ -28,7 +27,7 @@ class HF {
             }
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilters(filter, filter_reply)) {
-                await HDB.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
+                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filter", function () {
                     client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
                 });
             }
@@ -41,12 +40,12 @@ class HF {
             client.reply(chatID, "מממ השתמשת במקף כבודו?", messageID);
         }
     }
-    static async rem(client, bodyText, chatID, messageID, groupsDict) {
+    static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הסר פילטר", "");
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
-            if (groupsDict[chatID].delFilters(filter)) {
-                await HDB.delArgsFromDB(filter, chatID, "filters", function () {
+            if (groupsDict[chatID].delFilter(filter)) {
+                await HDB.delArgsFromDB(filter, chatID, "filter", function () {
                     client.reply(chatID, "הפילטר " + filter + " הוסר בהצלחה", messageID);
                 });
             }
@@ -59,7 +58,7 @@ class HF {
         }
 
     }
-    static async edit(client, bodyText, chatID, messageID, groupsDict) {
+    static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("ערוך פילטר", "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
@@ -78,8 +77,8 @@ class HF {
                 }
                 if (groupsDict[chatID].delFilters(filter)) {
                     await HDB.delArgsFromDB(filter, chatID, "filters", function () {
-                        groupsDict[chatID].addFilters(filter, filter_reply);
-                        HDB.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
+                        groupsDict[chatID].addFilter(filter, filter_reply);
+                        HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
                             client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageID);
                         });
                     });

@@ -8,15 +8,15 @@ class HT {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
             const phoneNumber = bodyText[1].trim();
-            //make new group and insert tag + phone number  if group not in DB otherwise just insert tag and phone number
+            //make new group and insert tag + phone number if group isn't in DB otherwise just insert tag and phone number
             if (!(chatID in groupsDict)) {
                 groupsDict[chatID] = new group(chatID);
             }
-            //check if tag exist on DB if it does return false otherwise add tag to DB
+            //check if tag exists in DB if it does return false otherwise add tag to DB
             if (groupMembersArray != null && groupMembersArray.includes(phoneNumber + "@c.us")) {
-                if (groupsDict[chatID].addTags(tag, phoneNumber)) {
-                    await HDB.addArgsToDB(tag, phoneNumber, chatID, "tags", function () {
-                        client.reply(chatID, "המספר טלפון של האדם " + tag + " נוסף בהצלחה", messageID);
+                if (groupsDict[chatID].addTag(tag, phoneNumber)) {
+                    await HDB.addArgsToDB(tag, phoneNumber, null, chatID, "tag", function () {
+                        client.reply(chatID, "מספר הטלפון של האדם " + tag + " נוסף בהצלחה", messageID);
                     });
                 }
                 else {
@@ -28,15 +28,15 @@ class HT {
             }
         }
         else {
-            client.reply(chatID, " אתה בטוח שהשתמשת במקף מר בחור?", messageID);
+            client.reply(chatID, "אתה בטוח שהשתמשת במקף מר בחור?", messageID);
         }
     }
     static async remTag(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הסר חבר מתיוג", "");
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
-            if (groupsDict[chatID].delTags(tag)) {
-                await HDB.delArgsFromDB(tag, chatID, "tags", function () {
+            if (groupsDict[chatID].delTag(tag)) {
+                await HDB.delArgsFromDB(tag, chatID, "tag", function () {
                     client.reply(chatID, "המספר טלפון של האדם " + tag + " הוסר בהצלחה", messageID);
                 });
             }
@@ -60,7 +60,6 @@ class HT {
                 if (splitText[i].charAt(0) === "ו") {
                     splitTextForChecking = splitText[i].slice(1);
                 }
-
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
