@@ -1,7 +1,7 @@
 const group = require("./group");
 const HDB = require("./HandleDB");
 
-class TAG {
+class HT {
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
         bodyText = bodyText.replace("הוסף חבר לתיוג", "");
         if (bodyText.includes("-")) {
@@ -101,4 +101,4 @@ class TAG {
     }
 }
 
-module.exports = TAG;
+module.exports = HT;
