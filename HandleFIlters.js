@@ -1,5 +1,5 @@
 const group = require("./group");
-const DBH = require("./DBHandle");
+const HDB = require("./HandleDB");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class FIH {
@@ -28,7 +28,7 @@ class FIH {
             }
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilters(filter, filter_reply)) {
-                await DBH.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
+                await HDB.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
                 });
             }
@@ -46,7 +46,7 @@ class FIH {
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilters(filter)) {
-                await DBH.delArgsFromDB(filter, chatID, "filters", function () {
+                await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " הוסר בהצלחה", messageID);
                 });
             }
@@ -77,9 +77,9 @@ class FIH {
                     }
                 }
                 if (groupsDict[chatID].delFilters(filter)) {
-                    await DBH.delArgsFromDB(filter, chatID, "filters", function () {
+                    await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                         groupsDict[chatID].addFilters(filter, filter_reply);
-                        DBH.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
+                        HDB.addArgsToDB(filter, filter_reply, chatID, "filters", function () {
                             client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageID);
                         });
                     });

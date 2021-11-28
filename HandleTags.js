@@ -1,5 +1,5 @@
 const group = require("./group");
-const DBH = require("./DBHandle");
+const HDB = require("./HandleDB");
 
 class TAG {
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
@@ -15,7 +15,7 @@ class TAG {
             //check if tag exist on DB if it does return false otherwise add tag to DB
             if (groupMembersArray != null && groupMembersArray.includes(phoneNumber + "@c.us")) {
                 if (groupsDict[chatID].addTags(tag, phoneNumber)) {
-                    await DBH.addArgsToDB(tag, phoneNumber, chatID, "tags", function () {
+                    await HDB.addArgsToDB(tag, phoneNumber, chatID, "tags", function () {
                         client.reply(chatID, "המספר טלפון של האדם " + tag + " נוסף בהצלחה", messageID);
                     });
                 }
@@ -36,7 +36,7 @@ class TAG {
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delTags(tag)) {
-                await DBH.delArgsFromDB(tag, chatID, "tags", function () {
+                await HDB.delArgsFromDB(tag, chatID, "tags", function () {
                     client.reply(chatID, "המספר טלפון של האדם " + tag + " הוסר בהצלחה", messageID);
                 });
             }

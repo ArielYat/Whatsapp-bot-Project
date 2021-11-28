@@ -3,6 +3,7 @@ const defaultTimedInstance = nvt.makeAPI();
 const theSameKey = defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a471c40dd0c3229e018968951d9ddc2408f");
 const time = require("sleep");
 const urlRegex = /((h|H)ttps?:\/\/[^\s]+)/g;
+
 class HURL {
     static async stripLinks(client, message) {
         const textMessage = message.body;

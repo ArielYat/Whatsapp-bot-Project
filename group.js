@@ -1,4 +1,5 @@
 const wa = require('@open-wa/wa-automate');
+
 class group {
     #groupID;
     #filterCounter = 0;
