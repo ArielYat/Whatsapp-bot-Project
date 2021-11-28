@@ -2,7 +2,7 @@ const group = require("./group");
 const HDB = require("./HandleDB");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
-class FIH {
+class HF {
     //add filter to DB
     static async add(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הוסף פילטר", "");
@@ -131,4 +131,4 @@ class FIH {
     }
 }
 
-module.exports = FIH;
+module.exports = HF;

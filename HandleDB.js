@@ -2,7 +2,7 @@ const group = require("./group");
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
-class DBHandle {
+class HDB {
     static async addArgsToDB(key, value, ID, filterOrTags, callback) {
         let objectToAddToDataBase = null;
         MongoClient.connect(url, function (err, db) {
@@ -104,4 +104,4 @@ class DBHandle {
     }
 }
 
-module.exports = DBHandle;
+module.exports = HDB;
