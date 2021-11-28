@@ -76,6 +76,9 @@ class group {
     filterCounterRest() {
         this.#filterCounter = 0;
     }
+    get groupID() {
+        return this.#groupID;
+    }
     get filters() {
         return this.#filters;
     }
