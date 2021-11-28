@@ -17,11 +17,11 @@ class FIH {
             }
 
             let regexTemp = filter_reply.match(regex);
-            if (regexTemp != null){
+            if (regexTemp != null) {
                 for (let j = 0; j < regexTemp.length; j++) {
                     let regexTempTest = regexTemp[j].replace("[", "");
                     regexTempTest = regexTempTest.replace("]", "");
-                    if(regexTempTest in groupsDict[chatID].tags){
+                    if (regexTempTest in groupsDict[chatID].tags) {
                         filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
                     }
                 }
@@ -41,7 +41,6 @@ class FIH {
             client.reply(chatID, "מממ השתמשת במקף כבודו?", messageID);
         }
     }
-
     static async rem(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הסר פילטר", "");
         const filter = bodyText.trim();
@@ -60,7 +59,6 @@ class FIH {
         }
 
     }
-
     static async edit(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("ערוך פילטר", "");
         if (bodyText.includes("-")) {
@@ -69,11 +67,11 @@ class FIH {
             let filter_reply = bodyText[1].trim();
             if (chatID in groupsDict) {
                 let regexTemp = filter_reply.match(regex);
-                if (regexTemp != null){
+                if (regexTemp != null) {
                     for (let j = 0; j < regexTemp.length; j++) {
                         let regexTempTest = regexTemp[j].replace("[", "");
                         regexTempTest = regexTempTest.replace("]", "");
-                        if(regexTempTest in groupsDict[chatID].tags){
+                        if (regexTempTest in groupsDict[chatID].tags) {
                             filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
                         }
                     }
@@ -98,7 +96,7 @@ class FIH {
             client.reply(chatID, "כבודו אתה בטוח שהשתמשת במקף?", messageID);
         }
     }
-    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter,restGroupsAuto) {
+    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;
             for (const word in filters) {
@@ -108,10 +106,10 @@ class FIH {
                         (location + word.length >= bodyText.length ||
                             !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
                         groupsDict[chatID].addToFilterCounter();
-                        if(groupsDict[chatID].filterCounter < limitFilter) {
+                        if (groupsDict[chatID].filterCounter < limitFilter) {
                             await client.sendReplyWithMentions(chatID, filters[word], messageID);
                         }
-                        else if(groupsDict[chatID].filterCounter === limitFilter){
+                        else if (groupsDict[chatID].filterCounter === limitFilter) {
                             await client.sendText(chatID, "כמה פילטרים בהודעה אחת הקבוצה מושתקת ל10 דקות");
                             groupsDict[chatID].addToFilterCounter();
                             restGroupsAuto.push(chatID);
@@ -122,7 +120,7 @@ class FIH {
         }
     }
     static async showFilters(client, chatID, messageID, groupsDict) {
-        if (chatID in groupsDict){
+        if (chatID in groupsDict) {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
             Object.entries(filters).forEach(([key, value]) => {
@@ -131,7 +129,6 @@ class FIH {
             await client.reply(chatID, stringForSending, messageID);
         }
     }
-
 }
 
 module.exports = FIH;

@@ -1,5 +1,5 @@
 const wa = require('@open-wa/wa-automate');
-class group{
+class group {
     #groupID;
     #filterCounter = 0;
     #filters;
@@ -9,63 +9,55 @@ class group{
         this.#filters = {};
         this.#tags = {};
     }
-
-    addFilters(filter, filter_reply){
-        if(!this.#filters.hasOwnProperty(filter)){
-            this.#filters[filter]  = filter_reply;
+    addFilters(filter, filter_reply) {
+        if (!this.#filters.hasOwnProperty(filter)) {
+            this.#filters[filter] = filter_reply;
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-
-    addToFilterCounter(){
+    addToFilterCounter() {
         this.#filterCounter++;
     }
-
-
-    delFilters(filter){
-        if(this.#filters.hasOwnProperty(filter)){
+    delFilters(filter) {
+        if (this.#filters.hasOwnProperty(filter)) {
             delete this.#filters[filter];
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-
-    delTags(tag){
-        if(this.#tags.hasOwnProperty(tag)){
+    delTags(tag) {
+        if (this.#tags.hasOwnProperty(tag)) {
             delete this.#tags[tag];
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-
-    addTags(tag, phoneNumber){
-        if(!this.#tags.hasOwnProperty(tag)){
-            this.#tags[tag]  = phoneNumber;
+    addTags(tag, phoneNumber) {
+        if (!this.#tags.hasOwnProperty(tag)) {
+            this.#tags[tag] = phoneNumber;
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
-
-    filterCounterRest(){
+    filterCounterRest() {
         this.#filterCounter = 0;
     }
-
-    get filters(){
+    get filters() {
         return this.#filters;
     }
-    get tags(){
+    get tags() {
         return this.#tags;
     }
-    get filterCounter(){
+    get filterCounter() {
         return this.#filterCounter;
     }
 }
