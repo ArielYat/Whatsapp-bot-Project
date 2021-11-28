@@ -1,5 +1,3 @@
-const wa = require('@open-wa/wa-automate');
-
 class group {
     #groupID;
     #filters;
