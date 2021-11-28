@@ -10,7 +10,6 @@ class group {
         this.#filters = {};
         this.#tags = {};
         this.#birthdays = {};
-        this.#birthmonths = {};
     }
     addFilter(filter, filter_reply) {
         if (!this.#filters.hasOwnProperty(filter)) {
@@ -48,10 +47,9 @@ class group {
             return false;
         }
     }
-    addBirthday(tag, birthday, birthmonth) {
-        if (!this.#birthdays.hasOwnProperty(tag)) {
-            this.#birthdays[tag] = birthday;
-            this.#birthmonths[tag] = birthmonth;
+    addBirthday(name, birthday, birthMonth) {
+        if (!this.#birthdays.hasOwnProperty(name)) {
+            this.#birthdays[name] = [birthday, birthMonth];
             return true;
         }
         else {
@@ -61,7 +59,6 @@ class group {
     delBirthday(tag) {
         if (this.#birthdays.hasOwnProperty(tag)) {
             delete this.#birthdays[tag];
-            delete this.#birthmonths[tag];
             return true;
         }
         else {

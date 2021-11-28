@@ -1,4 +1,4 @@
-import schedule from 'node-schedule'
+const schedule = require('node-schedule');
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL"),
     wa = require("@open-wa/wa-automate");
@@ -12,7 +12,7 @@ const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
-    wa.create({ headless: false, multiDevice: true }).then(client => start(client));
+    wa.create({ headless: false }).then(client => start(client));
 });
 
 //Handle filters - add, remove & edit filters and respond to them
@@ -172,6 +172,7 @@ async function handleGroupRest(client, message) {
         if (userID === "972543293155@c.us") {
             const groupIdIndex = restGroups.indexOf(responseGroupId);
             restGroups.splice(groupIdIndex, 1);
+            restGroupsAuto.splice(groupIdIndex, 1);
             await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageId);
         }
         else {
@@ -225,42 +226,38 @@ setInterval(function () {
     }
 }, the_interval_reset);
 
-//Check if there are birthdays everyday at midnight
-schedule.scheduleJob('0 0 * * *', () => {
-    const today = new Date();
-    const dayToday = today.getDate();
-    const monthToday = today.getDate() + 1; //+1 'cause January is 0!
 
-    for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-        for (const [birthdayBoy, day, month] of object.birthdays()) {
-            if (day == dayToday && month == monthToday) {
-                let stringForSending = "";
-                let tags = groupsDict[chatID].tags;
-                Object.entries(tags).forEach(([key, value]) => {
-                    stringForSending += "@" + value + "\n";
-                });
-                stringForSending += "ל @" + birthdayBoy + " יש יום הולדת היום!!";
-                await client.send(chatID, stringForSending)
-            }
-        }
-    }
-});
 
 ////Send Good Morning/Evening messages
 //{
 //    schedule.scheduleJob('0 7 * * *', () => {
 //        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//            client.send(chatID, "בוקר טוב!")
+//            client.sendText(chatID, "בוקר טוב!")
 //        }
 //    });
 //    schedule.scheduleJob('0 18 * * *', () => {
 //        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//            client.send(chatID, "ערב נעים!")
+//            client.sendText(chatID, "ערב נעים!")
 //        }
 //    });
 //}
 
 function start(client) {
+    //Check if there are birthdays everyday at midnight
+    schedule.scheduleJob('0 0 * * *', () => {
+        const today = new Date();
+        const dayToday = today.getDate();
+        const monthToday = today.getDate() + 1; //+1 'cause January is 0!
+
+        for (let group in groupsDict) {
+            for (let birthDay in group.birthdays) {
+                if (group.birthdays[birthDay][0] === dayToday && group.birthdays[birthDay][1] === monthToday) {
+                    let stringForSending = "מזל טוב ל " + birthDay;
+                    client.sendText(group.groupID, stringForSending)
+                }
+            }
+        }
+    });
     client.onMessage(async message => {
         if (message != null) {
             await handleUserRest(client, message);

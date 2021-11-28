@@ -24,8 +24,8 @@ class HF {
                 }
             }
             //check if filter exist on DB if it does return false otherwise add filters to DB
-            if (groupsDict[chatID].addFilters(filter, filter_reply)) {
-                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filter", function () {
+            if (groupsDict[chatID].addFilter(filter, filter_reply)) {
+                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
                 });
             }
@@ -43,7 +43,7 @@ class HF {
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
-                await HDB.delArgsFromDB(filter, chatID, "filter", function () {
+                await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " הוסר בהצלחה", messageID);
                 });
             }

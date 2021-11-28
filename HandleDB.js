@@ -11,9 +11,9 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filter") {
+            if (filterOrTagsOrBirthday === "filters") {
                 objectToAddToDataBase = { ID: ID, filter: key, filter_reply: value1 };
-            } else if (filterOrTagsOrBirthday === "tag") {
+            } else if (filterOrTagsOrBirthday === "tags") {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2 };
@@ -59,11 +59,11 @@ class HDB {
             let name = document.name;
             let phone_number = document.phone_number;
             if (ID in groupsDict) {
-                groupsDict[ID].addTags(name, phone_number);
+                groupsDict[ID].addTag(name, phone_number);
             }
             else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].addTags(name, phone_number);
+                groupsDict[ID].addTag(name, phone_number);
             }
         }
         function makeGroupFilters(document) {
@@ -71,11 +71,24 @@ class HDB {
             let filter = document.filter;
             let filter_reply = document.filter_reply;
             if (ID in groupsDict) {
-                groupsDict[ID].addFilters(filter, filter_reply);
+                groupsDict[ID].addFilter(filter, filter_reply);
             }
             else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].addFilters(filter, filter_reply);
+                groupsDict[ID].addFilter(filter, filter_reply);
+            }
+        }
+        function makeGroupBirthDay(document) {
+            let ID = document.ID;
+            let name = document.name;
+            let birthDay = document.birthDay;
+            let birthMonth = document.birthMonth;
+            if (ID in groupsDict) {
+                groupsDict[ID].addBirthday(name, birthDay, birthMonth);
+            }
+            else {
+                groupsDict[ID] = new group(ID);
+                groupsDict[ID].addBirthday(name, birthDay, birthMonth);
             }
         }
         MongoClient.connect(url, function (err, db) {
@@ -103,6 +116,15 @@ class HDB {
                 }
                 callback(groupsDict);
                 db.close();
+            });
+            dbo.collection("birthday-groups").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + "addArgsToDB-birthday-find");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++) {
+                    makeGroupBirthDay(result[i]);
+                }
             });
         });
     }
