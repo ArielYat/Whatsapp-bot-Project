@@ -40,7 +40,7 @@ async function handleFilters(client, message) {
     else{
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
-                await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict);
+                await FIH.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter,restGroupsAuto);
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");

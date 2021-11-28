@@ -98,7 +98,7 @@ class FIH {
             client.reply(chatID, "כבודו אתה בטוח שהשתמשת במקף?", messageID);
         }
     }
-    static async checkFilters(client, bodyText, chatID, messageID, groupsDict) {
+    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter,restGroupsAuto) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;
             for (const word in filters) {
@@ -108,7 +108,14 @@ class FIH {
                         (location + word.length >= bodyText.length ||
                             !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
                         groupsDict[chatID].addToFilterCounter();
-                        await client.sendReplyWithMentions(chatID, filters[word], messageID);
+                        if(groupsDict[chatID].filterCounter < limitFilter) {
+                            await client.sendReplyWithMentions(chatID, filters[word], messageID);
+                        }
+                        else if(groupsDict[chatID].filterCounter === limitFilter){
+                            await client.sendText(chatID, "כמה פילטרים בהודעה אחת הקבוצה מושתקת ל10 דקות");
+                            groupsDict[chatID].addToFilterCounter();
+                            restGroupsAuto.push(chatID);
+                        }
                     }
                 }
             }
