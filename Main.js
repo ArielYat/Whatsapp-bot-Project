@@ -246,6 +246,20 @@ schedule.scheduleJob('0 0 * * *', () => {
     }
 });
 
+////Send Good Morning/Evening messages
+//{
+//    schedule.scheduleJob('0 7 * * *', () => {
+//        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
+//            client.send(chatID, "בוקר טוב!")
+//        }
+//    });
+//    schedule.scheduleJob('0 18 * * *', () => {
+//        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
+//            client.send(chatID, "ערב נעים!")
+//        }
+//    });
+//}
+
 function start(client) {
     client.onMessage(async message => {
         if (message != null) {
