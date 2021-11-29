@@ -1,9 +1,10 @@
-node_modules
+node_modules\
 _IGNORE_session
 package-lock.json
 session.data.json
 package.json
-logs
+logs\
+.vs\
 
 # managed by open-wa
 **.data.json
