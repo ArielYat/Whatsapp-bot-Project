@@ -112,7 +112,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupFilters(result[i]);
+                    makeGroupFilter(result[i]);
                 }
                 callback(groupsDict);
                 db.close();
