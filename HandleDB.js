@@ -11,9 +11,9 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filter") {
+            if (filterOrTagsOrBirthday === "filters") {
                 objectToAddToDataBase = { ID: ID, filter: key, filter_reply: value1 };
-            } else if (filterOrTagsOrBirthday === "tag") {
+            } else if (filterOrTagsOrBirthday === "tags") {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2 };
@@ -97,7 +97,7 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            dbo.collection("tag-groups").find({}).toArray(function (err, result) {
+            dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + "addArgsToDB-tags-find");
                     return;
@@ -106,7 +106,7 @@ class HDB {
                     makeGroupID(result[i]);
                 }
             });
-            dbo.collection("filter-groups").find({}).toArray(function (err, result) {
+            dbo.collection("filters-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + "addArgsToDB-filters-find");
                     return;

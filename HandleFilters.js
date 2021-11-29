@@ -25,12 +25,12 @@ class HF {
             }
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilter(filter, filter_reply)) {
-                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filter", function () {
+                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
                 });
             }
             else {
-                client.reply(chatID, " הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב \n ערוך פילטר"
+                client.reply(chatID, " הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב:\nערוך פילטר "
                     + filter + " - " + filter_reply, messageID);
             }
         }
@@ -43,7 +43,7 @@ class HF {
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
-                await HDB.delArgsFromDB(filter, chatID, "filter", function () {
+                await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " הוסר בהצלחה", messageID);
                 });
             }
@@ -73,7 +73,7 @@ class HF {
                         }
                     }
                 }
-                if (groupsDict[chatID].delFilters(filter)) {
+                if (groupsDict[chatID].delFilter(filter)) {
                     await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                         groupsDict[chatID].addFilter(filter, filter_reply);
                         HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
@@ -107,7 +107,7 @@ class HF {
                             await client.sendReplyWithMentions(chatID, filters[word], messageID);
                         }
                         else if (groupsDict[chatID].filterCounter === limitFilter) {
-                            await client.sendText(chatID, "כמה פילטרים בהודעה אחת הקבוצה מושתקת ל10 דקות");
+                            await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
                             groupsDict[chatID].addToFilterCounter();
                             restGroupsAuto.push(chatID);
                         }

@@ -9,6 +9,8 @@ let restGroupsAuto = [];
 const the_interval_pop = 10 * 60 * 1000; //in ms
 const the_interval_reset = 3 * 60 * 1000; //in ms
 const limitFilter = 15;
+const rule = new schedule.RecurrenceRule();
+rule.tz = 'Israel';
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
@@ -201,7 +203,7 @@ async function sendHelp(client, message) {
             "\n לדוגמה תייג יוסי" +
             "\n הוסף חבר לתיוג [שם] - [מספר טלפון]" +
             "\n לדוגמה הוסף חבר לתיוג [יוסי] - 972541234567" +
-            "\n הסר מחבר תיוג [שם]" +
+            "\n הסר חבר מתיוג [שם]" +
             "\n לדוגמה הסר חבר מתיוג יוסי" +
             "\n תייג כולם = מתייגת את כל האנשים הנמצאים בקבוצה" +
             "\n הפוך לסטיקר = הופך לסטיקר את התמונה המסומנת" +
@@ -240,21 +242,22 @@ setInterval(function () {
 
 function start(client) {
     //Check if there are birthdays everyday at midnight
-    schedule.scheduleJob('0 0 * * *', () => {
+    schedule.scheduleJob('09 22 * * *', () => {
         const today = new Date();
         const dayToday = today.getDate();
-        const monthToday = today.getDate() + 1; //+1 'cause January is 0!
+        const monthToday = today.getMonth() + 1; //+1 'cause January is 0!
 
         for (let group in groupsDict) {
-            for (let birthDay in group.birthdays) {
-                if (group.birthdays[birthDay][0] === dayToday && group.birthdays[birthDay][1] === monthToday) {
-                    let stringForSending = "מזל טוב ל " + birthDay;
-                    client.sendText(group.groupID, stringForSending)
+            let currentGroup = groupsDict[group];
+            for (let birthDay in currentGroup.birthdays) {
+                if (currentGroup.birthdays[birthDay][0] == dayToday && currentGroup.birthdays[birthDay][1] == monthToday) {
+                    let stringForSending = "מזל טוב ל" + birthDay;
+                    client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
         }
     });
-    //Check every function every time a messsge is received
+    //Check every function every time a message is received
     client.onMessage(async message => {
         if (message != null) {
             await handleUserRest(client, message);
