@@ -17,8 +17,7 @@ class HB {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if(birthday <= 31 && birthmonth <= 12
-                && birthday >= 0 && birthmonth >= 0) {
+                if (birthday <= 31 && birthmonth <= 12 && birthday >= 0 && birthmonth >= 0) {
                     if (groupsDict[chatID].addBirthday(name, birthday, birthmonth)) {
                         await HDB.addArgsToDB(name, birthday, birthmonth, chatID, "birthday", function () {
                             client.reply(chatID, "יום ההולדת של האדם " + name + " נוסף בהצלחה", messageID);
@@ -27,8 +26,8 @@ class HB {
                         client.reply(chatID, "יום ההולדת של האדם " + name + " כבר קיים במאגר של קבוצה זו", messageID);
                     }
                 }
-                else{
-                    client.reply(chatID, "התאריך שבדקת הוא לא תאריך קיים", messageID);
+                else {
+                    client.reply(chatID, "התאריך שהזנת לא מציאותי, בדיוק כמוך", messageID);
                 }
             }
             else {

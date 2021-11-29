@@ -1,7 +1,7 @@
-const schedule = require('node-schedule');
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
-    HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL"),
-    wa = require("@open-wa/wa-automate");
+    HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
+const wa = require("@open-wa/wa-automate");
+const schedule = require('node-schedule');
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
@@ -158,7 +158,7 @@ async function handleGroupRest(client, message) {
     const messageId = message.id;
     const responseGroupId = message.chat.id;
     const userID = message.sender.id;
-    if (textMessage.startsWith("חסימת קבוצה")) {
+    if (textMessage.startsWith("חסום קבוצה")) {
         if (userID === "972543293155@c.us") {
             restGroups.push(responseGroupId);
             await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
@@ -168,7 +168,7 @@ async function handleGroupRest(client, message) {
         }
     }
 
-    if (textMessage.startsWith("שחרור קבוצה")) {
+    if (textMessage.startsWith("שחרר קבוצה")) {
         if (userID === "972543293155@c.us") {
             const groupIdIndex = restGroups.indexOf(responseGroupId);
             restGroups.splice(groupIdIndex, 1);
@@ -212,35 +212,31 @@ async function sendHelp(client, message) {
     }
 }
 
-//Reset counter of filters of all groups every 3 min
+//Reset filter counter for all groups every 3 minutes
 setInterval(function () {
     for (let group in groupsDict) {
         groupsDict[group].filterCounterRest();
     }
 }, the_interval_pop);
 
-//Unlock all groups from rest list every 10 min
+//Remove all groups from rest list every 10 minutes
 setInterval(function () {
     while (restGroupsAuto.length > 0) {
         restGroupsAuto.pop();
     }
 }, the_interval_reset);
 
-
-
 ////Send Good Morning/Evening messages
-//{
-//    schedule.scheduleJob('0 7 * * *', () => {
-//        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//            client.sendText(chatID, "בוקר טוב!")
-//        }
-//    });
-//    schedule.scheduleJob('0 18 * * *', () => {
-//        for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//            client.sendText(chatID, "ערב נעים!")
-//        }
-//    });
-//}
+//schedule.scheduleJob('0 7 * * *', () => {
+//    for (const [chatID, object] of groupsDict.entries(groupsDict)) {
+//        client.sendText(chatID, "בוקר טוב!")
+//    }
+//});
+//schedule.scheduleJob('0 18 * * *', () => {
+//    for (const [chatID, object] of groupsDict.entries(groupsDict)) {
+//        client.sendText(chatID, "ערב נעים!")
+//    }
+//});
 
 function start(client) {
     //Check if there are birthdays everyday at midnight
@@ -258,6 +254,7 @@ function start(client) {
             }
         }
     });
+    //Check every function every time a messsge is received
     client.onMessage(async message => {
         if (message != null) {
             await handleUserRest(client, message);

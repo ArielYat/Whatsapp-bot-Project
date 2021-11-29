@@ -11,9 +11,9 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filters") {
+            if (filterOrTagsOrBirthday === "filter") {
                 objectToAddToDataBase = { ID: ID, filter: key, filter_reply: value1 };
-            } else if (filterOrTagsOrBirthday === "tags") {
+            } else if (filterOrTagsOrBirthday === "tag") {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2 };
@@ -66,7 +66,7 @@ class HDB {
                 groupsDict[ID].addTag(name, phone_number);
             }
         }
-        function makeGroupFilters(document) {
+        function makeGroupFilter(document) {
             let ID = document.ID;
             let filter = document.filter;
             let filter_reply = document.filter_reply;
@@ -78,7 +78,7 @@ class HDB {
                 groupsDict[ID].addFilter(filter, filter_reply);
             }
         }
-        function makeGroupBirthDay(document) {
+        function makeGroupBirthday(document) {
             let ID = document.ID;
             let name = document.name;
             let birthDay = document.birthDay;
@@ -97,7 +97,7 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            dbo.collection("tags-groups").find({}).toArray(function (err, result) {
+            dbo.collection("tag-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + "addArgsToDB-tags-find");
                     return;
@@ -106,7 +106,7 @@ class HDB {
                     makeGroupID(result[i]);
                 }
             });
-            dbo.collection("filters-groups").find({}).toArray(function (err, result) {
+            dbo.collection("filter-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + "addArgsToDB-filters-find");
                     return;
@@ -123,7 +123,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupBirthDay(result[i]);
+                    makeGroupBirthday(result[i]);
                 }
             });
         });

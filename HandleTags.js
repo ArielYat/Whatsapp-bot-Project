@@ -15,7 +15,7 @@ class HT {
             //check if tag exists in DB if it does return false otherwise add tag to DB
             if (groupMembersArray != null && groupMembersArray.includes(phoneNumber + "@c.us")) {
                 if (groupsDict[chatID].addTag(tag, phoneNumber)) {
-                    await HDB.addArgsToDB(tag, phoneNumber, null, chatID, "tags", function () {
+                    await HDB.addArgsToDB(tag, phoneNumber, null, chatID, "tag", function () {
                         client.reply(chatID, "מספר הטלפון של האדם " + tag + " נוסף בהצלחה", messageID);
                     });
                 }
@@ -36,7 +36,7 @@ class HT {
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delTag(tag)) {
-                await HDB.delArgsFromDB(tag, chatID, "tags", function () {
+                await HDB.delArgsFromDB(tag, chatID, "tag", function () {
                     client.reply(chatID, "המספר טלפון של האדם " + tag + " הוסר בהצלחה", messageID);
                 });
             }
