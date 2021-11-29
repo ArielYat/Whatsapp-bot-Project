@@ -4,10 +4,9 @@ package-lock.json
 session.data.json
 package.json
 logs\
-.vs\
+/.vs
 
 # managed by open-wa
 **.data.json
 **.node-persist**
 # end managed by open-wa
-/.vs
