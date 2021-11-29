@@ -10,3 +10,4 @@ logs\
 **.data.json
 **.node-persist**
 # end managed by open-wa
+/.vs
