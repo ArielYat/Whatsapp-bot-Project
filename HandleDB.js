@@ -1,4 +1,4 @@
-const group = require("./group");
+const group = require("./Group");
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 

@@ -1,4 +1,4 @@
-const group = require("./group");
+const group = require("./Group");
 const HDB = require("./HandleDB");
 
 class HT {

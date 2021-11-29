@@ -4,13 +4,13 @@ class group {
     #tags;
     #birthdays;
     #filterCounter = 0;
+
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
         this.#birthdays = {};
     }
-
     addFilter(filter, filter_reply) {
         if (!this.#filters.hasOwnProperty(filter)) {
             this.#filters[filter] = filter_reply;
