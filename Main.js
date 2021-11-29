@@ -1,4 +1,4 @@
-const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
+const group = require("./group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
 const wa = require("@open-wa/wa-automate");
 const schedule = require('node-schedule');
@@ -14,7 +14,7 @@ const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
-    wa.create({ headless: false }).then(client => start(client));
+    wa.create({ headless: false, multiDevice: true }).then(client => start(client));
 });
 
 //Handle filters - add, remove & edit filters and respond to them
@@ -242,7 +242,7 @@ setInterval(function () {
 
 function start(client) {
     //Check if there are birthdays everyday at midnight
-    schedule.scheduleJob('09 22 * * *', () => {
+    schedule.scheduleJob('0 6 * * *', () => {
         const today = new Date();
         const dayToday = today.getDate();
         const monthToday = today.getMonth() + 1; //+1 'cause January is 0!
