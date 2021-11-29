@@ -2,6 +2,8 @@ const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./H
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
 const wa = require("@open-wa/wa-automate");
 const schedule = require('node-schedule');
+const rule = new schedule.RecurrenceRule();
+rule.tz = 'Israel';
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
@@ -9,8 +11,6 @@ let restGroupsAuto = [];
 const the_interval_pop = 10 * 60 * 1000; //in ms
 const the_interval_reset = 3 * 60 * 1000; //in ms
 const limitFilter = 15;
-const rule = new schedule.RecurrenceRule();
-rule.tz = 'Israel';
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
