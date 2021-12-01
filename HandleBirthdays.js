@@ -36,7 +36,7 @@ class HB {
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
                 if (birthday <= 31 && birthmonth <= 12 && birthday >= 0 && birthmonth >= 0) {
-                    if (groupsDict[chatID].addBirthday(name, birthday, birthmonth)) {
+                    if (groupsDict[chatID].addBirthday(name, birthday, birthmonth, birthyear)) {
                         await HDB.addArgsToDB(name, birthday, birthmonth, birthyear, chatID, "birthday", function () {
                             client.reply(chatID, "יום ההולדת של האדם " + name + " נוסף בהצלחה", messageID);
                         });
