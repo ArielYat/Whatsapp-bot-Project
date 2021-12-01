@@ -83,12 +83,13 @@ class HDB {
             let name = document.name;
             let birthDay = document.birthDay;
             let birthMonth = document.birthMonth;
+            let birthYear
             if (ID in groupsDict) {
-                groupsDict[ID].addBirthday(name, birthDay, birthMonth);
+                groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
             }
             else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].addBirthday(name, birthDay, birthMonth);
+                groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
             }
         }
         MongoClient.connect(url, function (err, db) {

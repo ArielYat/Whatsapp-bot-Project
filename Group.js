@@ -47,9 +47,9 @@ class group {
             return false;
         }
     }
-    addBirthday(name, birthday, birthMonth) {
+    addBirthday(name, birthDay, birthMonth, birthYear) {
         if (!this.#birthdays.hasOwnProperty(name)) {
-            this.#birthdays[name] = [birthday, birthMonth];
+            this.#birthdays[name] = [birthDay, birthMonth, birthYear];
             return true;
         }
         else {
