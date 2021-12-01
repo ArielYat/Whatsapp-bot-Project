@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
 class HDB {
-    static async addArgsToDB(key, value1, value2, ID, filterOrTagsOrBirthday, callback) {
+    static async addArgsToDB(key, value1, value2, value3, ID, filterOrTagsOrBirthday, callback) {
         let objectToAddToDataBase = null;
         MongoClient.connect(url, function (err, db) {
             if (err) {
@@ -16,7 +16,7 @@ class HDB {
             } else if (filterOrTagsOrBirthday === "tags") {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
-                objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2 };
+                objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2, birthdayyear: value3 };
             }
             dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {

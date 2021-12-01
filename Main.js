@@ -1,7 +1,6 @@
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
-const wa = require("@open-wa/wa-automate");
-const schedule = require('node-schedule');
+const wa = require("@open-wa/wa-automate"), schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
 let groupsDict = {};
@@ -23,16 +22,16 @@ async function handleFilters(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith("הוסף פילטר")) {
+    if (bodyText.startsWith("הוסף פילטר" || "Add filter")) {
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הסר פילטר")) {
+    else if (bodyText.startsWith("הסר פילטר" || "Remove filter")) {
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("ערוך פילטר")) {
+    else if (bodyText.startsWith("ערוך פילטר" || "Edit filter")) {
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה פילטרים")) {
+    else if (bodyText.startsWith("הראה פילטרים" || "Show filters")) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
     }
     else {
@@ -41,7 +40,7 @@ async function handleFilters(client, message) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
-                await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
+                await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל־10 דקות");
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsAuto.push(chatID);
             }
@@ -56,27 +55,26 @@ async function handleTags(client, message) {
     const messageID = message.id;
     let quotedMsgID = messageID;
 
-    if (message.quotedMsg != null) {
+    if (message.quotedMsg != null)
         quotedMsgID = message.quotedMsg.id;
-    }
     let groupMembersArray = null;
-    if (message.chat.isGroup) {
+    if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
+
+    if (bodyText.startsWith("תייג " || "Tag ")) {
+        await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    if (bodyText.startsWith("הוסף חבר לתיוג")) {
+    else if (bodyText.startsWith("הוסף חבר לתיוג" || "Add tag buddy")) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     }
-    else if (bodyText.startsWith("הסר חבר מתיוג")) {
+    else if (bodyText.startsWith("הסר חבר מתיוג" || "Remove tag buddy")) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה רשימת חברים לתיוג")) {
-        await HT.showTags(client, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith("תייג כולם")) {
+    else if (bodyText.startsWith("תייג כולם" || "Tag everyone")) {
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("תייג ")) {
-        await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
+    else if (bodyText.startsWith("הראה רשימת חברים לתיוג" || "Show tag buddies")) {
+        await HT.showTags(client, chatID, messageID, groupsDict);
     }
 }
 
@@ -86,13 +84,13 @@ async function handleBirthdays(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith("הוסף יום הולדת")) {
+    if (bodyText.startsWith("הוסף יום הולדת" || "Add birthday")) {
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הסר יום הולדת")) {
+    else if (bodyText.startsWith("הסר יום הולדת" || "Remove birthday")) {
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה ימי הולדת")) {
+    else if (bodyText.startsWith("הראה ימי הולדת" || "Show birthdays")) {
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
     }
 }
@@ -101,7 +99,7 @@ async function handleBirthdays(client, message) {
 async function handleStickers(client, message) {
     const textMessage = message.body;
 
-    if (textMessage.startsWith("הפוך לסטיקר")) {
+    if (textMessage.startsWith("הפוך לסטיקר" || "Make into sticker")) {
         if (message.quotedMsg != null) {
             const quotedMsg = message.quotedMsg;
             if (message.quotedMsg.type === "image") {
@@ -184,7 +182,7 @@ async function handleGroupRest(client, message) {
 }
 
 //Send a menu of all of the bot's options 
-async function sendHelp(client, message) {
+async function handleHelp(client, message) {
     let messageID = null;
     if (message.quotedMsg != null) {
         messageID = message.quotedMsg.id;
@@ -192,35 +190,70 @@ async function sendHelp(client, message) {
     else {
         messageID = message.id;
     }
-    if (message.body.startsWith("רשימת פקודות")) {
-        await client.reply(message.chat.id, "*פילטרים*" +
-            "\n הוסף פילטר[פילטר] - [תשובה]" +
-            "\n לדוגמה: הוסף פילטר אוכל - בננה " +
+    if (message.body.startsWith("הראה עזרה" || "Show help")) {
+        await client.reply(message.chat.id,
+            "*הוראות בעברית (אנגלית בהמשך)*" +                                   //Hebrew Instructions
+            "\n _פילטרים_" +
+            "\n הוסף פילטר[פילטר] - [תגובת הבוט]" +
+            "\n לדוגמה: הוסף פילטר אוכל - בננה" +
             "\n הסר פילטר [פילטר]" +
             "\n לדוגמה: הסר פילטר אוכל" +
             "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
             "\n לדוגמה: ערוך פילטר אוכל - אפרסק" +
             "\n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת" +
-            "*תיוגים*" +
+            "_תיוגים_" +
             "\n תייג [אדם]" +
             "\n לדוגמה: תייג יוסי" +
             "\n הוסף חבר לתיוג [אדם] - [מספר טלפון]" +
-            "\n לדוגמה: הוסף חבר לתיוג יוסי - 972541234567" +
+            "\n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567" +
             "\n הסר חבר מתיוג [אדם]" +
             "\n לדוגמה: הסר חבר מתיוג יוסי" +
-            "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה" +
+            "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר" +
             "\n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג" +
-            "*ימי הולדת*" +
-            "\n הוסף יום הולדת [אדם] - [חודש.יום]" +
-            "\n לדוגמה: הוסף יום הולדת שלומה - 27.6" +
+            "_ימי הולדת_" +
+            "\n הוסף יום הולדת [אדם] - [שנה.חודש.יום]" +
+            "\n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021" +
             "\n הסר יום הולדת [אדם]" +
             "\n לדוגמה: הסר יום הולדת יוסי" +
             "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
-            "*יצירת סטיקרים*" +
-            "\n הפוך לסטיקר - הופך לסטיקר את התמונה המסומנת" +
-            "*טיפ מיוחד!*" +
-            "\n בהוספת פילטר אפשר להשתמש גם ב[שם] בשביל לתייג מישהו בפילטר לדוגמה" +
-            "\n הוסף פילטר משה - אוכל [יוסי] יענה אוכל @יוסי ויתייג את יוסי"
+            "_יצירת סטיקרים_" +
+            "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
+            "_סריקת קישורים_" +
+            "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
+            "_טיפ מיוחד!_" +
+            "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
+            "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי" +
+            "*English Instructions*" +                                              // English Instructions
+            "_Filters_" +
+            "\n Add filter [filter] - [bot response]" +
+            "\n For example: Add filter food - banana" +
+            "\n Remove filter food" +
+            "\n For example: Remove filter food" +
+            "\n Edit filter [old filter] - [new response]" +
+            "\n For example: Edit filter food - peach" +
+            "\n Show filters - displays a list of filters defined in the group" +
+            "_Tags_" +
+            "\n Tag [person]" +
+            "\n For example: Tag Joseph" +
+            "\n Add tag buddy [person] - [phone number]" +
+            "\n For example: Add tag buddy Joseph - 972501234567" +
+            "\n Remove tag buddy [person]" +
+            "\n For example: Remove tag buddy Joseph" +
+            "\n Tag everyone - tags all people in the group who have a set tag" +
+            "\n Show tag buddies - displays a list of all tags defined in the group" +
+            "_Birthdays_" +
+            "\n Add birthday [person] - [day.month.year]" +
+            "\n For example: Add birthday Joseph - 27.6.2021" +
+            "\n Remove birthday [person]" +
+            "\n For example: Remove birthday Joseph" +
+            "\n Show birthdays - displays a list of all birthdays defined in the group" +
+            "_Sticker Making_" +
+            "\n Make into sticker - the bot makes the replied to image into a sticker and sends it" +
+            "_Link scanning_" +
+            "\n Scan [link] - Scans the given link for virues and determines if it's safe" +
+            "_Special Tip!_" +
+            "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
+            "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
             , messageID);
     }
 }
@@ -252,22 +285,15 @@ setInterval(function () {
 //});
 
 function start(client) {
+    //Sends changelog at every bot restart
+    for (let group in groupsDict) {
+        let currentGroup = groupsDict[group];
+        client.sendText(currentGroup.groupID,
+            "התרחש עדכון חדש לאלכסנדר! שלחו 'הראה פקודות' כדי לראות אם ישנה פקודה חדשה" +
+            "/n Alexsander recieved an update! Send 'Show help' to see if anything has changed")
+    }
     //Check if there are birthdays everyday at midnight
-    schedule.scheduleJob('0 6 * * *', () => {
-        const today = new Date();
-        const dayToday = today.getDate();
-        const monthToday = today.getMonth() + 1; //+1 'cause January is 0!
-
-        for (let group in groupsDict) {
-            let currentGroup = groupsDict[group];
-            for (let birthDay in currentGroup.birthdays) {
-                if (currentGroup.birthdays[birthDay][0] == dayToday && currentGroup.birthdays[birthDay][1] == monthToday) {
-                    let stringForSending = "מזל טוב ל" + birthDay;
-                    client.sendText(currentGroup.groupID, stringForSending)
-                }
-            }
-        }
-    });
+    schedule.scheduleJob('0 6 * * *', () => { HB.checkBirthday(client, groupsDict) });
     //Check every function every time a message is received
     client.onMessage(async message => {
         if (message != null) {
@@ -279,8 +305,8 @@ function start(client) {
                 await handleTags(client, message);
                 await handleBirthdays(client, message);
                 await handleStickers(client, message);
+                await handleHelp(client, message);
                 await HURL.stripLinks(client, message);
-                await sendHelp(client, message);
             }
         }
     });

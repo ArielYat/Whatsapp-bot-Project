@@ -3,8 +3,32 @@ const HDB = require("./HandleDB");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
+    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
+        if (chatID in groupsDict) {
+            const filters = groupsDict[chatID].filters;
+            for (const word in filters) {
+                const location = bodyText.indexOf(word);
+                if (bodyText.includes(word)) {
+                    if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
+                        (location + word.length >= bodyText.length ||
+                            !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
+                        groupsDict[chatID].addToFilterCounter();
+                        if (groupsDict[chatID].filterCounter < limitFilter) {
+                            await client.sendReplyWithMentions(chatID, filters[word], messageID);
+                        }
+                        else if (groupsDict[chatID].filterCounter === limitFilter) {
+                            await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
+                            groupsDict[chatID].addToFilterCounter();
+                            restGroupsAuto.push(chatID);
+                        }
+                    }
+                }
+            }
+        }
+    }
     static async addFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הוסף פילטר", "");
+        bodyText = bodyText.replace("Add filter", "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -25,7 +49,7 @@ class HF {
             }
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilter(filter, filter_reply)) {
-                await HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
+                await HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
                     client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
                 });
             }
@@ -40,6 +64,7 @@ class HF {
     }
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הסר פילטר", "");
+        bodyText = bodyText.replace("Remove filter", "");
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
@@ -58,6 +83,7 @@ class HF {
     }
     static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("ערוך פילטר", "");
+        bodyText = bodyText.replace("Edit filter", "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -91,29 +117,6 @@ class HF {
         }
         else {
             client.reply(chatID, "כבודו אתה בטוח שהשתמשת במקף?", messageID);
-        }
-    }
-    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
-        if (chatID in groupsDict) {
-            const filters = groupsDict[chatID].filters;
-            for (const word in filters) {
-                const location = bodyText.indexOf(word);
-                if (bodyText.includes(word)) {
-                    if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
-                        (location + word.length >= bodyText.length ||
-                            !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
-                        groupsDict[chatID].addToFilterCounter();
-                        if (groupsDict[chatID].filterCounter < limitFilter) {
-                            await client.sendReplyWithMentions(chatID, filters[word], messageID);
-                        }
-                        else if (groupsDict[chatID].filterCounter === limitFilter) {
-                            await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
-                            groupsDict[chatID].addToFilterCounter();
-                            restGroupsAuto.push(chatID);
-                        }
-                    }
-                }
-            }
         }
     }
     static async showFilters(client, chatID, messageID, groupsDict) {

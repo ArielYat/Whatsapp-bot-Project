@@ -9,7 +9,7 @@ class HURL {
         const textMessage = message.body;
         const chatID = message.chat.id;
         const messageId = message.id;
-        if (textMessage.includes("סרוק ")) {
+        if (textMessage.includes("סרוק " || "Scan")) {
             const found = textMessage.match(urlRegex);
             if (found == null) {
                 return;

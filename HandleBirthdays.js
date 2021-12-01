@@ -2,6 +2,23 @@
 const HDB = require("./HandleDB");
 
 class HB {
+    static async checkBirthday(client, groupsDict) {
+        const today = new Date();
+        const dayToday = today.getDate();
+        const monthToday = today.getMonth() + 1; //+1 'cause January is 0!
+        const yearToday = today.getFullYear();
+
+        for (let group in groupsDict) {
+            let currentGroup = groupsDict[group];
+            for (let person in currentGroup.birthdays) {
+                if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
+                    let stringForSending = "מזל טוב ל" + person + " , הוא/היא בן/בת " +
+                        (currentGroup.birthdays[person][2] - yearToday) + "היום!";
+                    client.sendText(currentGroup.groupID, stringForSending)
+                }
+            }
+        }
+    }
     static async addBirthday(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace("הוסף יום הולדת", "");
         if (bodyText.includes("-")) {
@@ -12,6 +29,7 @@ class HB {
                 fullbirthday = fullbirthday.split(".");
                 const birthday = fullbirthday[0].trim();
                 const birthmonth = fullbirthday[1].trim();
+                const birthyear = full.birthday[2].trim();
                 //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
                 if (!(chatID in groupsDict)) {
                     groupsDict[chatID] = new group(chatID);
@@ -19,7 +37,7 @@ class HB {
                 //check if name exists in DB if it does return false otherwise add name to DB
                 if (birthday <= 31 && birthmonth <= 12 && birthday >= 0 && birthmonth >= 0) {
                     if (groupsDict[chatID].addBirthday(name, birthday, birthmonth)) {
-                        await HDB.addArgsToDB(name, birthday, birthmonth, chatID, "birthday", function () {
+                        await HDB.addArgsToDB(name, birthday, birthmonth, birthyear, chatID, "birthday", function () {
                             client.reply(chatID, "יום ההולדת של האדם " + name + " נוסף בהצלחה", messageID);
                         });
                     } else {
@@ -60,7 +78,7 @@ class HB {
             let stringForSending = "";
             let birthdays = groupsDict[chatID].birthdays;
             Object.entries(birthdays).forEach(([key, value]) => {
-                stringForSending += key + " - " + value[0] + "." + value[1] + "\n";
+                stringForSending += key + " - " + value[0] + "." + value[1] + "." + value[2] + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
         }
