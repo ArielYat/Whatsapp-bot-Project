@@ -11,9 +11,9 @@ class HB {
         for (let group in groupsDict) {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
-                if (currentGroup.birthdays[person][0] === dayToday && currentGroup.birthdays[person][1] === monthToday) {
+                if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
                     let stringForSending = "מזל טוב ל" + person + " , הוא/היא בן/בת " +
-                        (currentGroup.birthdays[person][2] - yearToday) + "היום!";
+                        (parseInt(currentGroup.birthdays[person][2]) - yearToday + " היום! ");
                     client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
@@ -24,12 +24,12 @@ class HB {
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const name = bodyText[0].trim();
-            let fullbirthday = bodyText[1].trim();
-            if (fullbirthday.includes(".")) {
-                fullbirthday = fullbirthday.split(".");
-                const birthday = fullbirthday[0].trim();
-                const BirthMonth = fullbirthday[1].trim();
-                const BirthYear = fullbirthday[2].trim();
+            let fullBirthday = bodyText[1].trim();
+            if (fullBirthday.includes(".")) {
+                fullBirthday = fullBirthday.split(".");
+                const birthday = fullBirthday[0].trim();
+                const BirthMonth = fullBirthday[1].trim();
+                const BirthYear = fullBirthday[2].trim();
                 //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
                 if (!(chatID in groupsDict)) {
                     groupsDict[chatID] = new group(chatID);

@@ -103,7 +103,7 @@ class HF {
                 if (groupsDict[chatID].delFilter(filter)) {
                     await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                         groupsDict[chatID].addFilter(filter, filter_reply);
-                        HDB.addArgsToDB(filter, filter_reply, null, chatID, "filters", function () {
+                        HDB.addArgsToDB(filter, filter_reply, null, null,  chatID, "filters", function () {
                             client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageID);
                         });
                     });

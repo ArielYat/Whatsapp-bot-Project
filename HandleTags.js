@@ -12,7 +12,7 @@ class HT {
         for (let i = 0; i < splitText.length; i++) {
             for (const tag in tags) {
                 let splitTextForChecking = splitText[i];
-                if (splitText[i].charAt(0) === "ו") {
+                if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו") {
                     splitTextForChecking = splitText[i].slice(1);
                 }
                 if (splitTextForChecking === tag) {

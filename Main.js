@@ -1,8 +1,10 @@
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
 const wa = require("@open-wa/wa-automate"), schedule = require('node-schedule');
+const {cli} = require("@open-wa/wa-automate/dist/cli/setup");
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
+
 let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
@@ -13,7 +15,7 @@ const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
-    wa.create({ headless: false, multiDevice: true }).then(client => start(client));
+    wa.create({ headless: false }).then(client => start(client));
 });
 
 //Handle filters - add, remove & edit filters and respond to them
@@ -119,7 +121,7 @@ async function handleStickers(client, message) {
     }
 }
 
-//Hande user rest
+//Handle user rest
 async function handleUserRest(client, message) {
     const textMessage = message.body;
     const chatID = message.chat.id;
@@ -201,7 +203,7 @@ async function handleHelp(client, message) {
             "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
             "\n לדוגמה: ערוך פילטר אוכל - אפרסק" +
             "\n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת" +
-            "_תיוגים_ \n" +
+            "\n _תיוגים_" +
             "\n תייג [אדם]" +
             "\n לדוגמה: תייג יוסי" +
             "\n הוסף חבר לתיוג [אדם] - [מספר טלפון]" +
@@ -210,17 +212,17 @@ async function handleHelp(client, message) {
             "\n לדוגמה: הסר חבר מתיוג יוסי" +
             "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר" +
             "\n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג" +
-            "_ימי הולדת_ \n" +
+            "\n _ימי הולדת_" +
             "\n הוסף יום הולדת [אדם] - [שנה.חודש.יום]" +
             "\n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021" +
             "\n הסר יום הולדת [אדם]" +
             "\n לדוגמה: הסר יום הולדת יוסי" +
             "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
-            "_יצירת סטיקרים_ \n" +
+            "\n _יצירת סטיקרים_ " +
             "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
-            "_סריקת קישורים_ \n" +
+            "\n _סריקת קישורים_ "+
             "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
-            "_טיפ מיוחד!_ \n" +
+            "\n _טיפ מיוחד!_ " +
             "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
             "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי" +
             "\n *English Instructions*" +                                              // English Instructions
@@ -285,15 +287,11 @@ setInterval(function () {
 //});
 
 function start(client) {
-    //Sends changelog at every bot restart
-    for (let group in groupsDict) {
-        let currentGroup = groupsDict[group];
-        client.sendText(currentGroup.groupID,
-            "התרחש עדכון חדש לאלכסנדר! שלחו 'הראה פקודות' כדי לראות אם ישנה פקודה חדשה" +
-            "/n Alexander received an update! Send 'Show help' to see if anything has changed")
-    }
-    //Check if there are birthdays everyday at midnight
-    schedule.scheduleJob('0 6 * * *', () => { HB.checkBirthday(client, groupsDict) });
+    //Check if there are birthdays everyday at 6 am
+    schedule.scheduleJob('6 0 * * *', () =>
+    {
+        HB.checkBirthday(client, groupsDict)
+    });
     //Check every function every time a message is received
     client.onMessage(async message => {
         if (message != null) {
