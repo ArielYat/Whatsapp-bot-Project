@@ -1,8 +1,8 @@
-node_modules\
 _IGNORE_session
-package-lock.json
 session.data.json
+package-lock.json
 package.json
+/node_modules
 logs\
 /.vs
 /.idea
