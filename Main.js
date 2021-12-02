@@ -201,7 +201,7 @@ async function handleHelp(client, message) {
             "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
             "\n לדוגמה: ערוך פילטר אוכל - אפרסק" +
             "\n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת" +
-            "_תיוגים_" +
+            "_תיוגים_ \n" +
             "\n תייג [אדם]" +
             "\n לדוגמה: תייג יוסי" +
             "\n הוסף חבר לתיוג [אדם] - [מספר טלפון]" +
@@ -210,21 +210,21 @@ async function handleHelp(client, message) {
             "\n לדוגמה: הסר חבר מתיוג יוסי" +
             "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר" +
             "\n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג" +
-            "_ימי הולדת_" +
+            "_ימי הולדת_ \n" +
             "\n הוסף יום הולדת [אדם] - [שנה.חודש.יום]" +
             "\n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021" +
             "\n הסר יום הולדת [אדם]" +
             "\n לדוגמה: הסר יום הולדת יוסי" +
             "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
-            "_יצירת סטיקרים_" +
+            "_יצירת סטיקרים_ \n" +
             "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
-            "_סריקת קישורים_" +
+            "_סריקת קישורים_ \n" +
             "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
-            "_טיפ מיוחד!_" +
+            "_טיפ מיוחד!_ \n" +
             "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
             "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי" +
-            "*English Instructions*" +                                              // English Instructions
-            "_Filters_" +
+            "\n *English Instructions*" +                                              // English Instructions
+            "\n _Filters_" +
             "\n Add filter [filter] - [bot response]" +
             "\n For example: Add filter food - banana" +
             "\n Remove filter food" +
@@ -232,7 +232,7 @@ async function handleHelp(client, message) {
             "\n Edit filter [old filter] - [new response]" +
             "\n For example: Edit filter food - peach" +
             "\n Show filters - displays a list of filters defined in the group" +
-            "_Tags_" +
+            "\n _Tags_" +
             "\n Tag [person]" +
             "\n For example: Tag Joseph" +
             "\n Add tag buddy [person] - [phone number]" +
@@ -241,17 +241,17 @@ async function handleHelp(client, message) {
             "\n For example: Remove tag buddy Joseph" +
             "\n Tag everyone - tags all people in the group who have a set tag" +
             "\n Show tag buddies - displays a list of all tags defined in the group" +
-            "_Birthdays_" +
+            "\n _Birthdays_" +
             "\n Add birthday [person] - [day.month.year]" +
             "\n For example: Add birthday Joseph - 27.6.2021" +
             "\n Remove birthday [person]" +
             "\n For example: Remove birthday Joseph" +
             "\n Show birthdays - displays a list of all birthdays defined in the group" +
-            "_Sticker Making_" +
+            "\n _Sticker Making_" +
             "\n Make into sticker - the bot makes the replied to image into a sticker and sends it" +
-            "_Link scanning_" +
+            "\n _Link Scanning_" +
             "\n Scan [link] - Scans the given link for viruses and determines if it's safe" +
-            "_Special Tip!_" +
+            "\n _Special Tip!_" +
             "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
             "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
             , messageID);
