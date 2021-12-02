@@ -5,6 +5,7 @@ session.data.json
 package.json
 logs\
 /.vs
+/.idea
 
 # managed by open-wa
 **.data.json

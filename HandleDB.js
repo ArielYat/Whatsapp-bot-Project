@@ -16,7 +16,7 @@ class HDB {
             } else if (filterOrTagsOrBirthday === "tags") {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
-                objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2, birthdayyear: value3 };
+                objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2, birthYear: value3 };
             }
             dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {
@@ -83,7 +83,7 @@ class HDB {
             let name = document.name;
             let birthDay = document.birthDay;
             let birthMonth = document.birthMonth;
-            let birthYear
+            let birthYear = document.birthYear;
             if (ID in groupsDict) {
                 groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
             }

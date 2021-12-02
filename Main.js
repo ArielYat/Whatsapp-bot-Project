@@ -183,7 +183,7 @@ async function handleGroupRest(client, message) {
 
 //Send a menu of all of the bot's options 
 async function handleHelp(client, message) {
-    let messageID = null;
+    let messageID;
     if (message.quotedMsg != null) {
         messageID = message.quotedMsg.id;
     }
@@ -250,7 +250,7 @@ async function handleHelp(client, message) {
             "_Sticker Making_" +
             "\n Make into sticker - the bot makes the replied to image into a sticker and sends it" +
             "_Link scanning_" +
-            "\n Scan [link] - Scans the given link for virues and determines if it's safe" +
+            "\n Scan [link] - Scans the given link for viruses and determines if it's safe" +
             "_Special Tip!_" +
             "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
             "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
@@ -290,7 +290,7 @@ function start(client) {
         let currentGroup = groupsDict[group];
         client.sendText(currentGroup.groupID,
             "התרחש עדכון חדש לאלכסנדר! שלחו 'הראה פקודות' כדי לראות אם ישנה פקודה חדשה" +
-            "/n Alexsander recieved an update! Send 'Show help' to see if anything has changed")
+            "/n Alexander received an update! Send 'Show help' to see if anything has changed")
     }
     //Check if there are birthdays everyday at midnight
     schedule.scheduleJob('0 6 * * *', () => { HB.checkBirthday(client, groupsDict) });

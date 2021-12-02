@@ -33,7 +33,8 @@ class HF {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
             let filter_reply = bodyText[1].trim();
-            //make new group and insert filter + filter replay if group not in DB otherwise just insert filter + filter reply to DB and to group
+            //make new group and insert filter + filter replay if group not in DB otherwise
+            // just insert filter + filter reply to DB and to group
             if (!(chatID in groupsDict)) {
                 groupsDict[chatID] = new group(chatID);
             }

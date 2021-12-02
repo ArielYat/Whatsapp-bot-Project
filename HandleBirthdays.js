@@ -11,7 +11,7 @@ class HB {
         for (let group in groupsDict) {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
-                if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
+                if (currentGroup.birthdays[person][0] === dayToday && currentGroup.birthdays[person][1] === monthToday) {
                     let stringForSending = "מזל טוב ל" + person + " , הוא/היא בן/בת " +
                         (currentGroup.birthdays[person][2] - yearToday) + "היום!";
                     client.sendText(currentGroup.groupID, stringForSending)
@@ -28,16 +28,16 @@ class HB {
             if (fullbirthday.includes(".")) {
                 fullbirthday = fullbirthday.split(".");
                 const birthday = fullbirthday[0].trim();
-                const birthmonth = fullbirthday[1].trim();
-                const birthyear = full.birthday[2].trim();
+                const BirthMonth = fullbirthday[1].trim();
+                const BirthYear = fullbirthday[2].trim();
                 //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
                 if (!(chatID in groupsDict)) {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if (birthday <= 31 && birthmonth <= 12 && birthday >= 0 && birthmonth >= 0) {
-                    if (groupsDict[chatID].addBirthday(name, birthday, birthmonth, birthyear)) {
-                        await HDB.addArgsToDB(name, birthday, birthmonth, birthyear, chatID, "birthday", function () {
+                if (birthday <= 31 && BirthMonth <= 12 && birthday >= 0 && BirthMonth >= 0) {
+                    if (groupsDict[chatID].addBirthday(name, birthday, BirthMonth, BirthYear)) {
+                        await HDB.addArgsToDB(name, birthday, BirthMonth, BirthYear, chatID, "birthday", function () {
                             client.reply(chatID, "יום ההולדת של האדם " + name + " נוסף בהצלחה", messageID);
                         });
                     } else {
