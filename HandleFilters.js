@@ -1,5 +1,6 @@
 const group = require("./Group");
 const HDB = require("./HandleDB");
+const stringsHelp = require("./stringLang");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
@@ -17,7 +18,8 @@ class HF {
                             await client.sendReplyWithMentions(chatID, filters[word], messageID);
                         }
                         else if (groupsDict[chatID].filterCounter === limitFilter) {
-                            await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל10 דקות");
+                            await client.sendText(chatID,
+                                stringsHelp.getGroupLang(groupsDict, chatID, "filter_spamming"));
                             groupsDict[chatID].addToFilterCounter();
                             restGroupsAuto.push(chatID);
                         }
@@ -27,8 +29,7 @@ class HF {
         }
     }
     static async addFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("הוסף פילטר", "");
-        bodyText = bodyText.replace("Add filter", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"));
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -51,40 +52,40 @@ class HF {
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilter(filter, filter_reply)) {
                 await HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
-                    client.reply(chatID, "הפילטר " + filter + " נוסף בהצלחה", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply",
+                        filter), messageID);
                 });
             }
             else {
-                client.reply(chatID, " הפילטר " + filter + " כבר קיים במאגר של קבוצה זו אם אתה רוצה לערוך אותו תכתוב:\nערוך פילטר "
-                    + filter + " - " + filter_reply, messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply_exist",
+                    filter, filter_reply), messageID);
             }
         }
         else {
-            client.reply(chatID, "מממ השתמשת במקף כבודו?", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
         }
     }
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("הסר פילטר", "");
-        bodyText = bodyText.replace("Remove filter", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"));
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
                 await HDB.delArgsFromDB(filter, chatID, "filters", function () {
-                    client.reply(chatID, "הפילטר " + filter + " הוסר בהצלחה", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_reply",
+                        filter), messageID);
                 });
             }
             else {
-                client.reply(chatID, "רק אלוהים יכול למחוק פילטר לא קיים אדוני", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_dont_not_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, "אין פילטרים בקבוצה זו", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
         }
 
     }
     static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("ערוך פילטר", "");
-        bodyText = bodyText.replace("Edit filter", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"));
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -104,20 +105,21 @@ class HF {
                     await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                         groupsDict[chatID].addFilter(filter, filter_reply);
                         HDB.addArgsToDB(filter, filter_reply, null, null,  chatID, "filters", function () {
-                            client.reply(chatID, "הפילטר " + filter + " נערך בהצלחה", messageID);
+                            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_reply",
+                                filter), messageID);
                         });
                     });
                 }
                 else {
-                    client.reply(chatID, "סליחה כבודו אבל אי אפשר לערוך פילטר שלא שקיים במאגר", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_does_not_exist"), messageID);
                 }
             }
             else {
-                client.reply(chatID, "אין פילטרים לקבוצה זו", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
             }
         }
         else {
-            client.reply(chatID, "כבודו אתה בטוח שהשתמשת במקף?", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
         }
     }
     static async showFilters(client, chatID, messageID, groupsDict) {

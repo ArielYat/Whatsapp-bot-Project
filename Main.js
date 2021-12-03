@@ -1,7 +1,12 @@
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
     HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
+
+//whatsapp module
 const wa = require("@open-wa/wa-automate"), schedule = require('node-schedule');
-const {cli} = require("@open-wa/wa-automate/dist/cli/setup");
+//strings lang
+const stringsHelp = require("./stringLang");
+const HandleLang = require("./HandleLang");
+//time schedule module
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
 
@@ -23,17 +28,16 @@ async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
-
-    if (bodyText.startsWith("הוסף פילטר" || "Add filter")) {
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"))) {
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הסר פילטר" || "Remove filter")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"))) {
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("ערוך פילטר" || "Edit filter")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"))) {
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה פילטרים" || "Show filters")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_filters"))) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
     }
     else {
@@ -42,7 +46,7 @@ async function handleFilters(client, message) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
-                await client.sendText(chatID, "וואי וואי כמה פילטרים שולחים פה אני הולך לישון ל־10 דקות");
+                await client.sendText(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsAuto.push(chatID);
             }
@@ -63,19 +67,19 @@ async function handleTags(client, message) {
     if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
-    if (bodyText.startsWith("תייג " || "Tag ")) {
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag"))) {
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הוסף חבר לתיוג" || "Add tag buddy")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"))) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     }
-    else if (bodyText.startsWith("הסר חבר מתיוג" || "Remove tag buddy")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"))) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("תייג כולם" || "Tag everyone")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"))) {
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה רשימת חברים לתיוג" || "Show tag buddies")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_tags"))) {
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
 }
@@ -86,13 +90,13 @@ async function handleBirthdays(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith("הוסף יום הולדת" || "Add birthday")) {
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"))) {
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הסר יום הולדת" || "Remove birthday")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"))) {
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith("הראה ימי הולדת" || "Show birthdays")) {
+    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
     }
 }
@@ -101,7 +105,7 @@ async function handleBirthdays(client, message) {
 async function handleStickers(client, message) {
     const textMessage = message.body;
 
-    if (textMessage.startsWith("הפוך לסטיקר" || "Make into sticker")) {
+    if (textMessage.startsWith(stringsHelp.getGroupLang(groupsDict, message.chat.id, "make_sticker"))) {
         if (message.quotedMsg != null) {
             const quotedMsg = message.quotedMsg;
             if (message.quotedMsg.type === "image") {
@@ -112,11 +116,14 @@ async function handleStickers(client, message) {
                 )
             }
             else {
-                client.reply(message.from, "טיפש אי אפשר להפוך משהו שהוא לא תמונה לסטיקר", message.id);
+                client.reply(message.from,
+                    stringsHelp.getGroupLang(groupsDict, message.chat.id, "make_sticker_not_image"), message.id);
             }
         }
         else {
-            client.reply(message.from, "אתה אומר לי להפוך משהו לסטיקר אבל אתה לא אומר לי את מה", message.id);
+            client.reply(message.from,
+                stringsHelp.getGroupLang(groupsDict, message.chat.id, "make_sticker_not_not_reply_to_a_message"),
+                message.id);
         }
     }
 }
@@ -192,9 +199,10 @@ async function handleHelp(client, message) {
     else {
         messageID = message.id;
     }
-    if (message.body.startsWith("הראה עזרה" || "Show help")) {
+    if (message.body.startsWith("רשימת פקודות" || "Show help")) {
         await client.reply(message.chat.id,
             "*הוראות בעברית (אנגלית בהמשך)*" +                                   //Hebrew Instructions
+            "\n לשינוי השפה לאנגלית - Change lang English" +
             "\n _פילטרים_" +
             "\n הוסף פילטר[פילטר] - [תגובת הבוט]" +
             "\n לדוגמה: הוסף פילטר אוכל - בננה" +
@@ -226,6 +234,7 @@ async function handleHelp(client, message) {
             "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
             "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי" +
             "\n *English Instructions*" +                                              // English Instructions
+            "\n to change lang to hebrew - שנה שפה עברית" +
             "\n _Filters_" +
             "\n Add filter [filter] - [bot response]" +
             "\n For example: Add filter food - banana" +
@@ -303,8 +312,9 @@ function start(client) {
                 await handleTags(client, message);
                 await handleBirthdays(client, message);
                 await handleStickers(client, message);
-                await handleHelp(client, message);
-                await HURL.stripLinks(client, message);
+                await handleHelp(client, message);``
+                await HURL.stripLinks(groupsDict, client, message);
+                await HandleLang.changeGroupLang(client, message, groupsDict);
             }
         }
     });

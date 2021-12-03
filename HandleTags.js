@@ -1,10 +1,10 @@
 const group = require("./Group");
 const HDB = require("./HandleDB");
+const stringsHelp = require("./stringLang");
 
 class HT {
     static async checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
-        bodyText = bodyText.replace("תייג ", "");
-        bodyText = bodyText.replace("Tag ", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag"));
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
         let counter = 0;
@@ -25,12 +25,11 @@ class HT {
             await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
         }
         else {
-            await client.reply(chatID, "האדם שאתה מנסה לתייג לא מופיע במאגר של קבוצה זו", messageID);
+            await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "tag_person_does_not_exist"), messageID);
         }
     }
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
-        bodyText = bodyText.replace("הוסף חבר לתיוג", "");
-        bodyText = bodyText.replace("Add tag buddy", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"));
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
@@ -43,42 +42,40 @@ class HT {
             if (groupMembersArray != null && groupMembersArray.includes(phoneNumber + "@c.us")) {
                 if (groupsDict[chatID].addTag(tag, phoneNumber)) {
                     await HDB.addArgsToDB(tag, phoneNumber, null, null, chatID, "tags", function () {
-                        client.reply(chatID, "מספר הטלפון של האדם " + tag + " נוסף בהצלחה", messageID);
+                        client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
                     });
                 }
                 else {
-                    client.reply(chatID, "האדם " + tag + " כבר קיים במאגר של קבוצה זו", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_already_exist", tag), messageID);
                 }
             }
             else {
-                client.reply(chatID, "המספר לא קיים בקבוצה זו", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_does_not_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, "אתה בטוח שהשתמשת במקף מר בחור?", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
         }
     }
     static async remTag(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("הסר חבר מתיוג", "");
-        bodyText = bodyText.replace("Remove tag buddy", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"));
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delTag(tag)) {
                 await HDB.delArgsFromDB(tag, chatID, "tags", function () {
-                    client.reply(chatID, "המספר טלפון של האדם " + tag + " הוסר בהצלחה", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag), messageID);
                 });
             }
             else {
-                client.reply(chatID, "רק נפוליאון יכול למחוק אנשים לא קיימים", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag_does_not_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, "אין תיוגים בקבוצה זו", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_tags"), messageID);
         }
     }
     static async tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
-        bodyText = bodyText.replace("תייג כולם", "");
-        bodyText = bodyText.replace("Tag everyone", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"));
         if (chatID in groupsDict) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;
@@ -89,7 +86,7 @@ class HT {
             await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
         }
         else {
-            await client.reply(chatID, "אין בקבוצה זו אנשים לתיוג", messageID);
+            await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_tags"), messageID);
         }
     }
     static async showTags(client, chatID, messageID, groupsDict) {

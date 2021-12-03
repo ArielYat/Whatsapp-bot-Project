@@ -1,5 +1,6 @@
 ﻿const group = require("./Group");
 const HDB = require("./HandleDB");
+const stringsHelp = require("./stringLang");
 
 class HB {
     static async checkBirthday(client, groupsDict) {
@@ -12,15 +13,16 @@ class HB {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
-                    let stringForSending = "מזל טוב ל" + person + " , הוא/היא בן/בת " +
-                        (parseInt(currentGroup.birthdays[person][2]) - yearToday + " היום! ");
-                    client.sendText(currentGroup.groupID, stringForSending)
+                    let age = parseInt(currentGroup.birthdays[person][2]) - yearToday;
+                    let stringForSending = stringsHelp.getGroupLang(groupsDict, currentGroup.groupID,
+                        "send_birthDay", person, age)
+                    await client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
         }
     }
     static async addBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("הוסף יום הולדת", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"));
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const name = bodyText[0].trim();
@@ -35,42 +37,51 @@ class HB {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if (birthday <= 31 && BirthMonth <= 12 && birthday >= 0 && BirthMonth >= 0) {
+                if (birthday <= 31 && BirthMonth <= 12 && birthday >= 0 && BirthMonth >= 0
+                    && birthday >= 1900 && birthday <= 2020) {
                     if (groupsDict[chatID].addBirthday(name, birthday, BirthMonth, BirthYear)) {
                         await HDB.addArgsToDB(name, birthday, BirthMonth, BirthYear, chatID, "birthday", function () {
-                            client.reply(chatID, "יום ההולדת של האדם " + name + " נוסף בהצלחה", messageID);
+                            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                                "add_birthDay_reply", name), messageID);
                         });
                     } else {
-                        client.reply(chatID, "יום ההולדת של האדם " + name + " כבר קיים במאגר של קבוצה זו", messageID);
+                        client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                            "add_birthDay_already_exist", name), messageID);
                     }
                 }
                 else {
-                    client.reply(chatID, "התאריך שהזנת לא מציאותי, בדיוק כמוך", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                        "add_birthDay_date_isNot_correct"), messageID);
                 }
             }
             else {
-                client.reply(chatID, "לא ככה כותבים תאריך...", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                    "date_syntax"), messageID);
             }
         }
         else {
-            client.reply(chatID, "להשתמש במקף זה באמת לא כל כך קשה...", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                "hyphen"), messageID);
         }
     }
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace("הסר יום הולדת", "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"));
         const name = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delBirthday(name)) {
                 await HDB.delArgsFromDB(name, chatID, "birthday", function () {
-                    client.reply(chatID, "יום ההולדת של האדם " + name + " הוסר בהצלחה", messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                        "remove_birthDay_reply", name), messageID);
                 });
             }
             else {
-                client.reply(chatID, "רק דוקטור דופנשמירץ יכול למחוק ימי הולדת לא קיימים", messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                    "remove_birthday_does_not_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, "אין ימי הולדת בקבוצה זו - אולי תוסיפו כמה?", messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                "group_dont_have_birthdays"), messageID);
         }
     }
     static async showBirthdays(client, chatID, messageID, groupsDict) {

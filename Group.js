@@ -4,13 +4,16 @@ class group {
     #tags;
     #birthdays;
     #filterCounter = 0;
+    #langOfThisGroup;
 
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
-        this.#birthdays = {};
+        this.#birthdays = {}
+        this.#langOfThisGroup = "he";
     }
+
     addFilter(filter, filter_reply) {
         if (!this.#filters.hasOwnProperty(filter)) {
             this.#filters[filter] = filter_reply;
@@ -20,6 +23,7 @@ class group {
             return false;
         }
     }
+
     delFilter(filter) {
         if (this.#filters.hasOwnProperty(filter)) {
             delete this.#filters[filter];
@@ -29,6 +33,7 @@ class group {
             return false;
         }
     }
+
     addTag(tag, phoneNumber) {
         if (!this.#tags.hasOwnProperty(tag)) {
             this.#tags[tag] = phoneNumber;
@@ -38,6 +43,7 @@ class group {
             return false;
         }
     }
+
     delTag(tag) {
         if (this.#tags.hasOwnProperty(tag)) {
             delete this.#tags[tag];
@@ -47,6 +53,7 @@ class group {
             return false;
         }
     }
+
     addBirthday(name, birthDay, birthMonth, birthYear) {
         if (!this.#birthdays.hasOwnProperty(name)) {
             this.#birthdays[name] = [birthDay, birthMonth, birthYear];
@@ -56,6 +63,7 @@ class group {
             return false;
         }
     }
+
     delBirthday(tag) {
         if (this.#birthdays.hasOwnProperty(tag)) {
             delete this.#birthdays[tag];
@@ -65,27 +73,42 @@ class group {
             return false;
         }
     }
+
     addToFilterCounter() {
         this.#filterCounter++;
     }
+
     filterCounterRest() {
         this.#filterCounter = 0;
     }
+    changeLang(langCode) {
+        this.#langOfThisGroup = langCode;
+    }
+
     get groupID() {
         return this.#groupID;
     }
+
     get filters() {
         return this.#filters;
     }
+
     get tags() {
         return this.#tags;
     }
+
     get birthdays() {
         return this.#birthdays;
     }
+
     get filterCounter() {
         return this.#filterCounter;
     }
+
+    get langOfThisGroup() {
+        return this.#langOfThisGroup;
+    }
+
 }
 
 module.exports = group;
