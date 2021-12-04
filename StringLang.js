@@ -1,5 +1,5 @@
 const util = require('util');
-class stringLang {
+class StringLang {
      static strings = {
          //hyphen
          "hyphen" : {
@@ -179,6 +179,77 @@ class stringLang {
         "scan_link_checking_error_checking" : {
             "he" : "שגיאה בבדיקת הקישור",
             "en": "Error while checking the link"
+        },
+        "handleHelp" : {
+            "he" : "רשימת פקודות",
+            "en" : "Show help"
+        },
+        "handleHelp_reply" : {
+            "he" : "*הוראות בעברית*" +
+                "\nלשינוי השפה לאנגלית - Change lang English" +
+                "\n _פילטרים_" +
+                "\n הוסף פילטר[פילטר] - [תגובת הבוט]" +
+                "\n לדוגמה: הוסף פילטר אוכל - בננה" +
+                "\n הסר פילטר [פילטר]" +
+                "\n לדוגמה: הסר פילטר אוכל" +
+                "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
+                "\n לדוגמה: ערוך פילטר אוכל - אפרסק" +
+                "\n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת" +
+                "\n _תיוגים_" +
+                "\n תייג [אדם]" +
+                "\n לדוגמה: תייג יוסי" +
+                "\n הוסף חבר לתיוג [אדם] - [מספר טלפון]" +
+                "\n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567" +
+                "\n הסר חבר מתיוג [אדם]" +
+                "\n לדוגמה: הסר חבר מתיוג יוסי" +
+                "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר" +
+                "\n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג" +
+                "\n _ימי הולדת_" +
+                "\n הוסף יום הולדת [אדם] - [שנה.חודש.יום]" +
+                "\n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021" +
+                "\n הסר יום הולדת [אדם]" +
+                "\n לדוגמה: הסר יום הולדת יוסי" +
+                "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
+                "\n _יצירת סטיקרים_ " +
+                "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
+                "\n _סריקת קישורים_" +
+                "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
+                "\n _טיפ מיוחד!_ " +
+                "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
+                "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
+
+            "en" : "*English Instructions*" +
+                "\n to change lang to hebrew - שנה שפה עברית" +
+                "\n _Filters_" +
+                "\n Add filter [filter] - [bot response]" +
+                "\n For example: Add filter food - banana" +
+                "\n Remove filter food" +
+                "\n For example: Remove filter food" +
+                "\n Edit filter [old filter] - [new response]" +
+                "\n For example: Edit filter food - peach" +
+                "\n Show filters - displays a list of filters defined in the group" +
+                "\n _Tags_" +
+                "\n Tag [person]" +
+                "\n For example: Tag Joseph" +
+                "\n Add tag buddy [person] - [phone number]" +
+                "\n For example: Add tag buddy Joseph - 972501234567" +
+                "\n Remove tag buddy [person]" +
+                "\n For example: Remove tag buddy Joseph" +
+                "\n Tag everyone - tags all people in the group who have a set tag" +
+                "\n Show tag buddies - displays a list of all tags defined in the group" +
+                "\n _Birthdays_" +
+                "\n Add birthday [person] - [day.month.year]" +
+                "\n For example: Add birthday Joseph - 27.6.2021" +
+                "\n Remove birthday [person]" +
+                "\n For example: Remove birthday Joseph" +
+                "\n Show birthdays - displays a list of all birthdays defined in the group" +
+                "\n _Sticker Making_" +
+                "\n Make into sticker - the bot makes the replied to image into a sticker and sends it" +
+                "\n _Link Scanning_" +
+                "\n Scan [link] - Scans the given link for viruses and determines if it's safe" +
+                "\n _Special Tip!_" +
+                "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
+                "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
         }
     }
     static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null){
@@ -204,4 +275,4 @@ class stringLang {
         return strToReturn
     }
 }
-module.exports = stringLang;
+module.exports = StringLang;
