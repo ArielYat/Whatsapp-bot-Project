@@ -14,4 +14,4 @@
 Add the bot's phone number to your Whatsapp group and start sending out commands - As simple as that!
 
 ## Licence
-The end user may use to bot their heart's content, but it's code may not be redistributed or changed without explicit premision from the owner of this Github repository.
+The end user may use to bot their heart's content, but its code may not be redistributed or changed without explicit premision from the owner of this Github repository.
