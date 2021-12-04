@@ -15,7 +15,7 @@ class stringLang {
             "en": `The filter %s has been added successfully`
         },
         "add_filter_reply_exists": {
-            "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך %s - %s",
+            "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך פילטר %s - %s",
             "en": "The filter %s already exists in this group \n If u want to edit the filter please write this:" +
                 "\n Edit filter %s - %s"
         },
@@ -247,6 +247,7 @@ class stringLang {
         },
         "handleHelp_reply": {
             "he": "*הוראות בעברית*" +
+                "\n _שינוי שפה_" +
                 "\n כדי לשנות את שפת הבוט כתוב 'שנה שפה ל־[איזו שפה שאתה רוצה]'" +
                 "\n לדוגמה: שנה שפה לאנגלית" +
                 "\n שפות שקיימות כעת: אנגלית, עברית" +

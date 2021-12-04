@@ -179,7 +179,7 @@ setInterval(function () {
 
 function start(client) {
     //Check if there are birthdays everyday at 6 am
-    schedule.scheduleJob('38 19 * * *', () => {
+    schedule.scheduleJob('01 00 * * *', () => {
         HBi.checkBirthday(client, groupsDict)
     });
     //Check every function every time a message is received
