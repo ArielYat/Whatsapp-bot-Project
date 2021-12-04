@@ -103,7 +103,6 @@ class group {
     get language() {
         return this.#language;
     }
-
 }
 
 module.exports = group;

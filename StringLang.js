@@ -1,5 +1,6 @@
+//TODO turn this .js file into a .json file
 class stringLang {
-    static strings = { //TODO
+    static strings = {
         //hyphen
         "hyphen": {
             "he": "כבודו אתה בטוח שהשתמשת במקף?",
