@@ -20,7 +20,7 @@ class HandleLanguage {
                 await HDB.delArgsFromDB(langCode, chatID, "lang", function () {
                     HDB.addArgsToDB(langCode, null, null, null,
                         chatID, "lang", function () {
-                            groupsDict[chatID].changeLang(langCode);
+                            groupsDict[chatID].language(langCode);
                         })
                 });
             } else {

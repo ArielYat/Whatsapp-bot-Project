@@ -101,7 +101,7 @@ async function handleLanguage(client, message) {
 //Reset filter counter for all groups every [groupCommandResetInterval] minutes
 setInterval(function () {
     for (let group in groupsDict)
-        groupsDict[group].filterCounterRest();
+        groupsDict[group].filterCounterReset();
 }, groupCommandResetInterval);
 
 //Remove all groups from rest list every [groupRestResetInterval] minutes

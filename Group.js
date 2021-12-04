@@ -3,20 +3,21 @@ class group {
     #filters;
     #tags;
     #birthdays;
-    #filterCounter = 0;
+    #filterCounter;
     #language;
 
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
-        this.#birthdays = {}
+        this.#birthdays = {};
+        this.#filterCounter = 0;
         this.#language = "he";
     }
 
-    addFilter(filter, filter_reply) {
+    addFilter(filter, filterReply) {
         if (!this.#filters.hasOwnProperty(filter)) {
-            this.#filters[filter] = filter_reply;
+            this.#filters[filter] = filterReply;
             return true;
         } else {
             return false;
@@ -32,18 +33,18 @@ class group {
         }
     }
 
-    addTag(tag, phoneNumber) {
-        if (!this.#tags.hasOwnProperty(tag)) {
-            this.#tags[tag] = phoneNumber;
+    addTag(name, phoneNumber) {
+        if (!this.#tags.hasOwnProperty(name)) {
+            this.#tags[name] = phoneNumber;
             return true;
         } else {
             return false;
         }
     }
 
-    delTag(tag) {
-        if (this.#tags.hasOwnProperty(tag)) {
-            delete this.#tags[tag];
+    delTag(name) {
+        if (this.#tags.hasOwnProperty(name)) {
+            delete this.#tags[name];
             return true;
         } else {
             return false;
@@ -59,9 +60,9 @@ class group {
         }
     }
 
-    delBirthday(tag) {
-        if (this.#birthdays.hasOwnProperty(tag)) {
-            delete this.#birthdays[tag];
+    delBirthday(name) {
+        if (this.#birthdays.hasOwnProperty(name)) {
+            delete this.#birthdays[name];
             return true;
         } else {
             return false;
@@ -72,11 +73,11 @@ class group {
         this.#filterCounter++;
     }
 
-    filterCounterRest() {
+    filterCounterReset() {
         this.#filterCounter = 0;
     }
 
-    changeLang(langCode) {
+    set language(langCode) {
         this.#language = langCode;
     }
 
