@@ -1,12 +1,13 @@
-# Whatsapp Bot
+# Whatsapp Group Bot
 
 ## Features
 - Multilanguage Support - each command can be typed in whatever language the user wants (Currently available: English, Hebrew)
-- Adding Tags - The bot tags people via a group assigned dictionary.
-- Adding Filters - The bot responds to certain words via a group assigned dictionary.
-- Adding Birthdays - The bot notifies the group on someone's birthday via a group assigned dictionary.
-- Creating Stickers - The bot creates a sticker out of any given image with the command "Make sticker".
-- Scanning URLs - The bot scans any URL given to it with the command "Scan" for viruses.
+- Tags - The bot is able to tag people via a group assigned dictionary when issued the command.
+- Filters - The bot responds to certain words via a group assigned dictionary.
+- Birthdays - The bot notifies the group on someone's birthday via a group assigned dictionary.
+- Creating Stickers - The bot is able to create a sticker out of any given image.
+- Creating Surveys - The bot is able to create a whatsapp survey from a command.
+- Scanning URLs - The bot is able to scan any URL given to it for viruses.
 - The bot autobans groups or users who are spamming it for a short period of time.
 
 ## Usage
