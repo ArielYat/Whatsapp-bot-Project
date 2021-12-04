@@ -1,5 +1,5 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage"), HURL = require("./HandleURL"),
-    HF = require("./HandleFilters"), HT = require("./HandleTags"), HBi = require("./HandleBirthdays"),
+    HF = require("./HandleFilters"), HT = require("./HandleTags"), HB = require("./HandleBirthdays"),
     HR = require("./HandleRest"), HSi = require("./HandleStickers"), HSu = require("./HandleSurveys");
 //Whatsapp module
 const wa = require("@open-wa/wa-automate");
@@ -78,11 +78,11 @@ async function handleBirthdays(client, message) {
     const messageID = message.id;
 
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) {
-        await HBi.addBirthday(client, bodyText, chatID, messageID, groupsDict);
+        await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) {
-        await HBi.remBirthday(client, bodyText, chatID, messageID, groupsDict);
+        await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
-        await HBi.showBirthdays(client, chatID, messageID, groupsDict);
+        await HB.showBirthdays(client, chatID, messageID, groupsDict);
     }
 }
 
@@ -117,7 +117,7 @@ setInterval(function () {
 function start(client) {
     //Check if there are birthdays everyday at 6 am
     schedule.scheduleJob('01 00 * * *', () => {
-        HBi.checkBirthday(client, groupsDict)
+        HB.checkBirthday(client, groupsDict)
     });
     //Check every function every time a message is received
     client.onMessage(async message => {
