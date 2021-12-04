@@ -1,6 +1,6 @@
 const group = require("./Group");
 const HDB = require("./HandleDB");
-const stringsHelp = require("./stringLang");
+const stringsHelp = require("./StringLang");
 
 class HT {
     static async checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {

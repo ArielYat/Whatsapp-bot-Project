@@ -1,6 +1,6 @@
 const group = require("./Group");
 const HDB = require("./HandleDB");
-const stringsHelp = require("./stringLang");
+const stringsHelp = require("./StringLang");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
