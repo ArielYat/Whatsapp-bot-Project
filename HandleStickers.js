@@ -1,6 +1,6 @@
 const HL = require("./HandleLanguage");
 
-class HS {
+class HSi {
     static async handleStickers(client, message, groupsDict) {
         const textMessage = message.body;
 
@@ -26,4 +26,4 @@ class HS {
     }
 }
 
-module.exports = HS;
+module.exports = HSi;

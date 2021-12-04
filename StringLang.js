@@ -180,8 +180,8 @@ class stringLang {
             "he": "שגיאה בבדיקת הקישור",
             "en": "Error received while checking the link"
         },
-        //button handling
-        "make_survey": {
+        //button creating
+        "create_survey": {
             "he": "צור סקר",
             "en": "Create survey"
         },
@@ -189,23 +189,23 @@ class stringLang {
             "he": /כותרת - (.)+/,
             "en": /Title - (.)+/
         },
-        "survey_second_title": {
+        "second_survey_title": {
             "he": /כותרת משנה - (.)+/,
             "en": /Body - (.)+/
         },
-        "survey_third_title": {
+        "third_survey_title": {
             "he": /כותרת שלישית - (.)+/,
             "en": /Footer - (.)+/
         },
-        "survey_button1": {
+        "survey_button_1": {
             "he": /כפתור1 - (.)+/,
             "en": /Button1 - (.)+/
         },
-        "survey_button2": {
+        "survey_button_2": {
             "he": /כפתור2 - (.)+/,
             "en": /Button2 - (.)+/
         },
-        "survey_button3": {
+        "survey_button_3": {
             "he": /כפתור3 - (.)+/,
             "en": /Button3 - (.)+/
         },
@@ -213,23 +213,23 @@ class stringLang {
             "he": "כותרת -",
             "en": "Title -"
         },
-        "survey_second_title_replace": {
+        "second_survey_title_replace": {
             "he": "כותרת משנה -",
             "en": "Body -"
         },
-        "survey_third_title_replace": {
+        "third_survey_title_replace": {
             "he": "כותרת שלישית -",
             "en": "Footer -"
         },
-        "survey_button1_replace": {
+        "survey_button_1_replace": {
             "he": "כפתור1 -",
             "en": "Button1 -"
         },
-        "survey_button2_replace": {
+        "survey_button_2_replace": {
             "he": "כפתור2 -",
             "en": "Button2 -"
         },
-        "survey_button3_replace": {
+        "survey_button_3_replace": {
             "he": "כפתור3 -",
             "en": "Button3 -"
         },
@@ -237,16 +237,16 @@ class stringLang {
             "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
             "en": "I need a title, a body and at least one button to make a survey"
         },
-        //language
+        //language handling
         "change_language": {
             "he": "שנה שפה",
             "en": "Change language to"
         },
-        "handleHelp": {
+        "handle_Help": {
             "he": "הראה עזרה",
             "en": "Show help"
         },
-        "handleHelp_reply": {
+        "handle_help_reply": {
             "he": "*הוראות בעברית*" +
                 "\n _שינוי שפה_" +
                 "\n כדי לשנות את שפת הבוט כתוב 'שנה שפה ל־[איזו שפה שאתה רוצה]'" +

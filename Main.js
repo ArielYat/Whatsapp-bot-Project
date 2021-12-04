@@ -1,6 +1,6 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage"), HURL = require("./HandleURL"),
     HF = require("./HandleFilters"), HT = require("./HandleTags"), HBi = require("./HandleBirthdays"),
-    HS = require("./HandleStickers"), HBu = require("./HandleButtons");
+    HR = require("./HandleRest"), HSi = require("./HandleStickers"), HSu = require("./HandleSurveys");
 //Whatsapp module
 const wa = require("@open-wa/wa-automate");
 //Schedule module
@@ -8,14 +8,9 @@ const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
 
-let groupsDict = {};
-let restGroups = [];
-let restUsers = [];
-let restGroupsAuto = [];
-let devsOfTheBots = ["972543293155@c.us", "972586809911@c.us"];
+let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
 //Group rest constants
-const the_interval_pop = 10 * 60 * 1000; //in ms
-const the_interval_reset = 3 * 60 * 1000; //in ms
+const groupCommandResetInterval = 10 * 60 * 1000, groupRestResetInterval = 3 * 60 * 1000; //in ms
 const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
@@ -29,21 +24,21 @@ async function handleFilters(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) {
-        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
+        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) {
-        await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
+        await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) {
-        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
+        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
     } else {
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
-                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
+                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
             } else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
-                restGroupsAuto.push(chatID);
+                restGroupsSpam.push(chatID);
             }
         }
     }
@@ -99,83 +94,25 @@ async function handleLanguage(client, message) {
 
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "change_language"))) {
         await HL.changeGroupLang(client, message, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handleHelp"))) {
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) {
         await client.reply(message.chat.id,
-            HL.getGroupLang(groupsDict, message.chat.id, "handleHelp_reply"), messageID);
+            HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
     }
 }
 
-//Handle user rest
-async function handleUserRest(client, message) {
-    const textMessage = message.body;
-    const chatID = message.chat.id;
-    const messageId = message.id;
-
-    if (message.quotedMsg != null) {
-        const responseAuthor = message.quotedMsg.author;
-        const userID = message.sender.id;
-        if (textMessage.startsWith("חסום גישה למשתמש")) {
-            if (devsOfTheBots.includes(userID)) {
-                restUsers.push(responseAuthor);
-                await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
-            } else {
-                client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
-            }
-        }
-
-        if (textMessage.startsWith("אפשר גישה למשתמש")) {
-            if (devsOfTheBots.includes(userID)) {
-                const userIdIndex = restUsers.indexOf(responseAuthor);
-                restUsers.splice(userIdIndex, 1);
-                await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
-            } else {
-                await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
-            }
-        }
-    }
-}
-
-//Handle group rest
-async function handleGroupRest(client, message) {
-    const textMessage = message.body;
-    const chatID = message.chat.id;
-    const messageId = message.id;
-    const responseGroupId = message.chat.id;
-    const userID = message.sender.id;
-    if (textMessage.startsWith("חסום קבוצה")) {
-        if (devsOfTheBots.includes(userID)) {
-            restGroups.push(responseGroupId);
-            await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
-        } else {
-            client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
-        }
-    }
-
-    if (textMessage.startsWith("שחרר קבוצה")) {
-        if (devsOfTheBots.includes(userID)) {
-            const groupIdIndex = restGroups.indexOf(responseGroupId);
-            restGroups.splice(groupIdIndex, 1);
-            restGroupsAuto.splice(groupIdIndex, 1);
-            await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageId);
-        } else {
-            await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
-        }
-    }
-}
-
-//Reset filter counter for all groups every 5 minutes
+//Reset filter counter for all groups every [groupCommandResetInterval] minutes
 setInterval(function () {
     for (let group in groupsDict) {
         groupsDict[group].filterCounterRest();
     }
-}, the_interval_pop);
+}, groupCommandResetInterval);
 
-//Remove all groups from rest list every 15 minutes
+//Remove all groups from rest list every [groupRestResetInterval] minutes
 setInterval(function () {
-    while (restGroupsAuto.length > 0) {
-        restGroupsAuto.pop();
+    while (restGroupsSpam.length > 0) {
+        restGroupsSpam.pop();
     }
-}, the_interval_reset);
+}, groupRestResetInterval);
 
 function start(client) {
     //Check if there are birthdays everyday at 6 am
@@ -185,17 +122,17 @@ function start(client) {
     //Check every function every time a message is received
     client.onMessage(async message => {
         if (message != null) {
-            await handleUserRest(client, message);
-            await handleGroupRest(client, message);
+            await HR.handleUserRest(client, message, restUsers);
+            await HR.handleGroupRest(client, message, restGroups, restGroupsSpam);
             if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id) &&
-                !restGroupsAuto.includes(message.chat.id)) {
+                !restGroupsSpam.includes(message.chat.id)) {
                 await handleFilters(client, message);
                 await handleTags(client, message);
                 await handleBirthdays(client, message);
                 await handleLanguage(client, message);
-                await HS.handleStickers(client, message, groupsDict);
+                await HSi.handleStickers(client, message, groupsDict);
                 await HURL.stripLinks(client, message, groupsDict);
-                await HBu.makeButton(client, message, groupsDict);
+                await HSu.makeButton(client, message, groupsDict);
             }
         }
     });

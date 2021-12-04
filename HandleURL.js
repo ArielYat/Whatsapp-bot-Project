@@ -23,25 +23,6 @@ class HURL {
         }
     }
 
-    static async parseAndAnswerResults(client, chatID, res, url, messageId) {
-        let prettyStringForAnswer = "";
-        try {
-            const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
-            let counter = 0;
-            const dataParsed = parsedRes.data.attributes.last_analysis_results;
-            for (let attribute in dataParsed) {
-                if (dataParsed[attribute].result != "clean" && dataParsed[attribute].result != "unrated") {
-                    prettyStringForAnswer += (attribute + ": " + dataParsed[attribute].result) + "\n";
-                    counter++;
-                }
-            }
-            prettyStringForAnswer += "\n" + counter + " Anti virus engines detected this link as malicious";
-            client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
-        } catch (error) {
-            client.reply(chatID, "" + error, messageId);
-        }
-    }
-
     static async checkUrls(client, chatID, url, messageId, groupsDict) {
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageId);
         const hashed = nvt.sha256(url)
@@ -70,6 +51,24 @@ class HURL {
             } else
                 HURL.parseAndAnswerResults(client, chatID, res, url, messageId);
         });
+    }
+    static async parseAndAnswerResults(client, chatID, res, url, messageId) {
+        let prettyStringForAnswer = "";
+        try {
+            const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
+            let counter = 0;
+            const dataParsed = parsedRes.data.attributes.last_analysis_results;
+            for (let attribute in dataParsed) {
+                if (dataParsed[attribute].result != "clean" && dataParsed[attribute].result != "unrated") {
+                    prettyStringForAnswer += (attribute + ": " + dataParsed[attribute].result) + "\n";
+                    counter++;
+                }
+            }
+            prettyStringForAnswer += "\n" + counter + " Anti virus engines detected this link as malicious";
+            client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
+        } catch (error) {
+            client.reply(chatID, "" + error, messageId);
+        }
     }
 }
 
