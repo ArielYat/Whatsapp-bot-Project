@@ -65,7 +65,6 @@ async function handleTags(client, message) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) {
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
@@ -95,23 +94,20 @@ async function handleLanguage(client, message) {
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "change_language"))) {
         await HL.changeGroupLang(client, message, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) {
-        await client.reply(message.chat.id,
-            HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
+        await client.reply(message.chat.id, HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
     }
 }
 
 //Reset filter counter for all groups every [groupCommandResetInterval] minutes
 setInterval(function () {
-    for (let group in groupsDict) {
+    for (let group in groupsDict)
         groupsDict[group].filterCounterRest();
-    }
 }, groupCommandResetInterval);
 
 //Remove all groups from rest list every [groupRestResetInterval] minutes
 setInterval(function () {
-    while (restGroupsSpam.length > 0) {
+    while (restGroupsSpam.length > 0)
         restGroupsSpam.pop();
-    }
 }, groupRestResetInterval);
 
 function start(client) {
