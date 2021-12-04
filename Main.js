@@ -63,14 +63,15 @@ async function handleTags(client, message) {
     if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
-    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag"))) {
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"))) {
+        await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
+    }else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag"))) {
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"))) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"))) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"))) {
-        await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
+
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_tags"))) {
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
@@ -84,7 +85,7 @@ async function handleBirthdays(client, message) {
 
     if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthday"))) {
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthday"))) {
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
         await HB.showBirthdays(client, chatID, messageID, groupsDict);

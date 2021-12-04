@@ -18,7 +18,7 @@ class HDB {
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2, birthYear: value3 };
             } else if(filterOrTagsOrBirthday === "lang"){
-                objectToAddToDataBase = { ID: ID, lang: value1};
+                objectToAddToDataBase = { ID: ID, lang: key};
             }
             dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {

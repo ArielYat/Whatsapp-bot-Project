@@ -41,7 +41,7 @@ class HURL {
         }
     }
     static async checkUrls(client, chatID, url, messageId, groupsDict) {
-        await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "scan_link_checking"), messageId);
+        await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageId);
         const hashed = nvt.sha256(url)
         //TODO: make this code pretty
         const theSameObject = defaultTimedInstance.urlLookup(hashed, function (err, res) {

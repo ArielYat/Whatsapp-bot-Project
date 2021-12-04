@@ -84,7 +84,7 @@ class stringLang {
         },
         "remove_tag": {
             "he": "הסר חבר מתיוג",
-            "en": "Remove Tag buddy"
+            "en": "Remove tag buddy"
         },
         "remove_tag_reply": {
             "he": "מספר הטלפון של האדם %s הוסר בהצלחה",
@@ -128,14 +128,14 @@ class stringLang {
             "en": "Are you sure what you inputted is a date?"
         },
         "date_syntax": {
-            "he": "תראה אתה אמור לעשות להשתמש בנקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
+            "he": "תראה אתה אמור להשתמש בנקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
             "en": "Yeah that's not how you write a date"
         },
-        "remove_birthDay": {
+        "remove_birthday": {
             "he": "הסר יום הולדת",
             "en": "Remove birthday"
         },
-        "remove_birthDay_reply": {
+        "remove_birthday_reply": {
             "he": "יום ההולדת של האדם %s הוסר בהצלחה",
             "en": "%s' birthday has been successfully removed"
         },
@@ -154,7 +154,7 @@ class stringLang {
         //sticker making
         "make_sticker": {
             "he": "הפוך לסטיקר",
-            "en": "Make into Sticker"
+            "en": "Make into sticker"
         },
         "not_image": {
             "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה לסטיקר",
@@ -181,10 +181,67 @@ class stringLang {
             "he": "שגיאה בבדיקת הקישור",
             "en": "Error received while checking the link"
         },
+        //button handling
+        "make_survey" : {
+            "he" : "צור סקר",
+            "en" : "Make survey"
+        },
+        "survey_title" : {
+            "he" : /כותרת - (.)+/,
+            "en" : /Title - (.)+/
+        },
+        "survey_second_title" : {
+            "he" : /כותרת משנה - (.)+/,
+            "en" : /Body - (.)+/
+        },
+        "survey_third_title" : {
+            "he" : /כותרת שלישית - (.)+/,
+            "en" : /Footer - (.)+/
+        },
+        "survey_button1" : {
+            "he" : /כפתור1 - (.)+/,
+            "en" : /Button1 - (.)+/
+        },
+        "survey_button2" : {
+            "he" : /כפתור2 - (.)+/,
+            "en" : /Button2 - (.)+/
+        },
+        "survey_button3" : {
+            "he" : /כפתור3 - (.)+/,
+            "en" : /Button3 - (.)+/
+        },
+        "survey_title_replace" : {
+            "he" : "כותרת -",
+            "en" : "Title -"
+        },
+        "survey_second_title_replace" : {
+            "he" : "כותרת שנייה -",
+            "en" : "Body -"
+        },
+        "survey_third_title_replace" : {
+            "he" : "כותרת שלישית -",
+            "en" : "Footer -"
+        },
+        "survey_button1_replace" : {
+            "he" : "כפתור1 -",
+            "en" : "Button1 -"
+        },
+        "survey_button2_replace" : {
+            "he" : "כפתור2 -",
+            "en" : "Button2 -"
+        },
+        "survey_button3_replace" : {
+            "he" : "כפתור3 -",
+            "en" : "Button3 -"
+        },
+        "survey_reply" : {
+            "he" : "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
+            "en" : "I need at least a title a body and one button to make a survey"
+        },
         //language
         "change_language": {
             "he": "שנה שפה",
-            "en": "Change language"
+            "en": "Change language to"
         },
         "handleHelp": {
             "he": "הראה עזרה",
@@ -192,7 +249,7 @@ class stringLang {
         },
         "handleHelp_reply" : {
             "he" : "*הוראות בעברית*" +
-                "\nלשינוי השפה לאנגלית - Change lang English" +
+                "\nלשינוי השפה לאנגלית - שנה שפה אנגלית" +
                 "\n _פילטרים_" +
                 "\n הוסף פילטר[פילטר] - [תגובת הבוט]" +
                 "\n לדוגמה: הוסף פילטר אוכל - בננה" +
@@ -225,7 +282,7 @@ class stringLang {
                 "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
 
             "en" : "*English Instructions*" +
-                "\n to change lang to hebrew - שנה שפה עברית" +
+                "\n to change language to hebrew - Change language to Hebrew" +
                 "\n _Filters_" +
                 "\n Add filter [filter] - [bot response]" +
                 "\n For example: Add filter food - banana" +

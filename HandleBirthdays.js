@@ -22,7 +22,7 @@ class HB {
         }
     }
     static async addBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"), "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthday"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const name = bodyText[0].trim();
@@ -30,17 +30,17 @@ class HB {
             if (fullBirthday.includes(".")) {
                 fullBirthday = fullBirthday.split(".");
                 const birthDay = fullBirthday[0].trim();
-                const BirthMonth = fullBirthday[1].trim();
-                const BirthYear = fullBirthday[2].trim();
+                const birthMonth = fullBirthday[1].trim();
+                const birthYear = fullBirthday[2].trim();
                 //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
                 if (!(chatID in groupsDict)) {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if (birthDay <= 31 && BirthMonth <= 12 && birthDay >= 0 && BirthMonth >= 0
-                    && birthDay >= 1900 && birthDay <= 2020) {
-                    if (groupsDict[chatID].addBirthday(name, birthDay, BirthMonth, BirthYear)) {
-                        await HDB.addArgsToDB(name, birthDay, BirthMonth, BirthYear, chatID, "birthday", function () {
+                if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2020 && birthDay >= 0 && birthMonth >= 0
+                    && birthYear >= 1900) {
+                    if (groupsDict[chatID].addBirthday(name, birthDay, birthMonth, birthYear)) {
+                        await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {
                             client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
                                 "add_birthday_reply", name), messageID);
                         });
@@ -65,13 +65,13 @@ class HB {
         }
     }
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"), "");
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthday"), "");
         const name = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delBirthday(name)) {
                 await HDB.delArgsFromDB(name, chatID, "birthday", function () {
                     client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                        "remove_birthDay_reply", name), messageID);
+                        "remove_birthday_reply", name), messageID);
                 });
             }
             else {
