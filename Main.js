@@ -1,6 +1,6 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage"), HURL = require("./HandleURL"),
     HF = require("./HandleFilters"), HT = require("./HandleTags"), HBi = require("./HandleBirthdays"),
-    HS = require("./HandleStickers"), HBu = require("./ButtonHandling");
+    HS = require("./HandleStickers"), HBu = require("./HandleButtons");
 //Whatsapp module
 const wa = require("@open-wa/wa-automate");
 //Schedule module
