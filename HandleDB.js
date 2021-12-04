@@ -131,7 +131,6 @@ class HDB {
                     makeGroupFilter(result[i]);
                 }
                 callback(groupsDict);
-                db.close();
             });
             dbo.collection("birthday-groups").find({}).toArray(function (err, result) {
                 if (err) {
@@ -150,6 +149,7 @@ class HDB {
                 for (let i = 0; i < result.length; i++) {
                     makeGroupLang(result[i]);
                 }
+                db.close();
             });
         });
     }

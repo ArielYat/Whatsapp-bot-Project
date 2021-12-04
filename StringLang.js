@@ -269,7 +269,7 @@ class stringLang {
             lang = "he";
         }
         let str = this.strings[parameter][lang];
-         if (parameter === "add_filter_reply_exist"){
+         if (parameter === "add_filter_reply_exists"){
              strToReturn = util.format(str, value1, value1, value2);
          }
         else if(value1 != null && value2 != null) {

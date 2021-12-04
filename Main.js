@@ -98,7 +98,7 @@ async function handleLang(client, message) {
     const messageID = message.id;
 
     if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "change_language"))) {
-        await HL.changeGroupLang(client, message);
+        await HL.changeGroupLang(client, message, groupsDict);
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "handleHelp"))) {
         await client.reply(message.chat.id,
             stringsHelp.getGroupLang(groupsDict, message.chat.id, "handleHelp_reply"), messageID);

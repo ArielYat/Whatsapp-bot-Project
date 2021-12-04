@@ -4,14 +4,14 @@ class group {
     #tags;
     #birthdays;
     #filterCounter = 0;
-    #langOfThisGroup;
+    #language;
 
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
         this.#birthdays = {}
-        this.#langOfThisGroup = "he";
+        this.#language = "he";
     }
 
     addFilter(filter, filter_reply) {
@@ -82,7 +82,7 @@ class group {
         this.#filterCounter = 0;
     }
     changeLang(langCode) {
-        this.#langOfThisGroup = langCode;
+        this.#language = langCode;
     }
 
     get groupID() {
@@ -105,8 +105,8 @@ class group {
         return this.#filterCounter;
     }
 
-    get langOfThisGroup() {
-        return this.#langOfThisGroup;
+    get language() {
+        return this.#language;
     }
 
 }
