@@ -26,7 +26,7 @@ class StringLang {
         },
         "remove_filter_reply" :{
             "he" : " הפילטר %s הוסר בהצלחה",
-            "en" : "The filter %s} removed successfully"
+            "en" : "The filter %s removed successfully"
         },
         "remove_filter_dont_not_exist" :{
             "he" : "רק אלוהים יכול למחוק פילטר לא קיים",
@@ -263,7 +263,10 @@ class StringLang {
              lang = "he";
          }
         let str = this.strings[parameter][lang];
-        if(value2 != null) {
+         if (parameter === "add_filter_reply_exist"){
+             strToReturn = util.format(str, value1, value1, value2);
+         }
+        else if(value1 != null && value2 != null) {
             strToReturn = util.format(str, value1, value2);
         }
         else if (value1 != null){

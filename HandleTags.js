@@ -4,7 +4,7 @@ const stringsHelp = require("./StringLang");
 
 class HT {
     static async checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
         let counter = 0;
@@ -29,7 +29,7 @@ class HT {
         }
     }
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
@@ -58,7 +58,7 @@ class HT {
         }
     }
     static async remTag(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"), "");
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delTag(tag)) {
@@ -75,7 +75,7 @@ class HT {
         }
     }
     static async tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"), "");
         if (chatID in groupsDict) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;

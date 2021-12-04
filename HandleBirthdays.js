@@ -22,7 +22,7 @@ class HB {
         }
     }
     static async addBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const name = bodyText[0].trim();
@@ -65,7 +65,7 @@ class HB {
         }
     }
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"), "");
         const name = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delBirthday(name)) {

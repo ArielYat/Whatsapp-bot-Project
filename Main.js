@@ -6,6 +6,7 @@ const wa = require("@open-wa/wa-automate"), schedule = require('node-schedule');
 //strings lang
 const stringsHelp = require("./StringLang");
 const HandleLang = require("./HandleLang");
+const ButtonHandling = require("./ButtonHandling");
 //time schedule module
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
@@ -252,6 +253,7 @@ function start(client) {
                 await handleHelp(client, message);
                 await HURL.stripLinks(groupsDict, client, message);
                 await HandleLang.changeGroupLang(client, message, groupsDict);
+                await ButtonHandling.makeButton(client, message, groupsDict);
             }
         }
     });

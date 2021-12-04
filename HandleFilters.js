@@ -29,7 +29,7 @@ class HF {
         }
     }
     static async addFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -66,7 +66,7 @@ class HF {
         }
     }
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"), "");
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
@@ -85,7 +85,7 @@ class HF {
 
     }
     static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"));
+        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();

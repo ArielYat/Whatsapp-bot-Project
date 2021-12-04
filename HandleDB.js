@@ -17,6 +17,8 @@ class HDB {
                 objectToAddToDataBase = { ID: ID, name: key, phone_number: value1 };
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToAddToDataBase = { ID: ID, name: key, birthDay: value1, birthMonth: value2, birthYear: value3 };
+            } else if(filterOrTagsOrBirthday === "lang"){
+                objectToAddToDataBase = { ID: ID, lang: value1};
             }
             dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {
@@ -42,6 +44,8 @@ class HDB {
                 objectToDelToDataBase = { ID: ID, name: key };
             } else if (filterOrTagsOrBirthday === "birthday") {
                 objectToDelToDataBase = { ID: ID, name: key };
+            } else if(filterOrTagsOrBirthday === "lang"){
+                objectToDelToDataBase = { ID: ID};
             }
             dbo.collection(filterOrTagsOrBirthday + "-groups").deleteOne(objectToDelToDataBase, function (err, res) {
                 if (err) {
@@ -92,6 +96,17 @@ class HDB {
                 groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
             }
         }
+        function makeGroupLang(document) {
+            let ID = document.ID;
+            let lang = document.lang;
+            if (ID in groupsDict) {
+                groupsDict[ID].changeLang(lang);
+            }
+            else {
+                groupsDict[ID] = new group(ID);
+                groupsDict[ID].changeLang(lang);
+            }
+        }
         MongoClient.connect(url, function (err, db) {
             if (err) {
                 console.log(err + "addArgsToDB");
@@ -125,6 +140,15 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++) {
                     makeGroupBirthday(result[i]);
+                }
+            });
+            dbo.collection("lang-groups").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + "lang-birthday-find");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++) {
+                    makeGroupLang(result[i]);
                 }
             });
         });

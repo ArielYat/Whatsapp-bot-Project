@@ -8,9 +8,12 @@ class HandleLang {
             if (chatID in groupsDict) {
                 if(textArray[2] === "עברית"){
                     langCode = "he";
+
+                    await client.sendText(chatID, "השפה שונתה בהצלחה");
                 }
                 else if(textArray[2] === "English"){
                     langCode = "en";
+                    await client.sendText(chatID, "language changed successfully");
                 }
                 if(langCode != null) {
                     groupsDict[chatID].changeLang(langCode);
