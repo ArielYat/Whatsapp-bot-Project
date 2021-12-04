@@ -1,7 +1,5 @@
-const util = require('util');
-
 class stringLang {
-    static strings = {
+    strings = { //TODO
         //hyphen
         "hyphen": {
             "he": "כבודו אתה בטוח שהשתמשת במקף?",
@@ -17,8 +15,8 @@ class stringLang {
             "en": `The filter %s has been added successfully`
         },
         "add_filter_reply_exists": {
-            "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב \n ערוך %s - %s",
-            "en": "The filter %s already exists in this group \n If u want to edit the filter please write" +
+            "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך %s - %s",
+            "en": "The filter %s already exists in this group \n If u want to edit the filter please write this:" +
                 "\n Edit filter %s - %s"
         },
         "remove_filter": {
@@ -35,7 +33,7 @@ class stringLang {
         },
         "group_doesnt_have_filters": {
             "he": "אין פילטרים בקבוצה זו",
-            "en": "This group don't have any filters"
+            "en": "This group doesn't have any filters"
         },
         "edit_filter": {
             "he": "ערוך פילטר",
@@ -43,11 +41,11 @@ class stringLang {
         },
         "edit_filter_reply": {
             "he": "הפילטר %s נערך בהצלחה",
-            "en": "The filter %s edited successfully"
+            "en": "The filter %s was edited successfully"
         },
         "edit_filter_doesnt_exist": {
             "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים במאגר",
-            "en": "Apologies, good sir, but you tried to edit a filter which doesn't exit in this group"
+            "en": "Apologies good sir, but you tried to edit a filter which doesn't exit in this group"
         },
         "show_filters": {
             "he": "הראה פילטרים",
@@ -76,11 +74,11 @@ class stringLang {
         },
         "add_tag_reply_already_exists": {
             "he": "האדם %s כבר קיים במאגר של קבוצה זו",
-            "en": "The person %s already exists in this group"
+            "en": "The person %s already exists in this group's database"
         },
         "add_tag_reply_doesnt_exist": {
             "he": "מספר הטלפון לא קיים בקבוצה זו",
-            "en": "This phone number does not exist on this group"
+            "en": "This phone number does not exist in this group"
         },
         "remove_tag": {
             "he": "הסר חבר מתיוג",
@@ -88,7 +86,7 @@ class stringLang {
         },
         "remove_tag_reply": {
             "he": "מספר הטלפון של האדם %s הוסר בהצלחה",
-            "en": "The phone number of the person %s removed successfully"
+            "en": "The phone number of the person %s has been successfully removed"
         },
         "remove_tag_doesnt_exist": {
             "he": "רק נפוליאון יכול למחוק אנשים לא קיימים",
@@ -96,7 +94,7 @@ class stringLang {
         },
         "group_doesnt_have_tags": {
             "he": "אין תיוגים לקבוצה זו",
-            "en": "This group don't have any tags"
+            "en": "This group doesn't have any tags"
         },
         "tag_all": {
             "he": "תייג כולם",
@@ -129,7 +127,7 @@ class stringLang {
         },
         "date_syntax": {
             "he": "תראה אתה אמור להשתמש בנקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
-            "en": "Yeah that's not how you write a date"
+            "en": "Yeah that's not how you write a date... You should be using periods"
         },
         "remove_birthday": {
             "he": "הסר יום הולדת",
@@ -182,61 +180,61 @@ class stringLang {
             "en": "Error received while checking the link"
         },
         //button handling
-        "make_survey" : {
-            "he" : "צור סקר",
-            "en" : "Make survey"
+        "make_survey": {
+            "he": "צור סקר",
+            "en": "Create survey"
         },
-        "survey_title" : {
-            "he" : /כותרת - (.)+/,
-            "en" : /Title - (.)+/
+        "survey_title": {
+            "he": /כותרת - (.)+/,
+            "en": /Title - (.)+/
         },
-        "survey_second_title" : {
-            "he" : /כותרת משנה - (.)+/,
-            "en" : /Body - (.)+/
+        "survey_second_title": {
+            "he": /כותרת משנה - (.)+/,
+            "en": /Body - (.)+/
         },
-        "survey_third_title" : {
-            "he" : /כותרת שלישית - (.)+/,
-            "en" : /Footer - (.)+/
+        "survey_third_title": {
+            "he": /כותרת שלישית - (.)+/,
+            "en": /Footer - (.)+/
         },
-        "survey_button1" : {
-            "he" : /כפתור1 - (.)+/,
-            "en" : /Button1 - (.)+/
+        "survey_button1": {
+            "he": /כפתור1 - (.)+/,
+            "en": /Button1 - (.)+/
         },
-        "survey_button2" : {
-            "he" : /כפתור2 - (.)+/,
-            "en" : /Button2 - (.)+/
+        "survey_button2": {
+            "he": /כפתור2 - (.)+/,
+            "en": /Button2 - (.)+/
         },
-        "survey_button3" : {
-            "he" : /כפתור3 - (.)+/,
-            "en" : /Button3 - (.)+/
+        "survey_button3": {
+            "he": /כפתור3 - (.)+/,
+            "en": /Button3 - (.)+/
         },
-        "survey_title_replace" : {
-            "he" : "כותרת -",
-            "en" : "Title -"
+        "survey_title_replace": {
+            "he": "כותרת -",
+            "en": "Title -"
         },
-        "survey_second_title_replace" : {
-            "he" : "כותרת שנייה -",
-            "en" : "Body -"
+        "survey_second_title_replace": {
+            "he": "כותרת שנייה -",
+            "en": "Body -"
         },
-        "survey_third_title_replace" : {
-            "he" : "כותרת שלישית -",
-            "en" : "Footer -"
+        "survey_third_title_replace": {
+            "he": "כותרת שלישית -",
+            "en": "Footer -"
         },
-        "survey_button1_replace" : {
-            "he" : "כפתור1 -",
-            "en" : "Button1 -"
+        "survey_button1_replace": {
+            "he": "כפתור1 -",
+            "en": "Button1 -"
         },
-        "survey_button2_replace" : {
-            "he" : "כפתור2 -",
-            "en" : "Button2 -"
+        "survey_button2_replace": {
+            "he": "כפתור2 -",
+            "en": "Button2 -"
         },
-        "survey_button3_replace" : {
-            "he" : "כפתור3 -",
-            "en" : "Button3 -"
+        "survey_button3_replace": {
+            "he": "כפתור3 -",
+            "en": "Button3 -"
         },
-        "survey_reply" : {
-            "he" : "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
-            "en" : "I need at least a title a body and one button to make a survey"
+        "survey_reply": {
+            "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
+            "en": "I need a title, a body and at least one button to make a survey"
         },
         //language
         "change_language": {
@@ -247,9 +245,12 @@ class stringLang {
             "he": "הראה עזרה",
             "en": "Show help"
         },
-        "handleHelp_reply" : {
-            "he" : "*הוראות בעברית*" +
-                "\nלשינוי השפה לאנגלית - שנה שפה אנגלית" +
+        "handleHelp_reply": {
+            "he": "*הוראות בעברית*" +
+                "\n כדי לשנות את שפת הבוט כתוב 'שנה שפה ל־[איזו שפה שאתה רוצה]'" +
+                "\n לדוגמה: שנה שפה לאנגלית" +
+                "\n שפות שקיימות כעת: אנגלית, עברית" +
+                "\n" +
                 "\n _פילטרים_" +
                 "\n הוסף פילטר[פילטר] - [תגובת הבוט]" +
                 "\n לדוגמה: הוסף פילטר אוכל - בננה" +
@@ -258,6 +259,7 @@ class stringLang {
                 "\n ערוך פילטר [פילטר ישן] - [תשובה חדשה]" +
                 "\n לדוגמה: ערוך פילטר אוכל - אפרסק" +
                 "\n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת" +
+                "\n" +
                 "\n _תיוגים_" +
                 "\n תייג [אדם]" +
                 "\n לדוגמה: תייג יוסי" +
@@ -267,22 +269,29 @@ class stringLang {
                 "\n לדוגמה: הסר חבר מתיוג יוסי" +
                 "\n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר" +
                 "\n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג" +
+                "\n" +
                 "\n _ימי הולדת_" +
                 "\n הוסף יום הולדת [אדם] - [שנה.חודש.יום]" +
                 "\n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021" +
                 "\n הסר יום הולדת [אדם]" +
                 "\n לדוגמה: הסר יום הולדת יוסי" +
                 "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
+                "\n" +
                 "\n _יצירת סטיקרים_ " +
                 "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
+                "\n" +
                 "\n _סריקת קישורים_" +
                 "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
+                "\n" +
                 "\n _טיפ מיוחד!_ " +
                 "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
                 "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
 
-            "en" : "*English Instructions*" +
-                "\n to change language to hebrew - Change language to Hebrew" +
+            "en": "*English Instructions*" +
+                "\n To change the language type 'Change language to [whatever language you want]'" +
+                "\n For example: Change language to Hebrew" +
+                "\n Currently available languages are: English and Hebrew" +
+                "\n" +
                 "\n _Filters_" +
                 "\n Add filter [filter] - [bot response]" +
                 "\n For example: Add filter food - banana" +
@@ -291,6 +300,7 @@ class stringLang {
                 "\n Edit filter [old filter] - [new response]" +
                 "\n For example: Edit filter food - peach" +
                 "\n Show filters - displays a list of filters defined in the group" +
+                "\n" +
                 "\n _Tags_" +
                 "\n Tag [person]" +
                 "\n For example: Tag Joseph" +
@@ -300,43 +310,24 @@ class stringLang {
                 "\n For example: Remove tag buddy Joseph" +
                 "\n Tag everyone - tags all people in the group who have a set tag" +
                 "\n Show tag buddies - displays a list of all tags defined in the group" +
+                "\n" +
                 "\n _Birthdays_" +
                 "\n Add birthday [person] - [day.month.year]" +
                 "\n For example: Add birthday Joseph - 27.6.2021" +
                 "\n Remove birthday [person]" +
                 "\n For example: Remove birthday Joseph" +
                 "\n Show birthdays - displays a list of all birthdays defined in the group" +
+                "\n" +
                 "\n _Sticker Making_" +
                 "\n Make into sticker - the bot makes the replied to image into a sticker and sends it" +
+                "\n" +
                 "\n _Link Scanning_" +
                 "\n Scan [link] - Scans the given link for viruses and determines if it's safe" +
+                "\n" +
                 "\n _Special Tip!_" +
                 "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
                 "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
         }
-    }
-
-    static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null) {
-        let lang;
-        let strToReturn;
-        if (chatID in groupDict) {
-            const group = groupDict[chatID];
-            lang = group.language;
-        } else {
-            lang = "he";
-        }
-        let str = this.strings[parameter][lang];
-         if (parameter === "add_filter_reply_exists"){
-             strToReturn = util.format(str, value1, value1, value2);
-         }
-        else if(value1 != null && value2 != null) {
-            strToReturn = util.format(str, value1, value2);
-        } else if (value1 != null) {
-            strToReturn = util.format(str, value1);
-        } else {
-            strToReturn = str;
-        }
-        return strToReturn
     }
 }
 

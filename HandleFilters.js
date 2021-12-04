@@ -1,6 +1,4 @@
-const group = require("./Group");
-const HDB = require("./HandleDB");
-const stringsHelp = require("./StringLang");
+const group = require("./Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
@@ -16,10 +14,9 @@ class HF {
                         groupsDict[chatID].addToFilterCounter();
                         if (groupsDict[chatID].filterCounter < limitFilter) {
                             await client.sendReplyWithMentions(chatID, filters[word], messageID);
-                        }
-                        else if (groupsDict[chatID].filterCounter === limitFilter) {
+                        } else if (groupsDict[chatID].filterCounter === limitFilter) {
                             await client.sendText(chatID,
-                                stringsHelp.getGroupLang(groupsDict, chatID, "filter_spamming"));
+                                HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                             groupsDict[chatID].addToFilterCounter();
                             restGroupsAuto.push(chatID);
                         }
@@ -28,8 +25,9 @@ class HF {
             }
         }
     }
+
     static async addFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -52,40 +50,38 @@ class HF {
             //check if filter exist on DB if it does return false otherwise add filters to DB
             if (groupsDict[chatID].addFilter(filter, filter_reply)) {
                 await HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply",
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply",
                         filter), messageID);
                 });
-            }
-            else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
+            } else {
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
                     filter, filter_reply), messageID);
             }
-        }
-        else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
+        } else {
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
         }
     }
+
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_filter"), "");
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delFilter(filter)) {
                 await HDB.delArgsFromDB(filter, chatID, "filters", function () {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_reply",
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply",
                         filter), messageID);
                 });
+            } else {
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
             }
-            else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
-            }
-        }
-        else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
+        } else {
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
         }
 
     }
+
     static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
@@ -104,24 +100,22 @@ class HF {
                 if (groupsDict[chatID].delFilter(filter)) {
                     await HDB.delArgsFromDB(filter, chatID, "filters", function () {
                         groupsDict[chatID].addFilter(filter, filter_reply);
-                        HDB.addArgsToDB(filter, filter_reply, null, null,  chatID, "filters", function () {
-                            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_reply",
+                        HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply",
                                 filter), messageID);
                         });
                     });
+                } else {
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
                 }
-                else {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
-                }
+            } else {
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
             }
-            else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
-            }
-        }
-        else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
+        } else {
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
         }
     }
+
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (chatID in groupsDict) {
             let stringForSending = "";

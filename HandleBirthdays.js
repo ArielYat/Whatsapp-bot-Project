@@ -1,6 +1,4 @@
-﻿const group = require("./Group");
-const HDB = require("./HandleDB");
-const stringsHelp = require("./StringLang");
+﻿const group = require("./Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HB {
     static async checkBirthday(client, groupsDict) {
@@ -14,15 +12,16 @@ class HB {
             for (let person in currentGroup.birthdays) {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
                     let age = parseInt(currentGroup.birthdays[person][2]) - yearToday;
-                    let stringForSending = stringsHelp.getGroupLang(groupsDict, currentGroup.groupID,
+                    let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID,
                         "send_birthday", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
         }
     }
+
     static async addBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthday"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_birthday"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const name = bodyText[0].trim();
@@ -41,49 +40,46 @@ class HB {
                     && birthYear >= 1900) {
                     if (groupsDict[chatID].addBirthday(name, birthDay, birthMonth, birthYear)) {
                         await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {
-                            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                                 "add_birthday_reply", name), messageID);
                         });
                     } else {
-                        client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                             "add_birthday_already_exists", name), messageID);
                     }
-                }
-                else {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                } else {
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                         "date_existence"), messageID);
                 }
-            }
-            else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+            } else {
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                     "date_syntax"), messageID);
             }
-        }
-        else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+        } else {
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                 "hyphen"), messageID);
         }
     }
+
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthday"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_birthday"), "");
         const name = bodyText.trim();
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delBirthday(name)) {
                 await HDB.delArgsFromDB(name, chatID, "birthday", function () {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                         "remove_birthday_reply", name), messageID);
                 });
-            }
-            else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+            } else {
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                     "remove_birthday_doesnt_exist"), messageID);
             }
-        }
-        else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
+        } else {
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
                 "group_doesnt_have_birthdays"), messageID);
         }
     }
+
     static async showBirthdays(client, chatID, messageID, groupsDict) {
         if (chatID in groupsDict) {
             let stringForSending = "";

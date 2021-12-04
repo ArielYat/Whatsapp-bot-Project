@@ -18,8 +18,7 @@ class group {
         if (!this.#filters.hasOwnProperty(filter)) {
             this.#filters[filter] = filter_reply;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -28,8 +27,7 @@ class group {
         if (this.#filters.hasOwnProperty(filter)) {
             delete this.#filters[filter];
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -38,8 +36,7 @@ class group {
         if (!this.#tags.hasOwnProperty(tag)) {
             this.#tags[tag] = phoneNumber;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -48,8 +45,7 @@ class group {
         if (this.#tags.hasOwnProperty(tag)) {
             delete this.#tags[tag];
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -58,8 +54,7 @@ class group {
         if (!this.#birthdays.hasOwnProperty(name)) {
             this.#birthdays[name] = [birthDay, birthMonth, birthYear];
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -68,8 +63,7 @@ class group {
         if (this.#birthdays.hasOwnProperty(tag)) {
             delete this.#birthdays[tag];
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -81,6 +75,7 @@ class group {
     filterCounterRest() {
         this.#filterCounter = 0;
     }
+
     changeLang(langCode) {
         this.#language = langCode;
     }
