@@ -13,7 +13,7 @@ class HandleLanguage {
                 await client.sendText(chatID, "השפה שונתה בהצלחה");
             } else if (textArray[3] === "English" || textArray[2] === "לאנגלית") {
                 langCode = "en";
-                await client.sendText(chatID, "language changed successfully");
+                await client.sendText(chatID, "Language changed successfully");
             }
 
             if (langCode != null) {

@@ -13,7 +13,7 @@ class stringLang {
         },
         "add_filter_reply": {
             "he": "הפילטר %s נוסף בהצלחה",
-            "en": `The filter %s has been added successfully`
+            "en": "The filter %s has been successfully added"
         },
         "add_filter_reply_exists": {
             "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך פילטר %s - %s",
@@ -26,7 +26,7 @@ class stringLang {
         },
         "remove_filter_reply": {
             "he": "הפילטר %s הוסר בהצלחה",
-            "en": "The filter %s removed successfully"
+            "en": "The filter %s has been successfully removed"
         },
         "remove_filter_doesnt_exist": {
             "he": "רק אלוהים יכול למחוק פילטר לא קיים",
@@ -42,7 +42,7 @@ class stringLang {
         },
         "edit_filter_reply": {
             "he": "הפילטר %s נערך בהצלחה",
-            "en": "The filter %s was edited successfully"
+            "en": "The filter %s has been successfully edited"
         },
         "edit_filter_doesnt_exist": {
             "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים במאגר",
