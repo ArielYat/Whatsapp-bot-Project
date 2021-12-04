@@ -1,6 +1,6 @@
 const group = require("./Group");
 const HDB = require("./HandleDB");
-const stringsHelp = require("./stringLang");
+const stringsHelp = require("./StringLang");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
@@ -57,7 +57,7 @@ class HF {
                 });
             }
             else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply_exist",
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
                     filter, filter_reply), messageID);
             }
         }
@@ -76,11 +76,11 @@ class HF {
                 });
             }
             else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_dont_not_exist"), messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
         }
 
     }
@@ -111,11 +111,11 @@ class HF {
                     });
                 }
                 else {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_does_not_exist"), messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
                 }
             }
             else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
             }
         }
         else {

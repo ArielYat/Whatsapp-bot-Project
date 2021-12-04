@@ -1,12 +1,11 @@
+//All files in project
 const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./HandleFilters"),
-    HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL");
-
-//whatsapp module
-const wa = require("@open-wa/wa-automate"), schedule = require('node-schedule');
-//strings lang
-const stringsHelp = require("./stringLang");
-const HandleLang = require("./HandleLang");
-//time schedule module
+    HT = require("./HandleTags"), HB = require("./HandleBirthdays"), HURL = require("./HandleURL"),
+    HL = require("./HandleLang"), stringsHelp = require("./StringLang");
+//Whatsapp module
+const wa = require("@open-wa/wa-automate");
+//Schedule module
+const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
 
@@ -14,38 +13,34 @@ let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
 let restGroupsAuto = [];
+//Group rest constants
 const the_interval_pop = 10 * 60 * 1000; //in ms
 const the_interval_reset = 3 * 60 * 1000; //in ms
 const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function (groupsDict) {
-    wa.create({ headless: false }).then(client => start(client));
+    wa.create({headless: false}).then(client => start(client));
 });
 
-//Handle filters - add, remove & edit filters and respond to them
+//Handle filters - add, remove & edit filter, show all of them and respond to them
 async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
     if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_filter"))) {
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_filter"))) {
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "edit_filter"))) {
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_filters"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_filters"))) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
-    }
-    else {
+    } else {
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
-            }
-            else if (groupsDict[chatID].filterCounter === limitFilter) {
+            } else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsAuto.push(chatID);
@@ -54,7 +49,7 @@ async function handleFilters(client, message) {
     }
 }
 
-//Handle Tags - add & remove tags to/from dict, tag everyone and answer to them
+//Handle Tags - add & remove tags, show all of them and respond to them (either single tag/tag everyone)
 async function handleTags(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
@@ -69,39 +64,33 @@ async function handleTags(client, message) {
 
     if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag"))) {
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_tag"))) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag"))) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "tag_all"))) {
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_tags"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_tags"))) {
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
 }
 
-//Handle birthdays - add, remove & edit birthdays and announce them
+//Handle birthdays - add & remove birthdays, and show all of them
 async function handleBirthdays(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthDay"))) {
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "add_birthday"))) {
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "remove_birthDay"))) {
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-    }
-    else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
     }
 }
 
-//Convert photo to a sticker
+//Convert image to a sticker
 async function handleStickers(client, message) {
     const textMessage = message.body;
 
@@ -112,17 +101,15 @@ async function handleStickers(client, message) {
                 const mediaData = await client.decryptMedia(quotedMsg);
                 await client.sendImageAsSticker(
                     message.from,
-                    mediaData, { author: "אלכסנדר הגדול", pack: "חצול" }
+                    mediaData, {author: "אלכסנדר הגדול", pack: "חצול"}
                 )
-            }
-            else {
+            } else {
                 client.reply(message.from,
-                    stringsHelp.getGroupLang(groupsDict, message.chat.id, "make_sticker_not_image"), message.id);
+                    stringsHelp.getGroupLang(groupsDict, message.chat.id, "not_image"), message.id);
             }
-        }
-        else {
+        } else {
             client.reply(message.from,
-                stringsHelp.getGroupLang(groupsDict, message.chat.id, "make_sticker_not_not_reply_to_a_message"),
+                stringsHelp.getGroupLang(groupsDict, message.chat.id, "no_quoted_message"),
                 message.id);
         }
     }
@@ -141,8 +128,7 @@ async function handleUserRest(client, message) {
             if (userID === "972543293155@c.us") {
                 restUsers.push(responseAuthor);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
-            }
-            else {
+            } else {
                 client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
             }
         }
@@ -152,8 +138,7 @@ async function handleUserRest(client, message) {
                 const userIdIndex = restUsers.indexOf(responseAuthor);
                 restUsers.splice(userIdIndex, 1);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
-            }
-            else {
+            } else {
                 await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
             }
         }
@@ -171,8 +156,7 @@ async function handleGroupRest(client, message) {
         if (userID === "972543293155@c.us") {
             restGroups.push(responseGroupId);
             await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
-        }
-        else {
+        } else {
             client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
         }
     }
@@ -183,8 +167,7 @@ async function handleGroupRest(client, message) {
             restGroups.splice(groupIdIndex, 1);
             restGroupsAuto.splice(groupIdIndex, 1);
             await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageId);
-        }
-        else {
+        } else {
             await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
         }
     }
@@ -195,8 +178,7 @@ async function handleHelp(client, message) {
     let messageID;
     if (message.quotedMsg != null) {
         messageID = message.quotedMsg.id;
-    }
-    else {
+    } else {
         messageID = message.id;
     }
     if (message.body.startsWith("רשימת פקודות" || "Show help")) {
@@ -228,7 +210,7 @@ async function handleHelp(client, message) {
             "\n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת" +
             "\n _יצירת סטיקרים_ " +
             "\n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה" +
-            "\n _סריקת קישורים_ "+
+            "\n _סריקת קישורים_ " +
             "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
             "\n _טיפ מיוחד!_ " +
             "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
@@ -297,8 +279,7 @@ setInterval(function () {
 
 function start(client) {
     //Check if there are birthdays everyday at 6 am
-    schedule.scheduleJob('6 0 * * *', () =>
-    {
+    schedule.scheduleJob('6 0 * * *', () => {
         HB.checkBirthday(client, groupsDict)
     });
     //Check every function every time a message is received
@@ -312,9 +293,9 @@ function start(client) {
                 await handleTags(client, message);
                 await handleBirthdays(client, message);
                 await handleStickers(client, message);
-                await handleHelp(client, message);``
+                await handleHelp(client, message);
                 await HURL.stripLinks(groupsDict, client, message);
-                await HandleLang.changeGroupLang(client, message, groupsDict);
+                await HL.changeGroupLang(client, message, groupsDict);
             }
         }
     });
