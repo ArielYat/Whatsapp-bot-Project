@@ -6,6 +6,7 @@ const group = require("./Group"), HDB = require("./HandleDB"), HF = require("./H
 const wa = require("@open-wa/wa-automate");
 //Schedule module
 const schedule = require('node-schedule');
+const {cli} = require("@open-wa/wa-automate/dist/cli/setup");
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel';
 
@@ -87,6 +88,19 @@ async function handleBirthdays(client, message) {
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
     } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
+    }
+}
+
+//Handle language - change group language and show help message
+async function handleLang(client, message) {
+    let bodyText = message.body;
+    const chatID = message.chat.id;
+    const messageID = message.id;
+
+    if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "change_language"))) {
+        await HL.changeGroupLang(client, message);
+    } else if (bodyText.startsWith(stringsHelp.getGroupLang(groupsDict, chatID, "show_help"))) {
+        await //TODO
     }
 }
 
@@ -294,8 +308,8 @@ function start(client) {
                 await handleBirthdays(client, message);
                 await handleStickers(client, message);
                 await handleHelp(client, message);
+                await handleLang(client, message);
                 await HURL.stripLinks(groupsDict, client, message);
-                await HL.changeGroupLang(client, message, groupsDict);
             }
         }
     });

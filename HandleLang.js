@@ -14,7 +14,7 @@ class HandleLang {
                 if (langCode != null) {
                     groupsDict[chatID].changeLang(langCode);
                 } else {
-                    client.reply(chatID, "only English or עברית are currently supported by the bot", message.id);
+                    client.reply(chatID, "Only English or עברית are currently supported by the bot", message.id);
                 }
             }
         }

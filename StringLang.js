@@ -180,6 +180,19 @@ class stringLang {
         "scan_link_error_checking": {
             "he": "שגיאה בבדיקת הקישור",
             "en": "Error received while checking the link"
+        },
+        //language
+        "change_language": {
+            "he": "שנה שפה",
+            "en": "Change language"
+        },
+        "show_help": {
+            "he": "הראה עזרה",
+            "en": "Show help"
+        },
+        "help_message": {
+            "he": "",
+            "en": "" //TODO
         }
     }
 
