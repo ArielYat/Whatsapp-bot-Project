@@ -49,7 +49,7 @@ class HURL {
                 const theSameObject = defaultTimedInstance.initialScanURL(url, function (err, res) {
                     if (err) {
                         client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                            "scan_link_checking_error_upload"), messageId);
+                            "scan_link_error_upload"), messageId);
                     } else if (res) {
                         time.sleep(10);
                         const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
@@ -58,7 +58,7 @@ class HURL {
                         const theSameObject = defaultTimedInstance.urlLookup(hashedAfterRegex, function (err, res) {
                             if (err) {
                                 client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                                    "scan_link_checking_error_checking"), messageId);
+                                    "scan_link_error_checking"), messageId);
                             } else if (res) {
                                 HURL.parseAndAnswerResults(client, chatID, res, url, messageId);
                             }

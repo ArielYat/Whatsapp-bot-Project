@@ -15,7 +15,7 @@ class HB {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
                     let age = parseInt(currentGroup.birthdays[person][2]) - yearToday;
                     let stringForSending = stringsHelp.getGroupLang(groupsDict, currentGroup.groupID,
-                        "send_birthDay", person, age)
+                        "send_birthday", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
@@ -29,7 +29,7 @@ class HB {
             let fullBirthday = bodyText[1].trim();
             if (fullBirthday.includes(".")) {
                 fullBirthday = fullBirthday.split(".");
-                const birthday = fullBirthday[0].trim();
+                const birthDay = fullBirthday[0].trim();
                 const BirthMonth = fullBirthday[1].trim();
                 const BirthYear = fullBirthday[2].trim();
                 //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
@@ -37,21 +37,21 @@ class HB {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if (birthday <= 31 && BirthMonth <= 12 && birthday >= 0 && BirthMonth >= 0
-                    && birthday >= 1900 && birthday <= 2020) {
-                    if (groupsDict[chatID].addBirthday(name, birthday, BirthMonth, BirthYear)) {
-                        await HDB.addArgsToDB(name, birthday, BirthMonth, BirthYear, chatID, "birthday", function () {
+                if (birthDay <= 31 && BirthMonth <= 12 && birthDay >= 0 && BirthMonth >= 0
+                    && birthDay >= 1900 && birthDay <= 2020) {
+                    if (groupsDict[chatID].addBirthday(name, birthDay, BirthMonth, BirthYear)) {
+                        await HDB.addArgsToDB(name, birthDay, BirthMonth, BirthYear, chatID, "birthday", function () {
                             client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                                "add_birthDay_reply", name), messageID);
+                                "add_birthday_reply", name), messageID);
                         });
                     } else {
                         client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                            "add_birthDay_already_exist", name), messageID);
+                            "add_birthday_already_exists", name), messageID);
                     }
                 }
                 else {
                     client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                        "add_birthDay_date_isNot_correct"), messageID);
+                        "date_existence"), messageID);
                 }
             }
             else {
@@ -76,12 +76,12 @@ class HB {
             }
             else {
                 client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                    "remove_birthday_does_not_exist"), messageID);
+                    "remove_birthday_doesnt_exist"), messageID);
             }
         }
         else {
             client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID,
-                "group_dont_have_birthdays"), messageID);
+                "group_doesnt_have_birthdays"), messageID);
         }
     }
     static async showBirthdays(client, chatID, messageID, groupsDict) {

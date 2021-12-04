@@ -25,7 +25,7 @@ class HT {
             await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
         }
         else {
-            await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "tag_person_does_not_exist"), messageID);
+            await client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist"), messageID);
         }
     }
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
@@ -46,11 +46,11 @@ class HT {
                     });
                 }
                 else {
-                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_already_exist", tag), messageID);
+                    client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_already_exists", tag), messageID);
                 }
             }
             else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_does_not_exist"), messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "add_tag_reply_doesnt_exist"), messageID);
             }
         }
         else {
@@ -67,11 +67,11 @@ class HT {
                 });
             }
             else {
-                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag_does_not_exist"), messageID);
+                client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "remove_tag_doesnt_exist"), messageID);
             }
         }
         else {
-            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_dont_have_tags"), messageID);
+            client.reply(chatID, stringsHelp.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags"), messageID);
         }
     }
     static async tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
