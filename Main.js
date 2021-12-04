@@ -12,6 +12,7 @@ let groupsDict = {};
 let restGroups = [];
 let restUsers = [];
 let restGroupsAuto = [];
+let devsOfTheBots = ["972543293155@c.us", "972586809911@c.us"];
 //Group rest constants
 const the_interval_pop = 10 * 60 * 1000; //in ms
 const the_interval_reset = 3 * 60 * 1000; //in ms
@@ -28,11 +29,11 @@ async function handleFilters(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) {
-        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
+        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) {
-        await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
+        await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) {
-        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
+        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
     } else {
@@ -114,7 +115,7 @@ async function handleUserRest(client, message) {
         const responseAuthor = message.quotedMsg.author;
         const userID = message.sender.id;
         if (textMessage.startsWith("חסום גישה למשתמש")) {
-            if (userID === "972543293155@c.us") {
+            if (devsOfTheBots.includes(userID)) {
                 restUsers.push(responseAuthor);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
             } else {
@@ -123,7 +124,7 @@ async function handleUserRest(client, message) {
         }
 
         if (textMessage.startsWith("אפשר גישה למשתמש")) {
-            if (userID === "972543293155@c.us") {
+            if (devsOfTheBots.includes(userID)) {
                 const userIdIndex = restUsers.indexOf(responseAuthor);
                 restUsers.splice(userIdIndex, 1);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
@@ -142,7 +143,7 @@ async function handleGroupRest(client, message) {
     const responseGroupId = message.chat.id;
     const userID = message.sender.id;
     if (textMessage.startsWith("חסום קבוצה")) {
-        if (userID === "972543293155@c.us") {
+        if (devsOfTheBots.includes(userID)) {
             restGroups.push(responseGroupId);
             await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
         } else {
@@ -151,7 +152,7 @@ async function handleGroupRest(client, message) {
     }
 
     if (textMessage.startsWith("שחרר קבוצה")) {
-        if (userID === "972543293155@c.us") {
+        if (devsOfTheBots.includes(userID)) {
             const groupIdIndex = restGroups.indexOf(responseGroupId);
             restGroups.splice(groupIdIndex, 1);
             restGroupsAuto.splice(groupIdIndex, 1);
@@ -162,35 +163,23 @@ async function handleGroupRest(client, message) {
     }
 }
 
-//Reset filter counter for all groups every 3 minutes
+//Reset filter counter for all groups every 5 minutes
 setInterval(function () {
     for (let group in groupsDict) {
         groupsDict[group].filterCounterRest();
     }
 }, the_interval_pop);
 
-//Remove all groups from rest list every 10 minutes
+//Remove all groups from rest list every 15 minutes
 setInterval(function () {
     while (restGroupsAuto.length > 0) {
         restGroupsAuto.pop();
     }
 }, the_interval_reset);
 
-////Send Good Morning/Evening messages
-//schedule.scheduleJob('0 7 * * *', () => {
-//    for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//        client.sendText(chatID, "בוקר טוב!")
-//    }
-//});
-//schedule.scheduleJob('0 18 * * *', () => {
-//    for (const [chatID, object] of groupsDict.entries(groupsDict)) {
-//        client.sendText(chatID, "ערב נעים!")
-//    }
-//});
-
 function start(client) {
     //Check if there are birthdays everyday at 6 am
-    schedule.scheduleJob('6 0 * * *', () => {
+    schedule.scheduleJob('38 19 * * *', () => {
         HBi.checkBirthday(client, groupsDict)
     });
     //Check every function every time a message is received

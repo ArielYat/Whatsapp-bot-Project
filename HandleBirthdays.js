@@ -11,7 +11,7 @@ class HB {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
-                    let age = parseInt(currentGroup.birthdays[person][2]) - yearToday;
+                    let age = yearToday - parseInt(currentGroup.birthdays[person][2]);
                     let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID,
                         "send_birthday", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)

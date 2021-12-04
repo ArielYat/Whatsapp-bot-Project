@@ -8,10 +8,10 @@ class HandleLanguage {
         let langCode;
         let textArray = text.split(" ");
         if (chatID in groupsDict) {
-            if (textArray[2] === "עברית" || textArray[3] === "Hebrew") {
+            if (textArray[2] === "לעברית" || textArray[3] === "Hebrew") {
                 langCode = "he";
                 await client.sendText(chatID, "השפה שונתה בהצלחה");
-            } else if (textArray[3] === "English" || textArray[2] === "אנגלית") {
+            } else if (textArray[3] === "English" || textArray[2] === "לאנגלית") {
                 langCode = "en";
                 await client.sendText(chatID, "language changed successfully");
             }
@@ -29,7 +29,7 @@ class HandleLanguage {
         }
     }
 
-    static async getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null) {
+    static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null) {
         let lang;
         let strToReturn;
         if (chatID in groupDict) {
@@ -38,7 +38,7 @@ class HandleLanguage {
         } else {
             lang = "he";
         }
-        let str = stringLang.strings[parameter][lang]; //TODO
+        let str = stringLang.strings[parameter][lang];
         if (parameter === "add_filter_reply_exists") {
             strToReturn = util.format(str, value1, value1, value2);
         } else if (value1 != null && value2 != null) {

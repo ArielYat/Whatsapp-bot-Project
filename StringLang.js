@@ -1,5 +1,5 @@
 class stringLang {
-    strings = { //TODO
+    static strings = { //TODO
         //hyphen
         "hyphen": {
             "he": "כבודו אתה בטוח שהשתמשת במקף?",
@@ -106,7 +106,7 @@ class stringLang {
         },
         //birthdays
         "send_birthday": {
-            "he": "מזל טוב ל־%s! הוא/היא בן/בת %s!",
+            "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
             "en": "Happy birthday to %s! He/she is %s years old!"
         },
         "add_birthday": {
@@ -213,7 +213,7 @@ class stringLang {
             "en": "Title -"
         },
         "survey_second_title_replace": {
-            "he": "כותרת שנייה -",
+            "he": "כותרת משנה -",
             "en": "Body -"
         },
         "survey_third_title_replace": {
