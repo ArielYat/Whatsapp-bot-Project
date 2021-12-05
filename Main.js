@@ -1,3 +1,4 @@
+//list of required classes
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage"), HURL = require("./HandleURL"),
     HF = require("./HandleFilters"), HT = require("./HandleTags"), HB = require("./HandleBirthdays"),
     HR = require("./HandleRest"), HSi = require("./HandleStickers"), HSu = require("./HandleSurveys");
