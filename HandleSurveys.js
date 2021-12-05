@@ -7,7 +7,7 @@ class HSu {
         if (textMessage.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) {
             let buttonsArray = [];
             const titleRegex = HL.getGroupLang(groupsDict, chatID, "survey_title");
-            const secondTitleRegex = HL.getGroupLang(groupsDict, chatID, "second_survey_title");
+            const secondTitleRegex = HL.getGroupLang(groupsDict, chatID, "survey_subtitle");
             const thirdTitleRegex = HL.getGroupLang(groupsDict, chatID, "third_survey_title");
             const button1Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_1");
             const button2Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_2");
@@ -32,7 +32,7 @@ class HSu {
                     await client.sendButtons(chatID, secondTitle, buttonsArray, title);
                 }
             } else {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_reply"), message.id);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_error_reply"), message.id);
             }
         }
 

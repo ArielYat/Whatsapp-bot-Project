@@ -1,4 +1,4 @@
-const HDB = require("./HandleDB"), stringLang = require("./StringLang");
+const HDB = require("./HandleDB"), stringLang = require("./Strings");
 const util = require("util");
 
 class HandleLanguage {
@@ -8,12 +8,21 @@ class HandleLanguage {
         let langCode;
         let textArray = text.split(" ");
         if (chatID in groupsDict) {
-            if (textArray[2] === "לעברית" || textArray[3] === "Hebrew") {
+            if (textArray.find(element => element === "לעברית") != null) {
                 langCode = "he";
                 await client.sendText(chatID, "השפה שונתה בהצלחה");
-            } else if (textArray[3] === "English" || textArray[2] === "לאנגלית") {
-                langCode = "en";
-                await client.sendText(chatID, "Language changed successfully");
+            }
+            if (textArray.find(element => element === "לאנגלית") != null) {
+                langCode = "he";
+                await client.sendText(chatID, "Language successfully changed");
+            }
+            if (textArray.find(element => element === "Hebrew") != null) {
+                langCode = "he";
+                await client.sendText(chatID, "השפה שונתה בהצלחה");
+            }
+            if (textArray.find(element => element === "English") != null) {
+                langCode = "he";
+                await client.sendText(chatID, "Language successfully changed");
             }
 
             if (langCode != null) {

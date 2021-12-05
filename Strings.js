@@ -1,5 +1,5 @@
 //TODO turn this .js file into a .json file
-class stringLang {
+class Strings {
     static strings = {
         //hyphen
         "hyphen": {
@@ -189,13 +189,13 @@ class stringLang {
             "he": /כותרת - (.)+/,
             "en": /Title - (.)+/
         },
-        "second_survey_title": {
+        "survey_subtitle": {
             "he": /כותרת משנה - (.)+/,
-            "en": /Body - (.)+/
+            "en": /Subtitle - (.)+/
         },
         "third_survey_title": {
             "he": /כותרת שלישית - (.)+/,
-            "en": /Footer - (.)+/
+            "en": /Third title - (.)+/
         },
         "survey_button_1": {
             "he": /כפתור1 - (.)+/,
@@ -233,7 +233,7 @@ class stringLang {
             "he": "כפתור3 -",
             "en": "Button3 -"
         },
-        "survey_reply": {
+        "survey_error_reply": {
             "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
             "en": "I need a title, a body and at least one button to make a survey"
         },
@@ -285,6 +285,16 @@ class stringLang {
                 "\n _סריקת קישורים_" +
                 "\n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח" +
                 "\n" +
+                "\n _יצירת סקרים (לא פעיל בגלל תקלה של וואטסאפ)_" +
+                "\n צור סקר" +
+                "\n כותרת - [כותרת סקר]" +
+                "\n כותרת משנה - [כותרת משנה]" +
+                "\n כותרת שלישית - [כותרת שלישית]" +
+                "\n כפתור1 - [אופציה ראשונה]" +
+                "\n כפתור2 - [אופציה שנייה]" +
+                "\n כפתור3 - [אופציה שלישית]" +
+                "\n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים)" +
+                "\n" +
                 "\n _טיפ מיוחד!_ " +
                 "\n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר" +
                 "\n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
@@ -326,6 +336,16 @@ class stringLang {
                 "\n _Link Scanning_" +
                 "\n Scan [link] - Scans the given link for viruses and determines if it's safe" +
                 "\n" +
+                "\n _Creating surveys (Inactive due to Whatsapp bug)_" +
+                "\n Create survey" +
+                "\n Title - [title]" +
+                "\n Subtitle - [subtitle]" +
+                "\n Third title - [third title]" +
+                "\n Button1 - [first option]" +
+                "\n Button2 - [second option]" +
+                "\n Button3 - [third option]" +
+                "\n (The third title, second and third buttons are optional)" +
+                "\n" +
                 "\n _Special Tip!_" +
                 "\n When creating a filter you can also use [person] to tag someone whenever the filter is invoked" +
                 "\n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph"
@@ -333,4 +353,4 @@ class stringLang {
     }
 }
 
-module.exports = stringLang;
+module.exports = Strings;
