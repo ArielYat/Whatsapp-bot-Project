@@ -1,4 +1,4 @@
-const HDB = require("./HandleDB"), HL = require("HandleLanguage"), stringLang = require("../Strings");
+const HDB = require("./HandleDB"), stringLang = require("../Strings");
 const util = require("util");
 
 class HandleLanguage {
@@ -30,7 +30,7 @@ class HandleLanguage {
                 if (langCode === "en")
                     await client.sendText(chatID, stringLang.strings["language_change_reply"]["en"]);
             } else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "language_change_error_reply"), message.id);
+                client.reply(chatID, stringLang.strings["language_change_error_reply"][groupsDict[chatID].language], message.id);
             }
         }
     }
