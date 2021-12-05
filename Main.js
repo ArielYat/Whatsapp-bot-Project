@@ -1,16 +1,16 @@
-//list of required classes
+//Files for different functions
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage"), HURL = require("./HandleURL"),
     HF = require("./HandleFilters"), HT = require("./HandleTags"), HB = require("./HandleBirthdays"),
     HR = require("./HandleRest"), HSi = require("./HandleStickers"), HSu = require("./HandleSurveys");
 //Whatsapp module
 const wa = require("@open-wa/wa-automate");
-//Schedule module
+//Schedule module and it's configuration
 const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel'; //time zone
-
+//Local storage of data to not require access to the database at all times
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
-//Group rest constants
+//Group rest intervals
 const groupCommandResetInterval = 15 * 60 * 1000 // time limit for groups(in ms)
 const groupRestResetInterval = 5 * 60 * 1000; //reset filters counter (in ms)
 const limitFilter = 15;
@@ -21,10 +21,10 @@ HDB.GetAllGroupsFromDB(groupsDict, function () {
 });
 
 /*
-Handle filters - add filter, remove filter, edit filters and show filters
+Handle filters - add filter, remove filter, edit filters, show filters and repond to filter
 Input: client and message
 Output: None
- */
+*/
 async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
@@ -35,13 +35,13 @@ async function handleFilters(client, message) {
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filter
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //handle edit filter
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filter
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) { //show filters
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) { //Handle show filters
         await HF.showFilters(client, chatID, messageID, groupsDict);
     }
-    else {
+    else { //Handle responding to filters
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
@@ -55,7 +55,11 @@ async function handleFilters(client, message) {
     }
 }
 
-//Handle Tags - add & remove tags, show all of them and respond to them (either single tag/tag everyone)
+/*
+Handle tags - add tag, remove tag, tag persons, tag everyone and show tags
+Input: client and message
+Output: None
+*/
 async function handleTags(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
@@ -68,47 +72,55 @@ async function handleTags(client, message) {
     if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) {
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tag
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) {
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tag
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) {
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tag someone
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) {
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_everyone"))) { //Handle tag everyone
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
     }
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) {
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
 }
 
-//Handle birthdays - add & remove birthdays, and show all of them
+/*
+Handle birthdays - add birthday, remove birthday and show birthdays
+Input: client and message
+Output: None
+*/
 async function handleBirthdays(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) {
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) {
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) {
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) { //Handle show birthdays
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
     }
 }
 
-//Handle language - change group language and show help message
+/*
+Handle tags - change language and show help
+Input: client and message
+Output: None
+*/
 async function handleLanguage(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "change_language"))) {
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "change_language"))) { //Handle change language
         await HL.changeGroupLang(client, message, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) {
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) { //Handle show help
         await client.reply(message.chat.id, HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
     }
 }
@@ -125,6 +137,7 @@ setInterval(function () {
         restGroupsSpam.pop();
 }, groupRestResetInterval);
 
+//Main function
 function start(client) {
     //Check if there are birthdays everyday at 6 am
     schedule.scheduleJob('01 00 * * *', () => {
@@ -133,17 +146,17 @@ function start(client) {
     //Check every function every time a message is received
     client.onMessage(async message => {
         if (message != null) {
-            await HR.handleUserRest(client, message, restUsers);
-            await HR.handleGroupRest(client, message, restGroups, restGroupsSpam);
+            await HR.handleUserRest(client, message, restUsers); //Handle user rest due to admin
+            await HR.handleGroupRest(client, message, restGroups, restGroupsSpam); //Handle group rest due to admin or due to spam
             if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id) &&
-                !restGroupsSpam.includes(message.chat.id)) {
-                await handleFilters(client, message);
-                await handleTags(client, message);
-                await handleBirthdays(client, message);
-                await handleLanguage(client, message);
-                await HSi.handleStickers(client, message, groupsDict);
-                await HURL.stripLinks(client, message, groupsDict);
-                await HSu.makeButton(client, message, groupsDict);
+                !restGroupsSpam.includes(message.chat.id)) { //If both the user who sent the message the group the message was sent in are allowed, proceed to the functions
+                await handleFilters(client, message); //Handle filters
+                await handleTags(client, message); //Handle tags
+                await handleBirthdays(client, message); //Handle birthdays
+                await handleLanguage(client, message); //Handle language and help
+                await HSi.handleStickers(client, message, groupsDict); //Handle stickers
+                await HURL.stripLinks(client, message, groupsDict); //Handle URLs
+                await HSu.makeButton(client, message, groupsDict); //Handle surveys
             }
         }
     });
