@@ -1,4 +1,4 @@
-const HDB = require("./HandleDB"), stringLang = require("./Strings");
+const HDB = require("./HandleDB"), HL = require("HandleLanguage"), stringLang = require("../Strings");
 const util = require("util");
 
 class HandleLanguage {
@@ -8,32 +8,29 @@ class HandleLanguage {
         let langCode;
         let textArray = text.split(" ");
         if (chatID in groupsDict) {
-            if (textArray.find(element => element === "לעברית") != null) {
-                langCode = "he";
-                await client.sendText(chatID, "השפה שונתה בהצלחה");
+            langCode = textArray.find(element => element === "לעברית") !== null ? "he" : null;
+            if (langCode === null) {
+                langCode = textArray.find(element => element === "Hebrew") !== null ? "he" : null;
+                if (langCode === null) {
+                    langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : null;
+                    if (langCode === null) {
+                        langCode = textArray.find(element => element === "English") !== null ? "en" : null;
+                    }
+                }
             }
-            if (textArray.find(element => element === "לאנגלית") != null) {
-                langCode = "he";
-                await client.sendText(chatID, "Language successfully changed");
-            }
-            if (textArray.find(element => element === "Hebrew") != null) {
-                langCode = "he";
-                await client.sendText(chatID, "השפה שונתה בהצלחה");
-            }
-            if (textArray.find(element => element === "English") != null) {
-                langCode = "he";
-                await client.sendText(chatID, "Language successfully changed");
-            }
-
-            if (langCode != null) {
+            if (langCode !== null) {
                 await HDB.delArgsFromDB(langCode, chatID, "lang", function () {
                     HDB.addArgsToDB(langCode, null, null, null,
                         chatID, "lang", function () {
                             groupsDict[chatID].language(langCode);
                         })
                 });
+                if (langCode === "he")
+                    await client.sendText(chatID, stringLang.strings["language_change_reply"]["he"]);
+                if (langCode === "en")
+                    await client.sendText(chatID, stringLang.strings["language_change_reply"]["en"]);
             } else {
-                client.reply(chatID, "Only English or Hebrew are currently supported by the bot", message.id);
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "language_change_error_reply"), message.id);
             }
         }
     }

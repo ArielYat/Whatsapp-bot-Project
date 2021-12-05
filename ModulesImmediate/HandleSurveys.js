@@ -1,4 +1,4 @@
-const HL = require("./HandleLanguage");
+const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HSu {
     static async makeButton(client, message, groupsDict) {

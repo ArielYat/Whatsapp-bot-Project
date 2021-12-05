@@ -1,4 +1,4 @@
-const HL = require("./HandleLanguage");
+const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HSi {
     static async handleStickers(client, message, groupsDict) {

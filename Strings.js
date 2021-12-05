@@ -242,6 +242,14 @@ class Strings {
             "he": "שנה שפה",
             "en": "Change language to"
         },
+        "language_change_reply": {
+            "he": "השפה שונתה בהצלחה",
+            "en": "Language successfully changed"
+        },
+        "language_change_error_reply": {
+            "he": "בימינו אנו רק עברית ונאגלית נתמכות על ידי הבוט",
+            "en": "Only English or Hebrew are currently supported by the bot"
+        },
         "handle_Help": {
             "he": "הראה עזרה",
             "en": "Show help"

@@ -1,4 +1,4 @@
-const group = require("./Group");
+const group = require("../Group");
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
 
 class HDB {
@@ -144,7 +144,7 @@ class HDB {
             });
             dbo.collection("lang-groups").find({}).toArray(function (err, result) {
                 if (err) {
-                    console.log(err + "lang-birthday-find");
+                    console.log(err + "lang-find");
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {

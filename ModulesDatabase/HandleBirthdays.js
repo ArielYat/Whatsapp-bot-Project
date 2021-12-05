@@ -1,4 +1,4 @@
-﻿const group = require("./Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+﻿const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HB {
     static async checkBirthday(client, groupsDict) {

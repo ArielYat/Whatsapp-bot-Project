@@ -18,7 +18,6 @@ class HR {
                     client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
                 }
             }
-
             if (textMessage.startsWith("אפשר גישה למשתמש")) {
                 if (botDevs.includes(userID)) {
                     const userIdIndex = restUsers.indexOf(responseAuthor);
@@ -45,7 +44,6 @@ class HR {
                 client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
             }
         }
-
         if (textMessage.startsWith("שחרר קבוצה")) {
             if (botDevs.includes(userID)) {
                 const groupIdIndex = restGroups.indexOf(responseGroupId);
