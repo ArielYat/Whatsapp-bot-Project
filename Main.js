@@ -6,11 +6,12 @@ const wa = require("@open-wa/wa-automate");
 //Schedule module
 const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
-rule.tz = 'Israel';
+rule.tz = 'Israel'; //time zone
 
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
 //Group rest constants
-const groupCommandResetInterval = 10 * 60 * 1000, groupRestResetInterval = 3 * 60 * 1000; //in ms
+const groupCommandResetInterval = 15 * 60 * 1000 // time limit for groups(in ms)
+const groupRestResetInterval = 5 * 60 * 1000; //reset filters counter (in ms)
 const limitFilter = 15;
 
 //Get all the groups from mongoDB and make an instance of every group object in every group
@@ -18,24 +19,33 @@ HDB.GetAllGroupsFromDB(groupsDict, function () {
     wa.create({headless: false}).then(client => start(client));
 });
 
-//Handle filters - add, remove & edit filter, show all of them and respond to them
+/*
+Handle filters - add filter, remove filter, edit filters and show filters
+Input: client and message
+Output: None
+ */
 async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) {
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filter
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filter
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //handle edit filter
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) { //show filters
         await HF.showFilters(client, chatID, messageID, groupsDict);
-    } else {
+    }
+    else {
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-            } else if (groupsDict[chatID].filterCounter === limitFilter) {
+            }
+            else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsSpam.push(chatID);
@@ -59,13 +69,17 @@ async function handleTags(client, message) {
 
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) {
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) {
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) {
+    }
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) {
         await HT.showTags(client, chatID, messageID, groupsDict);
     }
 }
