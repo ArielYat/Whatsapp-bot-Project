@@ -1,4 +1,4 @@
-const HDB = require("./HandleDB"), stringLang = require("../Strings");
+const HDB = require("./HandleDB"), Strings = JSON.parse(require("../Strings.json"));
 const util = require("util");
 
 class HandleLanguage {
@@ -25,12 +25,14 @@ class HandleLanguage {
                             groupsDict[chatID].language(langCode);
                         })
                 });
+                //TODO: fix this area (the "he", "en" & groupLang)
                 if (langCode === "he")
-                    await client.sendText(chatID, stringLang.strings["language_change_reply"]["he"]);
+                    await client.sendText(chatID, Strings["language_change_reply"].he);
                 if (langCode === "en")
-                    await client.sendText(chatID, stringLang.strings["language_change_reply"]["en"]);
+                    await client.sendText(chatID, Strings["language_change_reply"].en);
             } else {
-                client.reply(chatID, stringLang.strings["language_change_error_reply"][groupsDict[chatID].language], message.id);
+                let groupLang = groupsDict[chatID].language;
+                client.reply(chatID, Strings["language_change_error_reply"].groupLang, message.id);
             }
         }
     }
@@ -44,7 +46,7 @@ class HandleLanguage {
         } else {
             lang = "he";
         }
-        let str = stringLang.strings[parameter][lang];
+        let str = Strings[parameter].lang;
         if (parameter === "add_filter_reply_exists") {
             strToReturn = util.format(str, value1, value1, value2);
         } else if (value1 != null && value2 != null) {
