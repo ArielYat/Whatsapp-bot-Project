@@ -1,7 +1,7 @@
 const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
-class HF {
+class HF { //TODO: add options for images/gifs/videos/stickers as filters
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;

@@ -1,4 +1,4 @@
-//TODO turn this .js file into a .json file
+//TODO: turn this .js file into a .json file
 class Strings {
     static strings = {
         //hyphen

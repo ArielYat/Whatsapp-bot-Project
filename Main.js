@@ -11,6 +11,10 @@ const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule();
 rule.tz = 'Israel'; //Time zone
 
+//TODO: add something to the bot's about section
+//TODO: add a function to reset a group's DB
+//TODO: add function to allow select users of a group to modify it's DB
+//TODO: add an option for a private link in a user's DMs to modify info in the group's DB
 //Local storage of data to not require access to the database at all times
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
 //Group rest intervals
@@ -58,7 +62,7 @@ Handle tags - add tag, remove tag, tag persons, tag everyone and show tags
 Input: client and message
 Output: None
 */
-async function handleTags(client, message) {
+async function handleTags(client, message) { //TODO: add function to check where a user was last tagged
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
