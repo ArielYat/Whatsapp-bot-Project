@@ -8,29 +8,29 @@ class HandleLanguage {
         let langCode;
         let textArray = text.split(" ");
         if (chatID in groupsDict) {
-            langCode = langCode = textArray.find(element => element === "לעברית") !== null ? "he" : null;
-            langCode = langCode === null ? langCode = textArray.find(element => element === "Hebrew") !== null ? "he" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "Hebraice") !== null ? "he" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "English") !== null ? "en" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "Anglicus") !== null ? "en" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "ללטינית") !== null ? "la" : {} : {};
-            langCode = langCode === null ? langCode = textArray.find(element => element === "Latin") !== null ? "la" : {} : {}
-            langCode = langCode === null ? langCode = textArray.find(element => element === "Latinus") !== null ? "la" : {} : {}
+            if(textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")){
+                langCode = "he";
+            }
+            else if(textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")){
+                langCode = "en";
+            }
+            else if(textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latinus")){
+                langCode = "la";
+            }
 
             if (langCode !== null) {
-                await HDB.delArgsFromDB(langCode, chatID, "lang", function () {
-                    HDB.addArgsToDB(langCode, null, null, null,
+                await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
+                    await HDB.addArgsToDB(langCode, null, null, null,
                         chatID, "lang", function () {
                             groupsDict[chatID].language(langCode);
                         })
+                    if (langCode === "he")
+                        await client.sendText(chatID, Strings["language_change_reply"]["he"]);
+                    else if (langCode === "en")
+                        await client.sendText(chatID, Strings["language_change_reply"]["en"]);
+                    else if (langCode === "la")
+                        await client.sendText(chatID, Strings["language_change_reply"]["la"]);
                 });
-                if (langCode === "he")
-                    await client.sendText(chatID, Strings["language_change_reply"]["he"]);
-                else if (langCode === "en")
-                    await client.sendText(chatID, Strings["language_change_reply"]["en"]);
-                else if (langCode === "la")
-                    await client.sendText(chatID, Strings["language_change_reply"]["la"]);
             } else {
                 let groupLang = groupsDict[chatID].language;
                 client.reply(chatID, Strings["language_change_error_reply"][groupLang], message.id);
