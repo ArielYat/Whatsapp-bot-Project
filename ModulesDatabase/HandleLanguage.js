@@ -12,9 +12,24 @@ class HandleLanguage {
             if (langCode === null) {
                 langCode = textArray.find(element => element === "Hebrew") !== null ? "he" : null;
                 if (langCode === null) {
-                    langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : null;
+                    langCode = textArray.find(element => element === "Hebraice") !== null ? "he" : null;
                     if (langCode === null) {
-                        langCode = textArray.find(element => element === "English") !== null ? "en" : null;
+                        langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : null;
+                        if (langCode === null) {
+                            langCode = textArray.find(element => element === "English") !== null ? "en" : null;
+                            if (langCode === null) {
+                                langCode = textArray.find(element => element === "Anglicus") !== null ? "en" : null;
+                                if (langCode === null) {
+                                    langCode = textArray.find(element => element === "ללטינית") !== null ? "la" : null;
+                                    if (langCode === null) {
+                                        langCode = textArray.find(element => element === "Latin") !== null ? "la" : null;
+                                        if (langCode === null) {
+                                            langCode = textArray.find(element => element === "Latinus") !== null ? "la" : null;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -25,14 +40,15 @@ class HandleLanguage {
                             groupsDict[chatID].language(langCode);
                         })
                 });
-                //TODO: fix this area (the "he", "en" & groupLang)
                 if (langCode === "he")
-                    await client.sendText(chatID, Strings["language_change_reply"].he);
-                if (langCode === "en")
-                    await client.sendText(chatID, Strings["language_change_reply"].en);
+                    await client.sendText(chatID, Strings["language_change_reply"]["he"]);
+                else if (langCode === "en")
+                    await client.sendText(chatID, Strings["language_change_reply"]["en"]);
+                else if (langCode === "en")
+                    await client.sendText(chatID, Strings["language_change_reply"]["la"]);
             } else {
                 let groupLang = groupsDict[chatID].language;
-                client.reply(chatID, Strings["language_change_error_reply"].groupLang, message.id);
+                client.reply(chatID, Strings["language_change_error_reply"][groupLang], message.id);
             }
         }
     }
@@ -46,7 +62,7 @@ class HandleLanguage {
         } else {
             lang = "he";
         }
-        let str = Strings[parameter].lang;
+        let str = Strings[parameter][lang];
         if (parameter === "add_filter_reply_exists") {
             strToReturn = util.format(str, value1, value1, value2);
         } else if (value1 != null && value2 != null) {

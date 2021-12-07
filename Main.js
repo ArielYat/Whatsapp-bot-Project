@@ -3,7 +3,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
       HURL = require("./ModulesImmediate/HandleURL"), HF = require("./ModulesDatabase/HandleFilters"),
       HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
       HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-      HR = require("./ModulesMiscellaneous/HandleRest");
+      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = JSON.parse(require("Strings.json"));
 //Whatsapp control module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and it's configuration
@@ -22,7 +22,7 @@ const groupCommandResetInterval = 15 * 60 * 1000 //When to reset the filter coun
 const groupRestResetInterval = 5 * 60 * 1000; //When to reset the groups muted (in ms)
 const limitFilter = 15; //Filter Limit
 
-//Get all the groups from mongoDB and make an instance of every group object in every group
+//Start the bot - get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function () {
     wa.create({headless: false}).then(client => start(client));
 });
@@ -116,20 +116,21 @@ async function handleLanguage(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "change_language"))) { //Handle change language
+    if (bodyText.startsWith(Strings["change_language"]["he"]) || bodyText.startsWith(Strings["change_language"]["en"]) ||
+        bodyText.startsWith(Strings["change_language"]["la"])) { //Handle change language
         await HL.changeGroupLang(client, message, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) { //Handle show help
         await client.reply(message.chat.id, HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
     }
 }
 
-//Reset filter counter for all groups every [groupCommandResetInterval] minutes
+//Reset filter counter for all groups every [groupCommandResetInterval] minutes (automatic)
 setInterval(function () {
     for (let group in groupsDict)
         groupsDict[group].filterCounterReset();
 }, groupCommandResetInterval);
 
-//Remove all groups from rest list every [groupRestResetInterval] minutes
+//Remove all groups from rest list every [groupRestResetInterval] minutes (automatic)
 setInterval(function () {
     while (restGroupsSpam.length > 0)
         restGroupsSpam.pop();
@@ -144,18 +145,18 @@ function start(client) {
         await client.sendText(chat,
             "*Hello, I'm Alex!*" +
             "\n To change my language type 'Change language to [language you want to change to]'" +
-            "\n The default language is Hebrew" +
+            "\n The default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
             "\n To display a help message type 'Show help' in the default language" +
             "\n שלום, אני אלכס!" +
             "\n כדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
-            "\n השפה בררת המחדל היא עברית" +
+            "\n השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
             "\n כדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל")
     });
     client.onMessage(async message => { //Check every function every time a message is received
         if (message != null) {
-            //Handle user rest due to admin
+            //Handle user rest by an admin
             await HR.handleUserRest(client, message, restUsers);
-            //Handle group rest due to admin or due to spam
+            //Handle group rest by an admin
             await HR.handleGroupRest(client, message, restGroups, restGroupsSpam);
             //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
             if (!restUsers.includes(message.author) && !restGroups.includes(message.chat.id) &&
