@@ -29,7 +29,7 @@ class HandleLanguage {
                     await client.sendText(chatID, Strings["language_change_reply"]["he"]);
                 else if (langCode === "en")
                     await client.sendText(chatID, Strings["language_change_reply"]["en"]);
-                else if (langCode === "en")
+                else if (langCode === "la")
                     await client.sendText(chatID, Strings["language_change_reply"]["la"]);
             } else {
                 let groupLang = groupsDict[chatID].language;
