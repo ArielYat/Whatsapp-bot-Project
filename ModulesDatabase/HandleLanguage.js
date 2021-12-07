@@ -8,31 +8,16 @@ class HandleLanguage {
         let langCode;
         let textArray = text.split(" ");
         if (chatID in groupsDict) {
-            langCode = textArray.find(element => element === "לעברית") !== null ? "he" : null;
-            if (langCode === null) {
-                langCode = textArray.find(element => element === "Hebrew") !== null ? "he" : null;
-                if (langCode === null) {
-                    langCode = textArray.find(element => element === "Hebraice") !== null ? "he" : null;
-                    if (langCode === null) {
-                        langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : null;
-                        if (langCode === null) {
-                            langCode = textArray.find(element => element === "English") !== null ? "en" : null;
-                            if (langCode === null) {
-                                langCode = textArray.find(element => element === "Anglicus") !== null ? "en" : null;
-                                if (langCode === null) {
-                                    langCode = textArray.find(element => element === "ללטינית") !== null ? "la" : null;
-                                    if (langCode === null) {
-                                        langCode = textArray.find(element => element === "Latin") !== null ? "la" : null;
-                                        if (langCode === null) {
-                                            langCode = textArray.find(element => element === "Latinus") !== null ? "la" : null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            langCode = langCode = textArray.find(element => element === "לעברית") !== null ? "he" : null;
+            langCode = langCode === null ? langCode = textArray.find(element => element === "Hebrew") !== null ? "he" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "Hebraice") !== null ? "he" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "לאנגלית") !== null ? "en" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "English") !== null ? "en" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "Anglicus") !== null ? "en" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "ללטינית") !== null ? "la" : null : {};
+            langCode = langCode === null ? langCode = textArray.find(element => element === "Latin") !== null ? "la" : null : {}
+            langCode = langCode === null ? langCode = textArray.find(element => element === "Latinus") !== null ? "la" : null : {}
+
             if (langCode !== null) {
                 await HDB.delArgsFromDB(langCode, chatID, "lang", function () {
                     HDB.addArgsToDB(langCode, null, null, null,
