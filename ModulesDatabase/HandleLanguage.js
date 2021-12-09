@@ -1,5 +1,6 @@
 const HDB = require("./HandleDB"), Strings = JSON.parse(require("../Strings.json"));
 const util = require("util");
+const group = require("../Group");
 
 class HandleLanguage {
     static async changeGroupLang(client, message, groupsDict) {
@@ -7,34 +8,32 @@ class HandleLanguage {
         let text = message.body;
         let langCode;
         let textArray = text.split(" ");
-        if (chatID in groupsDict) {
-            if(textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")){
-                langCode = "he";
-            }
-            else if(textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")){
-                langCode = "en";
-            }
-            else if(textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latinus")){
-                langCode = "la";
-            }
+        if (!(chatID in groupsDict))
+            groupsDict[chatID] = new group(chatID);
 
-            if (langCode !== null) {
-                await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
-                    await HDB.addArgsToDB(langCode, null, null, null,
-                        chatID, "lang", function () {
-                            groupsDict[chatID].language(langCode);
-                        })
-                    if (langCode === "he")
-                        await client.sendText(chatID, Strings["language_change_reply"]["he"]);
-                    else if (langCode === "en")
-                        await client.sendText(chatID, Strings["language_change_reply"]["en"]);
-                    else if (langCode === "la")
-                        await client.sendText(chatID, Strings["language_change_reply"]["la"]);
-                });
-            } else {
-                let groupLang = groupsDict[chatID].language;
-                client.reply(chatID, Strings["language_change_error_reply"][groupLang], message.id);
-            }
+        langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")
+            ? "he" : null;
+        langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")
+            ? "en" : {} : {};
+        langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latinus")
+            ? "la" : {} : {};
+
+        if (langCode !== null) {
+            await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
+                await HDB.addArgsToDB(langCode, null, null, null,
+                    chatID, "lang", function () {
+                        groupsDict[chatID].language(langCode);
+                    })
+                if (langCode === "he")
+                    await client.sendText(chatID, Strings["language_change_reply"]["he"]);
+                else if (langCode === "en")
+                    await client.sendText(chatID, Strings["language_change_reply"]["en"]);
+                else if (langCode === "la")
+                    await client.sendText(chatID, Strings["language_change_reply"]["la"]);
+            });
+        } else {
+            let groupLang = groupsDict[chatID].language;
+            client.reply(chatID, Strings["language_change_error_reply"][groupLang], message.id);
         }
     }
 
