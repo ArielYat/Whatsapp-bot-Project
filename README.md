@@ -13,5 +13,10 @@
 ## Usage
 Add the bot's phone number to your Whatsapp group and start sending out commands - As simple as that!
 
-## Licence
-The end user may use to bot their heart's content, but its code may not be redistributed or changed without explicit premision from the owner of this Github repository.
+##Dependencies/Credits
+@open-wa/wa-automate for the WhatsApp "link". 
+mongodb for storing our database.
+node-schedule for timing the birthday checking. 
+node-virustotal for scanning links for viruses. 
+usleep for timing out the bot while the antivirus scan takes place.
+util for formatting strings.
