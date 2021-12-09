@@ -1,5 +1,4 @@
-class Strings
-{
+class Strings {
     static strings = {
         "hyphen": {
             "he": "כבודו אתה בטוח שהשתמשת במקף?",
@@ -248,7 +247,7 @@ class Strings
         },
         "scan_link_result": {
             "he": " וואלה אחי בדקתי את הקישור כמו שביקשת ומצאתי ש-%s אנטי וירוסים מצאו אותו סאחי",
-            "en" : "%s antivirus engines detected this link as malicious",
+            "en": "%s antivirus engines detected this link as malicious",
             "la": "%s deprehendentes reperiebant hoc ligentem malum esse"
         }
         ,
@@ -379,4 +378,5 @@ class Strings
         }
     }
 }
+
 module.exports = Strings;

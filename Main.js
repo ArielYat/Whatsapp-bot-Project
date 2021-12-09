@@ -1,10 +1,9 @@
 //Files for the different modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
-      HURL = require("./ModulesImmediate/HandleURL"), HF = require("./ModulesDatabase/HandleFilters"),
+      HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
       HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
       HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-      HR = require("./ModulesMiscellaneous/HandleRest"), stringsClass = require("./Strings.js");
-const Strings = stringsClass.strings
+      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = require("./Strings.js").strings;
 //Whatsapp control module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and it's configuration

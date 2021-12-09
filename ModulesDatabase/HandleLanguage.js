@@ -13,15 +13,12 @@ class HandleLanguage {
         if (!(chatID in groupsDict))
             groupsDict[chatID] = new group(chatID);
 
-        if (textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")) {
-                 langCode = "he"
-         }
-        else if (textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglice")) {
-             langCode = "en"
-         }
-        else if(textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")){
-             langCode = "la"
-        }
+        langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")
+            ? "he" : null;
+        langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")
+            ? "en" : {} : {};
+        langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latinus")
+            ? "la" : {} : {};
 
         if (langCode !== null) {
             await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
