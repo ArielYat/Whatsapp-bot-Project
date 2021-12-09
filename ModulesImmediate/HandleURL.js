@@ -32,7 +32,7 @@ class HURL {
                 const theSameObject = defaultTimedInstance.initialScanURL(url, function (err, res) {
                     if (err) {
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                            "scan_link_error_upload"), messageId);
+                            "scan_link_upload_error"), messageId);
                     } else if (res) {
                         time.sleep(10);
                         const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
@@ -41,18 +41,18 @@ class HURL {
                         const theSameObject = defaultTimedInstance.urlLookup(hashedAfterRegex, function (err, res) {
                             if (err) {
                                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                                    "scan_link_error_checking"), messageId);
+                                    "scan_link_checking_error"), messageId);
                             } else if (res) {
-                                HURL.parseAndAnswerResults(client, chatID, res, url, messageId);
+                                HURL.parseAndAnswerResults(client, chatID, res, url, messageId, groupsDict);
                             }
                         });
                     }
                 });
             } else
-                HURL.parseAndAnswerResults(client, chatID, res, url, messageId);
+                HURL.parseAndAnswerResults(client, chatID, res, url, messageId, groupsDict);
         });
     }
-    static async parseAndAnswerResults(client, chatID, res, url, messageId) {
+    static async parseAndAnswerResults(client, chatID, res, url, messageId, groupsDict) {
         let prettyStringForAnswer = "";
         try {
             const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
@@ -64,7 +64,8 @@ class HURL {
                     counter++;
                 }
             }
-            prettyStringForAnswer += "\n" + counter + " Anti virus engines detected this link as malicious";
+            prettyStringForAnswer += "\n" + HL.getGroupLang(groupsDict, chatID,
+                "scan_link_result", counter);
             client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
         } catch (error) {
             client.reply(chatID, "" + error, messageId);

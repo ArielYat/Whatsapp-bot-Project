@@ -101,10 +101,10 @@ class HDB {
             let ID = document.ID;
             let lang = document.lang;
             if (ID in groupsDict) {
-                groupsDict[ID].changeLang(lang);
+                groupsDict[ID].setLanguage(lang);
             } else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].changeLang(lang);
+                groupsDict[ID].setLanguage(lang);
             }
         }
 

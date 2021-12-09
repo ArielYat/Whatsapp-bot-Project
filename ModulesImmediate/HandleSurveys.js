@@ -32,7 +32,7 @@ class HSu {
                     await client.sendButtons(chatID, secondTitle, buttonsArray, title);
                 }
             } else {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_error_reply"), message.id);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), message.id);
             }
         }
 

@@ -49,11 +49,11 @@ class HB {
                     }
                 } else {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                        "date_existence"), messageID);
+                        "date_existence_error"), messageID);
                 }
             } else {
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "date_syntax"), messageID);
+                    "date_syntax_error"), messageID);
             }
         } else {
             client.reply(chatID, HL.getGroupLang(groupsDict, chatID,

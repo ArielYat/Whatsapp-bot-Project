@@ -80,7 +80,7 @@ class HT {
             stringForSending += bodyText;
             await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
         } else {
-            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_dont_have_tags"), messageID);
+            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
         }
     }
 

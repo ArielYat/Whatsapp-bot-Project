@@ -139,7 +139,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                     restGroupsAuto.push(chatID);
                 }
             } else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_dont_have_filters"), messageID);
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
             }
         } else {
             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);

@@ -3,7 +3,8 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
       HURL = require("./ModulesImmediate/HandleURL"), HF = require("./ModulesDatabase/HandleFilters"),
       HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
       HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = JSON.parse(require("Strings.json"));
+      HR = require("./ModulesMiscellaneous/HandleRest"), stringsClass = require("./Strings.js");
+const Strings = stringsClass.strings
 //Whatsapp control module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and it's configuration
@@ -15,16 +16,17 @@ rule.tz = 'Israel'; //Time zone
 //TODO: add a function to reset a group's DB
 //TODO: add function to allow select users of a group to modify it's DB
 //TODO: add an option for a private link in a user's DMs to modify info in the group's DB
+//TODO: add cleaner group for group that not exist anymore
 //Local storage of data to not require access to the database at all times
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
 //Group rest intervals
-const groupCommandResetInterval = 15 * 60 * 1000 //When to reset the filter counter (in ms)
+const groupCommandResetInterval = 20 * 60 * 1000 //When to reset the filter counter (in ms)
 const groupRestResetInterval = 5 * 60 * 1000; //When to reset the groups muted (in ms)
 const limitFilter = 15; //Filter Limit
 
 //Start the bot - get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function () {
-    wa.create({headless: false}).then(client => start(client));
+    wa.create({headless: false, multiDevice:true}).then(client => start(client));
 });
 
 /*
@@ -74,13 +76,13 @@ async function handleTags(client, message) { //TODO: add function to check where
     if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tag
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tag everyone
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tag
-        await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tag someone
+        await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tag
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_everyone"))) { //Handle tag everyone
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tag
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
         await HT.showTags(client, chatID, messageID, groupsDict);
@@ -138,7 +140,18 @@ setInterval(function () {
 
 //Main function
 function start(client) {
-    schedule.scheduleJob('01 00 * * *', () => { //Check if there are birthdays everyday at 12 am
+    client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
+        await client.sendText(chat.id,
+            "Hello, I'm Alex!" +
+            "\n To change my language type 'Change language to [language you want to change to]'" +
+            "\n The default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
+            "\n To display a help message type 'Show help' in the default language" +
+            "\n שלום, אני אלכס!" +
+            "\n כדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
+            "\n השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
+            "\n כדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל")
+    });
+    schedule.scheduleJob('2 0 * * *', () => { //Check if there are birthdays everyday at 12 am
         HB.checkBirthday(client, groupsDict)
     });
     client.onMessage(async message => { //Check every function every time a message is received
