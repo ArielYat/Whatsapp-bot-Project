@@ -3,7 +3,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
       HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
       HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
       HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = JSON.parse(require("Strings.json"));
+      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = require("Strings.json");
 //Whatsapp control module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and it's configuration
