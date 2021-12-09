@@ -1,6 +1,6 @@
 //Files for the different modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
-      HURL = require("./ModulesImmediate/HandleURL"), HF = require("./ModulesDatabase/HandleFilters"),
+      HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
       HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
       HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
       HR = require("./ModulesMiscellaneous/HandleRest"), Strings = JSON.parse(require("Strings.json"));
@@ -140,6 +140,17 @@ setInterval(function () {
 function start(client) {
     schedule.scheduleJob('01 00 * * *', () => { //Check if there are birthdays everyday at 12 am
         HB.checkBirthday(client, groupsDict)
+    });
+    client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
+        await client.sendText(chat,
+            "*Hello, I'm Alex!*" +
+            "\n To change my language type 'Change language to [language you want to change to]'" +
+            "\n The default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
+            "\n To display a help message type 'Show help' in the default language" +
+            "\n שלום, אני אלכס!" +
+            "\n כדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
+            "\n השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
+            "\n כדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל")
     });
     client.onMessage(async message => { //Check every function every time a message is received
         if (message != null) {
