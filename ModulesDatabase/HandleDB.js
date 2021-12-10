@@ -10,15 +10,14 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filters") {
+            if (filterOrTagsOrBirthday === "filters")
                 objectToAddToDataBase = {ID: ID, filter: key, filter_reply: value1};
-            } else if (filterOrTagsOrBirthday === "tags") {
+            else if (filterOrTagsOrBirthday === "tags")
                 objectToAddToDataBase = {ID: ID, name: key, phone_number: value1};
-            } else if (filterOrTagsOrBirthday === "birthday") {
+            else if (filterOrTagsOrBirthday === "birthday")
                 objectToAddToDataBase = {ID: ID, name: key, birthDay: value1, birthMonth: value2, birthYear: value3};
-            } else if (filterOrTagsOrBirthday === "lang") {
+            else if (filterOrTagsOrBirthday === "lang")
                 objectToAddToDataBase = {ID: ID, lang: key};
-            }
             dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
                 if (err) {
                     console.log(err + "addArgsToDB-insertOne");
@@ -38,15 +37,14 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filters") {
+            if (filterOrTagsOrBirthday === "filters")
                 objectToDelToDataBase = {ID: ID, filter: key};
-            } else if (filterOrTagsOrBirthday === "tags") {
+            else if (filterOrTagsOrBirthday === "tags")
                 objectToDelToDataBase = {ID: ID, name: key};
-            } else if (filterOrTagsOrBirthday === "birthday") {
+            else if (filterOrTagsOrBirthday === "birthday")
                 objectToDelToDataBase = {ID: ID, name: key};
-            } else if (filterOrTagsOrBirthday === "lang") {
+            else if (filterOrTagsOrBirthday === "lang")
                 objectToDelToDataBase = {ID: ID};
-            }
             dbo.collection(filterOrTagsOrBirthday + "-groups").deleteOne(objectToDelToDataBase, function (err, res) {
                 if (err) {
                     console.log(err + "delArgsFromDB-deleteOne");

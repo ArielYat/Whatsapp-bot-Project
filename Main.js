@@ -1,9 +1,9 @@
 //Files for the different modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
-      HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
-      HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
-      HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-      HR = require("./ModulesMiscellaneous/HandleRest"), Strings = require("./Strings.js").strings;
+    HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
+    HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
+    HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
+    HR = require("./ModulesMiscellaneous/HandleRest"), Strings = require("./Strings.js").strings;
 //Whatsapp control module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and it's configuration
@@ -25,7 +25,7 @@ const limitFilter = 15; //Filter Limit
 
 //Start the bot - get all the groups from mongoDB and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, function () {
-    wa.create({headless: false, multiDevice:true}).then(client => start(client));
+    wa.create({headless: false, multiDevice: true}).then(client => start(client));
 });
 
 /*
@@ -37,15 +37,15 @@ async function handleFilters(client, message) {
     let bodyText = message.body;
     const chatID = message.chat.id;
     const messageID = message.id;
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filter
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) //Handle add filter
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filter
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) //Handle remove filter
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filter
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) //Handle edit filter
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) { //Handle show filters
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) //Handle show filters
         await HF.showFilters(client, chatID, messageID, groupsDict);
-    } else { //Handle responding to filters
+    else { //Handle responding to filters
         if (chatID in groupsDict) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
@@ -68,24 +68,22 @@ async function handleTags(client, message) { //TODO: add function to check where
     const chatID = message.chat.id;
     const messageID = message.id;
     let quotedMsgID = messageID;
-
     if (message.quotedMsg != null)
         quotedMsgID = message.quotedMsg.id;
     let groupMembersArray = null;
     if (message.chat.isGroup)
         groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tag everyone
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tag everyone
         await HT.tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tag someone
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tag someone
         await HT.checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tag
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tag
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tag
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tag
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) //Handle show tags
         await HT.showTags(client, chatID, messageID, groupsDict);
-    }
 }
 
 /*
@@ -98,13 +96,12 @@ async function handleBirthdays(client, message) {
     const chatID = message.chat.id;
     const messageID = message.id;
 
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) //Handle add birthday
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) //Handle remove birthday
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) { //Handle show birthdays
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) //Handle show birthdays
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
-    }
 }
 
 /*
@@ -118,11 +115,10 @@ async function handleLanguage(client, message) {
     const messageID = message.id;
 
     if (bodyText.startsWith(Strings["change_language"]["he"]) || bodyText.startsWith(Strings["change_language"]["en"]) ||
-        bodyText.startsWith(Strings["change_language"]["la"])) { //Handle change language
+        bodyText.startsWith(Strings["change_language"]["la"])) //Handle change language
         await HL.changeGroupLang(client, message, groupsDict);
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) { //Handle show help
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) //Handle show help
         await client.reply(message.chat.id, HL.getGroupLang(groupsDict, message.chat.id, "handle_help_reply"), messageID);
-    }
 }
 
 //Reset filter counter for all groups every [groupCommandResetInterval] minutes (automatic)
@@ -144,6 +140,17 @@ function start(client) {
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
         await client.sendText(chat.id,
+            "Hello, I'm Alex!" +
+            "\n To change my language type 'Change language to [language you want to change to]'" +
+            "\n The default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
+            "\n To display a help message type 'Show help' in the default language" +
+            "\n שלום, אני אלכס!" +
+            "\n כדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
+            "\n השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
+            "\n כדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל")
+    });
+    client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
+        await client.sendText(chat,
             "Hello, I'm Alex!" +
             "\n To change my language type 'Change language to [language you want to change to]'" +
             "\n The default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +

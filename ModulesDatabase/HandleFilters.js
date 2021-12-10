@@ -56,10 +56,8 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                             filter), messageID);
 
                     });
-                } else {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
-                        filter, filter_reply), messageID);
-                }
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
+                    filter, filter_reply), messageID);
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID,
@@ -68,9 +66,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                 restGroupsAuto.push(chatID);
             }
         }
-        else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
-        }
+        else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
     }
 
     static async remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
@@ -84,9 +80,8 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply",
                             filter), messageID);
                     });
-                } else {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
-                }
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
+
             }
             else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID,
@@ -94,9 +89,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsAuto.push(chatID);
             }
-        } else {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
-        }
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
 
 
     }
@@ -128,9 +121,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                                     filter), messageID);
                             });
                         });
-                    } else {
-                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
-                    }
+                    } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
                 }
                 else if (groupsDict[chatID].filterCounter === limitFilter) {
                     await client.sendText(chatID,
@@ -138,12 +129,8 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                     groupsDict[chatID].addToFilterCounter();
                     restGroupsAuto.push(chatID);
                 }
-            } else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
-            }
-        } else {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
-        }
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {

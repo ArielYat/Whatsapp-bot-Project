@@ -22,7 +22,6 @@ class HURL {
             });
         }
     }
-
     static async checkUrls(client, chatID, url, messageId, groupsDict) {
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageId);
         const hashed = nvt.sha256(url)

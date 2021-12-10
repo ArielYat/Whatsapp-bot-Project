@@ -22,18 +22,12 @@ class HSu {
             buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, groupsDict, chatID);
             if (title != null && secondTitle != null && buttonsArray.length > 0) {
                 title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
-                secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID,
-                    "second_survey_title_replace"), "").trim();
+                secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "second_survey_title_replace"), "").trim();
                 if (thirdTitle != null) {
-                    thirdTitle = thirdTitle[0].replace(HL.getGroupLang(groupsDict, chatID,
-                        "third_survey_title_replace"), "").trim();
+                    thirdTitle = thirdTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "third_survey_title_replace"), "").trim();
                     await client.sendButtons(chatID, secondTitle, buttonsArray, title, thirdTitle);
-                } else {
-                    await client.sendButtons(chatID, secondTitle, buttonsArray, title);
-                }
-            } else {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), message.id);
-            }
+                } else await client.sendButtons(chatID, secondTitle, buttonsArray, title);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), message.id);
         }
 
     }

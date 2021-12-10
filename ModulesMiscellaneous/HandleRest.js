@@ -14,18 +14,14 @@ class HR {
                 if (botDevs.includes(userID)) {
                     restUsers.push(responseAuthor);
                     await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
-                } else {
-                    client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
-                }
+                } else client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
             }
             if (textMessage.startsWith("אפשר גישה למשתמש")) {
                 if (botDevs.includes(userID)) {
                     const userIdIndex = restUsers.indexOf(responseAuthor);
                     restUsers.splice(userIdIndex, 1);
                     await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
-                } else {
-                    await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
-                }
+                } else await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
             }
         }
     }
@@ -40,9 +36,7 @@ class HR {
             if (botDevs.includes(userID)) {
                 restGroups.push(responseGroupId);
                 await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
-            } else {
-                client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
-            }
+            } else client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
         }
         if (textMessage.startsWith("שחרר קבוצה")) {
             if (botDevs.includes(userID)) {
@@ -50,9 +44,7 @@ class HR {
                 restGroups.splice(groupIdIndex, 1);
                 restGroupsAuto.splice(groupIdIndex, 1);
                 await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageId);
-            } else {
-                await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
-            }
+            } else await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
         }
     }
 }

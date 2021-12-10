@@ -12,8 +12,7 @@ class HB {
             for (let person in currentGroup.birthdays) {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
                     let age = yearToday - parseInt(currentGroup.birthdays[person][2]);
-                    let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID,
-                        "send_birthday", person, age)
+                    let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID, "send_birthday", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
@@ -36,29 +35,15 @@ class HB {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //check if name exists in DB if it does return false otherwise add name to DB
-                if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2020 && birthDay >= 0 && birthMonth >= 0
-                    && birthYear >= 1900) {
+                if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2020 && birthDay >= 0 && birthMonth >= 0 && birthYear >= 1900) {
                     if (groupsDict[chatID].addBirthday(name, birthDay, birthMonth, birthYear)) {
                         await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {
-                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                                "add_birthday_reply", name), messageID);
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", name), messageID);
                         });
-                    } else {
-                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                            "add_birthday_already_exists", name), messageID);
-                    }
-                } else {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                        "date_existence_error"), messageID);
-                }
-            } else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "date_syntax_error"), messageID);
-            }
-        } else {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                "hyphen"), messageID);
-        }
+                    } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists", name), messageID);
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
     }
 
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
@@ -67,17 +52,10 @@ class HB {
         if (chatID in groupsDict) {
             if (groupsDict[chatID].delBirthday(name)) {
                 await HDB.delArgsFromDB(name, chatID, "birthday", function () {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                        "remove_birthday_reply", name), messageID);
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_reply", name), messageID);
                 });
-            } else {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "remove_birthday_doesnt_exist"), messageID);
-            }
-        } else {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                "group_doesnt_have_birthdays"), messageID);
-        }
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_doesnt_exist"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays"), messageID);
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict) {
