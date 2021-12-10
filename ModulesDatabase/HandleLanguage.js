@@ -1,14 +1,11 @@
-const HDB = require("./HandleDB"),
-stringsClass = require("../Strings.js");
-const strings = stringsClass.strings
+const HDB = require("./HandleDB"), Strings = require("../Strings.js").strings, group = require("../Group");
 const util = require("util");
-const group = require("../Group");
 
 class HandleLanguage {
     static async changeGroupLang(client, message, groupsDict) {
         const chatID = message.chat.id;
         let text = message.body;
-        let langCode = null;
+        let langCode;
         let textArray = text.split(" ");
         if (!(chatID in groupsDict))
             groupsDict[chatID] = new group(chatID);
@@ -27,15 +24,15 @@ class HandleLanguage {
                         groupsDict[chatID].setLanguage(langCode);
                     })
                 if (langCode === "he")
-                    await client.sendText(chatID, strings["language_change_reply"]["he"]);
+                    await client.sendText(chatID, Strings["language_change_reply"]["he"]);
                 else if (langCode === "en")
-                    await client.sendText(chatID, strings["language_change_reply"]["en"]);
+                    await client.sendText(chatID, Strings["language_change_reply"]["en"]);
                 else if (langCode === "la")
-                    await client.sendText(chatID, strings["language_change_reply"]["la"]);
+                    await client.sendText(chatID, Strings["language_change_reply"]["la"]);
             });
         } else {
             let groupLang = groupsDict[chatID].language;
-            client.reply(chatID, strings["language_change_error"][groupLang], message.id);
+            client.reply(chatID, Strings["language_change_error"][groupLang], message.id);
         }
     }
 
@@ -48,7 +45,7 @@ class HandleLanguage {
         } else {
             lang = "he";
         }
-        let str = strings[parameter][lang];
+        let str = Strings[parameter][lang];
         if (parameter === "add_filter_reply_exists") {
             strToReturn = util.format(str, value1, value1, value2);
         } else if (value1 != null && value2 != null) {

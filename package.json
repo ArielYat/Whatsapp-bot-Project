@@ -1,0 +1,12 @@
+{
+  "name": "Whatsapp-bot-Project",
+  "version": "1.0.0",
+  "dependencies": {
+    "@open-wa/wa-automate": "^4.25.0",
+    "mongodb": "^4.2.1",
+    "node-schedule": "^2.1.0",
+    "node-virustotal": "^3.35.0",
+    "usleep": "^1.0.3",
+    "util": "^0.12.4"
+  }
+}

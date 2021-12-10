@@ -19,54 +19,42 @@ class group {
         if (!this.#filters.hasOwnProperty(filter)) {
             this.#filters[filter] = filterReply;
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     delFilter(filter) {
         if (this.#filters.hasOwnProperty(filter)) {
             delete this.#filters[filter];
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     addTag(name, phoneNumber) {
         if (!this.#tags.hasOwnProperty(name)) {
             this.#tags[name] = phoneNumber;
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     delTag(name) {
         if (this.#tags.hasOwnProperty(name)) {
             delete this.#tags[name];
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     addBirthday(name, birthDay, birthMonth, birthYear) {
         if (!this.#birthdays.hasOwnProperty(name)) {
             this.#birthdays[name] = [birthDay, birthMonth, birthYear];
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     delBirthday(name) {
         if (this.#birthdays.hasOwnProperty(name)) {
             delete this.#birthdays[name];
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     addToFilterCounter() {
