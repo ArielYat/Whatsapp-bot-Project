@@ -13,7 +13,7 @@
 ## Usage
 Add the bot's phone number to your Whatsapp group and start sending out commands - As simple as that!
 
-##Dependencies/Credits
+## Dependencies/Credits
 @open-wa/wa-automate for the WhatsApp "link". 
 mongodb for storing our database.
 node-schedule for timing the birthday checking. 
