@@ -12,7 +12,7 @@ class HandleLanguage {
 
         langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")
             ? "he" : null;
-        langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")
+        langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglico")
             ? "en" : {} : {};
         langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
             ? "la" : {} : {};
