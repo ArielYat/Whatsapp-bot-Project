@@ -139,6 +139,9 @@ setInterval(function () {
 
 //Main function
 function start(client) {
+    schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 12 am
+        HB.checkBirthday(client, groupsDict)
+    });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
         await client.sendText(chat.id,
             "Hello, I'm Alex!" +
@@ -149,9 +152,6 @@ function start(client) {
             "\n כדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
             "\n השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
             "\n כדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל")
-    });
-    schedule.scheduleJob('2 0 * * *', () => { //Check if there are birthdays everyday at 12 am
-        HB.checkBirthday(client, groupsDict)
     });
     client.onMessage(async message => { //Check every function every time a message is received
         if (message != null) {
