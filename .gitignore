@@ -1,5 +1,7 @@
 _IGNORE_session
 session.data.json
+package-lock.json
+package.json
 /node_modules
 /.vs
 /.idea
