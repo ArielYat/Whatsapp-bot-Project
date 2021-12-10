@@ -14,7 +14,7 @@ class HandleLanguage {
             ? "he" : null;
         langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglicus")
             ? "en" : {} : {};
-        langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latinus")
+        langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
             ? "la" : {} : {};
 
         if (langCode !== null) {
