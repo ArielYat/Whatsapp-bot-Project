@@ -9,73 +9,73 @@ class Strings {
         "add_filter": {
             "he": "הוסף פילטר",
             "en": "Add filter",
-            "la": "Crea reprehendentem"
+            "la": "Crea invenientem"
         }
         ,
         "add_filter_reply": {
             "he": "הפילטר %s נוסף בהצלחה",
             "en": "The filter %s has been successfully added",
-            "la": "Reprehendentem %s creatur feliciter"
+            "la": "Invenientem %s creatur feliciter"
         }
         ,
         "add_filter_reply_exists": {
             "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך פילטר %s - %s",
             "en": "The filter %s already exists in this group \n If u want to edit the filter please write this: \n Edit filter %s - %s",
-            "la": "Reprehendentem %s iam in systemae est \n scribe 'recense reprehendentem %s - %s' recensitum reprehendentem"
+            "la": "Reprehendentem %s iam in systemae est \n scribe 'recense invenientem %s - %s' recensitum reprehendentem"
         }
         ,
         "remove_filter": {
             "he": "הסר פילטר",
             "en": "Remove filter",
-            "la": "Dele reprehendentem"
+            "la": "Dele invenientem"
         }
         ,
         "remove_filter_reply": {
             "he": "הפילטר %s הוסר בהצלחה",
             "en": "The filter %s has been successfully removed",
-            "la": "Reprehendentem %s deletur feliciter"
+            "la": "Invenientem %s deletur feliciter"
         }
         ,
         "remove_filter_doesnt_exist": {
             "he": "רק אלוהים יכול למחוק פילטר לא קיים",
             "en": "Only the god of light and all that is good can can delete a filter which doesn't exist",
-            "la": "Dei Iupiter solum potest delere reprehendentem qui non exsistit"
+            "la": "Deus Iupiter solum potest delere invenientem qui non exsistit"
         }
         ,
         "group_doesnt_have_filters": {
             "he": "אין פילטרים בקבוצה זו",
             "en": "This group doesn't have any filters",
-            "la": "Coetus hoc non habet reprehendentes"
+            "la": "Coetus hoc non habet invenientes"
         }
         ,
         "edit_filter": {
             "he": "ערוך פילטר",
             "en": "Edit filter",
-            "la": "Recense reprehendentem"
+            "la": "Recense invenientem"
         }
         ,
         "edit_filter_reply": {
             "he": "הפילטר %s נערך בהצלחה",
             "en": "The filter %s has been successfully edited",
-            "la": "Reprehendentem %s recensetur felicitur"
+            "la": "Invenientem %s recensetur felicitur"
         }
         ,
         "edit_filter_doesnt_exist": {
             "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים במאגר",
             "en": "Apologies good sir, but you tried to edit a filter which doesn't exit in this group",
-            "la": "Paenito, mihi amice, sed recensere reprehendentem non exsistentem impossibile est"
+            "la": "Paenito, mihi amice, sed recensere invenientem non exsistentem impossibile est"
         }
         ,
         "show_filters": {
             "he": "הראה פילטרים",
             "en": "Show filters",
-            "la": "Ostende reprehendentes"
+            "la": "Ostende invenientes"
         }
         ,
         "filter_spamming": {
             "he": "כמה פילטרים שולחים פה? אני הולך לישון ל־20 דקות",
             "en": "Wow you're spamming filters, I'm going to sleep for 20 minutes",
-            "la": "Retarda! Eo dormitum"
+            "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
         }
         ,
         "tag": {
@@ -374,7 +374,7 @@ class Strings {
         "handle_help_reply": {
             "he": "*הוראות בעברית* \n _שינוי שפה_ \n כדי לשנות את שפת הבוט כתוב 'שנה שפה ל־[איזו שפה שאתה רוצה]' \n לדוגמה: שנה שפה לאנגלית \n שפות שקיימות כעת: אנגלית, עברית \n \n _פילטרים_ \n הוסף פילטר[פילטר] - [תגובת הבוט] \n לדוגמה: הוסף פילטר אוכל - בננה \n הסר פילטר [פילטר] \n לדוגמה: הסר פילטר אוכל \n ערוך פילטר [פילטר ישן] - [תשובה חדשה] \n לדוגמה: ערוך פילטר אוכל - אפרסק \n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת \n \n _תיוגים_ \n תייג [אדם] \n לדוגמה: תייג יוסי \n הוסף חבר לתיוג [אדם] - [מספר טלפון] \n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 \n הסר חבר מתיוג [אדם] \n לדוגמה: הסר חבר מתיוג יוסי \n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר \n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג \n \n _ימי הולדת_ \n הוסף יום הולדת [אדם] - [שנה.חודש.יום] \n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021 \n הסר יום הולדת [אדם] \n לדוגמה: הסר יום הולדת יוסי \n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת \n \n _יצירת סטיקרים_  \n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה \n \n _סריקת קישורים_ \n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח \n \n _יצירת סקרים (לא פעיל בגלל תקלה של וואטסאפ)_ \n צור סקר \n כותרת - [כותרת סקר] \n כותרת משנה - [כותרת משנה] \n כותרת שלישית - [כותרת שלישית] \n כפתור1 - [אופציה ראשונה] \n כפתור2 - [אופציה שנייה] \n כפתור3 - [אופציה שלישית] \n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) \n \n _טיפ מיוחד!_  \n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר \n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
             "en": "*English Instructions* \n To change the language type 'Change language to [whatever language you want]' \n For example: Change language to Hebrew \n Currently available languages are: English and Hebrew \n \n _Filters_ \n Add filter [filter] - [bot response] \n For example: Add filter food - banana \n Remove filter food \n For example: Remove filter food \n Edit filter [old filter] - [new response] \n For example: Edit filter food - peach \n Show filters - displays a list of filters defined in the group \n \n _Tags_ \n Tag [person] \n For example: Tag Joseph \n Add tag buddy [person] - [phone number] \n For example: Add tag buddy Joseph - 972501234567 \n Remove tag buddy [person] \n For example: Remove tag buddy Joseph \n Tag everyone - tags all people in the group who have a set tag \n Show tag buddies - displays a list of all tags defined in the group \n \n _Birthdays_ \n Add birthday [person] - [day.month.year] \n For example: Add birthday Joseph - 27.6.2021 \n Remove birthday [person] \n For example: Remove birthday Joseph \n Show birthdays - displays a list of all birthdays defined in the group \n \n _Sticker Making_ \n Make into sticker - the bot makes the replied to image into a sticker and sends it \n \n _Link Scanning_ \n Scan [link] - Scans the given link for viruses and determines if it's safe \n \n _Creating surveys (Inactive due to Whatsapp bug)_ \n Create survey \n Title - [title] \n Subtitle - [subtitle] \n Third title - [third title] \n Button1 - [first option] \n Button2 - [second option] \n Button3 - [third option] \n (The third title, second and third buttons are optional) \n \n _Special Tip!_ \n When creating a filter you can also use [person] to tag someone whenever the filter is invoked \n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph",
-            "la": "*Instructiones in Lingua Latina*\n Mutatio linguae - Muta lingua ad\n Exampli gratia: Muta lingua ad Hebraice\n Linguae in sistema: Hebraice, et Anglice et Latina.\n \n _Reprehendentes_ \n Crea reprehendentem [reprhendens] - [responsum]\n Exampli gratia: Crea reprehendentem Alexander - Magnus!\n Dele reprehendentem [reprehendens]\n Exampli gratia: Dele reprehendentem Alexander\n Recense reprehendentem [reprehendens vetus] - [novum responsum]\n Exampli gratia: Recense reprehendentem Alexander - Giganteus!\n Ostende reprehendentes - מראה פילטרים\n \n _Clamores_\n Clama ad [amico]\n Exampli gratia: Clama ad Caesare\n Adde amicum Caesar - 972501234567\n Dele amicum\n Exampli gratia: Dele amicum Caesar\n Clama ad quoque - מתייג את כולם\n Ostende amici - מראה רשימת חברים לתיוג\n \n _Natalis dies_\n Adde natalis dies [homo] - [dies.mensis.annus]\n Exampli gratia: Adde natalis dies Caesar - 5.7.-100\n Dele natalis dies [homo]\n Exampli gratia: dele natalis dies Caesar\n Ostende natalis dies - מראה רשימת ימי הולדת\n \n _Creatio imagines_\n Fac hoc imaginem - עושה את התמונה לסטיקר\n \n _Investigation ligentes_\n Examina [ligens] - סורק לינק ובודק אם יש בו וירוסים\n \n _Creatio census_\n Crea census\n Nomen - [Nomen]\n Subnomen - [Subnomen]\n Nomen tertium - [Nomen tertium]\n Buttonus1 - [Buttonus1]\n Buttonus2 - [Buttonus2]\n Buttonus3 - [Buttonus3]"
+            "la": "*Instructiones in Lingua Latina* \nMutatio linguae - Muta lingua ad \nExampli gratia: Muta lingua ad Hebraice \nLinguae in sistema: Hebraice, et Anglicus et Latina. \n \n_Invenientes_ \nCrea invenientem [inveniens] - [responsum] \nExampli gratia: Crea invenientem Alexander - Magnus! \nDele invenientem [inveniens] \nExampli gratia: Dele invenientem Alexander \nRecense invenientem [reprehendens vetus] - [novum responsum] \nExampli gratia: Recense invenientem Alexander - Giganteus! \nOstende invenientes - Ostentum invenientes \n \n_Clamores_ \nClama ad [amico] \nExampli gratia: Clama ad Caesare \nAdde amicum Caesar - 972501234567 \nDele amicum \nExampli gratia: Dele amicum Caesar \nClama ad quoque - clamatum ad quoque \nOstende amici - ostentum amici \n \n_Natalis dies_ \nAdde natalis dies [homo] - [dies.mensis.annus] \nExampli gratia: Adde natalis dies Caesar - 5.7.-100 \nDele natalis dies [homo] \nExampli gratia: dele natalis dies Caesar \nOstende natalis dies - ostentum natalis dies \n \n_Creatio imagines_ \nFac hoc imaginem - factum similacrum imaginem \n \n_Investigation ligentes_ \nExamina [ligens] - examinatum lignes \n \n_Creatio census_ \nCrea census \nNomen - [Nomen] \nSubnomen - [Subnomen] \nNomen tertium - [Nomen tertium] \nButtonus1 - [Buttonus1] \nButtonus2 - [Buttonus2] \nButtonus3 - [Buttonus3]"
         }
     }
 }
