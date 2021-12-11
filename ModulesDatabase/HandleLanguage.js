@@ -19,7 +19,7 @@ class HandleLanguage {
             await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
                 await HDB.addArgsToDB(langCode, null, null, null,
                     chatID, "lang", function () {
-                        groupsDict[chatID].language = langCode;
+                        groupsDict[chatID].groupLanguage = langCode;
                     })
                 if (langCode === "he")
                     await client.sendText(chatID, Strings["language_change_reply"]["he"]);
@@ -29,7 +29,7 @@ class HandleLanguage {
                     await client.sendText(chatID, Strings["language_change_reply"]["la"]);
             });
         } else {
-            let groupLang = groupsDict[chatID].language;
+            let groupLang = groupsDict[chatID].groupLanguage;
             client.reply(chatID, Strings["language_change_error"][groupLang], message.id);
         }
     }
@@ -39,7 +39,7 @@ class HandleLanguage {
         let strToReturn;
         if (chatID in groupDict) {
             const group = groupDict[chatID];
-            lang = group.language;
+            lang = group.groupLanguage;
         } else lang = "he";
 
         let str = Strings[parameter][lang];
