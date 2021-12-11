@@ -4,7 +4,7 @@ class group {
     #tags;
     #birthdays;
     #filterCounter;
-    #languageOfThisGroup;
+    #language;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -12,7 +12,35 @@ class group {
         this.#tags = {};
         this.#birthdays = {};
         this.#filterCounter = 0;
-        this.#languageOfThisGroup = "he";
+        this.#language = "he";
+    }
+
+    get groupID() {
+        return this.#groupID;
+    }
+
+    get filters() {
+        return this.#filters;
+    }
+
+    get tags() {
+        return this.#tags;
+    }
+
+    get birthdays() {
+        return this.#birthdays;
+    }
+
+    get filterCounter() {
+        return this.#filterCounter;
+    }
+
+    get language() {
+        return this.#language;
+    }
+
+    set language(langCode) {
+        this.#language = langCode;
     }
 
     addFilter(filter, filterReply) {
@@ -63,34 +91,6 @@ class group {
 
     filterCounterReset() {
         this.#filterCounter = 0;
-    }
-
-    setLanguage(langCode) {
-        this.#languageOfThisGroup = langCode;
-    }
-
-    get groupID() {
-        return this.#groupID;
-    }
-
-    get filters() {
-        return this.#filters;
-    }
-
-    get tags() {
-        return this.#tags;
-    }
-
-    get birthdays() {
-        return this.#birthdays;
-    }
-
-    get filterCounter() {
-        return this.#filterCounter;
-    }
-
-    get languageOfThisGroup() {
-        return this.#languageOfThisGroup;
     }
 }
 

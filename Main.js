@@ -15,7 +15,7 @@ rule.tz = 'Israel'; //Time zone
 //TODO: add a function to reset a group's DB
 //TODO: add function to allow select users of a group to modify it's DB
 //TODO: add an option for a private link in a user's DMs to modify info in the group's DB
-//TODO: add cleaner group for group that not exist anymore
+//TODO: add cleaner function for groups that don't exist anymore
 //Local storage of data to not require access to the database at all times
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsSpam = [];
 //Group rest intervals
@@ -137,21 +137,6 @@ setInterval(function () {
 function start(client) {
     schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 12 am
         HB.checkBirthday(client, groupsDict)
-    });
-    client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
-        await client.sendText(chat.id,
-            "Hello, I'm Alex!" +
-            "\nTo change my language type 'Change language to [language you want to change to]'" +
-            "\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
-            "\nTo display a help message type 'Show help' in the default language" +
-            "\nשלום, אני אלכס!" +
-            "\nכדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
-            "\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
-            "\nכדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל" +
-            "\nSalve amici, Alex sum!" +
-            "\nMea lingua mutatum, scriba 'Muta lingua ad [lingua quam desideras]'." +
-            "\nLingua Hebraica defalta est, et in sistema est Linguae Anglica et Latina." +
-            "\nPropter auxilium, scriba 'Ostende auxilium' in mea lingua.")
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
         await client.sendText(chat,

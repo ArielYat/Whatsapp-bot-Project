@@ -11,17 +11,15 @@ class HandleLanguage {
             groupsDict[chatID] = new group(chatID);
 
         langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraica")
-            ? "he" : null;
-        langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglico")
-            ? "en" : {} : {};
-        langCode = langCode === null ? textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
-            ? "la" : {} : {};
+            ? "he" : textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglico")
+            ? "en" : textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
+            ? "la" : null;
 
         if (langCode !== null) {
             await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {
                 await HDB.addArgsToDB(langCode, null, null, null,
                     chatID, "lang", function () {
-                        groupsDict[chatID].setLanguage(langCode);
+                        groupsDict[chatID].language = langCode;
                     })
                 if (langCode === "he")
                     await client.sendText(chatID, Strings["language_change_reply"]["he"]);
@@ -41,7 +39,7 @@ class HandleLanguage {
         let strToReturn;
         if (chatID in groupDict) {
             const group = groupDict[chatID];
-            lang = group.languageOfThisGroup;
+            lang = group.language;
         } else lang = "he";
 
         let str = Strings[parameter][lang];
