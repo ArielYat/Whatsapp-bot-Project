@@ -139,7 +139,7 @@ function start(client) {
         HB.checkBirthday(client, groupsDict)
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
-        await client.sendText(chat,
+        await client.sendText(chat.id,
             "Hello, I'm Alex!" +
             "\nTo change my language type 'Change language to [language you want to change to]'" +
             "\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
