@@ -10,7 +10,7 @@ class HandleLanguage {
         if (!(chatID in groupsDict))
             groupsDict[chatID] = new group(chatID);
 
-        langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraice")
+        langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraica")
             ? "he" : null;
         langCode = langCode === null ? textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglico")
             ? "en" : {} : {};
