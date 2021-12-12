@@ -13,7 +13,7 @@ class Strings {
         }, "add_filter_reply_exists": {
             "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך פילטר %s - %s",
             "en": "The filter %s already exists in this group \n If u want to edit the filter please write this: \n Edit filter %s - %s",
-            "la": "Reprehendentem %s iam in systemae est \n scribe 'recense invenientem %s - %s' recensitum reprehendentem"
+            "la": "Reprehendentem %s iam in systemae est \nscribe 'recense invenientem %s - %s' recensitum reprehendentem"
         }, "remove_filter": {
             "he": "הסר פילטר", "en": "Remove filter", "la": "Dele invenientem"
         }, "remove_filter_reply": {
