@@ -1,10 +1,8 @@
 const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HSu {
-    static async makeButton(client, message, groupsDict) {
-        let textMessage = message.body;
-        let chatID = message.chat.id;
-        if (textMessage.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) {
+    static async makeButton(client, bodyText, chatID, messageID, groupsDict) {
+        if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) {
             let buttonsArray = [];
             const titleRegex = HL.getGroupLang(groupsDict, chatID, "survey_title");
             const secondTitleRegex = HL.getGroupLang(groupsDict, chatID, "survey_subtitle");
@@ -13,12 +11,12 @@ class HSu {
             const button2Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_2");
             const button3Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_3");
 
-            let title = textMessage.match(titleRegex)
-            let secondTitle = textMessage.match(secondTitleRegex)
-            let thirdTitle = textMessage.match(thirdTitleRegex);
-            let button1 = textMessage.match(button1Regex);
-            let button2 = textMessage.match(button2Regex);
-            let button3 = textMessage.match(button3Regex);
+            let title = bodyText.match(titleRegex)
+            let secondTitle = bodyText.match(secondTitleRegex)
+            let thirdTitle = bodyText.match(thirdTitleRegex);
+            let button1 = bodyText.match(button1Regex);
+            let button2 = bodyText.match(button2Regex);
+            let button3 = bodyText.match(button3Regex);
             buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, groupsDict, chatID);
             if (title != null && secondTitle != null && buttonsArray.length > 0) {
                 title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
@@ -27,12 +25,12 @@ class HSu {
                     thirdTitle = thirdTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "third_survey_title_replace"), "").trim();
                     await client.sendButtons(chatID, secondTitle, buttonsArray, title, thirdTitle);
                 } else await client.sendButtons(chatID, secondTitle, buttonsArray, title);
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), message.id);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), messageID);
         }
 
     }
 
-    static makeButtonsArray(buttonsArray, button1, button2, button3, groupsDict, chatID) {
+    static makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict) {
         if (button1 != null) {
             buttonsArray.push({
                 id: "1",

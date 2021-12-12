@@ -1,17 +1,14 @@
 const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HSi {
-    static async handleStickers(client, message, groupsDict) {
-        const textMessage = message.body;
-
-        if (textMessage.startsWith(HL.getGroupLang(groupsDict, message.chat.id, "make_sticker"))) {
-            if (message.quotedMsg != null) {
-                const quotedMsg = message.quotedMsg;
-                if (message.quotedMsg.type === "image") {
+    static async handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict) {
+        if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) {
+            if (quotedMsg != null) {
+                if (quotedMsg.type === "image") {
                     const mediaData = await client.decryptMedia(quotedMsg);
-                    await client.sendImageAsSticker(message.from, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})
-                } else client.reply(message.from, HL.getGroupLang(groupsDict, message.chat.id, "not_image"), message.id);
-            } else client.reply(message.from, HL.getGroupLang(groupsDict, message.chat.id, "no_quoted_message"), message.id);
+                    await client.sendImageAsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_image"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_quoted_message"), messageID);
         }
     }
 }

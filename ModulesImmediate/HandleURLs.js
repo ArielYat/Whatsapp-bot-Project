@@ -6,19 +6,16 @@ const HL = require("../ModulesDatabase/HandleLanguage");
 const urlRegex = /((h|H)ttps?:\/\/[^\s]+)/g;
 
 class HURL {
-    static async stripLinks(client, message, groupsDict) {
-        const textMessage = message.body;
-        const chatID = message.chat.id;
-        const messageId = message.id;
-        if (textMessage.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) {
-            const found = textMessage.match(urlRegex);
+    static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
+        if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) {
+            const found = bodyText.match(urlRegex);
             if (found == null) {
                 return;
             }
             found.forEach(function (url, index) {
                 url.slice(-1) != "/" ? url = url + "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
-                HURL.checkUrls(client, chatID, url, messageId, groupsDict);
+                HURL.checkUrls(client, chatID, url, messageID, groupsDict);
             });
         }
     }

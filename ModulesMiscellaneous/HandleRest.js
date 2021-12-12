@@ -2,49 +2,39 @@ const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
 class HR {
     //Handle user rest
-    static async handleUserRest(client, message, restUsers) {
-        const textMessage = message.body;
-        const chatID = message.chat.id;
-        const messageId = message.id;
-
-        if (message.quotedMsg != null) {
-            const responseAuthor = message.quotedMsg.author;
-            const userID = message.sender.id;
-            if (textMessage.startsWith("חסום גישה למשתמש")) {
-                if (botDevs.includes(userID)) {
-                    restUsers.push(responseAuthor);
-                    await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageId);
-                } else client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageId);
+    static async handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers) {
+        if (quotedMsgID != null) {
+            if (bodyText.startsWith("חסום גישה למשתמש")) {
+                if (botDevs.includes(messageAuthor)) {
+                    restUsers.push(quotedMsgAuthor);
+                    await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + "\n נחסם בהצלחה \n, May God have mercy on your soul", messageID);
+                } else client.reply(chatID, "רק כבודו יכול לחסום אנשים", messageID);
             }
-            if (textMessage.startsWith("אפשר גישה למשתמש")) {
-                if (botDevs.includes(userID)) {
-                    const userIdIndex = restUsers.indexOf(responseAuthor);
+            if (bodyText.startsWith("אפשר גישה למשתמש")) {
+                if (botDevs.includes(messageAuthor)) {
+                    const userIdIndex = restUsers.indexOf(quotedMsgAuthor);
                     restUsers.splice(userIdIndex, 1);
-                    await client.sendReplyWithMentions(chatID, "המשתמש @" + responseAuthor + "\n שוחרר בהצלחה", messageId);
-                } else await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageId);
+                    await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + "\n שוחרר בהצלחה", messageID);
+                } else await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageID);
             }
         }
+        else await client.reply(chatID, "נא סמן את הודעת המשתמש כדי לחסום את הפרחח", messageID);
     }
     //Handle group rest
-    static async handleGroupRest(client, message, restGroups, restGroupsAuto) {
-        const textMessage = message.body;
-        const chatID = message.chat.id;
-        const messageId = message.id;
-        const responseGroupId = message.chat.id;
-        const userID = message.sender.id;
-        if (textMessage.startsWith("חסום קבוצה")) {
-            if (botDevs.includes(userID)) {
-                restGroups.push(responseGroupId);
-                await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageId);
-            } else client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageId);
+    static async handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam) {
+        if (bodyText.startsWith("חסום קבוצה")) {
+            if (botDevs.includes(messageAuthor)) {
+                restGroups.push(chatID);
+                await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
+            } else client.reply(chatID, "רק ארדואן בכבודו ובעצמו יכול לחסום קבוצות", messageID);
         }
-        if (textMessage.startsWith("שחרר קבוצה")) {
-            if (botDevs.includes(userID)) {
-                const groupIdIndex = restGroups.indexOf(responseGroupId);
+        if (bodyText.startsWith("שחרר קבוצה")) {
+            if (botDevs.includes(messageAuthor)) {
+                const groupIdIndex = restGroups.indexOf(chatID);
                 restGroups.splice(groupIdIndex, 1);
-                restGroupsAuto.splice(groupIdIndex, 1);
-                await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageId);
-            } else await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageId);
+                restGroupsSpam.splice(groupIdIndex, 1);
+                await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
+            } else await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageID);
         }
     }
 }

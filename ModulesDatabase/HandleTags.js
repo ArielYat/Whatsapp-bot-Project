@@ -1,7 +1,7 @@
 const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HT {
-    static async checkTags(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
+    static async checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
@@ -57,7 +57,7 @@ class HT {
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags"), messageID);
     }
 
-    static async tagEveryOne(client, bodyText, chatID, quotedMsgID, messageID, groupsDict) {
+    static async tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         if (chatID in groupsDict) {
             let stringForSending = "";

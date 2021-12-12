@@ -2,11 +2,9 @@ const HDB = require("./HandleDB"), Strings = require("../Strings.js").strings, g
 const util = require("util");
 
 class HandleLanguage {
-    static async changeGroupLang(client, message, groupsDict) {
-        const chatID = message.chat.id;
-        let text = message.body;
+    static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
         let langCode;
-        let textArray = text.split(" ");
+        let textArray = bodyText.split(" ");
         if (!(chatID in groupsDict))
             groupsDict[chatID] = new group(chatID);
 
@@ -30,7 +28,7 @@ class HandleLanguage {
             });
         } else {
             let groupLang = groupsDict[chatID].groupLanguage;
-            client.reply(chatID, Strings["language_change_error"][groupLang], message.id);
+            client.reply(chatID, Strings["language_change_error"][groupLang], messageID);
         }
     }
 
