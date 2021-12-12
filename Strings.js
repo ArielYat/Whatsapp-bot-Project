@@ -59,7 +59,7 @@ class Strings {
         }, "add_tag_reply_already_exists": {
             "he": "האדם %s כבר קיים במאגר של קבוצה זו",
             "en": "The person %s already exists in this group's database",
-            "la": "Amicum %s iam exsistet in systemae"
+            "la": "Amicum %s iam exsistet in sistema"
         }, "add_tag_reply_doesnt_exist": {
             "he": "מספר הטלפון לא קיים בקבוצה זו",
             "en": "This phone number does not exist in this group",
