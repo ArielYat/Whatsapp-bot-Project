@@ -3,7 +3,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
-    HR = require("./ModulesMiscellaneous/HandleRest"), Strings = require("./Strings.js").strings;
+    HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), Strings = require("./Strings.js").strings;
 //Whatsapp API module
 const wa = require("@open-wa/wa-automate");
 //Schedule module and its configuration
@@ -60,11 +60,11 @@ Handle tags - add tag, remove tag, tag persons, tag everyone and show tags
 Input: client and message
 Output: None
 */
-async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray) { //TODO: add function to check where a user was last tagged
+async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsgSpecial) { //TODO: add function to check where a user was last tagged
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tag everyone
         await HT.tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tag someone
-        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgSpecial, groupsDict);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tag
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tag
@@ -114,23 +114,25 @@ setInterval(function () {
 
 //Main function
 function start(client) {
-    schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 12 am
+    schedule.scheduleJob('36 16 * * *', () => { //Check if there are birthdays everyday at 12 am
         HB.checkBirthdays(client, groupsDict)
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
         await client.sendText(chat.id,
-            "Hello, I'm Alex!" +
-            "\nTo change my language type 'Change language to [language you want to change to]'" +
-            "\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin" +
-            "\nTo display a help message type 'Show help' in the default language" +
-            "\nשלום, אני אלכס!" +
-            "\nכדי לשנות שפה כתבו 'שנה שפה ל[שפה שאתם רוצים לשנות לה]'" +
-            "\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית" +
-            "\nכדי להציג את הודעת העזרה כתבו 'הראה עזרה' בשפה בררת המחדל" +
-            "\nSalve amici, Alex sum!" +
-            "\nMea lingua mutatum, scriba 'Muta lingua ad [lingua quam desideras]'." +
-            "\nLingua Hebraica defalta est, et in sistema est Linguae Anglica et Latina." +
-            "\nPropter auxilium, scriba 'Ostende auxilium' in mea lingua.")
+        `שלום, אני אלכס!` +
+        `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה].` +
+        `\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.` +
+        `\nכדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.` +
+
+         "\n\n\nHello, I'm Alex!" +
+        `\nTo change my language type "Change language to [language you want to change to].` +
+        `\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.` +
+        `\nTo display a help message type "Show help" in the active language.` +
+
+        `\n\n\nSalve amici, Alex sum!` +
+        `\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".` +
+        `\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.` +
+        `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`);
     });
     client.onMessage(async message => { //Check every function every time a message is received
         if (message != null) {
@@ -139,11 +141,13 @@ function start(client) {
             const messageID = message.id;
             const messageAuthor = message.author;
             let quotedMsg;
+            let quotedMsgSpecial = message.id;
             let quotedMsgID;
             let quotedMsgAuthor;
             if (message.quotedMsg) {
                 quotedMsg = message.quotedMsg;
                 quotedMsgID = message.quotedMsg.id;
+                quotedMsgSpecial = quotedMsgID;
                 quotedMsgAuthor = message.quotedMsg.author;
             }
             let groupMembersArray = null;
@@ -151,14 +155,15 @@ function start(client) {
                 groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
             //Handle user rest by an admin
-            await HR.handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers);
+            await HAF.handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers);
             //Handle group rest by an admin
-            await HR.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
+            await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
+            await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
             //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
             if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
                 !restGroupsSpam.includes(chatID)) {
                 await handleFilters(client, bodyText, chatID, messageID); //Handle filters
-                await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray); //Handle tags
+                await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsgSpecial); //Handle tags
                 await handleBirthdays(client, bodyText, chatID, messageID); //Handle birthdays
                 await handleLanguage(client, bodyText, chatID, messageID); //Handle language and help
                 if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers

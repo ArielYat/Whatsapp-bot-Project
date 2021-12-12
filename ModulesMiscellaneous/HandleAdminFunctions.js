@@ -1,6 +1,6 @@
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
-class HR {
+class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers) {
         if (quotedMsgID != null) {
             if (bodyText.startsWith("חסום גישה למשתמש")) {
@@ -36,6 +36,22 @@ class HR {
             } else await client.reply(chatID, "רק ארדואן יכול לשחרר קבוצות", messageID);
         }
     }
+    static async handleBotJoin(client, bodyText, chatID, messageID, messageAuthor) {
+        if(bodyText.startsWith("צרף את הבוט לקבוצה ")){
+            if (botDevs.includes(messageAuthor)) {
+                const found = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
+                if(found != null){
+                    try {
+                        await client.joinGroupViaLink(found[0]);
+                    }
+                    catch (e) {
+                        await client.reply(chatID, "אני חושב שהקישור לא תקין", messageID);
+                    }
+                }
+                else await client.reply(chatID, "מאסטר הההודעה הזו לא מכילה קישור לקבוצה", messageID);
+            } else await client.reply(chatID, "רק כבודו יכול להוסיף את אלכסנדר לקבוצות בעזרת קישור", messageID);
+        }
+    }
 }
 
-module.exports = HR;
+module.exports = HAF;
