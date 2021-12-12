@@ -1,7 +1,7 @@
 ﻿const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HB {
-    static async checkBirthday(client, groupsDict) {
+    static async checkBirthdays(client, groupsDict) {
         const today = new Date();
         const dayToday = today.getDate();
         const monthToday = today.getMonth() + 1; //+1 'cause January is 0!
@@ -10,7 +10,7 @@ class HB {
         for (let group in groupsDict) {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
-                if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
+                if (currentGroup.birthdays[person][0] === dayToday && currentGroup.birthdays[person][1] === monthToday) {
                     let age = yearToday - parseInt(currentGroup.birthdays[person][2]);
                     let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID, "send_birthday", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
@@ -30,11 +30,11 @@ class HB {
                 const birthDay = fullBirthday[0].trim();
                 const birthMonth = fullBirthday[1].trim();
                 const birthYear = fullBirthday[2].trim();
-                //make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
+                //Make new group and insert name + birthday if group isn't in DB otherwise just insert name and birthday
                 if (!(chatID in groupsDict)) {
                     groupsDict[chatID] = new group(chatID);
                 }
-                //check if name exists in DB if it does return false otherwise add name to DB
+                //Check if name exists in DB if it does return false otherwise add name to DB
                 if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2020 && birthDay >= 0 && birthMonth >= 0 && birthYear >= 1900) {
                     if (groupsDict[chatID].addBirthday(name, birthDay, birthMonth, birthYear)) {
                         await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {

@@ -95,8 +95,8 @@ class Strings {
             "en": "%s's birthday already exists in this group",
             "la": "Natalis dies %s iam exsistet in hoc coetu"
         }, "date_existence_error": {
-            "he": "מה לעזאזל זה השטויות האלה? אתה בטוח שזה תאריך?",
-            "en": "Are you sure what you inputted is a date?",
+            "he": "מה לעזאזל זה השטויות האלה? אתה בטוח שזה תאריך מהמאה האחרונה?",
+            "en": "Are you sure what you inputted is a date from the last century or something along those lines?",
             "la": "Certusne tu hoc natalis dies esse?"
         }, "date_syntax_error": {
             "he": "תראה אתה אמור להשתמש בנקודות כשאתה כותב תאריך אבל מי אני שאשפוט",

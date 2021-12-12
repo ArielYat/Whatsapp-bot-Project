@@ -62,7 +62,7 @@ class HT {
         if (chatID in groupsDict) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;
-            Object.entries(tags).forEach(([key, value]) => {
+            Object.entries(tags).forEach(([, value]) => {
                 stringForSending += "@" + value + "\n";
             });
             stringForSending += bodyText;

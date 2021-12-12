@@ -10,8 +10,8 @@ class HandleLanguage {
 
         langCode = textArray.includes("לעברית") || textArray.includes("Hebrew") || textArray.includes("Hebraica")
             ? "he" : textArray.includes("לאנגלית") || textArray.includes("English") || textArray.includes("Anglico")
-            ? "en" : textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
-            ? "la" : null;
+                ? "en" : textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
+                    ? "la" : null;
 
         if (langCode !== null) {
             await HDB.delArgsFromDB(langCode, chatID, "lang", async function () {

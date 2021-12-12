@@ -1,24 +1,21 @@
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameKey = defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a471c40dd0c3229e018968951d9ddc2408f");
 const time = require("usleep");
 const HL = require("../ModulesDatabase/HandleLanguage");
-const urlRegex = /((h|H)ttps?:\/\/[^\s]+)/g;
+const urlRegex = /(([hH])ttps?:\/\/[^\s]+)/g; // (h/H) == ([hH])
 
 class HURL {
     static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
-        if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) {
-            const found = bodyText.match(urlRegex);
-            if (found == null) {
-                return;
-            }
-            found.forEach(function (url, index) {
-                url.slice(-1) != "/" ? url = url + "/" : console.log("moshe");
-                url = url.charAt(0).toLowerCase() + url.slice(1);
-                HURL.checkUrls(client, chatID, url, messageID, groupsDict);
-            });
-        }
+        const found = bodyText.match(urlRegex);
+        if (found == null)
+            return;
+        found.forEach(function (url) {
+            url.slice(-1) != "/" ? url = url + "/" : console.log("moshe");
+            url = url.charAt(0).toLowerCase() + url.slice(1);
+            HURL.checkUrls(client, chatID, url, messageID, groupsDict);
+        });
     }
+
     static async checkUrls(client, chatID, url, messageId, groupsDict) {
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageId);
         const hashed = nvt.sha256(url)
@@ -27,8 +24,7 @@ class HURL {
             if (err) {
                 const theSameObject = defaultTimedInstance.initialScanURL(url, function (err, res) {
                     if (err) {
-                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                            "scan_link_upload_error"), messageId);
+                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_upload_error"), messageId);
                     } else if (res) {
                         time.sleep(10);
                         const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
@@ -48,6 +44,7 @@ class HURL {
                 HURL.parseAndAnswerResults(client, chatID, res, url, messageId, groupsDict);
         });
     }
+
     static async parseAndAnswerResults(client, chatID, res, url, messageId, groupsDict) {
         let prettyStringForAnswer = "";
         try {
@@ -60,8 +57,7 @@ class HURL {
                     counter++;
                 }
             }
-            prettyStringForAnswer += "\n" + HL.getGroupLang(groupsDict, chatID,
-                "scan_link_result", counter);
+            prettyStringForAnswer += "\n" + HL.getGroupLang(groupsDict, chatID, "scan_link_result", counter);
             client.reply(chatID, url + "\n" + prettyStringForAnswer, messageId);
         } catch (error) {
             client.reply(chatID, "" + error, messageId);

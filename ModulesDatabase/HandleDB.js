@@ -2,7 +2,7 @@ const group = require("../Group");
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
 
 class HDB {
-    static async addArgsToDB(key, value1, value2, value3, ID, filterOrTagsOrBirthday, callback) {
+    static async addArgsToDB(key, value1, value2, value3, ID, filterOrTagOrBirthday, callback) {
         let objectToAddToDataBase = null;
         MongoClient.connect(url, function (err, db) {
             if (err) {
@@ -10,15 +10,15 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filters")
+            if (filterOrTagOrBirthday === "filters")
                 objectToAddToDataBase = {ID: ID, filter: key, filter_reply: value1};
-            else if (filterOrTagsOrBirthday === "tags")
+            else if (filterOrTagOrBirthday === "tags")
                 objectToAddToDataBase = {ID: ID, name: key, phone_number: value1};
-            else if (filterOrTagsOrBirthday === "birthday")
+            else if (filterOrTagOrBirthday === "birthday")
                 objectToAddToDataBase = {ID: ID, name: key, birthDay: value1, birthMonth: value2, birthYear: value3};
-            else if (filterOrTagsOrBirthday === "lang")
+            else if (filterOrTagOrBirthday === "lang")
                 objectToAddToDataBase = {ID: ID, lang: key};
-            dbo.collection(filterOrTagsOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err, res) {
+            dbo.collection(filterOrTagOrBirthday + "-groups").insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
                     console.log(err + "addArgsToDB-insertOne");
                     return;
@@ -29,7 +29,7 @@ class HDB {
         });
     }
 
-    static async delArgsFromDB(key, ID, filterOrTagsOrBirthday, callback) {
+    static async delArgsFromDB(key, ID, filterOrTagOrBirthday, callback) {
         let objectToDelToDataBase = null;
         MongoClient.connect(url, function (err, db) {
             if (err) {
@@ -37,15 +37,15 @@ class HDB {
                 return;
             }
             const dbo = db.db("WhatsappBotDB");
-            if (filterOrTagsOrBirthday === "filters")
+            if (filterOrTagOrBirthday === "filters")
                 objectToDelToDataBase = {ID: ID, filter: key};
-            else if (filterOrTagsOrBirthday === "tags")
+            else if (filterOrTagOrBirthday === "tags")
                 objectToDelToDataBase = {ID: ID, name: key};
-            else if (filterOrTagsOrBirthday === "birthday")
+            else if (filterOrTagOrBirthday === "birthday")
                 objectToDelToDataBase = {ID: ID, name: key};
-            else if (filterOrTagsOrBirthday === "lang")
+            else if (filterOrTagOrBirthday === "lang")
                 objectToDelToDataBase = {ID: ID};
-            dbo.collection(filterOrTagsOrBirthday + "-groups").deleteOne(objectToDelToDataBase, function (err, res) {
+            dbo.collection(filterOrTagOrBirthday + "-groups").deleteOne(objectToDelToDataBase, function (err) {
                 if (err) {
                     console.log(err + "delArgsFromDB-deleteOne");
                     return;
@@ -57,52 +57,46 @@ class HDB {
     }
 
     static async GetAllGroupsFromDB(groupsDict, callback) {
-        function makeGroupID(document) {
-            let ID = document.ID;
-            let name = document.name;
-            let phone_number = document.phone_number;
-            if (ID in groupsDict) {
-                groupsDict[ID].addTag(name, phone_number);
-            } else {
+        function createGroupTag(document) {
+            let ID = document.ID, name = document.name;
+            let phoneNumber = document.phone_number;
+            if (ID in groupsDict)
+                groupsDict[ID].addTag(name, phoneNumber);
+            else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].addTag(name, phone_number);
+                groupsDict[ID].addTag(name, phoneNumber);
             }
         }
 
-        function makeGroupFilter(document) {
-            let ID = document.ID;
-            let filter = document.filter;
-            let filter_reply = document.filter_reply;
-            if (ID in groupsDict) {
-                groupsDict[ID].addFilter(filter, filter_reply);
-            } else {
+        function createGroupFilter(document) {
+            let ID = document.ID, filter = document.filter;
+            let filterReply = document.filter_reply;
+            if (ID in groupsDict)
+                groupsDict[ID].addFilter(filter, filterReply);
+            else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].addFilter(filter, filter_reply);
+                groupsDict[ID].addFilter(filter, filterReply);
             }
         }
 
-        function makeGroupBirthday(document) {
-            let ID = document.ID;
-            let name = document.name;
-            let birthDay = document.birthDay;
-            let birthMonth = document.birthMonth;
-            let birthYear = document.birthYear;
-            if (ID in groupsDict) {
+        function createGroupBirthday(document) {
+            let ID = document.ID, name = document.name;
+            let birthDay = document.birthDay, birthMonth = document.birthMonth, birthYear = document.birthYear;
+            if (ID in groupsDict)
                 groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
-            } else {
+            else {
                 groupsDict[ID] = new group(ID);
                 groupsDict[ID].addBirthday(name, birthDay, birthMonth, birthYear);
             }
         }
 
-        function makeGroupLang(document) {
-            let ID = document.ID;
-            let lang = document.lang;
-            if (ID in groupsDict) {
-                groupsDict[ID].setLanguage(lang);
-            } else {
+        function createGroupLang(document) {
+            let ID = document.ID, language = document.lang;
+            if (ID in groupsDict)
+                groupsDict[ID].language = language;
+            else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].setLanguage(lang);
+                groupsDict[ID].Language = language;
             }
         }
 
@@ -118,7 +112,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupID(result[i]);
+                    createGroupTag(result[i]);
                 }
             });
             dbo.collection("filters-groups").find({}).toArray(function (err, result) {
@@ -127,7 +121,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupFilter(result[i]);
+                    createGroupFilter(result[i]);
                 }
                 callback(groupsDict);
             });
@@ -137,7 +131,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupBirthday(result[i]);
+                    createGroupBirthday(result[i]);
                 }
             });
             dbo.collection("lang-groups").find({}).toArray(function (err, result) {
@@ -146,7 +140,7 @@ class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    makeGroupLang(result[i]);
+                    createGroupLang(result[i]);
                 }
                 db.close();
             });

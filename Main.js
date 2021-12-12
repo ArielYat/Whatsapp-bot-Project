@@ -115,7 +115,7 @@ setInterval(function () {
 //Main function
 function start(client) {
     schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 12 am
-        HB.checkBirthday(client, groupsDict)
+        HB.checkBirthdays(client, groupsDict)
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
         await client.sendText(chat.id,
@@ -134,7 +134,7 @@ function start(client) {
     });
     client.onMessage(async message => { //Check every function every time a message is received
         if (message != null) {
-            let bodyText = message.body;
+            const bodyText = message.body;
             const chatID = message.chat.id;
             const messageID = message.id;
             const messageAuthor = message.author;
@@ -161,9 +161,15 @@ function start(client) {
                 await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray); //Handle tags
                 await handleBirthdays(client, bodyText, chatID, messageID); //Handle birthdays
                 await handleLanguage(client, bodyText, chatID, messageID); //Handle language and help
-                await HSi.handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict); //Handle stickers
-                await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict); //Handle URLs
-                await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict); //Handle surveys
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
+                    await HSi.handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
+                }
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle URLs
+                    await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
+                }
+                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle surveys
+                    await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
+                }
             }
         }
     });

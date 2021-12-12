@@ -1,7 +1,8 @@
 const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
-class HF { //TODO: add options for images/gifs/videos/stickers as filters
+//TODO: add options for images/gifs/videos/stickers as filters
+class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;
@@ -58,15 +59,13 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply_exists",
                     filter, filter_reply), messageID);
-            }
-            else if (groupsDict[chatID].filterCounter === limitFilter) {
+            } else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID,
                     HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsAuto.push(chatID);
             }
-        }
-        else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
     }
 
     static async remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
@@ -82,8 +81,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist"), messageID);
 
-            }
-            else if (groupsDict[chatID].filterCounter === limitFilter) {
+            } else if (groupsDict[chatID].filterCounter === limitFilter) {
                 await client.sendText(chatID,
                     HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                 groupsDict[chatID].addToFilterCounter();
@@ -122,8 +120,7 @@ class HF { //TODO: add options for images/gifs/videos/stickers as filters
                             });
                         });
                     } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_doesnt_exist"), messageID);
-                }
-                else if (groupsDict[chatID].filterCounter === limitFilter) {
+                } else if (groupsDict[chatID].filterCounter === limitFilter) {
                     await client.sendText(chatID,
                         HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
                     groupsDict[chatID].addToFilterCounter();
