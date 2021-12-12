@@ -2,7 +2,7 @@ const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./
 
 class HT {
     static async checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
-        if(chatID in groupsDict) {
+        if (chatID in groupsDict) {
             bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
             bodyText = bodyText.trim();
             let splitText = bodyText.split(" ");
@@ -20,7 +20,7 @@ class HT {
                     }
                 }
             }
-            if (counter !== 0)
+            if (counter !== 0 && quotedMsgID === null)
                 await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
             else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist"), messageID);
         }

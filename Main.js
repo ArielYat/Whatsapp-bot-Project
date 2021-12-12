@@ -60,11 +60,11 @@ Handle tags - add tag, remove tag, tag persons, tag everyone and show tags
 Input: client and message
 Output: None
 */
-async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsgSpecial) { //TODO: add function to check where a user was last tagged
+async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsg) { //TODO: add function to check where a user was last tagged
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tag everyone
         await HT.tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tag someone
-        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgSpecial, groupsDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tag
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tag
@@ -114,7 +114,7 @@ setInterval(function () {
 
 //Main function
 function start(client) {
-    schedule.scheduleJob('36 16 * * *', () => { //Check if there are birthdays everyday at 12 am
+    schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 1 am
         HB.checkBirthdays(client, groupsDict)
     });
     client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
@@ -141,13 +141,11 @@ function start(client) {
             const messageID = message.id;
             const messageAuthor = message.author;
             let quotedMsg;
-            let quotedMsgSpecial = message.id;
             let quotedMsgID;
             let quotedMsgAuthor;
             if (message.quotedMsg) {
                 quotedMsg = message.quotedMsg;
                 quotedMsgID = message.quotedMsg.id;
-                quotedMsgSpecial = quotedMsgID;
                 quotedMsgAuthor = message.quotedMsg.author;
             }
             let groupMembersArray = null;
@@ -163,7 +161,7 @@ function start(client) {
             if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
                 !restGroupsSpam.includes(chatID)) {
                 await handleFilters(client, bodyText, chatID, messageID); //Handle filters
-                await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsgSpecial); //Handle tags
+                await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsg); //Handle tags
                 await handleBirthdays(client, bodyText, chatID, messageID); //Handle birthdays
                 await handleLanguage(client, bodyText, chatID, messageID); //Handle language and help
                 if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
