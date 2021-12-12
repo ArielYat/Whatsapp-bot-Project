@@ -2,26 +2,28 @@ const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./
 
 class HT {
     static async checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
-        bodyText = bodyText.trim();
-        let splitText = bodyText.split(" ");
-        let counter = 0;
-        const tags = groupsDict[chatID].tags;
-        for (let i = 0; i < splitText.length; i++) {
-            for (const tag in tags) {
-                let splitTextForChecking = splitText[i];
-                if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו") {
-                    splitTextForChecking = splitText[i].slice(1);
-                }
-                if (splitTextForChecking === tag) {
-                    counter += 1;
-                    bodyText = bodyText.replace(tag, "@" + tags[tag]);
+        if(chatID in groupsDict) {
+            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
+            bodyText = bodyText.trim();
+            let splitText = bodyText.split(" ");
+            let counter = 0;
+            const tags = groupsDict[chatID].tags;
+            for (let i = 0; i < splitText.length; i++) {
+                for (const tag in tags) {
+                    let splitTextForChecking = splitText[i];
+                    if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו") {
+                        splitTextForChecking = splitText[i].slice(1);
+                    }
+                    if (splitTextForChecking === tag) {
+                        counter += 1;
+                        bodyText = bodyText.replace(tag, "@" + tags[tag]);
+                    }
                 }
             }
+            if (counter !== 0)
+                await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
+            else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist"), messageID);
         }
-        if (counter !== 0)
-            await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
-        else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist"), messageID);
     }
 
     static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {

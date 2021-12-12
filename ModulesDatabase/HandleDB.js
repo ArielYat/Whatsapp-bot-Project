@@ -93,10 +93,10 @@ class HDB {
         function createGroupLang(document) {
             let ID = document.ID, language = document.lang;
             if (ID in groupsDict)
-                groupsDict[ID].language = language;
+                groupsDict[ID].groupLanguage = language;
             else {
                 groupsDict[ID] = new group(ID);
-                groupsDict[ID].Language = language;
+                groupsDict[ID].groupLanguage = language;
             }
         }
 

@@ -16,7 +16,7 @@ class HSu {
         let button1 = bodyText.match(button1Regex);
         let button2 = bodyText.match(button2Regex);
         let button3 = bodyText.match(button3Regex);
-        buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, groupsDict, chatID);
+        buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict);
         if (title != null && secondTitle != null && buttonsArray.length > 0) {
             title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
             secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "second_survey_title_replace"), "").trim();

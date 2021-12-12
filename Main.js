@@ -164,10 +164,10 @@ function start(client) {
                 if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
                     await HSi.handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
                 }
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle URLs
+                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
                     await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
                 }
-                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle surveys
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
                     await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
                 }
             }

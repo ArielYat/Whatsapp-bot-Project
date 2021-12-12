@@ -17,7 +17,7 @@ class HR {
                     await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + "שוחרר בהצלחה", messageID);
                 } else await client.reply(chatID, "רק כבודו יכול לשחרר אנשים", messageID);
             }
-        } else await client.reply(chatID, "נא סמן את הודעת המשתמש כדי לחסום את הפרחח", messageID);
+        }
     }
 
     static async handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam) {
