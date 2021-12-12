@@ -137,9 +137,9 @@ class Strings {
             "en": "%s antivirus engines detected this link as malicious",
             "la": "%s deprehendentes reperiebant hoc ligentem malum esse"
         }, "scan_link_upload_error": {
-            "he": "שגיאה בהעלאת הקישור", "en": "Error received while uploading the link", "la": "Error in ligente est"
+            "he": "שגיאה בהעלאת הקישור", "en": "Error received while uploading the link", "la": "Error #1 in ligente est"
         }, "scan_link_checking_error": {
-            "he": "שגיאה בבדיקת הקישור", "en": "Error received while checking the link", "la": "Error in ligente est"
+            "he": "שגיאה בבדיקת הקישור", "en": "Error received while checking the link", "la": "Error #2 in ligente est"
         }, "create_survey": {
             "he": "צור סקר", "en": "Create survey", "la": "Crea census"
         }, "survey_title": {
