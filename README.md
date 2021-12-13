@@ -1,7 +1,7 @@
 # Whatsapp Group Bot
 
 ## Features
-- Multilanguage Support - each command can be typed in whatever language the user wants (Currently available: English, Hebrew)
+- Multilanguage Support - each command can be typed in whatever language the user wants (Currently available: English, Hebrew, Latin)
 - Tags - The bot is able to tag people via a group assigned dictionary when issued the command.
 - Filters - The bot responds to certain words via a group assigned dictionary.
 - Birthdays - The bot notifies the group on someone's birthday via a group assigned dictionary.
