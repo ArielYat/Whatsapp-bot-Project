@@ -2,7 +2,7 @@ const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const time = require("usleep");
 const HL = require("../ModulesDatabase/HandleLanguage");
-const urlRegex = /(([hH])ttps?:\/\/[^\s]+)/g; // (h/H) == ([hH])
+const urlRegex = /((h|H)ttps?:\/\/[^\s]+)/g;
 
 class HURL {
     static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {

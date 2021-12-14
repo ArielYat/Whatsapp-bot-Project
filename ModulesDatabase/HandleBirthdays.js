@@ -12,7 +12,7 @@ class HB {
             for (let person in currentGroup.birthdays) {
                 if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
                     let age = yearToday - parseInt(currentGroup.birthdays[person][2]);
-                    let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID, "send_birthday", person, age)
+                    let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID, "send_birthday_wishes", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
                 }
             }
@@ -40,10 +40,10 @@ class HB {
                         await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {
                             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", name), messageID);
                         });
-                    } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists", name), messageID);
+                    } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_error_already_exists", name), messageID);
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
     static async remBirthday(client, bodyText, chatID, messageID, groupsDict) {
@@ -54,8 +54,8 @@ class HB {
                 await HDB.delArgsFromDB(name, chatID, "birthday", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_reply", name), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_doesnt_exist"), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_error_doesnt_exist"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays_error"), messageID);
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict) {

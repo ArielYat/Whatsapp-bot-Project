@@ -47,7 +47,7 @@ async function handleFilters(client, bodyText, chatID, messageID) {
             if (groupsDict[chatID].filterCounter < limitFilter) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
             } else if (groupsDict[chatID].filterCounter === limitFilter) {
-                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spamming"));
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam"));
                 groupsDict[chatID].addToFilterCounter();
                 restGroupsSpam.push(chatID);
             }
@@ -93,11 +93,12 @@ Input: client and message
 Output: None
 */
 async function handleLanguage(client, bodyText, chatID, messageID) {
-    if (bodyText.startsWith(Strings["change_language"]["he"]) || bodyText.startsWith(Strings["change_language"]["en"]) ||
+    if (bodyText.startsWith(Strings["change_language"]["he"]) ||
+        bodyText.startsWith(Strings["change_language"]["en"]) ||
         bodyText.startsWith(Strings["change_language"]["la"])) //Handle change language
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "handle_Help"))) //Handle show help
-        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "handle_help_reply"), messageID);
+    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) //Handle show help
+        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
 }
 
 //Reset filter counter for all groups every [groupCommandResetInterval] minutes (automatic)
@@ -117,26 +118,30 @@ function start(client) {
     schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 1 am
         HB.checkBirthdays(client, groupsDict)
     });
-    client.onAddedToGroup(async chat => { //Sends a starting help message when added to a group
-        await client.sendText(chat.id,
+    //Sends a starting help message when added to a group
+    client.onAddedToGroup({}).then(async chat => await client.sendText(chat.id,
         `שלום, אני אלכס!` +
-        `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה].` +
+        `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה]".` +
         `\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.` +
         `\nכדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.` +
 
-         "\n\n\nHello, I'm Alex!" +
-        `\nTo change my language type "Change language to [language you want to change to].` +
+        `\n\n\nHello, I'm Alex!` +
+        `\nTo change my language type "Change language to [language you want to change to]".` +
         `\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.` +
         `\nTo display a help message type "Show help" in the active language.` +
 
         `\n\n\nSalve amici, Alex sum!` +
         `\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".` +
         `\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.` +
-        `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`);
-    });
-    client.onMessage(async message => { //Check every function every time a message is received
+        `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`));
+    //Check every function every time a message is received
+    client.onMessage().then(async message => {
         if (message != null) {
-            const bodyText = message.body;
+            let bodyText
+            if(message.body !== null)
+                bodyText = message.body;
+            else
+                bodyText = message.caption;
             const chatID = message.chat.id;
             const messageID = message.id;
             const messageAuthor = message.author;
@@ -156,6 +161,7 @@ function start(client) {
             await HAF.handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers);
             //Handle group rest by an admin
             await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
+            //Handle sending links to the bot by an admin
             await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
             //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
             if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
@@ -164,15 +170,14 @@ function start(client) {
                 await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsg); //Handle tags
                 await handleBirthdays(client, bodyText, chatID, messageID); //Handle birthdays
                 await handleLanguage(client, bodyText, chatID, messageID); //Handle language and help
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) //Handle stickers
                     await HSi.handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
-                }
-                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
+                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) //Handle URLs
                     await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
-                }
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) //Handle surveys
                     await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                }
+                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage")))
+                    await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "show_webpage_reply"));
             }
         }
     });

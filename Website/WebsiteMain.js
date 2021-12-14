@@ -1,0 +1,5 @@
+let lolz;
+
+function main() {
+
+}

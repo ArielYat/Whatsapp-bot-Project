@@ -41,7 +41,7 @@ class HandleLanguage {
         } else lang = "he";
 
         let str = Strings[parameter][lang];
-        if (parameter === "add_filter_reply_exists")
+        if (parameter === "add_filter_error_already_exists")
             strToReturn = util.format(str, value1, value1, value2);
         else if (value1 != null && value2 != null)
             strToReturn = util.format(str, value1, value2);

@@ -6,8 +6,8 @@ class HSi {
             if (quotedMsg.type === "image") {
                 const mediaData = await client.decryptMedia(quotedMsg);
                 await client.sendImageAsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_image"), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_quoted_message"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_image_error"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_quoted_message_error"), messageID);
     }
 }
 
