@@ -151,7 +151,7 @@ class Strings {
             "en": "Error received while checking the link",
             "la": "Error #2 in ligente est"
         }, "create_survey": {
-            "he": "צור סקר", "en": /(c|c)reate survey/, "la": /(c|C)rea census/
+            "he": "צור סקר", "en": /(c|C)reate survey/, "la": /(c|C)rea census/
         }, "survey_title": {
             "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/
         }, "survey_subtitle": {
