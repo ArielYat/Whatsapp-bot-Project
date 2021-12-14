@@ -23,5 +23,7 @@ util for formatting strings.
 
 ## Credits
 @ArielYat for the idea, starting the project and adding most of the functionality.
+
 @TheBooker66 for helping greatly with development, expanding the bot, documentation and grammar.
+
 @Arbel99 for the Latin support.
