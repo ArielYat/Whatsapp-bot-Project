@@ -119,35 +119,33 @@ function start(client) {
         HB.checkBirthdays(client, groupsDict)
     });
     //Sends a starting help message when added to a group
-    client.onAddedToGroup({}).then(async chat => await client.sendText(chat.id,
-        `שלום, אני אלכס!` +
-        `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה]".` +
-        `\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.` +
-        `\nכדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.` +
+    client.onAddedToGroup().then(async chat => {
+        await client.sendText(chat.id,
+            `שלום, אני אלכס!` +
+            `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה]".` +
+            `\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.` +
+            `\nכדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.` +
 
-        `\n\n\nHello, I'm Alex!` +
-        `\nTo change my language type "Change language to [language you want to change to]".` +
-        `\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.` +
-        `\nTo display a help message type "Show help" in the active language.` +
+            `\n\n\nHello, I'm Alex!` +
+            `\nTo change my language type "Change language to [language you want to change to]".` +
+            `\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.` +
+            `\nTo display a help message type "Show help" in the active language.` +
 
-        `\n\n\nSalve amici, Alex sum!` +
-        `\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".` +
-        `\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.` +
-        `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`));
+            `\n\n\nSalve amici, Alex sum!` +
+            `\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".` +
+            `\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.` +
+            `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`)
+    });
     //Check every function every time a message is received
     client.onMessage().then(async message => {
         if (message != null) {
             let bodyText
-            if(message.body !== null)
+            if (message.body !== null)
                 bodyText = message.body;
             else
                 bodyText = message.caption;
-            const chatID = message.chat.id;
-            const messageID = message.id;
-            const messageAuthor = message.author;
-            let quotedMsg;
-            let quotedMsgID;
-            let quotedMsgAuthor;
+            const chatID = message.chat.id, messageID = message.id, messageAuthor = message.author;
+            let quotedMsg = null, quotedMsgID = null, quotedMsgAuthor = null;
             if (message.quotedMsg) {
                 quotedMsg = message.quotedMsg;
                 quotedMsgID = message.quotedMsg.id;
