@@ -73,7 +73,7 @@ class HT {
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
-        if (chatID in groupsDict) {
+        if (groupsDict[chatID].tags) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;
             Object.entries(tags).forEach(([key, value]) => {

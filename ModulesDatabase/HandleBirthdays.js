@@ -59,7 +59,7 @@ class HB {
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict) {
-        if (chatID in groupsDict) {
+        if (groupsDict[chatID].birthdays) {
             let stringForSending = "";
             let birthdays = groupsDict[chatID].birthdays;
             Object.entries(birthdays).forEach(([key, value]) => {
