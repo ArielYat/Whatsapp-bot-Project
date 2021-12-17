@@ -130,8 +130,8 @@ setInterval(function () {
 
 //Main function
 function start(client) {
-    schedule.scheduleJob('4 0 * * *', () => { //Check if there are birthdays everyday at 4 am
-        HB.checkBirthdays(client, groupsDict)
+    schedule.scheduleJob('4 0 * * *', async () => { //Check if there are birthdays everyday at 4 am
+        await HB.checkBirthdays(client, groupsDict)
     });
     //Sends a starting help message when added to a group
     client.onAddedToGroup().then(async chat => {
@@ -175,7 +175,7 @@ function start(client) {
             await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
             //Handle sending links to the bot by an admin
             await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
-                 //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
+            //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
             if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
                 !restGroupsSpam.includes(chatID)) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam)
