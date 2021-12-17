@@ -59,13 +59,15 @@ class HB {
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].birthdays) {
-            let stringForSending = "";
-            let birthdays = groupsDict[chatID].birthdays;
-            Object.entries(birthdays).forEach(([key, value]) => {
-                stringForSending += key + " - " + value[0] + "." + value[1] + "." + value[2] + "\n";
-            });
-            await client.reply(chatID, stringForSending, messageID);
+        if (chatID in groupsDict) {
+            if (groupsDict[chatID].birthdays) {
+                let stringForSending = "";
+                let birthdays = groupsDict[chatID].birthdays;
+                Object.entries(birthdays).forEach(([key, value]) => {
+                    stringForSending += key + " - " + value[0] + "." + value[1] + "." + value[2] + "\n";
+                });
+                await client.reply(chatID, stringForSending, messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays_error"), messageID);
         }
     }
 }

@@ -69,17 +69,19 @@ class HT {
             });
             stringForSending += bodyText;
             await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].tags) {
-            let stringForSending = "";
-            let tags = groupsDict[chatID].tags;
-            Object.entries(tags).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
-            });
-            await client.reply(chatID, stringForSending, messageID);
+        if (chatID in groupsDict) {
+            if (groupsDict[chatID].tags) {
+                let stringForSending = "";
+                let tags = groupsDict[chatID].tags;
+                Object.entries(tags).forEach(([key, value]) => {
+                    stringForSending += key + " - " + value + "\n";
+                });
+                await client.reply(chatID, stringForSending, messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
         }
     }
 }

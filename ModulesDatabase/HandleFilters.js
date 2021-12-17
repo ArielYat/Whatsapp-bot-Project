@@ -123,13 +123,16 @@ class HF {
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].filters) {
-            let stringForSending = "";
-            let filters = groupsDict[chatID].filters;
-            Object.entries(filters).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
-            });
-            await client.reply(chatID, stringForSending, messageID);
+        if (chatID in groupsDict) {
+            if (groupsDict[chatID].filters) {
+                let stringForSending = "";
+                let filters = groupsDict[chatID].filters;
+                Object.entries(filters).forEach(([key, value]) => {
+                    stringForSending += key + " - " + value + "\n";
+                });
+                await client.reply(chatID, stringForSending, messageID);
+            }
+            else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
         }
     }
 }
