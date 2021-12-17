@@ -24,8 +24,8 @@ const groupRestResetInterval = 5 * 60 * 1000; //When to reset the groups muted (
 const limitFilter = 15; //Filter Limit
 
 //Start the bot - get all the groups from mongoDB and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, function () {
-    wa.create({headless: false, multiDevice: true}).then(client => start(client));
+await HDB.GetAllGroupsFromDB(groupsDict, async function () {
+    await wa.create({headless: false, multiDevice: true}).then(client => start(client));
 });
 
 /*
@@ -34,25 +34,21 @@ Input: client and message
 Output: None
 */
 async function handleFilters(client, bodyText, chatID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) //Handle add filter
+    let filterRelated;
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filter
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) //Handle remove filter
+        filterRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filter
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) //Handle edit filter
+        filterRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filter
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) //Handle show filters
+        filterRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) { //Handle show filters
         await HF.showFilters(client, chatID, messageID, groupsDict);
-    else { //Handle responding to filters
-        if (chatID in groupsDict) {
-            if (groupsDict[chatID].filterCounter < limitFilter) {
-                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam);
-            } else if (groupsDict[chatID].filterCounter === limitFilter) {
-                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam"));
-                groupsDict[chatID].addToFilterCounter();
-                restGroupsSpam.push(chatID);
-            }
-        }
-    }
+        filterRelated = true;
+    } else filterRelated = false;
+    return filterRelated;
 }
 
 /*
@@ -60,17 +56,25 @@ Handle tags - add tag, remove tag, tag persons, tag everyone and show tags
 Input: client and message
 Output: None
 */
-async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsg) { //TODO: add function to check where a user was last tagged
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tag everyone
+async function handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray) { //TODO: add function to check where a user was last tagged
+    let tagRelated;
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tag someone
+        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+        tagRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tag everyone
         await HT.tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tag someone
-        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tag
+        tagRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tag
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tag
+        tagRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tag
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) //Handle show tags
+        tagRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
         await HT.showTags(client, chatID, messageID, groupsDict);
+        tagRelated = true;
+    } else tagRelated = false;
+    return tagRelated;
 }
 
 /*
@@ -79,12 +83,18 @@ Input: client and message
 Output: None
 */
 async function handleBirthdays(client, bodyText, chatID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) //Handle add birthday
+    let birthdayRelated
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) //Handle remove birthday
+        birthdayRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) //Handle show birthdays
+        birthdayRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) { //Handle show birthdays
         await HB.showBirthdays(client, chatID, messageID, groupsDict);
+        birthdayRelated = true;
+    } else birthdayRelated = false;
+    return birthdayRelated
 }
 
 /*
@@ -93,12 +103,17 @@ Input: client and message
 Output: None
 */
 async function handleLanguage(client, bodyText, chatID, messageID) {
+    let languageRelated;
     if (bodyText.startsWith(Strings["change_language"]["he"]) ||
         bodyText.startsWith(Strings["change_language"]["en"]) ||
-        bodyText.startsWith(Strings["change_language"]["la"])) //Handle change language
+        bodyText.startsWith(Strings["change_language"]["la"])) { //Handle change language
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
-    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) //Handle show help
+        languageRelated = true;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
+        languageRelated = true;
+    } else languageRelated = false;
+    return languageRelated;
 }
 
 //Reset filter counter for all groups every [groupCommandResetInterval] minutes (automatic)
@@ -115,7 +130,7 @@ setInterval(function () {
 
 //Main function
 function start(client) {
-    schedule.scheduleJob('1 0 * * *', () => { //Check if there are birthdays everyday at 1 am
+    schedule.scheduleJob('4 0 * * *', () => { //Check if there are birthdays everyday at 4 am
         HB.checkBirthdays(client, groupsDict)
     });
     //Sends a starting help message when added to a group
@@ -140,18 +155,17 @@ function start(client) {
     client.onMessage().then(async message => {
         if (message != null) {
             let bodyText
-            if (message.body !== null)
+            if (message.body !== null && typeof message.body === "string")
                 bodyText = message.body;
             else
                 bodyText = message.caption;
-            const chatID = message.chat.id, messageID = message.id, messageAuthor = message.author;
-            let quotedMsg = null, quotedMsgID = null, quotedMsgAuthor = null;
+            const chatID = message.chat.id, messageID = message.id, messageAuthor = message.author,
+                messageType = message.type;
+            let quotedMsgID = null, quotedMsgAuthor = null, groupMembersArray = null;
             if (message.quotedMsg) {
-                quotedMsg = message.quotedMsg;
                 quotedMsgID = message.quotedMsg.id;
                 quotedMsgAuthor = message.quotedMsg.author;
             }
-            let groupMembersArray = null;
             if (message.chat.isGroup)
                 groupMembersArray = await client.getGroupMembersId(message.chat.id);
 
@@ -161,20 +175,21 @@ function start(client) {
             await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
             //Handle sending links to the bot by an admin
             await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
-            //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
+                 //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
             if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
                 !restGroupsSpam.includes(chatID)) {
-                await handleFilters(client, bodyText, chatID, messageID); //Handle filters
-                await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray, quotedMsg); //Handle tags
-                await handleBirthdays(client, bodyText, chatID, messageID); //Handle birthdays
-                await handleLanguage(client, bodyText, chatID, messageID); //Handle language and help
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) //Handle stickers
-                    await HSi.handleStickers(client, bodyText, chatID, messageID, quotedMsg, groupsDict);
-                if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) //Handle URLs
+                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsSpam)
+                if (await handleFilters(client, bodyText, chatID, messageID)) { //Handle filters
+                } else if (await handleTags(client, bodyText, chatID, messageID, quotedMsgID, groupMembersArray)) { //Handle tags
+                } else if (await handleBirthdays(client, bodyText, chatID, messageID)) { //Handle birthdays
+                } else if (await handleLanguage(client, bodyText, chatID, messageID)) { //Handle language and help
+                } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
+                    await HSi.handleStickers(client, message, chatID, messageID, messageType, groupsDict);
+                } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) {//Handle URLs
                     await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) //Handle surveys
+                } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
                     await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage")))
+                } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage")))
                     await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "show_webpage_reply"));
             }
         }

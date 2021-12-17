@@ -124,14 +124,10 @@ class Strings {
             "he": "הראה ימי הולדת", "en": /(s|S)how birthdays/, "la": /(o|O)stende natalis dies/
         }, "make_sticker": {
             "he": "הפוך לסטיקר", "en": /(c|C)reate sticker/, "la": /(f|F)ac hoc imaginem/
-        }, "not_image_error": {
-            "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה לסטיקר",
-            "en": "The message you replied to isn't an image, you big-fingered individual",
+        }, "not_sticker_material_error": {
+            "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטוןלסטיקר",
+            "en": "Idiot, a sticker has to be an image or a video",
             "la": "Hoc non est similacrum"
-        }, "no_quoted_message_error": {
-            "he": "אתה בטוח שסימנת הודעה?",
-            "en": "Are you sure you replied to a message?",
-            "la": "Certusne tu respondere te nuntium?"
         }, "scan_link": {
             "he": "סרוק", "en": /(s|S)can/, "la": /(e|E)xamina/
         }, "scan_link_checking": {
