@@ -75,6 +75,8 @@ function start(client) {
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsSpam);
                 //Handle sending links to the bot by an admin
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
+                //Check the bot status (sort of)
+                await HAF.ping(client, bodyText, chatID, messageID, messageAuthor)
                 //If both the user who sent the message and group the message was sent in are allowed, proceed to the functions
                 if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) &&
                     !restGroupsSpam.includes(chatID)) {

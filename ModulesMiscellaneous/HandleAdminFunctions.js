@@ -38,7 +38,7 @@ class HAF {
     }
 
     static async handleBotJoin(client, bodyText, chatID, messageID, messageAuthor) {
-        if (bodyText.startsWith("צרף את הבוט לקבוצה ")) {
+        if (bodyText.startsWith("הצטרף לקבוצה ")) {
             if (botDevs.includes(messageAuthor)) {
                 const found = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
                 if (found != null) {
@@ -49,6 +49,15 @@ class HAF {
                     }
                 } else await client.reply(chatID, "מאסטר! הההודעה הזו לא מכילה קישור לקבוצה!", messageID);
             } else await client.reply(chatID, "רק אראגון יכול להוסיף את אלכסנדר לקבוצות בעזרת קישור", messageID);
+        }
+    }
+
+    static async ping(client, bodyText, chatID, messageID, messageAuthor) {
+        if (bodyText.startsWith("ping!")) {
+            if (botDevs.includes(messageAuthor)) {
+                let groupsIn = 0;
+                client.reply(chatID, groupsIn ,messageID)
+            }
         }
     }
 }
