@@ -10,7 +10,8 @@ class HB {
         for (let group in groupsDict) {
             let currentGroup = groupsDict[group];
             for (let person in currentGroup.birthdays) {
-                if (currentGroup.birthdays[person][0] == dayToday && currentGroup.birthdays[person][1] == monthToday) {
+                if (currentGroup.birthdays[person][0] === dayToday.toString() &&
+                    currentGroup.birthdays[person][1] === monthToday.toString()) {
                     let age = yearToday - parseInt(currentGroup.birthdays[person][2]);
                     let stringForSending = HL.getGroupLang(groupsDict, currentGroup.groupID, "send_birthday_wishes", person, age)
                     await client.sendText(currentGroup.groupID, stringForSending)
@@ -35,7 +36,7 @@ class HB {
                     groupsDict[chatID] = new group(chatID);
                 }
                 //Check if name exists in DB if it does return false otherwise add name to DB
-                if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2020 && birthDay >= 0 && birthMonth >= 0 && birthYear >= 1900) {
+                if (birthDay <= 31 && birthMonth <= 12 && birthDay >= 0 && birthMonth >= 0 && typeof birthYear === "number") {
                     if (groupsDict[chatID].addBirthday(name, birthDay, birthMonth, birthYear)) {
                         await HDB.addArgsToDB(name, birthDay, birthMonth, birthYear, chatID, "birthday", function () {
                             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", name), messageID);
