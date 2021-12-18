@@ -1,5 +1,0 @@
-let lolz;
-
-function main() {
-
-}
