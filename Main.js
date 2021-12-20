@@ -9,8 +9,9 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
 const wa = require("@open-wa/wa-automate");
 //Schedule module and its configuration
 const schedule = require('node-schedule');
-const rule = new schedule.RecurrenceRule();
-rule.tz = 'Israel'; //Time zone
+const IsraelSchedule = new schedule.RecurrenceRule();
+IsraelSchedule.tz = 'Israel'; //Time zone
+
 //Local storage of data to not require access to the database at all times (cache)
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [], restUsersCommandSpam = [];
 //Group & user rest intervals
@@ -40,7 +41,7 @@ setInterval(function () {
 //Main function
 function start(client) {
     //Check if there are birthdays everyday at 4 am
-    schedule.scheduleJob('4 0 * * *', async () => {
+    IsraelSchedule.scheduleJob('4 0 * * *', async () => {
         await HB.checkBirthdays(client, groupsDict);
     });
     //Sends a starting help message when added to a group
