@@ -34,8 +34,7 @@ setInterval(function () {
 
 //Remove all groups from filter rest list every [groupFilterRestResetInterval] minutes (automatic)
 setInterval(function () {
-    while (restGroupsFilterSpam.length > 0)
-        restGroupsFilterSpam.pop();
+    restGroupsFilterSpam = [];
 }, groupFilterRestResetInterval);
 
 //Main function
@@ -120,6 +119,7 @@ function start(client) {
         }
     );
 }
+
 //TODO: something to Alex's about
 //TODO: cleaner function for groups that Alex isn't in anymore
 //TODO: function to check where a user was last tagged
