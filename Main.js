@@ -11,6 +11,7 @@ const wa = require("@open-wa/wa-automate");
 const schedule = require('node-schedule');
 const IsraelSchedule = new schedule.RecurrenceRule();
 IsraelSchedule.tz = 'Israel'; //Time zone
+const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
 //Local storage of data to not require access to the database at all times (cache)
 let groupsDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [], restUsersCommandSpam = [];
@@ -67,11 +68,13 @@ function start(client) {
                 if (message.chat.isGroup)
                     allGroupMembers = await client.getGroupMembersId(message.chat.id);
 
-                //Handle admin functions
-                await HAF.handleUserRest(client, bodyText, chatID, messageID, messageAuthor, quotedMsgID, quotedMsgAuthor, restUsers);
-                await HAF.handleGroupRest(client, bodyText, chatID, messageID, messageAuthor, restGroups, restGroupsFilterSpam);
-                await HAF.handleBotJoin(client, bodyText, chatID, messageID, messageAuthor);
-                await HAF.ping(client, bodyText, chatID, messageID, messageAuthor)
+                //Handle bot developer functions
+                if (botDevs.includes(messageAuthor)) {
+                    await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, quotedMsgAuthor, restUsers);
+                    await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam);
+                    await HAF.handleBotJoin(client, bodyText, chatID, messageID);
+                    await HAF.ping(client, bodyText, chatID, messageID)
+                }
                 //If both the user who sent the message and group the message was sent in are aren't blocked,
                 //proceed to regular modules
                 if (!restUsers.includes(messageAuthor) && !restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)) {
