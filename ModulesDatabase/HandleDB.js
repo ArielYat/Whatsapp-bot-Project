@@ -106,7 +106,7 @@ class HDB {
             let ID = document.ID, permission = document.permissions;
             if (!ID in usersDict)
                 usersDict[ID] = new Person(ID);
-            usersDict[ID].permissions = permission;
+            usersDict[ID].permissionLevel = permission;
         }
 
         MongoClient.connect(url, function (err, client) {
