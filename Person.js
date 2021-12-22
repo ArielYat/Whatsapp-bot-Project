@@ -3,7 +3,7 @@ class Person {
     #personName;
     #birthday;
     #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
-    #groupsIn;
+    #birthDayGroups;
     #commandCounter;
 
     constructor(personID) {
@@ -11,7 +11,7 @@ class Person {
         this.#personName = "משה";
         this.#permissionLevel = {};
         this.#birthday = [];
-        this.#groupsIn = [];
+        this.#birthDayGroups = [];
         this.#commandCounter = 0;
     }
 
@@ -63,15 +63,16 @@ class Person {
         }
     }
 
-    get groupsIn() {
-        return this.#groupsIn;
+    get birthDayGroups(){
+        return this.#birthDayGroups;
     }
-
-    set groupsIn(chatIDArray) {
-        if (chatIDArray[0] === "push")
-            this.#groupsIn.push(chatIDArray[1]);
-        else if (chatIDArray[0] === "delete")
-            delete this.#groupsIn;
+    set birthDayGroups(birthdayGroupArray){
+        if (birthdayGroupArray[0] === "add") {
+            this.#birthDayGroups.push(birthdayGroupArray[1])
+        } else if (birthdayGroupArray[0] === "delete") {
+            const index = this.#birthDayGroups.indexOf(birthdayGroupArray[1]);
+            delete this.#birthDayGroups.splice(index, 1);
+        }
     }
 
     get commandCounter() {

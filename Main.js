@@ -85,67 +85,72 @@ function start(client) {
                 groupsDict[chatID].personsIn = ["add", authorID];
             if (!(authorID in usersDict))
                 usersDict[authorID] = new Person(authorID);
-            if (!(usersDict[authorID].groupsIn.includes(chatID))) {
-                usersDict[authorID].groupsIn = ["add", chatID];
-                usersDict[authorID].permissionLevel = {chatID: 0}; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
-            }
+            if (!chatID in usersDict[authorID].permissionLevel)
+                usersDict[authorID].permissionLevel[chatID] = 0; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
             //Handle bot developer functions
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel === 3) {
-                usersDict[authorID].permissionLevel = {chatID: 3};
-                await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, message.quotedMsg.author, restUsers);
+                usersDict[authorID].permissionLevel[chatID] = 3
+                await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, restUsers);
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam);
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 await HAF.ping(client, bodyText, chatID, messageID)
             }
-            //If the group the message was sent in isn't blocked, proceed to check filters
-            if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID))
-                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam)
-            //If the user who sent the message isn't blocked, proceed to regular modules
-            if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tags everyone
-                    await HT.tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict, await client.getGroupMembersId(chatID));
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tags someone
-                    await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) //Handle stickers
-                    await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
-                else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) //Handle URLs
-                    await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) //Handle surveys
-                    await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) //Handle show help
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) //Handle show filters
-                    await HF.showFilters(client, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) //Handle show tags
-                    await HT.showTags(client, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) //Handle show birthday
-                    await HB.showBirthdays(client, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) //Handle add filters
-                    await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) //Handle remove filters
-                    await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) //Handle edit filters
-                    await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tags
-                    await HT.addTag(client, bodyText, chatID, messageID, groupsDict, await client.getGroupMembersId(chatID));
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tags
-                    await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) //Handle add birthday
-                    await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) //Handle remove birthday
-                    await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-                else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) //Handle webpage link
-                    await HW.sendLink(client, chatID, groupsDict);
-                else if (bodyText.startsWith(Strings["change_language"]["he"]) ||
-                    bodyText.startsWith(Strings["change_language"]["en"]) ||
-                    bodyText.startsWith(Strings["change_language"]["la"])) //Handle language change
-                    await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
-                else return;
 
-                userCommandLimit[authorID].addToCommandCounter();
-                if (usersDict[authorID].commandCounter === userCommandLimit) {
-                    await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam"));
-                    restUsersCommandSpam.push(authorID);
+            //If the group the message was sent in isn't blocked, proceed to check filters
+            if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)) {
+                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam)
+                //If the user who sent the message isn't blocked, proceed to regular modules
+                if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
+                    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) //Handle tags everyone
+                        await HT.tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict, await client.getGroupMembersId(chatID));
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) //Handle tags someone
+                        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) //Handle stickers
+                        await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
+                    else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) //Handle URLs
+                        await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) //Handle surveys
+                        await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) //Handle show help
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) //Handle show filters
+                        await HF.showFilters(client, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) //Handle show tags
+                        await HT.showTags(client, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) //Handle show birthday
+                        await HB.showBirthdays(client, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) //Handle add filters
+                        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) //Handle remove filters
+                        await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) //Handle edit filters
+                        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) //Handle add tags
+                        await HT.addTag(client, bodyText, chatID, messageID, groupsDict, await client.getGroupMembersId(chatID));
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) //Handle remove tags
+                        await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) //Handle add birthday
+                        await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) //Handle remove birthday
+                        await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "update_group_birthDay"))) //Handle add this group birthday
+                        await HB.addCurrentGroupToBirthDay(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_group_birthDay"))) //Handle remove this group birthday
+                        await HB.delCurrentGroupFromBirthDay(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) //Handle webpage link
+                        await HW.sendLink(client, chatID, groupsDict);
+
+                    else if (bodyText.startsWith(Strings["change_language"]["he"]) ||
+                        bodyText.startsWith(Strings["change_language"]["en"]) ||
+                        bodyText.startsWith(Strings["change_language"]["la"])) //Handle language change
+                        await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
+                    else return;
+
+                    userCommandLimit[authorID].addToCommandCounter();
+                    if (usersDict[authorID].commandCounter === userCommandLimit) {
+                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam"));
+                        restUsersCommandSpam.push(authorID);
+                    }
                 }
             }
         }

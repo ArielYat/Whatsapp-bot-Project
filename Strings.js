@@ -122,6 +122,34 @@ class Strings {
             "he": "אין לקבוצה זו ימי הולדת",
             "en": "This group don't have any birthday registered",
             "la": "Hoc coetus non habet natalis dies"
+        }, "person_doesnt_have_birthdays_groups_error" :{
+            "he" : "אין לאדם זה קבוצות לימי הולדת",
+            "en" : "complete",
+            "la" : "complete"
+        }, "person_add_error" :{
+            "he" : "אני לא בטוח את מי אתה מנסה להוסיף \n אבל מעולם לא פגשתי את האדם הזה",
+            "en" : "complete",
+            "la" : "complete"
+        }, "update_group_birthDay" :{
+            "he" : "עדכן קבוצה ליום הולדת",
+            "en" : "complete",
+            "la" : "complete"
+        }, "remove_group_birthDay" :{
+            "he" : "הסר קבוצה מיום הולדת",
+            "en" : "complete",
+            "la" : "complete"
+        }, "group_BirthDay_Added" :{
+            "he" : "הקבוצה נוספה בהצלחה למאגר ימי הולדת של אדם זה",
+            "en" : "complete",
+            "la" : "complete"
+        }, "group_BirthDay_Removed" :{
+            "he" : "הקבוצה הוסרה בהצלחה ממאגר ימי הולדת של אדם זה",
+            "en" : "complete",
+            "la" : "complete"
+        }, "person_remove_error" :{
+            "he" : "אני לא בטוח את מי אתה מנסה להסיר \n אבל אני לא יכול להעיף אדם שלא פגשתי",
+            "en" : "complete",
+            "la" : "complete"
         }, "show_birthDays": {
             "he": "הראה ימי הולדת", "en": /(s|S)how birthday/, "la": /(o|O)stende natalis dies/
         }, "make_sticker": {

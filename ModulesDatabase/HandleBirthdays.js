@@ -7,7 +7,7 @@ class HB {
             if (person.birthday[0] === today.getDate().toString() &&
                 person.birthday[1] === (today.getMonth() + 1).toString()) { //+1 'cause January is 0!
                 const age = today.getFullYear() - parseInt(person.birthday[2]);
-                for (let group in usersDict[person].groupsIn) {
+                for (let group in usersDict[person].birthDayGroups) {
                     let stringForSending = HL.getGroupLang(group, group.groupID, "send_birthday_wishes", person.personName, age)
                     await client.sendText(group.groupID, stringForSending)
                 }
@@ -59,6 +59,35 @@ class HB {
                 }
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays_error"), messageID);
+        }
+    }
+    static async addCurrentGroupToBirthDay(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict){
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "update_group_birthDay"), "");
+        if(chatID in groupsDict){
+            if (groupsDict[chatID].birthDayGroups) {
+                if (bodyText in usersDict && usersDict[bodyText].birthday){
+                    usersDict[chatID].birthDayGroups = ["add", groupsDict[chatID]];
+                    await HDB.addArgsToDB(authorID, chatID, null, null, "groups_Of_BirthDays_Of_person",
+                        chatID, function () {
+                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_BirthDay_Added"), messageID);
+                    });
+                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_add_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_have_birthdays_groups_error"), messageID);
+        }
+    }
+    static async delCurrentGroupFromBirthDay(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict){
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_group_birthDay"), "");
+        bodyText = bodyText.replace("@", "");
+        bodyText += "@c.us"
+        if(chatID in groupsDict){
+            if (groupsDict[chatID].birthDayGroups) {
+                if (bodyText in usersDict && usersDict[bodyText].birthday){
+                    usersDict[chatID].birthDayGroups = ["rem", groupsDict[chatID]];
+                    await HDB.delArgsFromDB(authorID, null, "groups_Of_BirthDays_Of_person", function () {
+                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_BirthDay_Removed"), messageID);
+                    });
+                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_remove_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_have_birthdays_groups_error"), messageID);
         }
     }
 }

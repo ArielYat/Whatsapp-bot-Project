@@ -18,10 +18,13 @@ class HDB {
             else if (argType === "lang")
                 objectToAddToDataBase = {ID: ID, lang: value1};
             else if (argType === "perm")
-                objectToAddToDataBase = {ID: ID, lang: value1};
+                objectToAddToDataBase = {ID: ID, perm: value1};
+            else if(argType === "groups_Of_BirthDays_Of_person"){
+                objectToAddToDataBase = {ID: ID, groupID: value1};
+            }
             if (argType === "filters" || argType === "tags" || argType === "lang")
                 objectToAddToDataBase += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || "groups_Of_BirthDays_Of_person")
                 objectToAddToDataBase += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -50,10 +53,15 @@ class HDB {
             else if (argType === "lang")
                 objectToDelInDataBase = {ID: ID};
             else if (argType === "perm")
-                objectToDelInDataBase = {ID: ID}
+                objectToDelInDataBase = {ID: ID};
+            else if (argType === "lang")
+                objectToDelInDataBase = {ID: ID};
+            else if(argType === "groups_Of_BirthDays_Of_person"){
+                objectToDelInDataBase = {ID: ID};
+            }
             if (argType === "filters" || argType === "tags" || argType === "lang")
                 objectToDelInDataBase += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || "groups_Of_BirthDays_Of_person")
                 objectToDelInDataBase += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -107,6 +115,15 @@ class HDB {
             if (!ID in usersDict)
                 usersDict[ID] = new Person(ID);
             usersDict[ID].permissionLevel = permission;
+        }
+        function createPersonGroupsBirthDays(document){
+            let ID = document.ID, groupID = document.groupID;
+            if (!ID in usersDict)
+                usersDict[ID] = new Person(ID);
+            if(!groupID in groupsDict){
+                groupsDict[groupID] = new Group(groupID);
+            }
+            usersDict[ID].birthDayGroups = ["add", groupsDict[groupID]];
         }
 
         MongoClient.connect(url, function (err, client) {
@@ -167,6 +184,15 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++) {
                     createPersonPerm(result[i]);
+                }
+            });
+            dbo.collection("groups_Of_BirthDays_Of_person-persons").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in groups_Of_BirthDays_Of_person-find");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++) {
+                    createPersonGroupsBirthDays(result[i]);
                 }
             });
             callback();
