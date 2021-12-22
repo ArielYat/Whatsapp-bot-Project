@@ -1,4 +1,4 @@
-const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HT {
     static async checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
@@ -26,20 +26,15 @@ class HT {
         }
     }
 
-    static async addTag(client, bodyText, chatID, messageID, groupsDict, groupMembersArray) {
+    static async addTag(client, bodyText, chatID, messageID, groupsDict, allGroupMembers) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
             const phoneNumber = bodyText[1].trim();
-            //make new group and insert tag + phone number if group isn't in DB otherwise just insert tag and phone number
-            if (!(chatID in groupsDict)) {
-                groupsDict[chatID] = new group(chatID);
-            }
-            //check if tag exists in DB if it does return false otherwise add tag to DB
-            if (groupMembersArray != null && groupMembersArray.includes(phoneNumber + "@c.us")) {
-                if (groupsDict[chatID].addTag(tag, phoneNumber)) {
-                    await HDB.addArgsToDB(tag, phoneNumber, null, null, chatID, "tags", function () {
+            if (allGroupMembers != null && allGroupMembers.includes(phoneNumber + "@c.us")) {
+                if ((groupsDict[chatID].tags = ["add", tag, phoneNumber] === true)) {
+                    await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_error_already_exists", tag), messageID);
@@ -51,20 +46,19 @@ class HT {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_tag"), "");
         const tag = bodyText.trim();
         if (chatID in groupsDict) {
-            if (groupsDict[chatID].delTag(tag)) {
-                await HDB.delArgsFromDB(tag, chatID, "tags", function () {
+            if ((groupsDict[chatID].tags = ["delete", tag]) === true) {
+                await HDB.delArgsFromDB(chatID, tag, "tags", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_error_doesnt_exist"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
-    static async tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
+    static async tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict, allGroupMembers) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         if (chatID in groupsDict) {
             let stringForSending = "";
-            let tags = groupsDict[chatID].tags;
-            Object.entries(tags).forEach(([, value]) => {
+            Object.entries(allGroupMembers).forEach(([, value]) => {
                 stringForSending += "@" + value + "\n";
             });
             stringForSending += bodyText;

@@ -1,8 +1,8 @@
-const group = require("../Group"), HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
-    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, limitFilter, restGroupsAuto) {
+    static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
         if (chatID in groupsDict) {
             const filters = groupsDict[chatID].filters;
             for (const word in filters) {
@@ -11,11 +11,10 @@ class HF {
                     if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                         (location + word.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
                         groupsDict[chatID].addToFilterCounter();
-                        if (groupsDict[chatID].filterCounter < limitFilter) {
+                        if (groupsDict[chatID].filterCounter < groupFilterLimit)
                             await client.sendReplyWithMentions(chatID, filters[word], messageID);
-                        } else if (groupsDict[chatID].filterCounter === limitFilter) {
+                        else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
                             await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam"));
-                            groupsDict[chatID].addToFilterCounter();
                             restGroupsAuto.push(chatID);
                         }
                     }
@@ -30,11 +29,6 @@ class HF {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
             let filter_reply = bodyText[1].trim();
-            //make new group and insert filter + filter replay if group not in DB otherwise
-            // just insert filter + filter reply to DB and to group
-            if (!(chatID in groupsDict)) {
-                groupsDict[chatID] = new group(chatID);
-            }
             let regexTemp = filter_reply.match(regex);
             if (regexTemp != null) {
                 for (let j = 0; j < regexTemp.length; j++) {
@@ -45,11 +39,9 @@ class HF {
                     }
                 }
             }
-            //check if filter exist on DB if it does return false otherwise add filters to DB
-            if (groupsDict[chatID].addFilter(filter, filter_reply)) {
-                await HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
+            if ((groupsDict[chatID].filters = ["add", filter, filter_reply]) === true) {
+                await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
-
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_error_already_exists",
                 filter, filter_reply), messageID);
@@ -60,14 +52,12 @@ class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_filter"), "");
         const filter = bodyText.trim();
         if (chatID in groupsDict) {
-            if (groupsDict[chatID].delFilter(filter)) {
-                await HDB.delArgsFromDB(filter, chatID, "filters", function () {
+            if ((groupsDict[chatID].filters = ["delete", filter]) === true) {
+                await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_error_doesnt_exist"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
-
-
     }
 
     static async editFilter(client, bodyText, chatID, messageID, groupsDict) {
@@ -87,14 +77,13 @@ class HF {
                         }
                     }
                 }
-                if (groupsDict[chatID].delFilter(filter)) {
-                    await HDB.delArgsFromDB(filter, chatID, "filters", function () {
-                        groupsDict[chatID].addFilter(filter, filter_reply);
-                        HDB.addArgsToDB(filter, filter_reply, null, null, chatID, "filters", function () {
+                if ((groupsDict[chatID].filters = ["edit", filter, filter_reply]) === true) {
+                    await HDB.delArgsFromDB(chatID, filter, "filters", function () {
+                        HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
                             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
                         });
                     });
-                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_error_doesnt_exist"), messageID);
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_error"), messageID);
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }

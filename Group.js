@@ -2,16 +2,16 @@ class group {
     #groupID;
     #filters;
     #tags;
-    #birthdays;
     #groupLanguage;
+    #personsIn;
     #filterCounter;
 
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
-        this.#birthdays = {};
         this.#groupLanguage = "he";
+        this.#personsIn = [];
         this.#filterCounter = 0;
     }
 
@@ -23,16 +23,52 @@ class group {
         return this.#filters;
     }
 
+    set filters(filterArray) {
+        if (filterArray[0] === "add") {
+            if (!this.#filters.hasOwnProperty(filterArray)) {
+                this.#filters[filterArray[1]] = filterArray[2];
+                return true;
+            } else return false;
+        } else if (filterArray[0] === "delete") {
+            if (this.#filters.hasOwnProperty(filterArray)) {
+                delete this.#filters[filterArray[1]];
+                return true;
+            } else return false;
+        } else if (filterArray[0] === "edit") {
+            if (this.#filters.hasOwnProperty(filterArray) && this.filters[1] !== filterArray[2]) {
+                this.#filters[filterArray[1]] = filterArray[2];
+                return true;
+            } else return false;
+        }
+    }
+
     get tags() {
         return this.#tags;
     }
 
-    get birthdays() {
-        return this.#birthdays;
+    set tags(tagArray) {
+        if (tagArray[0] === "add") {
+            if (!this.#tags.hasOwnProperty(tagArray[1])) {
+                this.#tags[tagArray[1]] = tagArray[2];
+                return true;
+            } else return false;
+        } else if (tagArray[0] === "delete") {
+            if (this.#tags.hasOwnProperty(tagArray[1])) {
+                delete this.#tags[tagArray[1]];
+                return true;
+            } else return false;
+        }
     }
 
-    get filterCounter() {
-        return this.#filterCounter;
+    get personsIn() {
+        return this.#personsIn;
+    }
+
+    set personsIn(authorArray) {
+        if (authorArray[0] === "push")
+            this.#personsIn.push(authorArray[1]);
+        else if (authorArray[0] === "delete")
+            delete this.#personsIn;
     }
 
     get groupLanguage() {
@@ -43,50 +79,12 @@ class group {
         this.#groupLanguage = langCode;
     }
 
+    get filterCounter() {
+        return this.#filterCounter;
+    }
+
     set filterCounter(number) {
         this.#filterCounter = number;
-    }
-
-    addFilter(filter, filterReply) {
-        if (!this.#filters.hasOwnProperty(filter)) {
-            this.#filters[filter] = filterReply;
-            return true;
-        } else return false;
-    }
-
-    delFilter(filter) {
-        if (this.#filters.hasOwnProperty(filter)) {
-            delete this.#filters[filter];
-            return true;
-        } else return false;
-    }
-
-    addTag(name, phoneNumber) {
-        if (!this.#tags.hasOwnProperty(name)) {
-            this.#tags[name] = phoneNumber;
-            return true;
-        } else return false;
-    }
-
-    delTag(name) {
-        if (this.#tags.hasOwnProperty(name)) {
-            delete this.#tags[name];
-            return true;
-        } else return false;
-    }
-
-    addBirthday(name, birthDay, birthMonth, birthYear) {
-        if (!this.#birthdays.hasOwnProperty(name)) {
-            this.#birthdays[name] = [birthDay, birthMonth, birthYear];
-            return true;
-        } else return false;
-    }
-
-    delBirthday(name) {
-        if (this.#birthdays.hasOwnProperty(name)) {
-            delete this.#birthdays[name];
-            return true;
-        } else return false;
     }
 
     addToFilterCounter() {

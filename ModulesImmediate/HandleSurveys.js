@@ -10,16 +10,14 @@ class HSu {
         const button2Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_2");
         const button3Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_3");
 
-        let title = bodyText.match(titleRegex)
-        let secondTitle = bodyText.match(secondTitleRegex)
-        let thirdTitle = bodyText.match(thirdTitleRegex);
-        let button1 = bodyText.match(button1Regex);
-        let button2 = bodyText.match(button2Regex);
-        let button3 = bodyText.match(button3Regex);
-        buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict);
-        if (title != null && secondTitle != null && buttonsArray.length > 0) {
+        let title = bodyText.match(titleRegex), secondTitle = bodyText.match(secondTitleRegex),
+            thirdTitle = bodyText.match(thirdTitleRegex);
+        const button1 = bodyText.match(button1Regex), button2 = bodyText.match(button2Regex),
+            button3 = bodyText.match(button3Regex);
+        if (title != null && secondTitle != null && button1 != null) {
             title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
             secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "second_survey_title_replace"), "").trim();
+            buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict);
             if (thirdTitle != null) {
                 thirdTitle = thirdTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "third_survey_title_replace"), "").trim();
                 await client.sendButtons(chatID, secondTitle, buttonsArray, title, thirdTitle);
@@ -36,13 +34,13 @@ class HSu {
         }
         if (button2 != null) {
             buttonsArray.push({
-                id: "1",
+                id: "2",
                 "text": button2[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_button_2_replace"), "").trim()
             });
         }
         if (button3 != null) {
             buttonsArray.push({
-                id: "1",
+                id: "3",
                 "text": button3[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_button_3_replace"), "").trim()
             });
         }

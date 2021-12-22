@@ -1,6 +1,5 @@
 const nvt = require('node-virustotal'), time = require("usleep"), HL = require("../ModulesDatabase/HandleLanguage");
-const defaultTimedInstance = nvt.makeAPI();
-const urlRegex = /((h|H)ttps?:\/\/[^\s]+)/g;
+const urlRegex = /(([hH])ttps?:\/\/[^\s]+)/g;
 
 class HURL {
     static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
@@ -10,8 +9,9 @@ class HURL {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageID);
-                const hashed = nvt.sha256(url);
-                defaultTimedInstance.urlLookup(hashed, function (err, res) {
+                const defaultTimedInstance = nvt.makeAPI();
+                defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a471c40dd0c3229e018968951d9ddc2408f");
+                defaultTimedInstance.urlLookup(nvt.sha256(url), function (err, res) {
                     if (err) {
                         defaultTimedInstance.initialScanURL(url, function (err, res) {
                             if (err)
@@ -28,13 +28,13 @@ class HURL {
                                 });
                             }
                         });
-                    } else
-                        HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
+                    } else HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                 });
 
             });
-        }
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_error"), messageID);
     }
+
     static async parseAndSendResults(client, chatID, res, url, messageID, groupsDict) {
         let prettyAnswerString = "";
         try {

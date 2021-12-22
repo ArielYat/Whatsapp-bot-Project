@@ -6,54 +6,58 @@ class Strings {
             "he": "כבודו אתה בטוח שהשתמשת במקף?",
             "en": "Are you sure you used a hyphen correctly?",
             "la": "Certusne tu adhibuisse recte eo iungente te?"
+        }, "command_spam": {
+            "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך למשך 15 דקות",
+            "en": "Chill out with all the commands kid. You won't be getting a responce out of me for the next 15 minutes",
+            "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
         }, "add_filter": {
-            "he": "הוסף פילטר", "en": /(a|A)dd filter/, "la": /(c|C)rea invenientem/
+            "he": "הוסף פילטר", "en": /(a|A)dd filters/, "la": /(c|C)rea invenientem/
         }, "add_filter_reply": {
             "he": "הפילטר %s נוסף בהצלחה",
-            "en": "The filter %s has been successfully added",
+            "en": "The filters %s has been successfully added",
             "la": "Invenientem %s creatur feliciter"
         }, "add_filter_error_already_exists": {
             "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \n  אם אתה רוצה לערוך אותו תכתוב את זה: \n ערוך פילטר %s - %s",
-            "en": "The filter %s already exists in this group \n If u want to edit the filter please write this: \n Edit filter %s - %s",
+            "en": "The filters %s already exists in this group \n If u want to edit the filters please write this: \n Edit filters %s - %s",
             "la": "Reprehendentem %s iam in systemae est \nScribe 'recense invenientem %s - %s' recensitum reprehendentem"
         }, "remove_filter": {
-            "he": "הסר פילטר", "en": /(r|R)emove filter/, "la": /(d|D)ele invenientem/
+            "he": "הסר פילטר", "en": /(r|R)emove filters/, "la": /(d|D)ele invenientem/
         }, "remove_filter_reply": {
             "he": "הפילטר %s הוסר בהצלחה",
-            "en": "The filter %s has been successfully removed",
+            "en": "The filters %s has been successfully removed",
             "la": "Invenientem %s deletur feliciter"
         }, "remove_filter_error_doesnt_exist": {
             "he": "רק אלוהים יכול למחוק פילטר לא קיים",
-            "en": "Only the god of light and all that is good can can delete a filter which doesn't exist",
+            "en": "Only the god of light and all that is good can can delete a filters which doesn't exist",
             "la": "Deus Iupiter solum potest delere invenientem qui non exsistit"
         }, "group_doesnt_have_filters_error": {
             "he": "אין פילטרים בקבוצה זו",
             "en": "This group doesn't have any filters",
             "la": "Coetus hoc non habet invenientes"
         }, "edit_filter": {
-            "he": "ערוך פילטר", "en": /(e|E)dit filter/, "la": /(r|R)ecense invenientem/
+            "he": "ערוך פילטר", "en": /(e|E)dit filters/, "la": /(r|R)ecense invenientem/
         }, "edit_filter_reply": {
             "he": "הפילטר %s נערך בהצלחה",
-            "en": "The filter %s has been successfully edited",
+            "en": "The filters %s has been successfully edited",
             "la": "Invenientem %s recensetur felicitur"
-        }, "edit_filter_error_doesnt_exist": {
-            "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים במאגר",
-            "en": "Apologies good sir, but you tried to edit a filter which doesn't exit in this group",
+        }, "edit_filter_error": {
+            "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים וגם אי אפשר לערוך פילטר בלי באמת לעורכו",
+            "en": "Apologies good sir, but you tried to edit a filter which doesn't exist in this group, or you didn't change the response",
             "la": "Paenito, mihi amice, sed recensere invenientem non exsistentem impossibile est"
         }, "show_filters": {
             "he": "הראה פילטרים", "en": /(s|S)how filters/, "la": /(o|O)stende invenientes/
         }, "filter_spam": {
-            "he": "כמה פילטרים שולחים פה? אני הולך לישון ל־20 דקות",
-            "en": "Wow you're spamming filters, I'm going to sleep for 20 minutes",
+            "he": "כמה פילטרים שולחים פה? אני הולך לישון ל־15 דקות",
+            "en": "Wow you're spamming filters, I'm going to sleep for 15 minutes",
             "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
         }, "tag": {
-            "he": "תייג", "en": /(t|T)ag/, "la": /(c|C)lama ad/
+            "he": "תייג ", "en": /(t|T)ag /, "la": /(c|C)lama ad /
         }, "tag_person_error_doesnt_exist": {
             "he": "אתה בטוח שצדקת בשם? בכל מקרה האדם שניסית לתייג לא נמצא פה",
-            "en": "The person you tried to tag doesn't exist",
+            "en": "The person you tried to tags doesn't exist",
             "la": "Quem debeo clamare? Is/ea non exsistet"
         }, "add_tag": {
-            "he": "הוסף חבר לתיוג", "en": /(a|A)dd tag buddy/, "la": /(a|A)dde amicum/
+            "he": "הוסף חבר לתיוג", "en": /(a|A)dd tags buddy/, "la": /(a|A)dde amicum/
         }, "add_tag_reply": {
             "he": "מספר הטלפון של האדם %s נוסף בהצלחה",
             "en": "The phone number of the person %s has been successfully added",
@@ -67,7 +71,7 @@ class Strings {
             "en": "This phone number does not exist in this group",
             "la": "Amicum non exsistet in coetu"
         }, "remove_tag": {
-            "he": "הסר חבר מתיוג", "en": /(e|E)emove tag buddy/, "la": /(d|D)ele amicum/
+            "he": "הסר חבר מתיוג", "en": /(e|E)emove tags buddy/, "la": /(d|D)ele amicum/
         }, "remove_tag_reply": {
             "he": "מספר הטלפון של האדם %s הוסר בהצלחה",
             "en": "The phone number of the person %s has been successfully removed",
@@ -81,7 +85,7 @@ class Strings {
         }, "tag_all": {
             "he": "תייג כולם", "en": /(t|T)ag everyone/, "la": /(c|C)lama ad quoque/
         }, "show_tags": {
-            "he": "הראה רשימת חברים לתיוג", "en": /(s|S)how tag buddies/, "la": /(o|O)stende amici/
+            "he": "הראה רשימת חברים לתיוג", "en": /(s|S)how tags buddies/, "la": /(o|O)stende amici/
         }, "send_birthday_wishes": {
             "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
             "en": "Happy birthday to %s! He/she is %s years old!",
@@ -112,14 +116,14 @@ class Strings {
             "la": "%s natalis dies delitur feliciter"
         }, "remove_birthday_error_doesnt_exist": {
             "he": "רק דוקטור דופנשמירץ יכול למחוק ימי הולדת לא קיימים",
-            "en": "Only Dr. Doofenshmirtz can remove birthdays which don't exist",
+            "en": "Only Dr. Doofenshmirtz can remove birthday which don't exist",
             "la": "Doctor Doofenshmirtz solum potest delere natalis dies non exsistentes"
         }, "group_doesnt_have_birthdays_error": {
             "he": "אין לקבוצה זו ימי הולדת",
-            "en": "This group don't have any birthdays registered",
+            "en": "This group don't have any birthday registered",
             "la": "Hoc coetus non habet natalis dies"
         }, "show_birthDays": {
-            "he": "הראה ימי הולדת", "en": /(s|S)how birthdays/, "la": /(o|O)stende natalis dies/
+            "he": "הראה ימי הולדת", "en": /(s|S)how birthday/, "la": /(o|O)stende natalis dies/
         }, "make_sticker": {
             "he": "הפוך לסטיקר", "en": /(c|C)reate sticker/, "la": /(f|F)ac hoc imaginem/
         }, "not_sticker_material_error": {
@@ -128,10 +132,12 @@ class Strings {
             "la": "Hoc non est similacrum"
         }, "scan_link": {
             "he": "סרוק", "en": /(s|S)can/, "la": /(e|E)xamina/
+        }, "scan_link_error": {
+            "he": "חביבי, זה לא קישור תקין", "en": "bro that's not a valid link", "la": ""
         }, "scan_link_checking": {
             "he": "%s \n בודק...", "en": "%s \n Checking...", "la": "%s \n Examino..."
         }, "scan_link_result": {
-            "he": " וואלה אחי בדקתי את הקישור כמו שביקשת ומצאתי ש-%s אנטי וירוסים מצאו אותו סאחי",
+            "he": " וואלה אחי בדקתי את הקישור כמו שביקשת ומצאתי ש־%s אנטי וירוסים מצאו אותו סאחי",
             "en": "%s antivirus engines detected this link as malicious",
             "la": "%s deprehendentes reperiebant hoc ligentem malum esse"
         }, "scan_link_upload_error": {
@@ -143,11 +149,11 @@ class Strings {
         }, "create_survey": {
             "he": "צור סקר", "en": /(c|C)reate survey/, "la": /(c|C)rea census/
         }, "survey_title": {
-            "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/
+            "he": /כותרת - (\w)+/, "en": /Title - (\w)+/, "la": /Nomen - (\w)+/
         }, "survey_subtitle": {
-            "he": /כותרת משנה - (.)+/, "en": /Subtitle - (.)+/, "la": /Subnomen - (.)+/
+            "he": /כותרת משנה - (\w)+/, "en": /Subtitle - (\w)+/, "la": /Subnomen - (\w)+/
         }, "third_survey_title": {
-            "he": /כותרת שלישית - (.)+/, "en": /Third title - (.)+/, "la": /Nomen tertium - (.)+/
+            "he": /כותרת שלישית - (\w)+/, "en": /Third title - (.)+/, "la": /Nomen tertium - (.)+/
         }, "survey_button_1": {
             "he": /כפתור1 - (.)+/, "en": /Button1 - (.)+/, "la": /Buttonus1 - (.)+/
         }, "survey_button_2": {
@@ -167,33 +173,213 @@ class Strings {
         }, "survey_button_3_replace": {
             "he": "כפתור3 -", "en": "Button3 -", "la": "Buttonus3 -"
         }, "survey_creation_error": {
-            "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור 1 בשביל ליצור סקר",
+            "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור אחד בשביל ליצור סקר",
             "en": "I need a title, a body and at least one button to make a survey",
             "la": "Necessitudines sunt nomen atque subnomen atque buttonus namque census"
         }, "show_webpage": {
-            "he": "הראה דף אינטרנט", "en": /(s|S)how webpage/, "la": /(o|O)stende situs texti/
+            "he": "שלח קישור", "en": /(s|S)end link/, "la": /(o|O)stende situs texti/
         }, "show_webpage_reply": {
-            "he": "קח קישור אחי: ", "en": "Here's the link you requested: ", "la": "Hic est ligens quod petitis: "
+            "he": "קח את הקישור אחי: %s",
+            "en": "Here's the link you requested: %s",
+            "la": "Hic est ligens quod petitis: %s"
         }, "show_webpage_error": {
             "he": "הקישור לא עבד לי... סליחוש",
             "en": "Sorry bro, the link didn't work...",
-            "la": "Paenito frater, sed ligens non oportetץץץ..."
+            "la": "Paenito frater, sed ligens non oportet..."
         }, "change_language": {
             "he": "שנה שפה", "en": /(c|C)hange language to/, "la": /(m|M)uta lingua ad/
         }, "language_change_reply": {
             "he": "השפה שונתה בהצלחה", "en": "Language successfully changed", "la": "Lingua mutatur feliciter"
         }, "language_change_error": {
-            "he": "בימינו אנו רק עברית, אנגלית ולטינית נתמכות על ידי הבוט",
+            "he": "בימינו רק עברית, אנגלית ולטינית נתמכות על ידי הבוט",
             "en": "Only Hebrew, English and Latin are currently supported by the bot",
             "la": "Tantum Lingua Hebraice, Anglice et Latine nunc sustentantur per bot."
         }, "help": {
             "he": "הראה עזרה", "en": /(s|S)how help/, "la": /(o|O)stende auxilium/
         }, "help_reply": {
-            "he": "*הוראות בעברית* \n _שינוי שפה_ \n כדי לשנות את שפת הבוט כתוב 'שנה שפה ל־[איזו שפה שאתה רוצה]' \n לדוגמה: שנה שפה לאנגלית \n שפות שקיימות כעת: אנגלית, עברית \n \n _פילטרים_ \n הוסף פילטר[פילטר] - [תגובת הבוט] \n לדוגמה: הוסף פילטר אוכל - בננה \n הסר פילטר [פילטר] \n לדוגמה: הסר פילטר אוכל \n ערוך פילטר [פילטר ישן] - [תשובה חדשה] \n לדוגמה: ערוך פילטר אוכל - אפרסק \n הראה פילטרים - מראה את רשימת הפילטרים הקיימים כעת \n \n _תיוגים_ \n תייג [אדם] \n לדוגמה: תייג יוסי \n הוסף חבר לתיוג [אדם] - [מספר טלפון] \n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 \n הסר חבר מתיוג [אדם] \n לדוגמה: הסר חבר מתיוג יוסי \n תייג כולם - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר \n הראה רשימת חברים לתיוג - מראה את רשימת החברים לתיוג \n \n _ימי הולדת_ \n הוסף יום הולדת [אדם] - [שנה.חודש.יום] \n לדוגמה: הוסף יום הולדת שלמה - 27.6.2021 \n הסר יום הולדת [אדם] \n לדוגמה: הסר יום הולדת יוסי \n הראה ימי הולדת - מראה את רשימת ימי ההולדת הקיימים כעת \n \n _יצירת סטיקרים_  \n הפוך לסטיקר - הבוט הופך לסטיקר את התמונה שמשיבים אליה \n \n _סריקת קישורים_ \n סרוק [קישור] - הבוט יסרוק את הקישור הנתון לוירוסים ויקבע אם הוא בטוח \n \n _יצירת סקרים (לא פעיל בגלל תקלה של וואטסאפ)_ \n צור סקר \n כותרת - [כותרת סקר] \n כותרת משנה - [כותרת משנה] \n כותרת שלישית - [כותרת שלישית] \n כפתור1 - [אופציה ראשונה] \n כפתור2 - [אופציה שנייה] \n כפתור3 - [אופציה שלישית] \n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) \n \n _טיפ מיוחד!_  \n בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר \n לדוגמה: 'הוסף פילטר אוכל - [יוסי]' יגרום לבוט לענות '@יוסי' ולתייג את יוסי",
-            "en": "*English Instructions* \n To change the language type 'Change language to [whatever language you want]' \n For example: Change language to Hebrew \n Currently available languages are: English and Hebrew \n \n _Filters_ \n Add filter [filter] - [bot response] \n For example: Add filter food - banana \n Remove filter food \n For example: Remove filter food \n Edit filter [old filter] - [new response] \n For example: Edit filter food - peach \n Show filters - displays a list of filters defined in the group \n \n _Tags_ \n Tag [person] \n For example: Tag Joseph \n Add tag buddy [person] - [phone number] \n For example: Add tag buddy Joseph - 972501234567 \n Remove tag buddy [person] \n For example: Remove tag buddy Joseph \n Tag everyone - tags all people in the group who have a set tag \n Show tag buddies - displays a list of all tags defined in the group \n \n _Birthdays_ \n Add birthday [person] - [day.month.year] \n For example: Add birthday Joseph - 27.6.2021 \n Remove birthday [person] \n For example: Remove birthday Joseph \n Show birthdays - displays a list of all birthdays defined in the group \n \n _Sticker Making_ \n Make into sticker - the bot makes the replied to image into a sticker and sends it \n \n _Link Scanning_ \n Scan [link] - Scans the given link for viruses and determines if it's safe \n \n _Creating surveys (Inactive due to Whatsapp bug)_ \n Create survey \n Title - [title] \n Subtitle - [subtitle] \n Third title - [third title] \n Button1 - [first option] \n Button2 - [second option] \n Button3 - [third option] \n (The third title, second and third buttons are optional) \n \n _Special Tip!_ \n When creating a filter you can also use [person] to tag someone whenever the filter is invoked \n For example: 'Add filter food - [Joseph]' will make the bot say 'Joseph' and tag Joseph",
-            "la": "*Instructiones in Lingua Latina* \nMutatum linguam - Muta lingua ad \nExampli gratia: Muta lingua ad Hebraice \nLinguae in sistema: Hebraice, et Anglicus et Latina. \n \n_Invenientes_ \nCrea invenientem [inveniens] - [responsum] \nExampli gratia: Crea invenientem Alexander - Magnus! \nDele invenientem [inveniens] \nExampli gratia: Dele invenientem Alexander \nRecense invenientem [reprehendens vetus] - [novum responsum] \nExampli gratia: Recense invenientem Alexander - Giganteus! \nOstende invenientes - Ostentum invenientes \n \n_Clamores_ \nClama ad [amico] \nExampli gratia: Clama ad Caesare \nAdde amicum Caesar - 972501234567 \nDele amicum \nExampli gratia: Dele amicum Caesar \nClama ad quoque - clamatum ad quoque \nOstende amici - ostentum amici \n \n_Natalis dies_ \nAdde natalis dies [homo] - [dies.mensis.annus] \nExampli gratia: Adde natalis dies Caesar - 5.7.-100 \nDele natalis dies [homo] \nExampli gratia: dele natalis dies Caesar \nOstende natalis dies - ostentum natalis dies \n \n_Creatio imagines_ \nFac hoc imaginem - factum similacrum imaginem \n \n_Investigation ligentes_ \nExamina [ligens] - examinatum lignes \n \n_Creatio census_ \nCrea census \nNomen - [Nomen] \nSubnomen - [Subnomen] \nNomen tertium - [Nomen tertium] \nButtonus1 - [Buttonus1] \nButtonus2 - [Buttonus2] \nButtonus3 - [Buttonus3]"
+            "he": `*הוראות בעברית*
+ _שפה_ - השפה בה הבוט יגיב לפקודות: 
+ "שנה שפה ל[איזו שפה שאתה רוצה]" 
+ לדוגמה: שנה שפה לאנגלית 
+  פקודה זו יכולה להישמש בכל זמן בכל שפה
+ שפות שקיימות כעת: עברית, אנגלית ולטינית 
+  
+ _פילטרים_ - מילים שהבוט יענה להן באופן אוטומטי עם התגובה המוגדרת: 
+"הוסף פילטר [פילטר] - [תגובת הבוט]"  
+ לדוגמה: הוסף פילטר אוכל - בננה 
+"הסר פילטר [פילטר]"  
+ לדוגמה: הסר פילטר אוכל 
+"ערוך פילטר [פילטר קיים] - [תשובה חדשה]"  
+ לדוגמה: ערוך פילטר אוכל - אפרסק 
+"הראה פילטרים" - מראה את רשימת הפילטרים הקיימים כעת  
+  
+ _תיוגים_ - האדם המתוייג יקבל התראה גם אם הקבוצה מושתקת אצלו בטלפון: 
+"תייג [אדם]"  
+ לדוגמה: תייג יוסי 
+"הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי]"  
+ לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 
+"הסר חבר מתיוג [אדם]"  
+ לדוגמה: הסר חבר מתיוג יוסי 
+"תייג כולם" - מתייג את כל האנשים הנמצאים בקבוצה שיש להם תיוג מוגדר  
+"הראה רשימת חברים לתיוג" - מראה את רשימת החברים לתיוג  
+  
+ _ימי הולדת_ - הבוט יתריע בקבוצה על ימי ההולדת של חברי הקבוצה: 
+ "הוסף יום הולדת [אדם] - [שנה.חודש.יום]" 
+ לדוגמה: הוסף יום הולדת שלמה - 27.6.2021 
+"הסר יום הולדת [אדם]"  
+ לדוגמה: הסר יום הולדת יוסי 
+ "הראה ימי הולדת" - מראה את רשימת ימי ההולדת הקיימים כעת 
+  
+ _סטיקרים_ - יצירת סטיקר מתמונה או מסרטון: 
+ "הפוך לסטיקר" באותה הודעה בה נשלחים תמונה או סטיקר 
+  
+ _סריקת קישורים_ - סריקת קישור לווירוסים וקביעה אם הוא בטוח: 
+ "סרוק [קישור]" 
+  
+ _סקרים_ - יצירת סקר של וואטסאפ: 
+ צור סקר 
+ כותרת - [כותרת סקר] 
+ כותרת משנה - [כותרת משנה] 
+ כותרת שלישית - [כותרת שלישית] 
+ כפתור1 - [אופציה ראשונה] 
+ כפתור2 - [אופציה שנייה] 
+ כפתור3 - [אופציה שלישית] 
+ (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) 
+  
+  _אתר האינטרנט: (בתהליך עבודה) - אתר לשליטה על עוד אופציות של הבוט:
+  "שלח קישור"
+  
+ _טיפ מיוחד!_ 
+ בהוספת פילטר אפשר גם להשתמש ב־[שם] בשביל לתייג מישהו בפילטר 
+  לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי
+  
+  מפותח ומתוחזק על ידי אריאל יצקן ואיתן עמירן
+  קישור ל־Github Repository שלי, לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`, "en": `*English Instructions* 
+  _Language_ - the language in which the bot will respond to commands:
+  "Change language to [whatever language you want]" 
+  For example: Change language to Hebrew
+  This command can be used at all time in all languages
+  Currently available languages are: Hebrew, English and Latin
+  
+  _Filters_ - words the bot will automagically respond to which a preset response: 
+  "Add filters [filters] - [bot response]" 
+  For example: Add filters food - banana
+  "Remove filters food"
+  For example: Remove filters food
+  "Edit filters [existing filters] - [new response]" 
+  For example: Edit filters food - peach
+  "Show filters" - displays a list of filters defined in the group 
+  
+  _Tags_ - the person tagged will receive a notification even if the group they muted the group:
+  "Tag [person]"
+  For example: Tag Joseph
+  "Add tags buddy [person] - [phone number in the international format]"
+  For example: Add tags buddy Joseph - 972501234567 
+  "Remove tags buddy [person]"
+  For example: Remove tags buddy Joseph
+  "Tag everyone" - tags all people in the group who have a set tags
+  "Show tags buddies" - displays a list of all tags defined in the group 
+  
+  _Birthdays_ - the bot will alert the group on everyone's birthday:
+  "Add birthday [person] - [day.month.year]"
+  For example: Add birthday Joseph - 27.6.2021 
+  "Remove birthday [person]"
+  For example: Remove birthday Joseph
+  "Show birthday" - displays a list of all birthday defined in the group 
+  
+  _Stickers_ - create a sticker from an image or a video:
+  "Create sticker" in the same message the image/video is sent 
+  
+  _Link Scanning_ - scan a link for viruses and determine if it's safe:
+  "Scan [link]" 
+  
+  _Surveys_ - create a WhatsApp survey:
+  Create survey
+  Title - [title]
+  Subtitle - [subtitle]
+  Third title - [third title] 
+  Button1 - [first option]
+  Button2 - [second option] 
+  Button3 - [third option] 
+  (The third title, second and third buttons are optional)
+  
+  _Link to website_ (work in progress) - to control more bot options:
+  "Send link"
+  
+  _Special Tip!_
+  When creating a filters you can also use [person] to tags someone whenever the filters is invoked 
+  For example: "Add filters food - [Joseph]" will make the bot tags Joseph
+  
+  Developed and maintained by Ariel Yatskan and Ethan Amiran
+  Link to the Github Repository, for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`, "la": `*Instructiones in Lingua Latina
+  __
+  "Muta lingua ad []" 
+  Exampli gratia: Muta lingua ad Hebraice 
+  Linguae in sistema: Hebraice, et Anglicus et Latina. 
+  
+  _Invenientes_ - :
+  Crea invenientem [inveniens] - [responsum] 
+  Exampli gratia: Crea invenientem Alexander - Magnus! 
+  Dele invenientem [inveniens] 
+  Exampli gratia: Dele invenientem Alexander 
+  Recense invenientem [reprehendens vetus] - [novum responsum] 
+  Exampli gratia: Recense invenientem Alexander - Giganteus! 
+  Ostende invenientes - Ostentum invenientes 
+  
+  _Clamores_ - :
+  Clama ad [amico] 
+  Exampli gratia: Clama ad Caesare 
+  Adde amicum Caesar - 972501234567 
+  Dele amicum 
+  Exampli gratia: Dele amicum Caesar 
+  Clama ad quoque - clamatum ad quoque 
+  Ostende amici - ostentum amici 
+  
+  _Natalis dies_ - :
+  Adde natalis dies [homo] - [dies.mensis.annus] 
+  Exampli gratia: Adde natalis dies Caesar - 5.7.-100 
+  Dele natalis dies [homo] 
+  Exampli gratia: dele natalis dies Caesar 
+  Ostende natalis dies - ostentum natalis dies 
+  
+  _Creatio imagines_ - :
+  Fac hoc imaginem - factum similacrum imaginem 
+  
+  _Investigation ligentes_ - :
+  Examina [ligens] - examinatum lignes 
+  
+  _Creatio census_ - :
+  Crea census 
+  Nomen - [Nomen] 
+  Subnomen - [Subnomen] 
+  Nomen tertium - [Nomen tertium] 
+  Buttonus1 - [Buttonus1] 
+  Buttonus2 - [Buttonus2] 
+  Buttonus3 - [Buttonus3]
+  
+  __ () - :
+  
+  _!_
+  `
         }, "start_message": {
-            "all": `שלום, אני אלכס!` + `\nכדי לשנות שפה כתבו "שנה שפה ל־[שפה שאתם רוצים לשנות לה]".` + `\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.` + `\nכדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.` + `\n\n\nHello, I'm Alex!` + `\nTo change my language type "Change language to [language you want to change to]".` + `\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.` + `\nTo display a help message type "Show help" in the active language.` + `\n\n\nSalve amici, Alex sum!` + `\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".` + `\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.` + `\nPropter auxilium, scriba "Ostende auxilium" in mea lingua.`
+            "all": `שלום, אני אלכס!
+כדי לשנות שפה כתבו "שנה שפה ל[שפה שאתם רוצים לשנות לה]".
+השפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.
+כדי להציג את הודעת העזרה כתבו "הראה עזרה" בשפה הפעילה.
+
+
+Hello, I'm Alex!
+To change language type "Change language to [language you want to change to]".
+The default language is Hebrew, and the currently available languages are Hebrew, English and Latin.
+To display a help message type "Show help" in the active language.
+
+
+Salve amici, Alex sum!
+Mea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".
+Lingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.
+Propter auxilium, scriba "Ostende auxilium" in mea lingua.`
+        }, "about": {
+            "all": `עדכון ענק! שלחו לי "הראה עזרה" כדי לראות את כל הפקודות החדשות!` + `\n Huge update! Message Me "Show help" to see the new commands!`
         }
     }
 }

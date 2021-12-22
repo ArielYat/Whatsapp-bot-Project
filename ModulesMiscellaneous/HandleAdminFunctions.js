@@ -45,7 +45,7 @@ class HAF {
                     try {
                         await client.joinGroupViaLink(found[0]);
                     } catch (e) {
-                        await client.reply(chatID, "אני חושב שהקישור לא תקין", messageID);
+                        await client.reply(chatID, "אני חושב שהקישור לא בתוקף", messageID);
                     }
                 } else await client.reply(chatID, "מאסטר! הההודעה הזו לא מכילה קישור לקבוצה!", messageID);
             } else await client.reply(chatID, "רק אראגון יכול להוסיף את אלכסנדר לקבוצות בעזרת קישור", messageID);
@@ -55,8 +55,7 @@ class HAF {
     static async ping(client, bodyText, chatID, messageID, messageAuthor) {
         if (bodyText.startsWith("ping!")) {
             if (botDevs.includes(messageAuthor)) {
-                let groupsIn = 0;
-                client.reply(chatID, groupsIn ,messageID)
+                client.reply(chatID, "שום דבר לעכשיו! חכו בסבלנות!" ,messageID)
             }
         }
     }
