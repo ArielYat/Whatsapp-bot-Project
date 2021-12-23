@@ -30,7 +30,7 @@ class Person {
     }
 
     set birthday(birthdayArray) {
-        if (birthdayArray[0] === "push")
+        if (birthdayArray[0] === "add")
             this.#birthday = [birthdayArray[1], birthdayArray[2], birthdayArray[3]];
         else if (birthdayArray[0] === "delete")
             this.#birthday = null;

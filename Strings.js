@@ -124,39 +124,39 @@ class Strings {
             "he": "אין לאדם זה קבוצות לפרסום הודעת ימי ההולדת",
             "en": "This person does not have groups in which to publish his birthday message",
             "la": null
-        }, "add_group_birthDay": {
+        }, "add_group_birthday": {
             "he": "הוסף קבוצה להודעת יום הולדת", "en": "Add group to birthday message", "la": null
-        }, "birthDay_added_to_group_reply": {
+        }, "birthday_added_to_group_reply": {
             "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת של אדם זה",
             "en": "The group has been successfully added to this person's birthday message broadcast list",
             "la": null
-        }, "birthDay_added_to_group_error": {
+        }, "birthday_added_to_group_error": {
             "he": "אני לא בטוח את מי אתה מנסה להוסיף אבל מעולם לא פגשתי את האדם הזה",
             "en": "I'm unsure of who you're trying to add as I've never met this human before",
             "la": null
-        }, "remove_group_birthDay": {
+        }, "remove_group_birthday": {
             "he": "הסר קבוצה מהודעת יום ההולדת", "en": "Remove group from birthday message", "la": null
-        }, "birthDay_removed_from_group_reply": {
+        }, "birthday_removed_from_group_reply": {
             "he": "הקבוצה הוסרה בהצלחה ממאגר ימי הולדת של אדם זה",
             "en": "The group has been successfully removed from this person's birthday message broadcast list",
             "la": null
-        }, "birthDay_removed_from_group_error": {
+        }, "birthday_removed_from_group_error": {
             "he": "אני לא בטוח את מי אתה מנסה להסיר אבל אני לא יכול להעיף אדם שלא פגשתי",
             "en": "I'm unsure of who you're trying to remove as I've never met this human before",
             "la": null
-        }, "set_Permissions": {
+        }, "set_permissions": {
             "he": "קבע הרשאות", "en": "set Permissions", "la": null
-        }, "set_Permissions_reply": {
+        }, "set_permissions_reply": {
             "he": "ההרשאה שונתה בהצלחה",
             "en": "permission changed successfully",
             "la": null
-        }, "set_Permissions_error": {
+        }, "set_permissions_error": {
             "he": "אין לך הרשאה מספיק גבוהה",
-            "en": null,
+            "en": "You don't have a high enough clearance level for what you were trying to do",
             "la": null
-        }, "option_Not_Exist": {
+        }, "permission_option_does_not_exist_error": {
             "he": "רק האיש והאגדה משה יכול לבחור אופציה לא קיימת לשינוי",
-            "en": null,
+            "en": "Only the man, the myth, the legend Moses can select a nonexistent option",
             "la": null
         }, "filters": {
             "he": "פילטרים", "en": "filters", "la": null

@@ -5,38 +5,20 @@ class group {
     #groupLanguage;
     #personsIn;
     #filterCounter;
-    #permissionFunctions;
-    #adminsOfTheGroups;
+    #groupAdmins;
+    #functionPermissions;
 
     constructor(groupID) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
-        this.#adminsOfTheGroups = [];
         this.#groupLanguage = "he";
         this.#personsIn = [];
         this.#filterCounter = 0;
-        this.#permissionFunctions =
-            {
-                "filters" : 1,
-                "handleFilters" : 1,
-                "handleBirthdays" : 1,
-                "tags" : 1,
-                "handleTags" : 1,
-                "handleOthers" : 1,
-            };
-    }
-    get permissionFunctions(){
-        return this.#permissionFunctions;
-    }
-    SetPermissionFunction(funcToChange, newPerm){
-        this.#permissionFunctions[funcToChange] = newPerm;
-    }
-    get adminsOfTheGroups(){
-        return this.#adminsOfTheGroups;
-    }
-    set adminsOfTheGroups(adminsOfTheGroups){
-        this.#adminsOfTheGroups = adminsOfTheGroups;
+        this.#functionPermissions = {
+            "filters": 1, "handleFilters": 1, "handleBirthdays": 1, "tags": 1, "handleTags": 1, "handleOthers": 1,
+        };
+        this.#groupAdmins = [];
     }
 
     get groupID() {
@@ -72,7 +54,7 @@ class group {
     }
 
     set personsIn(authorArray) {
-        if (authorArray[0] === "push")
+        if (authorArray[0] === "add")
             this.#personsIn.push(authorArray[1]);
         else if (authorArray[0] === "delete")
             delete this.#personsIn[authorArray[1]];
@@ -92,6 +74,22 @@ class group {
 
     set filterCounter(number) {
         this.#filterCounter = number;
+    }
+
+    get groupAdmins() {
+        return this.#groupAdmins;
+    }
+
+    set groupAdmins(adminsOfTheGroups) {
+        this.#groupAdmins = adminsOfTheGroups;
+    }
+
+    get functionPermissions() {
+        return this.#functionPermissions;
+    }
+
+    set functionPermissions(permissionsArray) {
+        this.#functionPermissions[permissionsArray[0]] = permissionsArray[1];
     }
 
     doesFilterExist(filter) {

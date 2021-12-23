@@ -19,15 +19,13 @@ class HDB {
                 objectToAddToDataBase = {ID: ID, lang: value1};
             else if (argType === "perm")
                 objectToAddToDataBase = {ID: ID, author: value1, perm: value2};
-            else if (argType === "personBirthdayGroups") {
+            else if (argType === "personBirthdayGroups")
                 objectToAddToDataBase = {ID: ID, authorID: value1};
-            }
-            else if (argType === "groupPermissions") {
+            else if (argType === "groupPermissions")
                 objectToAddToDataBase = {ID: ID, key: value1, perm: value2};
-            }
-            else if (argType === "personIn") {
+            else if (argType === "personIn")
                 objectToAddToDataBase = {ID: ID, personID: value1};
-            }
+
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
@@ -62,15 +60,13 @@ class HDB {
                 objectToDelInDataBase = {ID: ID, author: key};
             else if (argType === "lang")
                 objectToDelInDataBase = {ID: ID};
-            else if (argType === "personBirthdayGroups") {
+            else if (argType === "personBirthdayGroups")
                 objectToDelInDataBase = {ID: ID, authorID: key};
-            }
-            else if (argType === "groupPermissions") {
+            else if (argType === "groupPermissions")
                 objectToDelInDataBase = {ID: ID, key: key};
-            }
-            else if (argType === "personIn") {
+            else if (argType === "personIn")
                 objectToDelInDataBase = {ID: ID, personID: key};
-            }
+
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
@@ -106,7 +102,7 @@ class HDB {
                 birthYear = object.birthYear;
             if (!(ID in usersDict))
                 usersDict[ID] = new Person(ID);
-            usersDict[ID].birthday = ["push", birthDay, birthMonth, birthYear];
+            usersDict[ID].birthday = ["add", birthDay, birthMonth, birthYear];
         }
 
         function createGroupLang(object) {
@@ -131,19 +127,21 @@ class HDB {
                 groupsDict[ID] = new Group(ID);
             usersDict[ID].birthDayGroups = ["add", groupsDict[ID]];
         }
-        function createPersonIn(document){
+
+        function createPersonIn(document) {
             let ID = document.ID, personID = document.personID;
             if (!(personID in usersDict))
                 usersDict[personID] = new Person(personID);
             if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
-            groupsDict[ID].personsIn = ["push", usersDict[personID]];
+            groupsDict[ID].personsIn = ["add", usersDict[personID]];
         }
+
         function createGroupPermissions(document) {
             let ID = document.ID, key = document.key, permission = document.perm;
             if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
-            groupsDict[ID].SetPermissionFunction(key, permission)
+            groupsDict[ID].functionPermissions = [key, permission]
         }
 
         MongoClient.connect(url, function (err, client) {
@@ -157,72 +155,64 @@ class HDB {
                     console.log(err + " in filters-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createGroupFilter(result[i]);
-                }
             });
             dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in tags-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createGroupTag(result[i]);
-                }
             });
             dbo.collection("birthday-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in birthday-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createPersonBirthday(result[i]);
-                }
             });
             dbo.collection("lang-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in lang-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createGroupLang(result[i]);
-                }
             });
             dbo.collection("groupPermissions-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in groupPermissions-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createGroupPermissions(result[i]);
-                }
             });
             dbo.collection("personIn-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in personIn-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createPersonIn(result[i]);
-                }
             });
             dbo.collection("perm-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in permission-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createPersonPerm(result[i]);
-                }
             });
             dbo.collection("personBirthdayGroups-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in personBirthdayGroups-find");
                     return;
                 }
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length; i++)
                     createPersonGroupsBirthDays(result[i]);
-                }
                 callback();
                 client.close();
             });
