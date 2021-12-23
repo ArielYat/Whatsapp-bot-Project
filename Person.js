@@ -63,15 +63,21 @@ class Person {
         }
     }
 
-    get birthDayGroups(){
+    get birthDayGroups() {
         return this.#birthDayGroups;
     }
-    set birthDayGroups(birthdayGroupArray){
+
+    set birthDayGroups(birthdayGroupArray) {
         if (birthdayGroupArray[0] === "add") {
-            this.#birthDayGroups.push(birthdayGroupArray[1])
+            if (!this.#birthday) {
+                this.#birthDayGroups.push(birthdayGroupArray[1])
+                return true;
+            } else return false;
         } else if (birthdayGroupArray[0] === "delete") {
-            const index = this.#birthDayGroups.indexOf(birthdayGroupArray[1]);
-            delete this.#birthDayGroups.splice(index, 1);
+            if (this.#birthday) {
+                delete this.#birthDayGroups.splice(this.#birthDayGroups.indexOf(birthdayGroupArray[1]), 1);
+                return true;
+            } else return false;
         }
     }
 

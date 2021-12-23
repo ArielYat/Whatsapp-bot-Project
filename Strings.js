@@ -122,35 +122,31 @@ class Strings {
             "he": "אין לקבוצה זו ימי הולדת",
             "en": "This group don't have any birthday registered",
             "la": "Hoc coetus non habet natalis dies"
-        }, "person_doesnt_have_birthdays_groups_error" :{
-            "he" : "אין לאדם זה קבוצות לימי הולדת",
-            "en" : "complete",
-            "la" : "complete"
-        }, "person_add_error" :{
-            "he" : "אני לא בטוח את מי אתה מנסה להוסיף \n אבל מעולם לא פגשתי את האדם הזה",
-            "en" : "complete",
-            "la" : "complete"
-        }, "update_group_birthDay" :{
-            "he" : "עדכן קבוצה ליום הולדת",
-            "en" : "complete",
-            "la" : "complete"
-        }, "remove_group_birthDay" :{
-            "he" : "הסר קבוצה מיום הולדת",
-            "en" : "complete",
-            "la" : "complete"
-        }, "group_BirthDay_Added" :{
-            "he" : "הקבוצה נוספה בהצלחה למאגר ימי הולדת של אדם זה",
-            "en" : "complete",
-            "la" : "complete"
-        }, "group_BirthDay_Removed" :{
-            "he" : "הקבוצה הוסרה בהצלחה ממאגר ימי הולדת של אדם זה",
-            "en" : "complete",
-            "la" : "complete"
-        }, "person_remove_error" :{
-            "he" : "אני לא בטוח את מי אתה מנסה להסיר \n אבל אני לא יכול להעיף אדם שלא פגשתי",
-            "en" : "complete",
-            "la" : "complete"
-        }, "show_birthDays": {
+        }, "person_doesnt_have_birthday_groups_error": {
+            "he": "אין לאדם זה קבוצות לפרסום הודעת ימי ההולדת",
+            "en": "This person does not have groups in which to publish his birthday message",
+            "la": null
+        }, "add_group_birthDay": {
+            "he": "הוסף קבוצה להודעת יום הולדת", "en": /(a|A)dd group to birthday message/, "la": null
+        }, "birthDay_added_to_group_reply": {
+            "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת של אדם זה",
+            "en": "The group has been successfully added to this person's birthday message broadcast list",
+            "la": null
+        }, "birthDay_added_to_group_error": {
+            "he": "אני לא בטוח את מי אתה מנסה להוסיף אבל מעולם לא פגשתי את האדם הזה",
+            "en": "I'm unsure of who you're trying to add as I've never met this human before",
+            "la": null
+        }, "remove_group_birthDay": {
+            "he": "הסר קבוצה מהודעת יום ההולדת", "en": /(r|R)emove group from birthday message/, "la": null
+        }, "birthDay_removed_from_group_reply": {
+            "he": "הקבוצה הוסרה בהצלחה ממאגר ימי הולדת של אדם זה",
+            "en": "The group has been successfully removed from this person's birthday message broadcast list",
+            "la": null
+        }, "birthDay_removed_from_group_error": {
+            "he": "אני לא בטוח את מי אתה מנסה להסיר אבל אני לא יכול להעיף אדם שלא פגשתי",
+            "en": "I'm unsure of who you're trying to remove as I've never met this human before",
+            "la": null
+        }, "show_birthdays": {
             "he": "הראה ימי הולדת", "en": /(s|S)how birthday/, "la": /(o|O)stende natalis dies/
         }, "make_sticker": {
             "he": "הפוך לסטיקר", "en": /(c|C)reate sticker/, "la": /(f|F)ac hoc imaginem/
@@ -161,7 +157,7 @@ class Strings {
         }, "scan_link": {
             "he": "סרוק", "en": /(s|S)can/, "la": /(e|E)xamina/
         }, "scan_link_error": {
-            "he": "חביבי, זה לא קישור תקין", "en": "bro that's not a valid link", "la": ""
+            "he": "חביבי, זה לא קישור תקין", "en": "bro that's not a valid link", "la": null
         }, "scan_link_checking": {
             "he": "%s \n בודק...", "en": "%s \n Checking...", "la": "%s \n Examino..."
         }, "scan_link_result": {
@@ -173,7 +169,9 @@ class Strings {
             "en": "Error received while uploading the link",
             "la": "Error #1 in ligente est"
         }, "scan_link_checking_error": {
-            "he": "שגיאה בבדיקת הקישור", "en": "Error received while checking the link", "la": "Error #2 in ligente est"
+            "he": "שגיאה בבדיקת הקישור",
+            "en": "Error received while checking the link",
+            "la": "Error #2 in ligente est"
         }, "create_survey": {
             "he": "צור סקר", "en": /(c|C)reate survey/, "la": /(c|C)rea census/
         }, "survey_title": {

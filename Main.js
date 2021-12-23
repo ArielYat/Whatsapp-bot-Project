@@ -89,7 +89,7 @@ function start(client) {
                 usersDict[authorID].permissionLevel[chatID] = 0; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
             //Handle bot developer functions
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel === 3) {
-                usersDict[authorID].permissionLevel[chatID] = 3
+                usersDict[authorID].permissionLevel[chatID] = 3;
                 await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, restUsers);
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam);
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID);
@@ -117,7 +117,7 @@ function start(client) {
                         await HF.showFilters(client, chatID, messageID, groupsDict);
                     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) //Handle show tags
                         await HT.showTags(client, chatID, messageID, groupsDict);
-                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthDays"))) //Handle show birthday
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthdays"))) //Handle show birthday
                         await HB.showBirthdays(client, chatID, messageID, groupsDict);
                     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) //Handle add filters
                         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
@@ -133,10 +133,10 @@ function start(client) {
                         await HB.addBirthday(client, bodyText, chatID, messageID, groupsDict);
                     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) //Handle remove birthday
                         await HB.remBirthday(client, bodyText, chatID, messageID, groupsDict);
-                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "update_group_birthDay"))) //Handle add this group birthday
-                        await HB.addCurrentGroupToBirthDay(client, bodyText, chatID, messageID, groupsDict);
+                    else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_group_birthDay"))) //Handle add this group birthday
+                        await HB.addCurrentGroupToBirthDayBroadcastList(client, bodyText, chatID, messageID, groupsDict);
                     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_group_birthDay"))) //Handle remove this group birthday
-                        await HB.delCurrentGroupFromBirthDay(client, bodyText, chatID, messageID, groupsDict);
+                        await HB.remCurrentGroupFromBirthDayBroadcastList(client, bodyText, chatID, messageID, groupsDict);
                     else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) //Handle webpage link
                         await HW.sendLink(client, chatID, groupsDict);
 
