@@ -18,14 +18,20 @@ class HDB {
             else if (argType === "lang")
                 objectToAddToDataBase = {ID: ID, lang: value1};
             else if (argType === "perm")
-                objectToAddToDataBase = {ID: ID, perm: value1};
+                objectToAddToDataBase = {ID: ID, author: value1, perm: value2};
             else if (argType === "personBirthdayGroups") {
-                objectToAddToDataBase = {ID: ID, groupID: value1};
+                objectToAddToDataBase = {ID: ID, authorID: value1};
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang")
-                objectToAddToDataBase += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
-                objectToAddToDataBase += "-persons"
+            else if (argType === "groupPermissions") {
+                objectToAddToDataBase = {ID: ID, key: value1, perm: value2};
+            }
+            else if (argType === "personIn") {
+                objectToAddToDataBase = {ID: ID, personID: value1};
+            }
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
+                argType += "-groups";
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
+                argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
                     console.log(err + " in addArgsToDB-insertOne");
@@ -53,16 +59,22 @@ class HDB {
             else if (argType === "lang")
                 objectToDelInDataBase = {ID: ID};
             else if (argType === "perm")
-                objectToDelInDataBase = {ID: ID};
+                objectToDelInDataBase = {ID: ID, author: key};
             else if (argType === "lang")
                 objectToDelInDataBase = {ID: ID};
             else if (argType === "personBirthdayGroups") {
-                objectToDelInDataBase = {ID: ID};
+                objectToDelInDataBase = {ID: ID, authorID: key};
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang")
-                objectToDelInDataBase += "-groups";
+            else if (argType === "groupPermissions") {
+                objectToDelInDataBase = {ID: ID, key: key};
+            }
+            else if (argType === "personIn") {
+                objectToDelInDataBase = {ID: ID, personID: key};
+            }
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
+                argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
-                objectToDelInDataBase += "-persons"
+                argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
                     console.log(err + " in delArgsFromDB-deleteOne");
@@ -104,27 +116,34 @@ class HDB {
             groupsDict[ID].groupLanguage = language;
         }
 
-        function createPersonName(document) {
-            let ID = document.ID, personName = document.personName;
-            if (!(ID in usersDict))
-                usersDict[ID] = new Person(ID);
-            usersDict[ID].personName = personName;
-        }
-
         function createPersonPerm(document) {
-            let ID = document.ID, permission = document.permissions;
-            if (!(ID in usersDict))
-                usersDict[ID] = new Person(ID);
-            usersDict[ID].permissionLevel = permission;
+            let ID = document.ID, author = document.author, permission = document.perm;
+            if (!(author in usersDict))
+                usersDict[author] = new Person(author);
+            usersDict[author].permissionLevel[ID] = permission;
         }
 
         function createPersonGroupsBirthDays(document) {
-            let ID = document.ID, groupID = document.groupID;
-            if (!(ID in usersDict))
-                usersDict[ID] = new Person(ID);
-            if (!(groupID in groupsDict))
-                groupsDict[groupID] = new Group(groupID);
-            usersDict[ID].birthDayGroups = ["add", groupsDict[groupID]];
+            let ID = document.ID, authorID = document.authorID;
+            if (!(authorID in usersDict))
+                usersDict[authorID] = new Person(authorID);
+            if (!(ID in groupsDict))
+                groupsDict[ID] = new Group(ID);
+            usersDict[ID].birthDayGroups = ["add", groupsDict[ID]];
+        }
+        function createPersonIn(document){
+            let ID = document.ID, personID = document.personID;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            if (!(ID in groupsDict))
+                groupsDict[ID] = new Group(ID);
+            groupsDict[ID].personsIn = ["push", usersDict[personID]];
+        }
+        function createGroupPermissions(document) {
+            let ID = document.ID, key = document.key, permission = document.perm;
+            if (!(ID in groupsDict))
+                groupsDict[ID] = new Group(ID);
+            groupsDict[ID].SetPermissionFunction(key, permission)
         }
 
         MongoClient.connect(url, function (err, client) {
@@ -169,16 +188,25 @@ class HDB {
                     createGroupLang(result[i]);
                 }
             });
-            dbo.collection("name-persons").find({}).toArray(function (err, result) {
+            dbo.collection("groupPermissions-groups").find({}).toArray(function (err, result) {
                 if (err) {
-                    console.log(err + " in name-find");
+                    console.log(err + " in groupPermissions-find");
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
-                    createPersonName(result[i]);
+                    createGroupPermissions(result[i]);
                 }
             });
-            dbo.collection("permission-persons").find({}).toArray(function (err, result) {
+            dbo.collection("personIn-groups").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in personIn-find");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++) {
+                    createPersonIn(result[i]);
+                }
+            });
+            dbo.collection("perm-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in permission-find");
                     return;
@@ -195,9 +223,9 @@ class HDB {
                 for (let i = 0; i < result.length; i++) {
                     createPersonGroupsBirthDays(result[i]);
                 }
+                callback();
+                client.close();
             });
-            callback();
-            client.close();
         });
     }
 }

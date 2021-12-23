@@ -1,5 +1,5 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
-const regex = new RegExp('\\[(.*?)\]', "g");
+const regex = new RegExp('\\[(.*?)\\]', "g");
 
 class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
@@ -37,7 +37,7 @@ class HF {
                     }
                 }
             }
-            if (groupsDict[chatID].doesFilterExist(filter)) {
+            if (!groupsDict[chatID].doesFilterExist(filter)) {
                 groupsDict[chatID].filters = ["add", filter, filter_reply];
                 await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
@@ -51,7 +51,7 @@ class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_filter"), "");
         const filter = bodyText.trim();
         if (groupsDict[chatID].filters) {
-            if (!groupsDict[chatID].doesFilterExist(filter)) {
+            if (groupsDict[chatID].doesFilterExist(filter)) {
                 groupsDict[chatID].filters = ["delete", filter];
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);

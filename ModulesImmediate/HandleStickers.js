@@ -3,12 +3,12 @@ const HL = require("../ModulesDatabase/HandleLanguage");
 class HSi {
     static async handleStickers(client, message, chatID, messageID, messageType, groupsDict) {
         if (messageType === "image") {
-            const mediaData = await client.decryptMedia(message);
+            const mediaData = await client.decryptMedia(message.quotedMsg);
             await client.sendImageAsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})
         } else if (messageType === "video") {
-            const mediaData = await client.decryptMedia(message);
+            const mediaData = await client.decryptMedia(message.quotedMsg);
             await client.sendMp4AsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
     }
 }
 

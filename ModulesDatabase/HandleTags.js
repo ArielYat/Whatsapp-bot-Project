@@ -31,7 +31,7 @@ class HT {
             const tag = bodyText[0].trim();
             const phoneNumber = bodyText[1].trim();
             if (allGroupMembers != null && allGroupMembers.includes(phoneNumber + "@c.us")) {
-                if (groupsDict[chatID].doesTagExist(tag)) {
+                if (!groupsDict[chatID].doesTagExist(tag)) {
                     groupsDict[chatID].tags = ["add", tag, phoneNumber];
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
