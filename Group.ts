@@ -1,85 +1,85 @@
 class group {
-    #groupID;
-    #filters;
-    #tags;
-    #groupLanguage;
-    #personsIn;
-    #filterCounter;
+    private _groupID;
+    private _filters;
+    private _tags;
+    private _groupLanguage;
+    private _personsIn;
+    private _filterCounter;
 
     constructor(groupID) {
-        this.#groupID = groupID;
-        this.#filters = {};
-        this.#tags = {};
-        this.#groupLanguage = "he";
-        this.#personsIn = [];
-        this.#filterCounter = 0;
+        this._groupID = groupID;
+        this._filters = {};
+        this._tags = {};
+        this._groupLanguage = "he";
+        this._personsIn = [];
+        this._filterCounter = 0;
     }
 
-    get groupID() {
-        return this.#groupID;
+    public get groupID() {
+        return this._groupID;
     }
 
     get filters() {
-        return this.#filters;
+        return this._filters;
     }
 
     set filters(filterArray) {
         if (filterArray[0] === "add")
-            this.#filters[filterArray[1]] = filterArray[2];
+            this._filters[filterArray[1]] = filterArray[2];
         else if (filterArray[0] === "delete")
-            delete this.#filters[filterArray[1]];
+            delete this._filters[filterArray[1]];
         else if (filterArray[0] === "edit")
-            this.#filters[filterArray[1]] = filterArray[2];
+            this._filters[filterArray[1]] = filterArray[2];
     }
 
     get tags() {
-        return this.#tags;
+        return this._tags;
     }
 
     set tags(tagArray) {
         if (tagArray[0] === "add")
-            this.#tags[tagArray[1]] = tagArray[2];
+            this._tags[tagArray[1]] = tagArray[2];
         else if (tagArray[0] === "delete")
-            delete this.#tags[tagArray[1]];
+            delete this._tags[tagArray[1]];
     }
 
     get personsIn() {
-        return this.#personsIn;
+        return this._personsIn;
     }
 
     set personsIn(authorArray) {
         if (authorArray[0] === "push")
-            this.#personsIn.push(authorArray[1]);
+            this._personsIn.push(authorArray[1]);
         else if (authorArray[0] === "delete")
-            delete this.#personsIn[authorArray[1]];
+            delete this._personsIn[authorArray[1]];
     }
 
     get groupLanguage() {
-        return this.#groupLanguage;
+        return this._groupLanguage;
     }
 
     set groupLanguage(langCode) {
-        this.#groupLanguage = langCode;
+        this._groupLanguage = langCode;
     }
 
     get filterCounter() {
-        return this.#filterCounter;
+        return this._filterCounter;
     }
 
     set filterCounter(number) {
-        this.#filterCounter = number;
+        this._filterCounter = number;
     }
 
     doesFilterExist(filter) {
-        return this.#filters.hasOwnProperty(filter);
+        return this._filters.hasOwnProperty(filter);
     }
 
     doesTagExist(tag) {
-        return this.#tags.hasOwnProperty(tag);
+        return this._tags.hasOwnProperty(tag);
     }
 
     addToFilterCounter() {
-        this.#filterCounter++;
+        this._filterCounter++;
     }
 }
 

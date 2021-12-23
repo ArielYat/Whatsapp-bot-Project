@@ -1,79 +1,79 @@
 class Person {
-    #personID;
-    #personName;
-    #birthday;
-    #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
-    #birthDayGroups;
-    #commandCounter;
+    private _personID;
+    private _personName;
+    private _birthday;
+    private _permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
+    private _birthdayGroups;
+    private _commandCounter;
 
     constructor(personID) {
-        this.#personID = personID;
-        this.#personName = "משה";
-        this.#permissionLevel = {};
-        this.#birthday = [];
-        this.#birthDayGroups = [];
-        this.#commandCounter = 0;
+        this._personID = personID;
+        this._personName = "משה";
+        this._permissionLevel = {};
+        this._birthday = [];
+        this._birthdayGroups = [];
+        this._commandCounter = 0;
     }
 
     get personID() {
-        return this.#personID;
+        return this._personID;
     }
 
     get personName() {
-        return this.#personName;
+        return this._personName;
     }
 
     set personName(nameArray) {
         if (nameArray[0] === "push")
-            this.#personName = nameArray[1];
+            this._personName = nameArray[1];
         else if (nameArray[0] === "delete")
-            delete this.#personName;
+            delete this._personName;
     }
 
     get permissionLevel() {
-        return this.#permissionLevel;
+        return this._permissionLevel;
     }
 
     set permissionLevel(perm) {
-        this.#permissionLevel = perm;
+        this._permissionLevel = perm;
     }
 
     get birthday() {
-        return this.#birthday;
+        return this._birthday;
     }
 
     set birthday(birthdayArray) {
         if (birthdayArray[0] === "push")
-            this.#birthday = [birthdayArray[1], birthdayArray[2], birthdayArray[3]];
+            this._birthday = [birthdayArray[1], birthdayArray[2], birthdayArray[3]];
         else if (birthdayArray[0] === "delete")
-            delete this.#birthday;
+            delete this._birthday;
     }
 
     get birthDayGroups() {
-        return this.#birthDayGroups;
+        return this._birthdayGroups;
     }
 
     set birthDayGroups(birthdayGroupArray) {
         if (birthdayGroupArray[0] === "add")
-            this.#birthDayGroups.push(birthdayGroupArray[1])
+            this._birthdayGroups.push(birthdayGroupArray[1])
         else if (birthdayGroupArray[0] === "delete")
-            this.#birthDayGroups.splice(this.#birthDayGroups.indexOf(birthdayGroupArray[1]), 1);
+            this._birthdayGroups.splice(this._birthdayGroups.indexOf(birthdayGroupArray[1]), 1);
     }
 
     get commandCounter() {
-        return this.#commandCounter;
+        return this._commandCounter;
     }
 
     set commandCounter(number) {
-        this.#commandCounter = number;
+        this._commandCounter = number;
     }
 
     doesBirthdayExist() {
-        return !!this.#birthday;
+        return !!this._birthday;
     }
 
     addToCommandCounter() {
-        this.#commandCounter++;
+        this._commandCounter++;
     }
 }
 

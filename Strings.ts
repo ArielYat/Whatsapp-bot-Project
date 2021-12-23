@@ -9,7 +9,7 @@ class Strings {
             "en": "Chill out with all the commands kid. You won't be getting a responce out of me for the next 15 minutes",
             "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
         }, "add_filter": {
-            "he": "הוסף פילטר", "en": /([aA])dd filters/, "la": /([cC])rea invenientem/
+            "he": "הוסף פילטר", "en": "Add filters", "la": "Crea invenientem"
         }, "add_filter_reply": {
             "he": "הפילטר %s נוסף בהצלחה",
             "en": "The filters %s has been successfully added",
@@ -19,7 +19,7 @@ class Strings {
             "en": "The filters %s already exists in this group \n If u want to edit the filters please write this: \n Edit filters %s - %s",
             "la": "Reprehendentem %s iam in systemae est \nScribe 'recense invenientem %s - %s' recensitum reprehendentem"
         }, "remove_filter": {
-            "he": "הסר פילטר", "en": /([rR])emove filters/, "la": /([dD])ele invenientem/
+            "he": "הסר פילטר", "en": "Remove filters", "la": "Dele invenientem"
         }, "remove_filter_reply": {
             "he": "הפילטר %s הוסר בהצלחה",
             "en": "The filters %s has been successfully removed",
@@ -33,7 +33,7 @@ class Strings {
             "en": "This group doesn't have any filters",
             "la": "Coetus hoc non habet invenientes"
         }, "edit_filter": {
-            "he": "ערוך פילטר", "en": /([eE])dit filters/, "la": /([rR])ecense invenientem/
+            "he": "ערוך פילטר", "en": "Edit filter", "la": "Recense invenientem"
         }, "edit_filter_reply": {
             "he": "הפילטר %s נערך בהצלחה",
             "en": "The filters %s has been successfully edited",
@@ -43,19 +43,19 @@ class Strings {
             "en": "Apologies good sir, but you tried to edit a filter which doesn't exist in this group, or you didn't change the response",
             "la": "Paenito, mihi amice, sed recensere invenientem non exsistentem impossibile est"
         }, "show_filters": {
-            "he": "הראה פילטרים", "en": /([sS])how filters/, "la": /([oO])stende invenientes/
+            "he": "הראה פילטרים", "en": "Show filters", "la": "Ostende invenientes"
         }, "filter_spam": {
             "he": "כמה פילטרים שולחים פה? אני הולך לישון ל־15 דקות",
             "en": "Wow you're spamming filters, I'm going to sleep for 15 minutes",
             "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
         }, "tag": {
-            "he": "תייג ", "en": /([tT])ag /, "la": /([cC])lama ad /
+            "he": "תייג ", "en": "Tag", "la": "Clama ad"
         }, "tag_person_error_doesnt_exist": {
             "he": "אתה בטוח שצדקת בשם? בכל מקרה האדם שניסית לתייג לא נמצא פה",
             "en": "The person you tried to tags doesn't exist",
             "la": "Quem debeo clamare? Is/ea non exsistet"
         }, "add_tag": {
-            "he": "הוסף חבר לתיוג", "en": /([aA])dd tags buddy/, "la": /([aA])dde amicum/
+            "he": "הוסף חבר לתיוג", "en": "Add tags buddy", "la": "Adde amicum"
         }, "add_tag_reply": {
             "he": "מספר הטלפון של האדם %s נוסף בהצלחה",
             "en": "The phone number of the person %s has been successfully added",
@@ -69,7 +69,7 @@ class Strings {
             "en": "This phone number does not exist in this group",
             "la": "Amicum non exsistet in coetu"
         }, "remove_tag": {
-            "he": "הסר חבר מתיוג", "en": /([eE])emove tags buddy/, "la": /([dD])ele amicum/
+            "he": "הסר חבר מתיוג", "en": "Remove tags buddy", "la": "Dele amicum"
         }, "remove_tag_reply": {
             "he": "מספר הטלפון של האדם %s הוסר בהצלחה",
             "en": "The phone number of the person %s has been successfully removed",
@@ -81,15 +81,15 @@ class Strings {
         }, "group_doesnt_have_tags_error": {
             "he": "אין תיוגים לקבוצה זו", "en": "This group doesn't have any tags", "la": "Hoc coetus non habet amici"
         }, "tag_all": {
-            "he": "תייג כולם", "en": /([tT])ag everyone/, "la": /([cC])lama ad quoque/
+            "he": "תייג כולם", "en": "Tag everyone", "la": "Clama ad quoque"
         }, "show_tags": {
-            "he": "הראה רשימת חברים לתיוג", "en": /([sS])how tags buddies/, "la": /([oO])stende amici/
+            "he": "הראה רשימת חברים לתיוג", "en": "Show tags buddies", "la": "Ostende amici"
         }, "send_birthday_wishes": {
             "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
             "en": "Happy birthday to %s! He/she is %s years old!",
             "la": "%s, felix sit natalis dies! Habes %s annos"
         }, "add_birthday": {
-            "he": "הוסף יום הולדת", "en": /([aA])dd birthday/, "la": /([aA])dde natalis dies/
+            "he": "הוסף יום הולדת", "en": "Add birthday", "la": "Adde natalis dies"
         }, "add_birthday_reply": {
             "he": "יום ההולדת של האדם %s נוסף בהצלחה",
             "en": "%s's birthday has been successfully added",
@@ -107,7 +107,7 @@ class Strings {
             "en": "Yeah that's not how you write a date... You should be using periods",
             "la": "Rescribe dies cum periodes"
         }, "remove_birthday": {
-            "he": "הסר יום הולדת", "en": /([rR])emove birthday/, "la": /([dD])ele natalis dies/
+            "he": "הסר יום הולדת", "en": "Remove birthday", "la": "Dele natalis dies"
         }, "remove_birthday_reply": {
             "he": "יום ההולדת של האדם %s הוסר בהצלחה",
             "en": "%s's birthday has been successfully removed",
@@ -125,7 +125,7 @@ class Strings {
             "en": "This person does not have groups in which to publish his birthday message",
             "la": null
         }, "add_group_birthDay": {
-            "he": "הוסף קבוצה להודעת יום הולדת", "en": /([aA])dd group to birthday message/, "la": null
+            "he": "הוסף קבוצה להודעת יום הולדת", "en": "Add group to birthday message", "la": null
         }, "birthDay_added_to_group_reply": {
             "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת של אדם זה",
             "en": "The group has been successfully added to this person's birthday message broadcast list",
@@ -135,7 +135,7 @@ class Strings {
             "en": "I'm unsure of who you're trying to add as I've never met this human before",
             "la": null
         }, "remove_group_birthDay": {
-            "he": "הסר קבוצה מהודעת יום ההולדת", "en": /([rR])emove group from birthday message/, "la": null
+            "he": "הסר קבוצה מהודעת יום ההולדת", "en": "Remove group from birthday message", "la": null
         }, "birthDay_removed_from_group_reply": {
             "he": "הקבוצה הוסרה בהצלחה ממאגר ימי הולדת של אדם זה",
             "en": "The group has been successfully removed from this person's birthday message broadcast list",
@@ -145,15 +145,15 @@ class Strings {
             "en": "I'm unsure of who you're trying to remove as I've never met this human before",
             "la": null
         }, "show_birthdays": {
-            "he": "הראה ימי הולדת", "en": /([sS])how birthday/, "la": /([oO])stende natalis dies/
+            "he": "הראה ימי הולדת", "en": "Show birthday", "la": "Ostende natalis dies"
         }, "make_sticker": {
-            "he": "הפוך לסטיקר", "en": /([cC])reate sticker/, "la": /([fF])ac hoc imaginem/
+            "he": "הפוך לסטיקר", "en": "Create sticker", "la": "Fac hoc imaginem"
         }, "not_sticker_material_error": {
             "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטוןלסטיקר",
             "en": "Idiot, a sticker has to be an image or a video",
             "la": "Hoc non est similacrum"
         }, "scan_link": {
-            "he": "סרוק", "en": /([sS])can/, "la": /([eE])xamina/
+            "he": "סרוק", "en": "Scan", "la": "Examina"
         }, "scan_link_error": {
             "he": "חביבי, זה לא קישור תקין", "en": "bro that's not a valid link", "la": null
         }, "scan_link_checking": {
@@ -171,7 +171,7 @@ class Strings {
             "en": "Error received while checking the link",
             "la": "Error #2 in ligente est"
         }, "create_survey": {
-            "he": "צור סקר", "en": /([cC])reate survey/, "la": /([cC])rea census/
+            "he": "צור סקר", "en": "Create survey", "la": "Crea census"
         }, "survey_title": {
             "he": /כותרת - (\w)+/, "en": /Title - (\w)+/, "la": /Nomen - (\w)+/
         }, "survey_subtitle": {
@@ -211,7 +211,7 @@ class Strings {
             "en": "Sorry bro, the link didn't work...",
             "la": "Paenito frater, sed ligens non oportet..."
         }, "change_language": {
-            "he": "שנה שפה", "en": /([cC])hange language to/, "la": /([mM])uta lingua ad/
+            "he": "שנה שפה", "en": "Change language to", "la": "Muta lingua ad"
         }, "language_change_reply": {
             "he": "השפה שונתה בהצלחה", "en": "Language successfully changed", "la": "Lingua mutatur feliciter"
         }, "language_change_error": {
@@ -219,7 +219,7 @@ class Strings {
             "en": "Only Hebrew, English and Latin are currently supported by the bot",
             "la": "Tantum Lingua Hebraice, Anglice et Latine nunc sustentantur per bot."
         }, "help": {
-            "he": "הראה עזרה", "en": /([sS])how help/, "la": /([oO])stende auxilium/
+            "he": "הראה עזרה", "en": "Show help", "la": "Ostende auxilium"
         }, "help_reply": {
             "he": `*הוראות בעברית*
  _שפה_ - השפה בה הבוט יגיב לפקודות: 
