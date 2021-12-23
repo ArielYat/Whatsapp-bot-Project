@@ -1,5 +1,3 @@
-const botDevs = ["972543293155@c.us", "972586809911@c.us"];
-
 class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, quotedMsgAuthor, restUsers) {
         if (quotedMsgID != null) {
@@ -44,7 +42,7 @@ class HAF {
 
     static async ping(client, bodyText, chatID, messageID) {
         if (bodyText.startsWith("ping!")) {
-            client.reply(chatID, "שום דבר לעכשיו! חכו בסבלנות!" ,messageID)
+            client.reply(chatID, "שום דבר לעכשיו! חכו בסבלנות!", messageID)
         }
     }
 }

@@ -24,7 +24,7 @@ const groupFilterLimit = 15, userCommandLimit = 5; //Filter & Command Limit
 const botDevs = ["972543293155@c.us", "972586809911@c.us"]; //The bot developer's IDs
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-await HDB.GetAllGroupsFromDB(groupsDict, usersDict, async function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, async function () {
     await wa.create({headless: true, multiDevice: true}).then(client => start(client));
 });
 
@@ -85,7 +85,7 @@ function start(client) {
                 groupsDict[chatID].personsIn = ["add", authorID];
             if (!(authorID in usersDict))
                 usersDict[authorID] = new Person(authorID);
-            if (!chatID in usersDict[authorID].permissionLevel)
+            if (!(chatID in usersDict[authorID].permissionLevel))
                 usersDict[authorID].permissionLevel[chatID] = 0; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
             //Handle bot developer functions
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel === 3) {

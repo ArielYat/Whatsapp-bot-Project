@@ -19,12 +19,12 @@ class HDB {
                 objectToAddToDataBase = {ID: ID, lang: value1};
             else if (argType === "perm")
                 objectToAddToDataBase = {ID: ID, perm: value1};
-            else if (argType === "personBirthDayGroups") {
+            else if (argType === "personBirthdayGroups") {
                 objectToAddToDataBase = {ID: ID, groupID: value1};
             }
             if (argType === "filters" || argType === "tags" || argType === "lang")
                 objectToAddToDataBase += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthDayGroups")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
                 objectToAddToDataBase += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -56,12 +56,12 @@ class HDB {
                 objectToDelInDataBase = {ID: ID};
             else if (argType === "lang")
                 objectToDelInDataBase = {ID: ID};
-            else if (argType === "personBirthDayGroups") {
+            else if (argType === "personBirthdayGroups") {
                 objectToDelInDataBase = {ID: ID};
             }
             if (argType === "filters" || argType === "tags" || argType === "lang")
                 objectToDelInDataBase += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthDayGroups")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
                 objectToDelInDataBase += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -77,14 +77,14 @@ class HDB {
     static async GetAllGroupsFromDB(groupsDict, usersDict, callback) {
         function createGroupFilter(object) {
             let ID = object.ID, filter = object.filters, filterReply = object.filter_reply;
-            if (!ID in groupsDict)
+            if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].filters = ["add", filter, filterReply];
         }
 
         function createGroupTag(object) {
             let ID = object.ID, name = object.name, phoneNumber = object.phone_number;
-            if (!ID in groupsDict)
+            if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].tags = ["add", name, phoneNumber];
         }
@@ -92,39 +92,38 @@ class HDB {
         function createPersonBirthday(object) {
             let ID = object.ID, birthDay = object.birthDay, birthMonth = object.birthMonth,
                 birthYear = object.birthYear;
-            if (!ID in usersDict)
+            if (!(ID in usersDict))
                 usersDict[ID] = new Person(ID);
             usersDict[ID].birthday = ["push", birthDay, birthMonth, birthYear];
         }
 
         function createGroupLang(object) {
             let ID = object.ID, language = object.lang;
-            if (!ID in groupsDict)
+            if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].groupLanguage = language;
         }
 
         function createPersonName(document) {
             let ID = document.ID, personName = document.personName;
-            if (!ID in usersDict)
+            if (!(ID in usersDict))
                 usersDict[ID] = new Person(ID);
             usersDict[ID].personName = personName;
         }
 
         function createPersonPerm(document) {
             let ID = document.ID, permission = document.permissions;
-            if (!ID in usersDict)
+            if (!(ID in usersDict))
                 usersDict[ID] = new Person(ID);
             usersDict[ID].permissionLevel = permission;
         }
 
         function createPersonGroupsBirthDays(document) {
             let ID = document.ID, groupID = document.groupID;
-            if (!ID in usersDict)
+            if (!(ID in usersDict))
                 usersDict[ID] = new Person(ID);
-            if (!groupID in groupsDict) {
+            if (!(groupID in groupsDict))
                 groupsDict[groupID] = new Group(groupID);
-            }
             usersDict[ID].birthDayGroups = ["add", groupsDict[groupID]];
         }
 
@@ -188,9 +187,9 @@ class HDB {
                     createPersonPerm(result[i]);
                 }
             });
-            dbo.collection("personBirthDayGroups-persons").find({}).toArray(function (err, result) {
+            dbo.collection("personBirthdayGroups-persons").find({}).toArray(function (err, result) {
                 if (err) {
-                    console.log(err + " in personBirthDayGroups-find");
+                    console.log(err + " in personBirthdayGroups-find");
                     return;
                 }
                 for (let i = 0; i < result.length; i++) {
