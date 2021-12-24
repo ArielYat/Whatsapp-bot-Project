@@ -33,7 +33,7 @@ class Person {
         if (birthdayArray[0] === "add")
             this.#birthday = [birthdayArray[1], birthdayArray[2], birthdayArray[3]];
         else if (birthdayArray[0] === "delete")
-            this.#birthday = null;
+            this.#birthday = [];
     }
 
     get birthDayGroups() {
@@ -56,7 +56,7 @@ class Person {
     }
 
     doesBirthdayExist() {
-        return !!this.#birthday;
+        return !!this.#birthday.length;
     }
 
     addToCommandCounter() {

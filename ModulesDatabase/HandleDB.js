@@ -108,7 +108,7 @@ class HDB {
 
     static async GetAllGroupsFromDB(groupsDict, usersDict, callback) {
         function createGroupFilter(object) {
-            let ID = object.ID, filter = object.filters, filterReply = object.filter_reply;
+            let ID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].filters = ["add", filter, filterReply];
@@ -156,7 +156,7 @@ class HDB {
                 usersDict[authorID] = new Person(authorID);
             if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
-            usersDict[ID].birthDayGroups = ["add", groupsDict[ID]];
+            usersDict[authorID].birthDayGroups = ["add", groupsDict[ID]];
         }
 
         function createPersonIn(document) {

@@ -19,7 +19,7 @@ class HT {
                 }
             }
         }
-        if (counter !== 0 && quotedMsgID === null)
+        if (counter !== 0)
             await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
         else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist_error"), messageID);
     }
@@ -30,7 +30,8 @@ class HT {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
             const phoneNumber = bodyText[1].trim();
-            if (groupsDict[chatID].personsIn != null && groupsDict[chatID].personsIn.includes(phoneNumber + "@c.us")) {
+            const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
+            if (groupsDict[chatID].personsIn != null && (groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
                     groupsDict[chatID].tags = ["add", tag, phoneNumber];
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
@@ -57,15 +58,15 @@ class HT {
     static async tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         let stringForSending = "";
-        Object.entries(groupsDict[chatID].personsIn).forEach(person => {
-            stringForSending += "@" + person.personID.replace("@c.us", "") + "\n";
+        Object.entries(groupsDict[chatID].personsIn).forEach(element => {
+            stringForSending += "@" + element[1].personID.replace("@c.us", "") + "\n";
             });
         stringForSending += "\n" + bodyText;
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].tags) {
+        if (!!Object.keys(groupsDict[chatID].tags).length) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;
             Object.entries(tags).forEach(([key, value]) => {

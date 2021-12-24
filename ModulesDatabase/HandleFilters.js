@@ -90,7 +90,7 @@ class HF {
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].filters) {
+        if (!!Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
             Object.entries(filters).forEach(([key, value]) => {

@@ -45,8 +45,8 @@ class Strings {
             "en": "The filters %s has been successfully edited",
             "la": "Invenientem %s recensetur felicitur"
         }, "edit_filter_error": {
-            "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים וגם אי אפשר לערוך פילטר בלי באמת לעורכו",
-            "en": "Apologies good sir, but you tried to edit a filter which doesn't exist in this group, or you didn't change the response",
+            "he": "סליחה כבודו אבל אי אפשר לערוך פילטר שלא קיים",
+            "en": "Apologies good sir, but you tried to edit a filter which doesn't exist in this group",
             "la": "Paenito, mihi amice, sed recensere invenientem non exsistentem impossibile est"
         }, "show_filters": {
             "he": "הראה פילטרים", "en": "Show filters", "la": "Ostende invenientes"
@@ -89,17 +89,17 @@ class Strings {
             "he": "הראה רשימת חברים לתיוג", "en": "Show tag buddies", "la": "Ostende amici"
         }, //birthdays
         "birthday_wishes_reply": {
-            "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
+            "he": "מזל טוב ל %s! הוא/היא בן/בת %s!",
             "en": "Happy birthday to %s! He/she is %s years old!",
             "la": "%s, felix sit natalis dies! Habes %s annos"
         }, "add_birthday": {
             "he": "הוסף יום הולדת", "en": "Add birthday", "la": "Adde natalis dies"
         }, "add_birthday_reply": {
-            "he": "יום ההולדת של הבחור נוסף בהצלחה",
+            "he": "יום ההולדת של הבחור %s נוסף בהצלחה",
             "en": "%s's birthday has been successfully added",
             "la": "Natalis dies %s additur feliciter"
         }, "add_birthday_already_exists_error": {
-            "he": "יום ההולדת של הבחור כבר קיים",
+            "he": "יום ההולדת של הבחור %s כבר קיים",
             "en": "%s's birthday already exists in this group",
             "la": "Natalis dies %s iam exsistet in hoc coetu"
         }, "date_existence_error": {
@@ -107,13 +107,13 @@ class Strings {
             "en": "Are you sure what you inputted is a date or something along those lines?",
             "la": "Certusne tu hoc natalis dies esse?"
         }, "date_syntax_error": {
-            "he": "תראה אתה אמור להשתמש בנקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
+            "he": "תראה אתה אמור להשתמש בשתי נקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
             "en": "Yeah that's not how you write a date... You should be using periods",
             "la": "Rescribe dies cum periodes"
         }, "remove_birthday": {
             "he": "הסר יום הולדת", "en": "Remove birthday", "la": "Dele natalis dies"
         }, "remove_birthday_reply": {
-            "he": "יום ההולדת של הבחור הוסר בהצלחה",
+            "he": "יום ההולדת של הבחור %s הוסר בהצלחה",
             "en": "%s's birthday has been successfully removed",
             "la": "%s natalis dies delitur feliciter"
         }, "remove_birthday_doesnt_exist_error": {
@@ -127,12 +127,12 @@ class Strings {
         }, "add_birthday_to_group": {
             "he": "הוסף קבוצה להודעת יום הולדת", "en": "Add group to birthday message", "la": null
         }, "birthday_added_to_group_reply": {
-            "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת של אדם זה",
+            "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת שלך",
             "en": "The group has been successfully added to this person's birthday message broadcast list",
             "la": null
         }, "birthday_added_to_group_error": {
-            "he": "אני לא בטוח את מי אתה מנסה להוסיף אבל מעולם לא פגשתי את האדם הזה",
-            "en": "I'm unsure of who you're trying to add as I've never met this human before",
+            "he": "הקבוצה כבר קיימת במאגר התפוצות של ימי ההולדת שלך",
+            "en": null,
             "la": null
         }, "remove_birthday_from_group": {
             "he": "הסר קבוצה מהודעת יום ההולדת", "en": "Remove group from birthday message", "la": null
@@ -141,17 +141,21 @@ class Strings {
             "en": "The group has been successfully removed from this person's birthday message broadcast list",
             "la": null
         }, "birthday_removed_from_group_error": {
-            "he": "אני לא בטוח את מי אתה מנסה להסיר אבל אני לא יכול להעיף אדם שלא פגשתי",
-            "en": "I'm unsure of who you're trying to remove as I've never met this human before",
+            "he": "רק סמי יכול למחוק קבוצות שלא קיימות במאגר התפוצות שלך",
+            "en": null,
             "la": null
         }, "person_doesnt_have_birthday_groups_error": {
-            "he": "אין לאדם זה קבוצות לפרסום הודעת יום ההולדת",
-            "en": "This person does not have groups in which to publish his birthday message",
+            "he": "אין לאדם זה יום הולדת מוגדר",
+            "en": null,
             "la": null
         }, "show_birthdays": {
             "he": "הראה ימי הולדת", "en": "Show birthdays", "la": "Ostende natalis dies"
         }, //permissions
-        "set_permissions": {
+        "show_group_permissions" :{
+            "he" : "הראה הרשאות",
+            "en" : "show permissions",
+            "la" : null
+        }, "set_permissions": {
             "he": "קבע הרשאה ל", "en": "Define permissions for", "la": null
         }, "set_permissions_reply": {
             "he": "ההרשאה שונתה בהצלחה",
@@ -180,13 +184,13 @@ class Strings {
         },
         //mute and unmute
         "mute_participant": {
-            "he": "השתק ", "en": "Mute ", "la": null
+            "he": "השתק את האדם", "en": "Mute the person", "la": null
         }, "mute_participant_reply": {
             "he": "המשתמש %s לא יכול להשתמש בפקודות יותר",
             "en": "User %s cannot use commands anymore",
             "la": null
         }, "unmute_participant": {
-            "he": "בטל השתקה", "en": "Unmute", "la": null
+            "he": "בטל השתקה", "en": "Unmute person", "la": null
         }, "unmute_participant_reply": {
             "he": "המשתמש %s יכול להשתמש בפקודות שוב",
             "en": "User %S can use commands again",
@@ -201,7 +205,7 @@ class Strings {
             "la": null
         }, //stickers
         "make_sticker": {
-            "he": "צור סטיקר", "en": "Create sticker", "la": "Fac hoc imaginem"
+            "he": "הפוך לסטיקר", "en": "Create sticker", "la": "Fac hoc imaginem"
         }, "not_sticker_material_error": {
             "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון לסטיקר",
             "en": "Idiot, a sticker has to be an image or a video",
