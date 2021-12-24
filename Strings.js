@@ -89,7 +89,7 @@ class Strings {
             "he": "הראה רשימת חברים לתיוג", "en": "Show tag buddies", "la": "Ostende amici"
         }, //birthdays
         "birthday_wishes_reply": {
-            "he": "מזל טוב ל %s! הוא/היא בן/בת %s!",
+            "he": "מזל טוב ל-- %s! הוא/היא בן/בת %s!",
             "en": "Happy birthday to %s! He/she is %s years old!",
             "la": "%s, felix sit natalis dies! Habes %s annos"
         }, "add_birthday": {

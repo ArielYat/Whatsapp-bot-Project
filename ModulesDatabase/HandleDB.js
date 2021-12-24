@@ -188,6 +188,8 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createGroupFilter(result[i]);
+                callback();
+                client.close();
             });
             dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
@@ -252,8 +254,6 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createPersonGroupsBirthDays(result[i]);
-                callback();
-                client.close();
             });
         });
     }

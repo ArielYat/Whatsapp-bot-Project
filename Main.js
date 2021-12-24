@@ -60,8 +60,8 @@ setInterval(function () {
 function start(client) {
     //Check if there are birthday everyday at 4 am
     IsraelSchedule.tz = 'Israel'; //Time zone
-    IsraelSchedule.scheduleJob('4 0 * * *', async () => {
-        await HB.checkBirthdays(client, usersDict);
+    IsraelSchedule.scheduleJob('0 4 * * *', async () => {
+        await HB.checkBirthdays(client, usersDict, groupsDict);
     });
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
@@ -75,7 +75,7 @@ function start(client) {
             let checkFilters = true;
             //define quotedMsgID depending on if a message was quoted
             if (message.quotedMsg != null)
-                quotedMsgID = message.quotedMsg.id
+                quotedMsgID = message.quotedMsg.id;
             else
                 quotedMsgID = message.id;
             //define bodyText depending on the message type
