@@ -27,7 +27,7 @@ const botDevs = ["972586809911@c.us"]; //The bot developer's IDs "972543293155@c
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, function () {
-    wa.create({headless: false, multiDevice: false}).then(client => start(client));
+    wa.create({headless: false, multiDevice: true}).then(client => start(client));
 });
 
 //Reset filters counter for all groups every [groupFilterCounterResetInterval] minutes (automatic)
@@ -79,10 +79,10 @@ function start(client) {
             else
                 quotedMsgID = message.id;
             //define bodyText depending on the message type
-            if (message.body !== null && typeof message.body === "string")
-                bodyText = message.body; //if the message is a text message
+            if (message.type === "image")
+                bodyText = message.caption; //if the message is a text message
             else
-                bodyText = message.caption; //if the message is a media message
+                bodyText = message.text; //if the message is a media message
 
             //create new group/person object if they don't exist
             if (!(chatID in groupsDict))
@@ -208,12 +208,17 @@ function start(client) {
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
                         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                        usersDict[authorID].addToCommandCounter();
+                            usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
                         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
-                        await HSi.handleStickers(client, message, chatID, messageID, message.quotedMsgObj.type, groupsDict);
+                        if(message.quotedMsgObj != null){
+                            await HSi.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
+                        }
+                        else{
+                            await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
+                        }
                         usersDict[authorID].addToCommandCounter();
                     } //else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
                     //     await HW.sendLink(client, chatID, groupsDict);
