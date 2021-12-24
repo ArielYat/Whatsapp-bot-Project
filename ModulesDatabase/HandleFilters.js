@@ -13,7 +13,7 @@ class HF {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit)
                         await client.sendReplyWithMentions(chatID, filters[word], messageID);
                     else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
-                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam"));
+                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply"));
                         restGroupsAuto.push(chatID);
                     }
                 }
@@ -42,7 +42,7 @@ class HF {
                 await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_error_already_exists",
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error",
                 filter, filter_reply), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
@@ -56,7 +56,7 @@ class HF {
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_error_doesnt_exist"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist_error"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }
 

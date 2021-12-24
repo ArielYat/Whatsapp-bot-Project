@@ -21,23 +21,23 @@ class HT {
         }
         if (counter !== 0 && quotedMsgID === null)
             await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
-        else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_error_doesnt_exist"), messageID);
+        else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist_error"), messageID);
     }
 
-    static async addTag(client, bodyText, chatID, messageID, groupsDict, allGroupMembers) {
+    static async addTag(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
             const tag = bodyText[0].trim();
             const phoneNumber = bodyText[1].trim();
-            if (allGroupMembers != null && allGroupMembers.includes(phoneNumber + "@c.us")) {
+            if (groupsDict[chatID].personsIn != null && groupsDict[chatID].personsIn.includes(phoneNumber + "@c.us")) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
                     groupsDict[chatID].tags = ["add", tag, phoneNumber];
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
                     });
-                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_error_already_exists", tag), messageID);
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_error_doesnt_exist"), messageID);
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_already_exists_error", tag), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_doesnt_exist_error"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
@@ -50,20 +50,18 @@ class HT {
                 await HDB.delArgsFromDB(chatID, tag, "tags", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_error_doesnt_exist"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_doesnt_exist_error"), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
-    static async tagEveryOne(client, bodyText, chatID, messageID, quotedMsgID, groupsDict, allGroupMembers) {
+    static async tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
-        if (groupsDict[chatID].tags) {
-            let stringForSending = "";
-            Object.entries(allGroupMembers).forEach(([, value]) => {
-                stringForSending += "@" + value + "\n";
+        let stringForSending = "";
+        Object.entries(groupsDict[chatID].personsIn.personID).forEach(([_, value]) => {
+            stringForSending += "@" + value.replace("@c.us", "") + " ";
             });
-            stringForSending += bodyText;
-            await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
+        stringForSending += "\n" + bodyText;
+        await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {

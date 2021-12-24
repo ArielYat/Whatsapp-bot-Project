@@ -42,7 +42,7 @@ class Person {
 
     set birthDayGroups(birthdayGroupArray) {
         if (birthdayGroupArray[0] === "add")
-            this.#birthdayGroups.push(birthdayGroupArray[1])
+            this.#birthdayGroups.push(birthdayGroupArray[1]);
         else if (birthdayGroupArray[0] === "delete")
             this.#birthdayGroups.splice(this.#birthdayGroups.indexOf(birthdayGroupArray[1]), 1);
     }

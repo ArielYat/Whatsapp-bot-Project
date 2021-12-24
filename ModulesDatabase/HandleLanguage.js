@@ -31,7 +31,7 @@ class HandleLanguage {
             lang = groupDict[chatID].groupLanguage;
         else lang = "he";
 
-        if (parameter === "add_filter_error_already_exists")
+        if (parameter === "add_filter_already_exists_error")
             return util.format(Strings[parameter][lang], value1, value1, value2);
         if (value1 != null && value2 != null)
             return util.format(Strings[parameter][lang], value1, value2);

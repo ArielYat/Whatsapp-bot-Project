@@ -8,7 +8,7 @@ class HURL {
             found.forEach(function (url) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking", url), messageID);
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url), messageID);
                 const defaultTimedInstance = nvt.makeAPI();
                 defaultTimedInstance.setKey("b7e76491b457b5c044e2db87f6644a471c40dd0c3229e018968951d9ddc2408f");
                 defaultTimedInstance.urlLookup(nvt.sha256(url), function (err, res) {
@@ -32,7 +32,7 @@ class HURL {
                 });
 
             });
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_error"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
     }
 
     static async parseAndSendResults(client, chatID, res, url, messageID, groupsDict) {
@@ -47,7 +47,7 @@ class HURL {
                     counter++;
                 }
             }
-            prettyAnswerString += "\n" + HL.getGroupLang(groupsDict, chatID, "scan_link_result", counter);
+            prettyAnswerString += "\n" + HL.getGroupLang(groupsDict, chatID, "scan_link_result_reply", counter);
             client.reply(chatID, url + "\n" + prettyAnswerString, messageID);
         } catch (err) {
             client.reply(chatID, "" + err, messageID);

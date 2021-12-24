@@ -9,7 +9,7 @@ class HB {
                 const age = today.getFullYear() - parseInt(usersDict[person].birthday[2]);
                 for (let group in usersDict[person].birthDayGroups) {
                     let stringForSending = HL.getGroupLang(group, usersDict[person].birthDayGroups[group].groupID,
-                        "send_birthday_wishes", "@" + usersDict[person].personID, age)
+                        "birthday_wishes_reply", "@" + usersDict[person].personID, age)
                     await client.sendTextWithMentions(usersDict[person].birthDayGroups[group].groupID, stringForSending)
                 }
             }
@@ -31,7 +31,7 @@ class HB {
                         await HDB.addArgsToDB(authorID, birthDay, birthMonth, birthYear, "birthday", function () {
                             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply"), messageID);
                         });
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_error_already_exists")
+                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error")
                         , messageID);
                 } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
@@ -44,7 +44,7 @@ class HB {
             await HDB.delArgsFromDB(authorID, null, "birthday", function () {
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_reply"), messageID);
             });
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_error_doesnt_exist"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_doesnt_exist_error"), messageID);
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict, usersDict) {
@@ -59,7 +59,7 @@ class HB {
     }
 
     static async addCurrentGroupToBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_group_birthday"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_birthday_to_group"), "");
         bodyText.replace("@", "");
         bodyText += "c.us"
         if (groupsDict[chatID].birthDayGroups) {
@@ -73,7 +73,7 @@ class HB {
     }
 
     static async remCurrentGroupFromBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_group_birthday"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_birthday_from_group"), "");
         bodyText.replace("@", "");
         bodyText += "c.us"
         if (groupsDict[chatID].birthDayGroups) {
