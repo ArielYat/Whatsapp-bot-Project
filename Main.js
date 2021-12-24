@@ -69,10 +69,10 @@ function start(client) {
     });
     //Check every module every time a message is received
     client.onMessage(async message => {
-        let handleFilter = true;
         if (message != null) {
             const chatID = message.chat.id, authorID = message.author, messageID = message.id;
             let bodyText, quotedMsgID;
+            let checkFilters = true;
             //define quotedMsgID depending on if a message was quoted
             if (message.quotedMsg != null)
                 quotedMsgID = message.quotedMsg.id
@@ -99,7 +99,6 @@ function start(client) {
             }
             const isIDEqualPersonID = (person) => authorID === person.personID;
             if (!(groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
-
                 groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
                 await HDB.delArgsFromDB(chatID, authorID, "personIn", function () {
                     HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
@@ -166,22 +165,22 @@ function start(client) {
                 if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"]) {
                     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filters
                         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
-                        handleFilter = false;
+                        checkFilters = false;
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filters
                         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
-                        handleFilter = false;
+                        checkFilters = false;
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filters
                         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
-                        handleFilter = false;
+                        checkFilters = false;
                         usersDict[authorID].addToCommandCounter();
                     }
                 }
 
                 //If the group the message was sent in isn't blocked, proceed to check filters
                 if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)) {
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"] && handleFilter) {
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"] && checkFilters) {
                         await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam)
                         if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) //Handle show filters
                             await HF.showFilters(client, chatID, messageID, groupsDict);

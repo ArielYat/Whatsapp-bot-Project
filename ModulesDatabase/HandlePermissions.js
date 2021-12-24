@@ -72,8 +72,8 @@ class HP {
 
     static async muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         bodyText = bodyText.split(" ");
-        if (bodyText.length === 4) {
-            let personTag = bodyText[3].trim();
+        if (bodyText.length === 2) {
+            let personTag = bodyText[1].trim();
             let personID = personTag.replace("@", "");
             personID += "@c.us";
             const isIDEqualPersonID = (person) => personID === person.personID;
