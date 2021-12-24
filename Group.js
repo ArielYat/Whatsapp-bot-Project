@@ -80,11 +80,8 @@ class group {
         return this.#groupAdmins;
     }
 
-    set groupAdmins(adminsOfTheGroups) {
-        this.#groupAdmins = adminsOfTheGroups;
-    }
-    addOneAdmin(adminID){
-        this.#groupAdmins.push(adminID);
+    set groupAdmins(groupAdmins) {
+        this.#groupAdmins = groupAdmins;
     }
 
     get functionPermissions() {

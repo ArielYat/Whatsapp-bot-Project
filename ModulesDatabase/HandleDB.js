@@ -9,25 +9,35 @@ class HDB {
                 console.log(err + " in addArgsToDB");
                 return;
             }
-            if (argType === "filters")
-                objectToAddToDataBase = {ID: ID, filter: value1, filter_reply: value2};
-            else if (argType === "tags")
-                objectToAddToDataBase = {ID: ID, name: value1, phone_number: value2};
-            else if (argType === "birthday")
-                objectToAddToDataBase = {ID: ID, birthDay: value1, birthMonth: value2, birthYear: value3};
-            else if (argType === "lang")
-                objectToAddToDataBase = {ID: ID, lang: value1};
-            else if (argType === "perm")
-                objectToAddToDataBase = {ID: ID, author: value1, perm: value2};
-            else if (argType === "personBirthdayGroups")
-                objectToAddToDataBase = {ID: ID, authorID: value1};
-            else if (argType === "groupPermissions")
-                objectToAddToDataBase = {ID: ID, key: value1, perm: value2};
-            else if (argType === "personIn")
-                objectToAddToDataBase = {ID: ID, personID: value1};
-            else if (argType === "groupAdmins")
-                objectToAddToDataBase = {ID: ID, adminsArray: value1};
-
+            switch (argType) {
+                case "filters":
+                    objectToAddToDataBase = {ID: ID, filter: value1, filter_reply: value2};
+                    break;
+                case "tags":
+                    objectToAddToDataBase = {ID: ID, name: value1, phone_number: value2};
+                    break;
+                case "birthday":
+                    objectToAddToDataBase = {ID: ID, birthDay: value1, birthMonth: value2, birthYear: value3};
+                    break;
+                case "lang":
+                    objectToAddToDataBase = {ID: ID, lang: value1};
+                    break;
+                case "perm":
+                    objectToAddToDataBase = {ID: ID, author: value1, perm: value2};
+                    break;
+                case "personBirthdayGroups":
+                    objectToAddToDataBase = {ID: ID, authorID: value1};
+                    break;
+                case "groupPermissions":
+                    objectToAddToDataBase = {ID: ID, key: value1, perm: value2};
+                    break;
+                case "personIn":
+                    objectToAddToDataBase = {ID: ID, personID: value1};
+                    break;
+                case "groupAdmins":
+                    objectToAddToDataBase = {ID: ID, adminsArray: value1};
+                    break;
+            }
             if (argType === "filters" || argType === "tags" || argType === "lang" ||
                 argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
@@ -51,26 +61,34 @@ class HDB {
                 console.log(err + " in delArgsFromDB");
                 return;
             }
-            if (argType === "filters")
-                objectToDelInDataBase = {ID: ID, filter: key};
-            else if (argType === "tags")
-                objectToDelInDataBase = {ID: ID, name: key};
-            else if (argType === "birthday")
-                objectToDelInDataBase = {ID: ID};
-            else if (argType === "lang")
-                objectToDelInDataBase = {ID: ID};
-            else if (argType === "perm")
-                objectToDelInDataBase = {ID: ID, author: key};
-            else if (argType === "lang")
-                objectToDelInDataBase = {ID: ID};
-            else if (argType === "personBirthdayGroups")
-                objectToDelInDataBase = {ID: ID, authorID: key};
-            else if (argType === "groupPermissions")
-                objectToDelInDataBase = {ID: ID, key: key};
-            else if (argType === "personIn")
-                objectToDelInDataBase = {ID: ID, personID: key};
-            else if(argType === "groupAdmins"){
-                objectToDelInDataBase = {ID: ID};
+            switch (argType) {
+                case "filters":
+                    objectToDelInDataBase = {ID: ID, filter: key};
+                    break;
+                case "tags":
+                    objectToDelInDataBase = {ID: ID, name: key};
+                    break;
+                case "birthday":
+                    objectToDelInDataBase = {ID: ID};
+                    break;
+                case "lang":
+                    objectToDelInDataBase = {ID: ID};
+                    break;
+                case "perm":
+                    objectToDelInDataBase = {ID: ID, author: key};
+                    break;
+                case "personBirthdayGroups":
+                    objectToDelInDataBase = {ID: ID, authorID: key};
+                    break;
+                case "groupPermissions":
+                    objectToDelInDataBase = {ID: ID, key: key};
+                    break;
+                case "personIn":
+                    objectToDelInDataBase = {ID: ID, personID: key};
+                    break;
+                case "groupAdmins":
+                    objectToDelInDataBase = {ID: ID};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" ||
                 argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
@@ -95,6 +113,7 @@ class HDB {
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].filters = ["add", filter, filterReply];
         }
+
         function creatGroupAdmins(object) {
             let ID = object.ID, adminsArray = object.adminsArray;
             if (!(ID in groupsDict))

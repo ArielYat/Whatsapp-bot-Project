@@ -180,24 +180,24 @@ class Strings {
         },
         //mute and unmute
         "mute_participant": {
-            "he": "השתק את המשתמש", "en": null, "la": null
+            "he": "השתק ", "en": "Mute ", "la": null
         }, "mute_participant_reply": {
             "he": "המשתמש %s לא יכול להשתמש בפקודות יותר",
-            "en": null,
+            "en": "User %s cannot use commands anymore",
             "la": null
         }, "unmute_participant": {
-            "he": "השתק את המשתמש", "en": null, "la": null
+            "he": "בטל השתקה", "en": "Unmute", "la": null
         }, "unmute_participant_reply": {
             "he": "המשתמש %s יכול להשתמש בפקודות שוב",
-            "en": null,
+            "en": "User %S can use commands again",
             "la": null
-        }, "participant_not_in_the_group": {
-            "he": "אני יכול לחסום רק מישהו שכתב בקבוצה פעם",
-            "en": null,
+        }, "participant_not_in_group_error": {
+            "he": "אני יכול להשתיק רק מישהו שכתב בקבוצה פעם. סליחה!",
+            "en": "I can only mute someone who has been in this group in the past. Sorry!",
             "la": null
-        }, "didNot_Choose_participant": {
-            "he": "אני לא יכול לחסום את אף אחד, אתה חייב לבחור מישהו",
-            "en": null,
+        }, "no_participant_chosen_error": {
+            "he": "אני לא יכול להשתיק את אף אחד, אתה חייב לבחור מישהו",
+            "en": "I can't mute nobody, you gotta choose someone",
             "la": null
         }, //stickers
         "make_sticker": {

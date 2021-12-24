@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HP {
-    static async setPermissionOfDifferentFunc(client, bodyText, personPermission, permissionFunctions, groupsDict, chatID, messageID) {
+    static async setPermissionLevelOfFunctions(client, bodyText, personPermission, permissionFunctions, groupsDict, chatID, messageID) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
         const textArray = bodyText.split("-");
         let permissionType = textArray[0].trim();
@@ -43,16 +43,16 @@ class HP {
 
     static async checkPermissionLevels(groupsDict, chatID, callback) {
         for (let i = 0; i < groupsDict.personsIn.length; i++) {
-            let highestPerm = 3;
-            let mutedPerm = 0;
-            if (groupsDict.personsIn[i].permissionLevel !== highestPerm.toString() &&
+            const developerPerm = 3, mutedPerm = 0;
+            if (groupsDict.personsIn[i].permissionLevel !== developerPerm.toString() &&
                 groupsDict.personsIn[i].permissionLevel !== mutedPerm.toString()) {
                 await this.checkPermissionOfPerson(groupsDict[chatID], groupsDict.personsIn[i], chatID);
             }
         }
         callback()
     }
-    static async checkPermissionOfPerson(group, person, chatID){
+
+    static async checkPermissionOfPerson(group, person, chatID) {
         if (group.groupAdmins.includes(person.personID)) {
             person.permissionLevel = 2;
             await HDB.delArgsFromDB(chatID, person.personID, "perm", function () {
@@ -69,52 +69,39 @@ class HP {
             });
         }
     }
-    static async muteParticipant(client,bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
+
+    static async muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         bodyText = bodyText.split(" ");
         if (bodyText < 4) {
             const personID = bodyText[4];
             if (groupsDict[chatID].personsIn.includes(personID)) {
-                if(usersDict[authorID].permissionLevel[chatID] > groupsDict[chatID].personsIn[personID].permissionLevel[chatID]) {
+                if (usersDict[authorID].permissionLevel[chatID] > groupsDict[chatID].personsIn[personID].permissionLevel[chatID]) {
                     groupsDict[chatID].personsIn[personID].permissionLevel[chatID] = 0;
                     await HDB.delArgsFromDB(chatID, groupsDict[chatID].personsIn[personID].personID, "perm", function () {
                         HDB.addArgsToDB(chatID, groupsDict[chatID].personsIn[personID].personID, 0, null, "perm", function () {
                             console.log("person muted successfully");
-                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                                "mute_participant_reply"), messageID);
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "mute_participant_reply"), messageID);
                         });
                     });
-                }
-                else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "set_permissions_error"), messageID);
-
-            }
-            else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                "participant_not_in_the_group"), messageID);
-
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-            "didNot_Choose_participant"), messageID);
+                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "participant_not_in_group_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_participant_chosen_error"), messageID);
     }
-    static async unMuteParticipant(client,bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
+
+    static async unmuteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         bodyText = bodyText.split(" ");
         if (bodyText < 4) {
             const personID = bodyText[4];
             if (groupsDict[chatID].personsIn.includes(personID)) {
-                if(usersDict[authorID].permissionLevel[chatID] > groupsDict[chatID].personsIn[personID].permissionLevel[chatID]){
+                if (usersDict[authorID].permissionLevel[chatID] > groupsDict[chatID].personsIn[personID].permissionLevel[chatID]) {
                     await this.checkPermissionOfPerson(groupsDict[chatID], groupsDict.personsIn[personID], chatID);
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                        "unmute_participant_reply"), messageID);
-                }
-                else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "set_permissions_error"), messageID);
-
-            }
-            else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                "participant_not_in_the_group"), messageID);
-
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-            "didNot_Choose_participant"), messageID);
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "unmute_participant_reply"), messageID);
+                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "participant_not_in_group_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_participant_chosen_error"), messageID);
     }
-    static async getGroupAdminsFunc(chatID){
+
+    static async getGroupAdminsFunc(chatID) {
 
     }
 }
