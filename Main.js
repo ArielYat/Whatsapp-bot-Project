@@ -23,7 +23,7 @@ const userCommandCounterResetInterval = 15 * 60 * 1000; //When to reset the comm
 const groupFilterRestResetInterval = 5 * 60 * 1000; //When to reset the groups in rest by filters spamming (in ms); 5 min
 const userCommandRestResetInterval = 5 * 60 * 1000; //When to reset the users in rest by command spamming (in ms); 5 min
 const groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
-const botDevs = ["972543293155@c.us"]; //The bot developer's IDs "972586809911@c.us"
+const botDevs = ["972543293155@c.us", "972586809911@c.us"]; //The bot developer's IDs "972586809911@c.us"
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, function () {
