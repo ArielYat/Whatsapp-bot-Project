@@ -220,7 +220,7 @@ function start(client) {
                     //     usersDict[authorID].addToCommandCounter();
                     // }
                 }
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
+                if (bodyText === (HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
                     usersDict[authorID].addToCommandCounter();
                 } else if (bodyText.startsWith(Strings["change_language"]["he"]) ||
