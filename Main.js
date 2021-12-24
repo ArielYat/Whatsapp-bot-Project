@@ -6,8 +6,9 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HW = require("/Website/HandleWebsite"), Group = require("./Group"), Person = require("./Person"),
-    Strings = require("./Strings.js").strings;
+    Group = require("./Group"), Person = require("./Person"),
+    Strings = require("./Strings.js").strings; //HW = require("/Website/HandleWebsite")
+
 //Whatsapp API module
 const wa = require("@open-wa/wa-automate");
 //Schedule module
@@ -87,7 +88,14 @@ function start(client) {
                 groupsDict[chatID] = new Group(chatID);
             if (!(authorID in usersDict))
                 usersDict[authorID] = new Person(authorID);
-
+            if(groupsDict[chatID].groupAdmins.length === 0){
+                groupsDict[chatID].groupAdmins = client.getGroupAdmins(chatID);
+                await HDB.delArgsFromDB(chatID, null, "groupAdmins", function (){
+                    HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                        console.log("groupAdmins added successfully");
+                    });
+                });
+            }
             if (!(groupsDict[chatID].personsIn.includes(authorID)))
                 groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
             await HDB.delArgsFromDB(chatID, authorID, "personIn", function () {
@@ -96,13 +104,7 @@ function start(client) {
                 });
             });
             if (!(chatID in usersDict[authorID].permissionLevel)) {
-                const permissionLevel = 1;
-                usersDict[authorID].permissionLevel[chatID] = permissionLevel; //0 - muted, 1 - Everyone, 2 - group admins, 3 - group devs
-                await HDB.delArgsFromDB(chatID, authorID, "perm", function () {
-                    HDB.addArgsToDB(chatID, authorID, permissionLevel, null, "perm", function () {
-                        console.log("permission added successfully");
-                    });
-                });
+                await HP.checkPermissionOfPerson(groupsDict[chatID], usersDict[authorID], chatID);
             }
 
             //Handle bot developer functions
@@ -123,11 +125,24 @@ function start(client) {
             }
             //If the user who sent the message isn't blocked, proceed to regular modules
             if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
-                if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) {
-                    groupsDict[chatID].groupAdmins = client.getGroupAdmins;
-                    await HP.checkPermissionLevels(groupsDict, chatID, function () {
-                        HP.setPermissionOfDifferentFunc(client, bodyText, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict, chatID, messageID);
-                    });
+                if (usersDict[authorID].permissionLevel[chatID] >= 2) {
+                    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) {
+                        groupsDict[chatID].groupAdmins = client.getGroupAdmins(chatID);
+                        await HDB.delArgsFromDB(chatID, null, "groupAdmins", function (){
+                            HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                                console.log("groupAdmins added successfully");
+                                HP.checkPermissionLevels(groupsDict, chatID, function () {
+                                    HP.setPermissionOfDifferentFunc(client, bodyText, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict, chatID, messageID);
+                                });
+                            });
+                        });
+                    }
+                    else if(bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "mute_participant"))){
+                        await HP.muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
+                    }
+                    else if(bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "unmute_participant"))){
+                        await HP.unMuteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
+                    }
                 }
                 if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"]) {
                     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tags everyone

@@ -25,8 +25,11 @@ class HDB {
                 objectToAddToDataBase = {ID: ID, key: value1, perm: value2};
             else if (argType === "personIn")
                 objectToAddToDataBase = {ID: ID, personID: value1};
+            else if (argType === "groupAdmins")
+                objectToAddToDataBase = {ID: ID, adminsArray: value1};
 
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
+            if (argType === "filters" || argType === "tags" || argType === "lang" ||
+                argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
                 argType += "-persons"
@@ -66,8 +69,11 @@ class HDB {
                 objectToDelInDataBase = {ID: ID, key: key};
             else if (argType === "personIn")
                 objectToDelInDataBase = {ID: ID, personID: key};
-
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" || argType === "personIn")
+            else if(argType === "groupAdmins"){
+                objectToDelInDataBase = {ID: ID};
+            }
+            if (argType === "filters" || argType === "tags" || argType === "lang" ||
+                argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
                 argType += "-persons"
@@ -88,6 +94,12 @@ class HDB {
             if (!(ID in groupsDict))
                 groupsDict[ID] = new Group(ID);
             groupsDict[ID].filters = ["add", filter, filterReply];
+        }
+        function creatGroupAdmins(object) {
+            let ID = object.ID, adminsArray = object.adminsArray;
+            if (!(ID in groupsDict))
+                groupsDict[ID] = new Group(ID);
+            groupsDict[ID].groupAdmins = adminsArray;
         }
 
         function createGroupTag(object) {
@@ -197,6 +209,14 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createPersonIn(result[i]);
+            });
+            dbo.collection("groupAdmins-groups").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in groupAdmins-find");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++)
+                    creatGroupAdmins(result[i]);
             });
             dbo.collection("perm-persons").find({}).toArray(function (err, result) {
                 if (err) {

@@ -31,8 +31,8 @@ class HB {
                         await HDB.addArgsToDB(authorID, birthDay, birthMonth, birthYear, "birthday", function () {
                             client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply"), messageID);
                         });
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error")
-                        , messageID);
+                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error",
+                        authorID), messageID);
                 } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);

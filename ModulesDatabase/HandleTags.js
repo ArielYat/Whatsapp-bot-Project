@@ -57,8 +57,8 @@ class HT {
     static async tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         let stringForSending = "";
-        Object.entries(groupsDict[chatID].personsIn.personID).forEach(([_, value]) => {
-            stringForSending += "@" + value.replace("@c.us", "") + " ";
+        Object.entries(groupsDict[chatID].personsIn).forEach(person => {
+            stringForSending += "@" + person.personID.replace("@c.us", "") + "\n";
             });
         stringForSending += "\n" + bodyText;
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);

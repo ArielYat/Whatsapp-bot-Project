@@ -177,6 +177,28 @@ class Strings {
             "he": "טיפוליוםהולדת", "en": "handleBirthdays", "la": null
         }, "handleOthers": {
             "he": "שונות", "en": "handleOthers", "la": null
+        },
+        //mute and unmute
+        "mute_participant": {
+            "he": "השתק את המשתמש", "en": null, "la": null
+        }, "mute_participant_reply": {
+            "he": "המשתמש %s לא יכול להשתמש בפקודות יותר",
+            "en": null,
+            "la": null
+        }, "unmute_participant": {
+            "he": "השתק את המשתמש", "en": null, "la": null
+        }, "unmute_participant_reply": {
+            "he": "המשתמש %s יכול להשתמש בפקודות שוב",
+            "en": null,
+            "la": null
+        }, "participant_not_in_the_group": {
+            "he": "אני יכול לחסום רק מישהו שכתב בקבוצה פעם",
+            "en": null,
+            "la": null
+        }, "didNot_Choose_participant": {
+            "he": "אני לא יכול לחסום את אף אחד, אתה חייב לבחור מישהו",
+            "en": null,
+            "la": null
         }, //stickers
         "make_sticker": {
             "he": "צור סטיקר", "en": "Create sticker", "la": "Fac hoc imaginem"
