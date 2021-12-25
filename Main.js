@@ -81,6 +81,9 @@ function start(client) {
             //define bodyText depending on the message type
             if (message.type === "image")
                 bodyText = message.caption; //if the message is a text message
+                if(bodyText === undefined){
+                    bodyText = message.text
+                }
             else
                 bodyText = message.text; //if the message is a media message
 
