@@ -70,7 +70,7 @@ function start(client) {
     //Check every module every time a message is received
     client.onMessage(async message => {
         if (message != null) {
-            const chatID = message.chat.id, authorID = message.author, messageID = message.id;
+            const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
             let bodyText, quotedMsgID;
             let checkFilters = true;
             //define quotedMsgID depending on if a message was quoted
