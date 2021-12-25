@@ -51,12 +51,12 @@ class HB {
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_birthday_doesnt_exist_error"), messageID);
     }
 
-    static async showBirthdays(client, chatID, messageID, groupsDict, usersDict) {
+    static async showBirthdays(client, chatID, messageID, groupsDict) {
         if (!!Object.keys(groupsDict[chatID].personsIn).length) {
             let stringForSending = "";
             for (const person in groupsDict[chatID].personsIn) {
                 let birthdays = groupsDict[chatID].personsIn[person].birthday;
-                if(birthdays.length !== 0) {
+                if (birthdays.length !== 0) {
                     let tagID = groupsDict[chatID].personsIn[person].personID;
                     tagID = tagID.replace("@c.us", "");
                     tagID = "@" + tagID;
@@ -69,18 +69,18 @@ class HB {
 
     static async addCurrentGroupToBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         if (usersDict[authorID].doesBirthdayExist()) {
-                if(!(usersDict[authorID].birthDayGroups).includes(groupsDict[chatID])) {
-                    usersDict[authorID].birthDayGroups = ["add", groupsDict[chatID]]
-                    await HDB.addArgsToDB(chatID, authorID, null, null, "personBirthdayGroups", function () {
-                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "birthday_added_to_group_reply"), messageID);
-                    });
-                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "birthday_added_to_group_error"), messageID);
+            if (!(usersDict[authorID].birthDayGroups).includes(groupsDict[chatID])) {
+                usersDict[authorID].birthDayGroups = ["add", groupsDict[chatID]]
+                await HDB.addArgsToDB(chatID, authorID, null, null, "personBirthdayGroups", function () {
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "birthday_added_to_group_reply"), messageID);
+                });
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "birthday_added_to_group_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_have_birthday_groups_error"), messageID);
     }
 
     static async remCurrentGroupFromBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         if (usersDict[authorID].doesBirthdayExist()) {
-            if((usersDict[authorID].birthDayGroups).includes(groupsDict[chatID])) {
+            if ((usersDict[authorID].birthDayGroups).includes(groupsDict[chatID])) {
                 usersDict[authorID].birthDayGroups = ["delete", groupsDict[chatID]]
                 await HDB.delArgsFromDB(chatID, authorID, "personBirthdayGroups", function () {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "birthday_removed_from_group_reply"), messageID);

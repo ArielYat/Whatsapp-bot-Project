@@ -3,7 +3,7 @@ const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 class HP {
     static async setPermissionLevelOfFunctions(client, bodyText, personPermission, permissionFunctions, groupsDict, chatID, messageID) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
-        if(bodyText.includes("-")) {
+        if (bodyText.includes("-")) {
             const textArray = bodyText.split("-");
             let permissionType = textArray[0].trim();
             let newPermissionLevel = textArray[1].trim();
@@ -40,7 +40,7 @@ class HP {
                     });
                 });
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
-        }else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
     static async checkPermissionLevels(groupsDict, chatID, callback) {

@@ -60,7 +60,7 @@ class HT {
         let stringForSending = "";
         Object.entries(groupsDict[chatID].personsIn).forEach(element => {
             stringForSending += "@" + element[1].personID.replace("@c.us", "") + "\n";
-            });
+        });
         stringForSending += "\n" + bodyText;
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
     }

@@ -81,10 +81,9 @@ function start(client) {
             //define bodyText depending on the message type
             if (message.type === "image")
                 bodyText = message.caption; //if the message is a text message
-                if(bodyText === undefined){
-                    bodyText = message.text
-                }
-            else
+            if (bodyText === undefined) {
+                bodyText = message.text
+            } else
                 bodyText = message.text; //if the message is a media message
 
             //create new group/person object if they don't exist
@@ -211,15 +210,14 @@ function start(client) {
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
                         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                            usersDict[authorID].addToCommandCounter();
+                        usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
                         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
-                        if(message.quotedMsgObj != null){
+                        if (message.quotedMsgObj != null) {
                             await HSi.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
-                        }
-                        else{
+                        } else {
                             await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
                         }
                         usersDict[authorID].addToCommandCounter();
