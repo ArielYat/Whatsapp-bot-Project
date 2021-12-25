@@ -1,6 +1,7 @@
 class HAF {
-    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, quotedMsgAuthor, restUsers) {
-        if (quotedMsgID != null) {
+    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers) {
+        if (quotedMsg != null) {
+            let quotedMsgAuthor = quotedMsg.author
             if (bodyText.startsWith("חסום גישה למשתמש")) {
                 restUsers.push(quotedMsgAuthor);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor +

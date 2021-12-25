@@ -113,7 +113,7 @@ function start(client) {
             //Handle bot developer functions
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
-                await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, restUsers);
+                await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers);
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam);
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 await HAF.ping(client, bodyText, chatID, messageID)
