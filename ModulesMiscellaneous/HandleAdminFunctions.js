@@ -23,7 +23,6 @@ class HAF {
         if (bodyText.startsWith("שחרר קבוצה")) {
             const groupIdIndex = restGroups.indexOf(chatID);
             restGroups.splice(groupIdIndex, 1);
-            restGroupsSpam.splice(groupIdIndex, 1);
             await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
         }
     }
