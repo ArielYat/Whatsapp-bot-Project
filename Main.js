@@ -15,8 +15,7 @@ const wa = require("@open-wa/wa-automate");
 const IsraelSchedule = require('node-schedule');
 
 //Local storage of data to not require access to the database at all times (cache)
-let groupsDict = {}, usersDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [],
-    restUsersCommandSpam = [];
+let groupsDict = {}, usersDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [], restUsersCommandSpam = [];
 //Group & user rest intervals
 const groupFilterCounterResetInterval = 15 * 60 * 1000; //When to reset the filters counter (in ms); 15 min
 const userCommandCounterResetInterval = 15 * 60 * 1000; //When to reset the command counter (in ms); 20 min
@@ -113,7 +112,7 @@ function start(client) {
             //Handle bot developer functions
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
-                await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, restUsers);
+                await HAF.handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, restUsers, restUsersCommandSpam);
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam);
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 await HAF.ping(client, bodyText, chatID, messageID)
@@ -208,17 +207,15 @@ function start(client) {
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
                         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-                            usersDict[authorID].addToCommandCounter();
+                        usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
                         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
                         usersDict[authorID].addToCommandCounter();
                     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
-                        if(message.quotedMsgObj != null){
+                        if (message.quotedMsgObj != null)
                             await HSi.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
-                        }
-                        else{
+                        else
                             await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
-                        }
                         usersDict[authorID].addToCommandCounter();
                     } //else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
                     //     await HW.sendLink(client, chatID, groupsDict);

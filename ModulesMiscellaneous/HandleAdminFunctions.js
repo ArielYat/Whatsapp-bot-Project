@@ -1,5 +1,5 @@
 class HAF {
-    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, quotedMsgAuthor, restUsers) {
+    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsgID, quotedMsgAuthor, restUsers, restUsersCommandSpam) {
         if (quotedMsgID != null) {
             if (bodyText.startsWith("חסום גישה למשתמש")) {
                 restUsers.push(quotedMsgAuthor);
@@ -7,8 +7,8 @@ class HAF {
                     "נחסם בהצלחה, \n May God have mercy on your soul", messageID);
             }
             if (bodyText.startsWith("אפשר גישה למשתמש")) {
-                const userIdIndex = restUsers.indexOf(quotedMsgAuthor);
-                restUsers.splice(userIdIndex, 1);
+                restUsers.splice(restUsers.indexOf(quotedMsgAuthor), 1);
+                restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(quotedMsgAuthor), 1);
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + "שוחרר בהצלחה", messageID);
             }
         }
@@ -20,9 +20,8 @@ class HAF {
             await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
         }
         if (bodyText.startsWith("שחרר קבוצה")) {
-            const groupIdIndex = restGroups.indexOf(chatID);
-            restGroups.splice(groupIdIndex, 1);
-            restGroupsSpam.splice(groupIdIndex, 1);
+            restGroups.splice(restGroups.indexOf(chatID), 1);
+            restGroupsSpam.splice(restGroupsSpam.indexOf(chatID), 1);
             await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
         }
     }
