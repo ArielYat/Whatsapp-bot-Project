@@ -1,5 +1,5 @@
 class HAF {
-    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers, restUsersCommandSpam) {
+    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers, restUsersCommandSpam, user) {
         if (quotedMsg != null) {
             let quotedMsgAuthor = quotedMsg.author
             if (bodyText.startsWith("חסום גישה למשתמש")) {
@@ -10,12 +10,13 @@ class HAF {
             if (bodyText.startsWith("אפשר גישה למשתמש")) {
                 restUsers.splice(restUsers.indexOf(quotedMsgAuthor), 1);
                 restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(quotedMsgAuthor), 1);
+                user.commandCounter = 0;
                 await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " שוחרר בהצלחה", messageID);
             }
         }
     }
 
-    static async handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsSpam) {
+    static async handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsSpam, group) {
         if (bodyText.startsWith("חסום קבוצה")) {
             restGroups.push(chatID);
             await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
@@ -23,6 +24,7 @@ class HAF {
         if (bodyText.startsWith("שחרר קבוצה")) {
             restGroups.splice(restGroups.indexOf(chatID), 1);
             restGroupsSpam.splice(restGroupsSpam.indexOf(chatID), 1);
+            group.filterCounter = 0;
             await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
         }
     }
