@@ -42,8 +42,8 @@ class HURL {
             let counter = 0;
             const dataParsed = parsedRes.data.attributes.last_analysis_results;
             for (let attribute in dataParsed) {
-                if (dataParsed.attribute.result !== "clean" && dataParsed.attribute.result !== "unrated") {
-                    prettyAnswerString += (attribute + ": " + dataParsed.attribute.result) + "\n";
+                if (dataParsed[attribute].result !== "clean" && dataParsed[attribute].result !== "unrated") {
+                    prettyAnswerString += (attribute + ": " + dataParsed[attribute].result) + "\n";
                     counter++;
                 }
             }

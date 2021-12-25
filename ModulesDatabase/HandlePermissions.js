@@ -3,42 +3,44 @@ const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 class HP {
     static async setPermissionLevelOfFunctions(client, bodyText, personPermission, permissionFunctions, groupsDict, chatID, messageID) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
-        const textArray = bodyText.split("-");
-        let permissionType = textArray[0].trim();
-        let newPermissionLevel = textArray[1].trim();
-        switch (permissionType) {
-            case HL.getGroupLang(groupsDict, chatID, "filters"):
-                permissionType = "filters"
-                break;
-            case HL.getGroupLang(groupsDict, chatID, "tags"):
-                permissionType = "tags"
-                break;
-            case HL.getGroupLang(groupsDict, chatID, "handleFilters"):
-                permissionType = "handleFilters"
-                break;
-            case HL.getGroupLang(groupsDict, chatID, "handleTags"):
-                permissionType = "handleTags"
-                break;
-            case HL.getGroupLang(groupsDict, chatID, "handleBirthdays"):
-                permissionType = "handleBirthdays"
-                break;
-            case HL.getGroupLang(groupsDict, chatID, "handleOthers"):
-                permissionType = "handleOthers"
-                break;
-            default:
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
-                return;
-        }
-        let currentPermissionLevel = permissionFunctions[permissionType];
-        if (newPermissionLevel <= personPermission && currentPermissionLevel <= personPermission && newPermissionLevel > 0) {
-            groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
-            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_reply"), messageID);
-            await HDB.delArgsFromDB(chatID, permissionType, "groupPermissions", function () {
-                HDB.addArgsToDB(chatID, permissionType, newPermissionLevel, null, "groupPermissions", function () {
-                    console.log(permissionType + "Permission changed successful on group" + chatID);
+        if(bodyText.includes("-")) {
+            const textArray = bodyText.split("-");
+            let permissionType = textArray[0].trim();
+            let newPermissionLevel = textArray[1].trim();
+            switch (permissionType) {
+                case HL.getGroupLang(groupsDict, chatID, "filters"):
+                    permissionType = "filters"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "tags"):
+                    permissionType = "tags"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "handleFilters"):
+                    permissionType = "handleFilters"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "handleTags"):
+                    permissionType = "handleTags"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "handleBirthdays"):
+                    permissionType = "handleBirthdays"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "handleOthers"):
+                    permissionType = "handleOthers"
+                    break;
+                default:
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
+                    return;
+            }
+            let currentPermissionLevel = permissionFunctions[permissionType];
+            if (newPermissionLevel <= personPermission && currentPermissionLevel <= personPermission && newPermissionLevel > 0) {
+                groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_reply"), messageID);
+                await HDB.delArgsFromDB(chatID, permissionType, "groupPermissions", function () {
+                    HDB.addArgsToDB(chatID, permissionType, newPermissionLevel, null, "groupPermissions", function () {
+                        console.log(permissionType + "Permission changed successful on group" + chatID);
+                    });
                 });
-            });
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
+        }else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
     static async checkPermissionLevels(groupsDict, chatID, callback) {
