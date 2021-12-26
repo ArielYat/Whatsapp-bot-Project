@@ -27,7 +27,7 @@ const botDevs = ["972586809911@c.us", "972543293155@c.us"]; //The bot developer'
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, function () {
-    wa.create({headless: false, multiDevice: true}).then(client => start(client));
+    wa.create({headless: false, multiDevice: true, useChrome:true}).then(client => start(client));
 });
 
 //Reset filters counter for all groups every [groupFilterCounterResetInterval] minutes (automatic)
@@ -70,7 +70,7 @@ function start(client) {
     //Check every module every time a message is received
     client.onMessage(async message => {
             if (message != null) {
-                const chatID = message.chat.id, authorID = message.author, messageID = message.id;
+                const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
                 let bodyText, quotedMsgID;
                 //define quotedMsgID depending on if a message was quoted
                 if (message.quotedMsg != null)
