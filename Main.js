@@ -116,7 +116,7 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions"))) { //Handle people function permissions
         await HP.showGroupFunctionsPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions"))) { //Handle show function permissions
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_user_permissions"))) { //Handle show function permissions
         await HP.showGroupUsersPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
     } //else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
@@ -129,13 +129,16 @@ async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filters
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
+        return false;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filters
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
+        return false;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filters
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
-    }
+        return false;
+    } else return true;
 }
 
 async function HandleTags(client, bodyText, chatID, authorID, messageID) {
@@ -192,6 +195,7 @@ function start(client) {
             if (message != null) {
                 const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
                 let bodyText, quotedMsgID;
+                let checkFilters = true;
                 const doesAuthorIDEqualPersonID = (person) => authorID === person.personID;
                 //define quotedMsgID depending on if a message was quoted
                 if (message.quotedMsg != null)
@@ -256,7 +260,7 @@ function start(client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
                         await HandleShows(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
-                        await HandleFilters(client, bodyText, chatID, authorID, messageID);
+                    checkFilters = await HandleFilters(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
                         await HandleTags(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
@@ -264,7 +268,7 @@ function start(client) {
                     await HandleHelp(client, bodyText, chatID, authorID, messageID);
                     //If the group the message was sent in isn't blocked and no filter altering commands were used, check filters
                     if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
-                        && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
+                        && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"] && checkFilters)
                         await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam)
                 }
             }

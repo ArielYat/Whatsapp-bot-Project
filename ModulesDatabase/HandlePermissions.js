@@ -123,9 +123,9 @@ class HP {
     static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
         let permString = "";
         for (let user in groupsDict[chatID].personsIn) {
-            permString += "@" + user.replace("@c.us", "") + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
+            permString += "@" + groupsDict[chatID].personsIn[user].personID.replace("@c.us", "") + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
         }
-        client.reply(chatID, permString, messageID)
+        client.sendReplyWithMentions(chatID, permString, messageID)
     }
 }
 
