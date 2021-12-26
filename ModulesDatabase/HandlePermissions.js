@@ -23,8 +23,11 @@ class HP {
                 case HL.getGroupLang(groupsDict, chatID, "handleBirthdays"):
                     permissionType = "handleBirthdays"
                     break;
-                case HL.getGroupLang(groupsDict, chatID, "handleOthers"):
-                    permissionType = "handleOthers"
+                case HL.getGroupLang(groupsDict, chatID, "handleShows"):
+                    permissionType = "handleShows"
+                    break;
+                case HL.getGroupLang(groupsDict, chatID, "handleImmediate"):
+                    permissionType = "handleImmediate"
                     break;
                 default:
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
@@ -109,10 +112,18 @@ class HP {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_participant_chosen_error"), messageID);
     }
 
-    static async getGroupsPermFunc(client, chatID, messageID, groupsDict) {
+    static async showGroupFunctionsPermissions(client, chatID, messageID, groupsDict) {
         let permString = "";
         for (let permission in groupsDict[chatID].functionPermissions) {
             permString += permission + " - " + groupsDict[chatID].functionPermissions[permission] + "\n";
+        }
+        client.reply(chatID, permString, messageID)
+    }
+
+    static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
+        let permString = "";
+        for (let user in groupsDict[chatID].personsIn) {
+            permString += "@" + user.replace("@c.us", "") + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
         }
         client.reply(chatID, permString, messageID)
     }

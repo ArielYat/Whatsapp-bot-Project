@@ -16,7 +16,13 @@ class group {
         this.#personsIn = [];
         this.#filterCounter = 0;
         this.#functionPermissions = {
-            "filters": "1", "handleFilters": "1", "handleBirthdays": "1", "tags": "1", "handleTags": "1", "handleOthers": "1",
+            "filters": "1",
+            "tags": "1",
+            "handleImmediate": "1",
+            "handleShows": "1",
+            "handleFilters": "1",
+            "handleTags": "1",
+            "handleBirthdays": "1",
         };
         this.#groupAdmins = [];
     }
