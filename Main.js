@@ -1,13 +1,13 @@
-//version 2.0
+//version 2.1
 
 //Files for the different modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
     HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
-    HSi = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
+    HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
-    Group = require("./Group"), Person = require("./Person"),
-    Strings = require("./Strings.js").strings; //HW = require("/Website/HandleWebsite")
+    HW = require("/Users/ethan/WebstormProjects/Whatsapp-bot-Project/ModuleWebsite/HandleWebsite"), Strings = require("./Strings.js").strings,
+    Group = require("./Classes/Group"), Person = require("./Classes/Person");
 
 //Whatsapp API module
 const wa = require("@open-wa/wa-automate");
@@ -95,9 +95,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].addToCommandCounter();
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
         if (message.quotedMsgObj != null) {
-            await HSi.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
+            await HSt.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
         } else {
-            await HSi.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
+            await HSt.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
         }
         usersDict[authorID].addToCommandCounter();
     }
@@ -119,10 +119,10 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_user_permissions"))) { //Handle show function permissions
         await HP.showGroupUsersPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].addToCommandCounter();
-    } //else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
-    //     await HW.sendLink(client, chatID, groupsDict);
-    //     usersDict[authorID].addToCommandCounter();
-    // }
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
+        await HW.sendLink(client, chatID, groupsDict);
+        usersDict[authorID].addToCommandCounter();
+    }
 }
 
 async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
@@ -197,18 +197,11 @@ function start(client) {
                 let bodyText, quotedMsgID;
                 let checkFilters = true;
                 const doesAuthorIDEqualPersonID = (person) => authorID === person.personID;
-                //define quotedMsgID depending on if a message was quoted
-                if (message.quotedMsg != null)
-                    quotedMsgID = message.quotedMsg.id;
-                else
-                    quotedMsgID = message.id;
-                //Define bodyText depending on the message type
-                if (message.type === "image")
-                    bodyText = message.caption; //if the message is a text message
-                if (bodyText === undefined)
-                    bodyText = message.text;
-                else
-                    bodyText = message.text; //if the message is a media message
+                //Define quotedMsgID depending on if a message was quoted
+                quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
+                //Define bodeText depending on if the message a text message or a media message
+                bodyText = message.type === "image" || message.type === "video" ? message.caption : undefined;
+                bodyText = bodyText === undefined ? message.text : message.text;
 
                 //Create new group/person/properties if they don't exist
                 if (!(chatID in groupsDict))
@@ -249,6 +242,7 @@ function start(client) {
                     if (usersDict[authorID].commandCounter === userCommandLimit) {
                         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
                         restUsersCommandSpam.push(authorID);
+                        return;
                     }
                     //If not, check all the functions if the user has a high enough permission level
                     if (usersDict[authorID].permissionLevel[chatID] >= 2)

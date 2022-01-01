@@ -1,6 +1,6 @@
 const HL = require("../ModulesDatabase/HandleLanguage");
 
-class HSi {
+class HSt {
     static async handleStickers(client, message, chatID, messageID, messageType, groupsDict) {
         if (messageType === "image") {
             const mediaData = await client.decryptMedia(message);
@@ -12,4 +12,4 @@ class HSi {
     }
 }
 
-module.exports = HSi;
+module.exports = HSt;

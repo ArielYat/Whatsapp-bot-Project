@@ -1,6 +1,6 @@
 class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers, restUsersCommandSpam, user) {
-        if (quotedMsg != null) {
+        if (quotedMsg) {
             let quotedMsgAuthor = quotedMsg.author
             if (bodyText.startsWith("חסום גישה למשתמש")) {
                 restUsers.push(quotedMsgAuthor);
@@ -31,12 +31,13 @@ class HAF {
 
     static async handleBotJoin(client, bodyText, chatID, messageID) {
         if (bodyText.startsWith("הצטרף לקבוצה ")) {
-            const found = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
-            if (found != null) {
+            const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
+            if (urlsInMessage) {
                 try {
-                    await client.joinGroupViaLink(found[0]);
-                } catch (e) {
-                    await client.reply(chatID, "אני חושב שהקישור לא בתוקף", messageID);
+                    for (const url in urlsInMessage)
+                        await client.joinGroupViaLink(url);
+                } catch (err) {
+                    await client.reply(chatID, "אני חושב שהקישור/ים לא בתוקף", messageID);
                 }
             } else await client.reply(chatID, "מאסטר! הההודעה הזו לא מכילה קישור לקבוצה!", messageID);
         }

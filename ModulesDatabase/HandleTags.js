@@ -10,9 +10,8 @@ class HT {
         for (let i = 0; i < splitText.length; i++) {
             for (const tag in tags) {
                 let splitTextForChecking = splitText[i];
-                if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו") {
+                if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו")
                     splitTextForChecking = splitText[i].slice(1);
-                }
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
@@ -28,8 +27,7 @@ class HT {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
-            const tag = bodyText[0].trim();
-            const phoneNumber = bodyText[1].trim();
+            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim();
             const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
             if (groupsDict[chatID].personsIn != null && (groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
@@ -66,7 +64,7 @@ class HT {
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
-        if (!!Object.keys(groupsDict[chatID].tags).length) {
+        if (Object.keys(groupsDict[chatID].tags).length) {
             let stringForSending = "";
             let tags = groupsDict[chatID].tags;
             Object.entries(tags).forEach(([key, value]) => {

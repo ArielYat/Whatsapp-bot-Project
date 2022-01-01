@@ -32,9 +32,8 @@ class HF {
                 for (let j = 0; j < regexTemp.length; j++) {
                     let regexTempTest = regexTemp[j].replace("[", "");
                     regexTempTest = regexTempTest.replace("]", "");
-                    if (regexTempTest in groupsDict[chatID].tags) {
+                    if (regexTempTest in groupsDict[chatID].tags)
                         filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
-                    }
                 }
             }
             if (!groupsDict[chatID].doesFilterExist(filter)) {
@@ -90,7 +89,7 @@ class HF {
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {
-        if (!!Object.keys(groupsDict[chatID].filters).length) {
+        if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
             Object.entries(filters).forEach(([key, value]) => {

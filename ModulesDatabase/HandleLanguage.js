@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), Strings = require("../Strings.js").strings;
 const util = require("util");
 
-class HandleLanguage {
+class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
         let lang, textArray = bodyText.split(" ");
 
@@ -10,7 +10,7 @@ class HandleLanguage {
                 ? "en" : textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
                     ? "la" : null;
 
-        if (lang !== null) {
+        if (lang) {
             await HDB.delArgsFromDB(chatID, null, "lang", async function () {
                 await HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
                     groupsDict[chatID].groupLanguage = lang;
@@ -41,4 +41,4 @@ class HandleLanguage {
     }
 }
 
-module.exports = HandleLanguage;
+module.exports = HL;

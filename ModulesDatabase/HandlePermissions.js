@@ -5,8 +5,7 @@ class HP {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
         if (bodyText.includes("-")) {
             const textArray = bodyText.split("-");
-            let permissionType = textArray[0].trim();
-            let newPermissionLevel = textArray[1].trim();
+            let permissionType = textArray[0].trim(), newPermissionLevel = textArray[1].trim();
             switch (permissionType) {
                 case HL.getGroupLang(groupsDict, chatID, "filters"):
                     permissionType = "filters"
@@ -33,8 +32,7 @@ class HP {
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
                     return;
             }
-            let currentPermissionLevel = permissionFunctions[permissionType];
-            if (newPermissionLevel <= personPermission && currentPermissionLevel <= personPermission && newPermissionLevel > 0) {
+            if (newPermissionLevel <= personPermission && permissionFunctions[permissionType] <= personPermission && newPermissionLevel > 0) {
                 groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_reply"), messageID);
                 await HDB.delArgsFromDB(chatID, permissionType, "groupPermissions", function () {
@@ -47,8 +45,8 @@ class HP {
     }
 
     static async checkPermissionLevels(groupsDict, chatID, callback) {
+        const developerPerm = 3, mutedPerm = 0;
         for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
-            const developerPerm = 3, mutedPerm = 0;
             if (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
                 groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== mutedPerm.toString()) {
                 await this.checkPermissionOfPerson(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
@@ -78,9 +76,8 @@ class HP {
     static async muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         bodyText = bodyText.split(" ");
         if (bodyText.length === 2) {
-            let personTag = bodyText[1].trim();
-            let personID = personTag.replace("@", "");
-            personID += "@c.us";
+            const personTag = bodyText[1].trim();
+            const personID = personTag.replace("@", "") + "@c.us";
             const isIDEqualPersonID = (person) => personID === person.personID;
             if ((groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
@@ -99,9 +96,8 @@ class HP {
     static async unmuteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         bodyText = bodyText.split(" ");
         if (bodyText.length === 3) {
-            let personTag = bodyText[2].trim();
-            let personID = personTag.replace("@", "");
-            personID += "@c.us";
+            const personTag = bodyText[2].trim();
+            const personID = personTag.replace("@", "") + "@c.us";
             const isIDEqualPersonID = (person) => personID === person.personID;
             if ((groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
@@ -114,18 +110,16 @@ class HP {
 
     static async showGroupFunctionsPermissions(client, chatID, messageID, groupsDict) {
         let permString = "";
-        for (let permission in groupsDict[chatID].functionPermissions) {
+        for (let permission in groupsDict[chatID].functionPermissions)
             permString += permission + " - " + groupsDict[chatID].functionPermissions[permission] + "\n";
-        }
         client.reply(chatID, permString, messageID)
     }
 
     static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
         let permString = "";
-        for (let user in groupsDict[chatID].personsIn) {
+        for (let user in groupsDict[chatID].personsIn)
             permString += "@" + groupsDict[chatID].personsIn[user].personID.replace("@c.us", "") + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
-        }
-        client.sendReplyWithMentions(chatID, permString, messageID)
+        await client.sendReplyWithMentions(chatID, permString, messageID)
     }
 }
 
