@@ -53,9 +53,9 @@ This command can be used in the message the media was sent in and as a reply to 
 - `Scan [link]` - scans the given link for viruses.
 For example: Scan https://www.google.com/.
 - `Send link` - sends a link to the bots webpage (work in progress).
-Create a WhatsApp survey:
+- Create a WhatsApp survey:
 ```
-- Create survey
+Create survey
 Title - [survey title]
 Subtitle - [survey subtitle]
 Third Title - [third title]
