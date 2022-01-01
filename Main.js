@@ -13,7 +13,6 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
 const wa = require("@open-wa/wa-automate");
 //Schedule module
 const IsraelSchedule = require('node-schedule');
-
 //Local storage of data to not require access to the database at all times (cache)
 let groupsDict = {}, usersDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [],
     restUsersCommandSpam = [];
