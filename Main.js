@@ -6,7 +6,8 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HW = require("/Users/ethan/WebstormProjects/Whatsapp-bot-Project/ModuleWebsite/HandleWebsite"), Strings = require("./Strings.js").strings,
+    HW = require("/Users/ethan/WebstormProjects/Whatsapp-bot-Project/ModuleWebsite/HandleWebsite"),
+    Strings = require("./Strings.js").strings,
     Group = require("./Classes/Group"), Person = require("./Classes/Person");
 
 //Whatsapp API module
@@ -80,7 +81,10 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter += 1;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
-        await HT.checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter += 1;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "check_tags"))) {
+        await HT.messagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter += 1;
     }
 }
@@ -253,7 +257,7 @@ function start(client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
                         await HandleShows(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
-                    checkFilters = await HandleFilters(client, bodyText, chatID, authorID, messageID);
+                        checkFilters = await HandleFilters(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
                         await HandleTags(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])

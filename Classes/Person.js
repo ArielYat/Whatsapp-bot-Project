@@ -4,6 +4,7 @@ class Person {
     #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
     #birthdayGroups;
     #commandCounter;
+    #messagesTaggedIn;
 
     constructor(personID) {
         this.#personID = personID;
@@ -11,6 +12,7 @@ class Person {
         this.#birthday = [];
         this.#birthdayGroups = [];
         this.#commandCounter = 0;
+        this.#messagesTaggedIn = {};
     }
 
     get personID() {
@@ -55,9 +57,13 @@ class Person {
         this.#commandCounter = number;
     }
 
-    doesBirthdayExist() {
-        return !!this.#birthday.length;
+    get messagesTaggedIn() {
+        return this.#messagesTaggedIn;
     }
+
+    set messagesTaggedIn(number) {
+        this.#messagesTaggedIn = number;
+    }y
 }
 
 module.exports = Person;

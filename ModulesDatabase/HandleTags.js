@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HT {
-    static async checkTags(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
+    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
@@ -15,6 +15,10 @@ class HT {
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
+                    usersDict[authorID].messagesTaggedIn.push({
+                        chatID: chatID,
+                        messageID: messageID
+                    });
                 }
             }
         }
@@ -56,11 +60,22 @@ class HT {
     static async tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         let stringForSending = "";
-        Object.entries(groupsDict[chatID].personsIn).forEach(element => {
-            stringForSending += "@" + element[1].personID.replace("@c.us", "") + "\n";
+        Object.entries(groupsDict[chatID].personsIn).forEach(person => {
+            stringForSending += "@" + person[1].personID.replace("@c.us", "") + "\n";
         });
         stringForSending += "\n" + bodyText;
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
+    }
+
+    static async messagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
+        for (const chat in usersDict[authorID].messagesTaggedIn) {
+            if (chat === chatID) {
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"),
+                    usersDict[authorID].messagesTaggedIn[chat]);
+                delete usersDict[authorID].messagesTaggedIn[chat];
+                break;
+            }
+        }
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
