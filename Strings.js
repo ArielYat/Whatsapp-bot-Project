@@ -91,7 +91,7 @@ class Strings {
             "he": "בדוק היכן תייגוני", "en": "Check for tagged messages", "la": null
         }, "check_tags_reply": {
             "he": "הנה תיוגך, אדוני הטוב",
-            "en": "You've been tagged here, O' Great Sir",
+            "en": "You've been tagged here, Good Sir",
             "la": null
         }, "check_tags_no_messages_error": {
             "he": "לא תוייגת מאז ההפעלה האחרונה שלי",

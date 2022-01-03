@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HT {
-    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
+    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
@@ -15,10 +15,6 @@ class HT {
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
-                    usersDict[authorID].messagesTaggedIn.push({
-                        chatID: chatID,
-                        messageID: messageID
-                    });
                 }
             }
         }
@@ -67,11 +63,22 @@ class HT {
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
     }
 
+    static async logMessagesWithTags(bodyText, chatID, messageID, usersDict) {
+        const tagsFound = bodyText.match(/@[\d]+/g);
+        if (tagsFound) {
+            for (let tag in tagsFound) {
+                usersDict[tag.replace("@", "") + "@c.us"].messagesTaggedIn.push({
+                    chatID: chatID,
+                    messageID: messageID
+                });
+            }
+        }
+    }
+
     static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
         for (const {chat, message} in usersDict[authorID].messagesTaggedIn) {
             if (chat === chatID) {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"),
-                    message);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), message);
                 delete usersDict[authorID].messagesTaggedIn[chatID];
                 return;
             }
