@@ -63,7 +63,7 @@ class Person {
 
     set messagesTaggedIn(number) {
         this.#messagesTaggedIn = number;
-    }y
+    }
 }
 
 module.exports = Person;
