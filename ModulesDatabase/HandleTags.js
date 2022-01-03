@@ -67,11 +67,11 @@ class HT {
         await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
     }
 
-    static async messagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
-        for (const chat in usersDict[authorID].messagesTaggedIn) {
+    static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
+        for (const {chat, message} in usersDict[authorID].messagesTaggedIn) {
             if (chat === chatID) {
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"),
-                    usersDict[authorID].messagesTaggedIn[chatID]);
+                    message);
                 delete usersDict[authorID].messagesTaggedIn[chatID];
                 return;
             }
