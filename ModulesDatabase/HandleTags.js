@@ -64,7 +64,7 @@ class HT {
     }
 
     static async logMessagesWithTags(bodyText, chatID, messageID, usersDict) {
-        const tagsFound = bodyText.match(/@[\d]+/g);
+        const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
                 usersDict[tag.replace("@", "") + "@c.us"].messagesTaggedIn.push({
