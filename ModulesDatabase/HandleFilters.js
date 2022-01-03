@@ -9,7 +9,7 @@ class HF {
             if (bodyText.includes(word)) {
                 if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                     (location + word.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
-                    groupsDict[chatID].addToFilterCounter();
+                    groupsDict[chatID].filterCounter += 1;
                     if (groupsDict[chatID].filterCounter < groupFilterLimit)
                         await client.sendReplyWithMentions(chatID, filters[word], messageID);
                     else if (groupsDict[chatID].filterCounter === groupFilterLimit) {

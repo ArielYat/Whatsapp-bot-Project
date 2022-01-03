@@ -58,10 +58,6 @@ class Person {
     doesBirthdayExist() {
         return !!this.#birthday.length;
     }
-
-    addToCommandCounter() {
-        this.#commandCounter++;
-    }
 }
 
 module.exports = Person;

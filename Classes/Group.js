@@ -105,10 +105,6 @@ class group {
     doesTagExist(tag) {
         return this.#tags.hasOwnProperty(tag);
     }
-
-    addToFilterCounter() {
-        this.#filterCounter++;
-    }
 }
 
 module.exports = group;
