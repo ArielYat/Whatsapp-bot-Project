@@ -89,13 +89,13 @@ class Strings {
             "he": "הראה רשימת חברים לתיוג", "en": "Show tag buddies", "la": "Ostende amici"
         }, "check_tags": {
             "he": "בדוק היכן תייגוני", "en": "Check for tagged messages", "la": null
-        }, "check_tags_no_messages_error": {
-            "he": "לא תוייגת מאז ההפעלה האחרונה שלי",
-            "en": "You haven't been tagged since the last time I was restarted",
-            "la": null
         }, "check_tags_reply": {
             "he": "הנה תיוגך, אדוני הטוב",
             "en": "You've been tagged here, O' Great Sir",
+            "la": null
+        }, "check_tags_no_messages_error": {
+            "he": "לא תוייגת מאז ההפעלה האחרונה שלי",
+            "en": "You haven't been tagged since the last time I was restarted",
             "la": null
         }, //birthdays
         "birthday_wishes_reply": {

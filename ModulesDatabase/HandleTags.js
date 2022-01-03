@@ -71,11 +71,12 @@ class HT {
         for (const chat in usersDict[authorID].messagesTaggedIn) {
             if (chat === chatID) {
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"),
-                    usersDict[authorID].messagesTaggedIn[chat]);
-                delete usersDict[authorID].messagesTaggedIn[chat];
-                break;
+                    usersDict[authorID].messagesTaggedIn[chatID]);
+                delete usersDict[authorID].messagesTaggedIn[chatID];
+                return;
             }
         }
+        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), usersDict[authorID].messagesTaggedIn[chatID]);
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
