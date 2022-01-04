@@ -61,9 +61,8 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
         groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
         await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
             HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-                console.log("groupAdmins added successfully");
-                HP.checkPermissionLevels(groupsDict, chatID, function () {
-                    HP.setPermissionLevelOfFunctions(client, bodyText, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict, chatID, messageID);
+                HP.checkGroupUsersPermissionLevels(groupsDict, chatID, function () {
+                    HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
                 });
             });
         });
@@ -230,7 +229,7 @@ function start(client) {
                     });
                 }
                 if (!(chatID in usersDict[authorID].permissionLevel))
-                    await HP.checkPermissionOfPerson(groupsDict[chatID], usersDict[authorID], chatID);
+                    await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
 
                 //Handle bot developer functions
                 if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
