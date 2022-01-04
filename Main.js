@@ -237,7 +237,7 @@ function start(client) {
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                     await HAF.ping(client, bodyText, chatID, messageID)
                 }
-                //Log messages with tags, for later use in HT.whichMessagesTaggedIn()
+                //Log messages with tags for later use in HT.whichMessagesTaggedIn()
                 await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
                 //If the user who sent the message isn't blocked, proceed to regular modules
                 if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
