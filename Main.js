@@ -7,7 +7,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
     HC = require("./ModulesImmediate/HandleCryptocurrency.js"),
-    HW = require("/Users/ethan/WebstormProjects/Whatsapp-bot-Project/ModuleWebsite/HandleWebsite"),
+    HW = require("./ModuleWebsite/HandleWebsite"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 
 //Whatsapp API module
