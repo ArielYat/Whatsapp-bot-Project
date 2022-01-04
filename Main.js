@@ -113,7 +113,7 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
         await HT.showTags(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthdays"))) { //Handle show birthdays
-        await HB.showBirthdays(client, chatID, messageID, groupsDict, usersDict)
+        await HB.showBirthdays(client, chatID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions"))) { //Handle people function permissions
         await HP.showGroupFunctionsPermissions(client, chatID, messageID, groupsDict);
@@ -155,7 +155,7 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
 
 async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
-        await HB.addBirthday(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict)
+        await HB.addBirthday(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
         await HB.remBirthday(client, bodyText, authorID, chatID, messageID, groupsDict, usersDict);
