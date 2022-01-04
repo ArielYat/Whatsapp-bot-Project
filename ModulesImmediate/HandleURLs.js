@@ -1,9 +1,8 @@
 const nvt = require('node-virustotal'), time = require("usleep"), HL = require("../ModulesDatabase/HandleLanguage");
-const urlRegex = /(([hH])ttps?:\/\/[^\s]+)/g;
 
 class HURL {
     static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
-        const urlsInMessage = bodyText.match(urlRegex);
+        const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             urlsInMessage.forEach(function (url) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");

@@ -1,4 +1,4 @@
-//version 2.1
+//version 2.2
 
 //Files for the different modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
@@ -6,9 +6,9 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
+    HC = require("./ModulesImmediate/HandleCryptocurrency.js"),
     HW = require("/Users/ethan/WebstormProjects/Whatsapp-bot-Project/ModuleWebsite/HandleWebsite"),
-    Strings = require("./Strings.js").strings,
-    Group = require("./Classes/Group"), Person = require("./Classes/Person");
+    Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 
 //Whatsapp API module
 const wa = require("@open-wa/wa-automate");
@@ -90,17 +90,23 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
 }
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
-        await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
-        usersDict[authorID].commandCounter++;
-    } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
-        await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
-        usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
+    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
         if (message.quotedMsgObj)
             await HSt.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
         else
             await HSt.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
+        await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) {
+        await HC.fetchCryptocurrency(client, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
+        await HW.sendLink(client, chatID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
+        await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -120,9 +126,6 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_user_permissions"))) { //Handle show function permissions
         await HP.showGroupUsersPermissions(client, chatID, messageID, groupsDict);
-        usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
-        await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -278,7 +281,6 @@ function start(client) {
     // });
 }
 
-//TODO: check where a user was last tagged
 //TODO: images/gifs/videos/stickers as filters
 //TODO: Dictionary/translations
 //TODO: check cryptocurrencies

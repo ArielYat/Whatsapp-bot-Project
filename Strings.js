@@ -250,28 +250,23 @@ class Strings {
             "he": /כותרת - (.)+/,
             "en": /Title - (.)+/,
             "la": /Nomen - (.)+/
-        },
-        "survey_subtitle": {
+        }, "survey_subtitle": {
             "he": /כותרת משנה - (.)+/,
             "en": /Subtitle - (.)+/,
             "la": /Subnomen - (.)+/
-        },
-        "third_survey_title": {
+        }, "third_survey_title": {
             "he": /כותרת שלישית - (.)+/,
             "en": /Third title - (.)+/,
             "la": /Nomen tertium - (.)+/
-        },
-        "survey_button_1": {
+        }, "survey_button_1": {
             "he": /כפתור 1 - (.)+/,
             "en": /Button 1 - (.)+/,
             "la": /Buttonus 1 - (.)+/
-        },
-        "survey_button_2": {
+        }, "survey_button_2": {
             "he": /כפתור 2 - (.)+/,
             "en": /Button 2 - (.)+/,
             "la": /Buttonus 2 - (.)+/
-        },
-        "survey_button_3": {
+        }, "survey_button_3": {
             "he": /כפתור 3 - (.)+/,
             "en": /Button 3 - (.)+/,
             "la": /Buttonus 3 - (.)+/
@@ -291,6 +286,17 @@ class Strings {
             "he": "אני צריך כותרת, כותרת משנה ולפחות כפתור אחד בשביל ליצור סקר",
             "en": "I need a title, a body and at least one button to make a survey",
             "la": "Necessitudines sunt nomen atque subnomen atque buttonus namque census"
+        }, //Cryptocurrencies
+        "check_crypto": {
+            "he": "בדוק קריפטו", "en": "Check Crypto", "la": null
+        }, "crypto_check_reply": {
+            "he": "הנה השטויות שביקשת: \n %s",
+            "en": "Here's the junk you requsted: \n %s",
+            "la": "Hoc non est similacrum"
+        }, "crypto_check_error": {
+            "he": "נתקלתי בבעיה איפהשהו בדרך",
+            "en": "I've ran into a problem somewhere along the way",
+            "la": "Hoc non est similacrum"
         }, //website
         "show_webpage": {
             "he": "שלח קישור", "en": "Send link", "la": "Ostende situs texti"
