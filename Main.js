@@ -266,7 +266,7 @@ function start(client) {
                     //If the group the message was sent in isn't blocked and no filter altering commands were used, check filters
                     if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
                         && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"] && checkFilters)
-                        await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam)
+                        await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
                 }
             }
         }
