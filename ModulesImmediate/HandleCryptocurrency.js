@@ -1,5 +1,5 @@
-import requestInfo from "node-fetch";
-import HL from "../ModulesDatabase/HandleLanguage";
+const requestInfo = require("node-fetch");
+const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HC {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
