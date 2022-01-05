@@ -15,10 +15,7 @@ class HT {
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
-                    usersDict[tags[tag] + "@c.us"].messagesTaggedIn.push({
-                        chatID: chatID,
-                        messageID: messageID
-                    });
+                    usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
                 }
             }
         }
@@ -82,21 +79,17 @@ class HT {
         const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
-                usersDict[tag.replace("@", "") + "@c.us"].messagesTaggedIn.push({
-                    chatID: chatID,
-                    messageID: messageID
-                });
+                usersDict[tag.replace("@", "") + "@c.us"].messagesTaggedIn[chatID].push(messageID);
             }
         }
     }
 
     static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
-        for (const {chat, message} in usersDict[authorID].messagesTaggedIn) {
-            if (chat === chatID) {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), message);
-                delete usersDict[authorID].messagesTaggedIn[chatID];
-                return;
-            }
+        if(usersDict[authorID].messagesTaggedIn[chatID] != null) {
+            usersDict[authorID].messagesTaggedIn[chatID].forEach(messageID =>
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), messageID),
+                    delete usersDict[authorID].messagesTaggedIn[chatID],
+            );
         }
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), usersDict[authorID].messagesTaggedIn[chatID]);
     }

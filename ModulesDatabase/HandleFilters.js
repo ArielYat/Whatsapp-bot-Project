@@ -77,8 +77,10 @@ class HF {
                 }
                 if (groupsDict[chatID].doesFilterExist(filter)) {
                     groupsDict[chatID].filters = ["edit", filter, filter_reply]
-                    await HDB.chaArgsInDB(chatID, filter, filter_reply, null, "filters", function () {
-                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
+                    await HDB.delArgsFromDB(chatID, filter, "filters", function () {
+                        HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
+                        });
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_error"), messageID);
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);

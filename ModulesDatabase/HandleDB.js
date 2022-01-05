@@ -1,6 +1,5 @@
 const Group = require("../Classes/Group"), Person = require("../Classes/Person"), HL = require("./HandleLanguage");
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
-
 class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
@@ -106,64 +105,6 @@ class HDB {
         });
     }
 
-    static async chaArgsInDB(ID, value1, value2, value3, argType, callback) {
-        let objectToChangeInDataBase;
-        MongoClient.connect(url, function (err, client) {
-            if (err) {
-                console.log(err + " in chaArgsInDB");
-                return;
-            }
-            switch (argType) {
-                case "filters":
-                    objectToChangeInDataBase = {ID: ID, filter: value1, filter_reply: value2};
-                    break;
-                case "tags":
-                    objectToChangeInDataBase = {ID: ID, name: value1, phone_number: value2};
-                    break;
-                case "birthday":
-                    objectToChangeInDataBase = {ID: ID, birthDay: value1, birthMonth: value2, birthYear: value3};
-                    break;
-                case "lang":
-                    objectToChangeInDataBase = {ID: ID, lang: value1};
-                    break;
-                case "perm":
-                    objectToChangeInDataBase = {ID: ID, author: value1, perm: value2};
-                    break;
-                case "personBirthdayGroups":
-                    objectToChangeInDataBase = {ID: ID, authorID: value1};
-                    break;
-                case "groupPermissions":
-                    objectToChangeInDataBase = {ID: ID, key: value1, perm: value2}; //key == function. Yatskan is a moron
-                    break;
-                case "personIn":
-                    objectToChangeInDataBase = {ID: ID, personID: value1};
-                    break;
-                case "groupAdmins":
-                    objectToChangeInDataBase = {ID: ID, adminsArray: value1};
-                    break;
-            }
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
-                argType === "personIn" || argType === "groupAdmins")
-                argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
-                argType += "-persons"
-            client.db("WhatsappBotDB").collection(argType).deleteOne(objectToChangeInDataBase, function (err) {
-                if (err) {
-                    console.log(err + " in chaArgsInDB-deleteOne");
-                    return;
-                }
-                client.db("WhatsappBotDB").collection(argType).insertOne(objectToChangeInDataBase, function (err) {
-                    if (err) {
-                        console.log(err + " in chaArgsInDB-insertOne");
-                        return;
-                    }
-                    callback();
-                    client.close();
-                });
-            });
-        });
-    }
-
     static async GetAllGroupsFromDB(groupsDict, usersDict, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
@@ -246,6 +187,8 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createGroupFilter(result[i]);
+                callback();
+                client.close();
             });
             dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
@@ -311,8 +254,6 @@ class HDB {
                 for (let i = 0; i < result.length; i++)
                     createPersonGroupsBirthDays(result[i]);
             });
-            callback();
-            client.close();
         });
     }
 
@@ -415,6 +356,7 @@ class HDB {
         waClient.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_person_from_db_reply", messageID, true));
         delete usersDict[personID];
     }
-}
 
+}
 module.exports = HDB;
+
