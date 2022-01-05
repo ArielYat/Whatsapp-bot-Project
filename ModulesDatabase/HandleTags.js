@@ -60,7 +60,18 @@ class HT {
             stringForSending += "@" + person[1].personID.replace("@c.us", "") + "\n";
         });
         stringForSending += "\n" + bodyText;
-        await client.sendTextWithMentions(chatID, stringForSending, quotedMsgID);
+        await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
+    }
+
+    static async showTags(client, chatID, messageID, groupsDict) {
+        if (Object.keys(groupsDict[chatID].tags).length) {
+            let stringForSending = "";
+            let tags = groupsDict[chatID].tags;
+            Object.entries(tags).forEach(([key, value]) => {
+                stringForSending += key + " - " + value + "\n";
+            });
+            await client.reply(chatID, stringForSending, messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
     static async logMessagesWithTags(bodyText, chatID, messageID, usersDict) {
@@ -84,17 +95,6 @@ class HT {
             }
         }
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), usersDict[authorID].messagesTaggedIn[chatID]);
-    }
-
-    static async showTags(client, chatID, messageID, groupsDict) {
-        if (Object.keys(groupsDict[chatID].tags).length) {
-            let stringForSending = "";
-            let tags = groupsDict[chatID].tags;
-            Object.entries(tags).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
-            });
-            await client.reply(chatID, stringForSending, messageID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 }
 
