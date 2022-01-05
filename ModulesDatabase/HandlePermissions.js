@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HP {
-    static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, permissionFunctions, groupsDict) {
+    static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, functionPermissions, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
         if (bodyText.includes("-")) {
             const textArray = bodyText.split("-");
@@ -32,7 +32,7 @@ class HP {
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
                     return;
             }
-            if (newPermissionLevel <= personPermission && permissionFunctions[permissionType] <= personPermission && newPermissionLevel > 0) {
+            if (newPermissionLevel <= personPermission && functionPermissions[permissionType] <= personPermission && newPermissionLevel > 0) {
                 await HDB.chaArgsInDB(chatID, permissionType, newPermissionLevel, null, "groupPermissions", async function () {
                     groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_reply"), messageID);
@@ -41,7 +41,7 @@ class HP {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
-    static async checkGroupUsersPermissionLevels(groupsDict, chatID, callback) {
+    static async checkGroupUsersPermissionLevels(groupsDict, chatID) {
         const developerPerm = 3, mutedPerm = 0;
         for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
             if (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
@@ -49,7 +49,6 @@ class HP {
                 await this.autoAssignPersonPermissions(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
             }
         }
-        callback()
     }
 
     static async autoAssignPersonPermissions(group, person, chatID) {
@@ -84,8 +83,7 @@ class HP {
         bodyText = bodyText.split(" ");
         if (bodyText.length === 3) {
             const personTag = bodyText[2].trim(), personID = personTag.replace("@", "") + "@c.us";
-            const isIDEqualPersonID = (person) => personID === person.personID;
-            if ((groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
+            if ((groupsDict[chatID].personsIn.some((person) => personID === person.personID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
                     await this.autoAssignPersonPermissions(groupsDict[chatID], usersDict[personID], chatID);
                     await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "unmute_participant_reply", personTag), messageID);

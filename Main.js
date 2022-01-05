@@ -1,6 +1,6 @@
 //version 2.2
 
-//Files for the different modules
+//Command Modules
 const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDatabase/HandleLanguage"),
     HURL = require("./ModulesImmediate/HandleURLs"), HF = require("./ModulesDatabase/HandleFilters"),
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
@@ -8,21 +8,19 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
     HC = require("./ModulesImmediate/HandleCryptocurrency.js"), HW = require("./ModuleWebsite/HandleWebsite"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
-
-//Whatsapp API module
-const wa = require("@open-wa/wa-automate");
-//Schedule module
-const IsraelSchedule = require('node-schedule');
-//Local storage of data to not require access to the database at all times (cache)
+//Open-Whatsapp and Schedule libraries
+const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
+//Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [],
     restUsersCommandSpam = [];
 //Group & user rest intervals
-const groupFilterCounterResetInterval = 5 * 60 * 1000; //When to reset the filters counter (in ms); 5 min
-const userCommandCounterResetInterval = 5 * 60 * 1000; //When to reset the command counter (in ms); 5 min
-const groupFilterRestResetInterval = 15 * 60 * 1000; //When to reset the groups in rest by filters spamming (in ms); 15 min
-const userCommandRestResetInterval = 15 * 60 * 1000; //When to reset the users in rest by command spamming (in ms); 15 min
-const groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
-const botDevs = ["972586809911@c.us", "972543293155@c.us"]; //The bot developer's IDs
+const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filters counter (in ms); 5 min
+    userCommandCounterResetInterval = 5 * 60 * 1000, //When to reset the command counter (in ms); 5 min
+    groupFilterRestResetInterval = 15 * 60 * 1000, //When to reset the groups in rest by filters spamming (in ms); 15 min
+    userCommandRestResetInterval = 15 * 60 * 1000, //When to reset the users in rest by command spamming (in ms); 15 min
+    groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
+//The bot developer's whatsapp IDs
+const botDevs = ["972586809911@c.us", "972543293155@c.us"];
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, function () {
@@ -56,87 +54,82 @@ setInterval(function () {
 }, userCommandRestResetInterval)
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) {
-        groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-        await HDB.chaArgsInDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-            HP.checkGroupUsersPermissionLevels(groupsDict, chatID, function () {
-                HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
-            });
-        });
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) {
+        await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "mute_participant"))) {
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "mute_participant"))) {
         await HP.muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "unmute_participant"))) {
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "unmute_participant"))) {
         await HP.unmuteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     }
 }
 
 async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tagging everyone
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tagging everyone
         await HT.tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
         await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "check_tags"))) {
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "check_tags"))) {
         await HT.whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     }
 }
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
         if (message.quotedMsgObj)
             await HSt.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
         else
             await HSt.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.includes(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle URLs
         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) {
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) {
         await HC.fetchCryptocurrency(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle surveys
         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
 
 async function HandleShows(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_filters"))) {//Handle show filters
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_filters"))) {//Handle show filters
         await HF.showFilters(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_tags"))) { //Handle show tags
         await HT.showTags(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_birthdays"))) { //Handle show birthdays
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_birthdays"))) { //Handle show birthdays
         await HB.showBirthdays(client, chatID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions"))) { //Handle people function permissions
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions"))) { //Handle people function permissions
         await HP.showGroupFunctionsPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "show_group_user_permissions"))) { //Handle show function permissions
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "show_group_user_permissions"))) { //Handle show function permissions
         await HP.showGroupUsersPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
 
 async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filters
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle add filters
         await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filters
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle remove filters
         await HF.remFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filters
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle edit filters
         await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
@@ -144,26 +137,26 @@ async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
 }
 
 async function HandleTags(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tags
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "add_tag"))) { //Handle add tags
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tags
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle remove tags
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
 
 async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
+    if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "add_birthday"))) { //Handle add birthday
         await HB.addBirthday(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "remove_birthday"))) { //Handle remove birthday
         await HB.remBirthday(client, bodyText, authorID, chatID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "add_birthday_to_group"))) { //Handle add this group birthday
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "add_birthday_to_group"))) { //Handle add this group birthday
         await HB.addCurrentGroupToBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "remove_birthday_from_group"))) { //Handle remove this group birthday
+    } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "remove_birthday_from_group"))) { //Handle remove this group birthday
         await HB.remCurrentGroupFromBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     }
@@ -173,9 +166,9 @@ async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
     if (bodyText === (HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.startsWith(Strings["change_language"]["he"]) ||
-        bodyText.startsWith(Strings["change_language"]["en"]) ||
-        bodyText.startsWith(Strings["change_language"]["la"])) { //Handle language change
+    } else if (bodyText.test(Strings["change_language"]["he"]) ||
+        bodyText.test(Strings["change_language"]["en"]) ||
+        bodyText.test(Strings["change_language"]["la"])) { //Handle language change
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
@@ -194,58 +187,52 @@ function start(client) {
     });
     //Check every module every time a message is received
     client.onMessage(async message => {
-            if (message != null) {
-                const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
-                let bodyText, quotedMsgID;
-                let checkFilters = true;
-                const doesAuthorIDEqualPersonID = (person) => authorID === person.personID;
-                //Define quotedMsgID depending on if a message was quoted
-                quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
-                //Define bodeText depending on if the message a text message or a media message
-                bodyText = message.type === "image" || message.type === "video" ? message.caption : undefined;
-                bodyText = bodyText === undefined ? message.text : message.text;
+        if (message != null) {
+            const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
+            const currentGroupAdmins = await client.getGroupAdmins(chatID);
+            let bodyText, quotedMsgID, checkFilters = true;
+            //Define quotedMsgID depending on if a message was quoted
+            quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
+            //Define bodeText depending on if the message a text message or a media message
+            bodyText = message.type === "image" || message.type === "video" ? message.caption : undefined;
+            bodyText = bodyText === undefined ? message.text : message.text;
 
-                //Create new group/person/properties if they don't exist
-                if (!(chatID in groupsDict))
-                    groupsDict[chatID] = new Group(chatID);
-                if (!(authorID in usersDict))
-                    usersDict[authorID] = new Person(authorID);
-                if (groupsDict[chatID].groupAdmins !== await client.getGroupAdmins(chatID)) {
-                    groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-                    await HDB.chaArgsInDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-                        console.log("groupAdmins added successfully");
-                    });
-                }
-                if (!(groupsDict[chatID].personsIn.some(doesAuthorIDEqualPersonID))) {
-                    await HDB.chaArgsInDB(chatID, authorID, null, null, "personIn", function () {
-                        groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
-                        console.log("person added successfully");
-                    });
-                }
-                if (!(chatID in usersDict[authorID].permissionLevel))
-                    await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
-
-                //Handle bot developer functions
-                if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
-                    usersDict[authorID].permissionLevel[chatID] = 3;
-                    await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
-                    await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
-                    await HAF.handleBotJoin(client, bodyText, chatID, messageID);
-                    await HAF.ping(client, bodyText, chatID, messageID)
-                }
-                //Log messages with tags for later use in HT.whichMessagesTaggedIn()
-                await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
-                //If the user who sent the message isn't blocked, proceed to regular modules
-                if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
-                    //If the user used too many commands, put them on a cool down
-                    if (usersDict[authorID].commandCounter === userCommandLimit) {
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
-                        restUsersCommandSpam.push(authorID);
-                        return;
-                    }
-                    //If not, check all the functions if the user has a high enough permission level
-                    if (usersDict[authorID].permissionLevel[chatID] >= 2)
-                        await HandlePermissions(client, bodyText, chatID, authorID, messageID);
+            //Create new group/person if they don't exist in the DB
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            if (!(authorID in usersDict))
+                usersDict[authorID] = new Person(authorID);
+            //Add author to group's DB if not already in it
+            if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
+                await HDB.chaArgsInDB(chatID, authorID, null, null, "personIn", function () {
+                    groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
+                });
+            }
+            //Update group admins if they aren't updated
+            if (groupsDict[chatID].groupAdmins !== currentGroupAdmins) {
+                groupsDict[chatID].groupAdmins = currentGroupAdmins;
+                await HDB.chaArgsInDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                    HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+                });
+            }
+            //Handle bot developer functions if the author is a dev
+            if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
+                usersDict[authorID].permissionLevel[chatID] = 3;
+                await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
+                await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
+                await HAF.handleBotJoin(client, bodyText, chatID, messageID);
+                await HAF.ping(client, bodyText, chatID, messageID)
+            }
+            //Log messages with tags for later use in HT.whichMessagesTaggedIn()
+            await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
+            //If the user who sent the message isn't blocked, check for commands
+            if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
+                //If the user used too many commands, put them on a cool down
+                if (usersDict[authorID].commandCounter === userCommandLimit) {
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
+                    restUsersCommandSpam.push(authorID);
+                } else { //If not, check all the main subfunctions for commands
+                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleImmediate"])
@@ -258,15 +245,21 @@ function start(client) {
                         await HandleTags(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
                         await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
-                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
-                    //If the group the message was sent in isn't blocked and no filter altering commands were used, check filters
-                    if (!restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
-                        && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"] && checkFilters)
-                        await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
+                    if (usersDict[authorID].permissionLevel[chatID] >= 2)
+                        await HandlePermissions(client, bodyText, chatID, authorID, messageID);
                 }
             }
+            //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters
+            if (checkFilters && !restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
+                && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
+                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
+            //Delete group/person from DB
+            if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "delete_group_from_db")) && usersDict[authorID].permissionLevel[chatID] >= 2)
+                await HDB.deleteGroupFromDB(client, groupsDict, chatID, messageID);
+            else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "delete_person_from_db")))
+                await HDB.deletePersonFromDB(client, usersDict, authorID, groupsDict, chatID, messageID);
         }
-    );
+    });
     // //clean unneeded groups from cache
     // client.onRemovedFromGroup().then(chat => {
     //     delete groupsDict[chat]; // !! delete does not change array length (remember for the future)
@@ -276,5 +269,4 @@ function start(client) {
 
 //TODO: images/gifs/videos/stickers as filters
 //TODO: Dictionary/translations
-//TODO: check cryptocurrencies
-//TODO: a function to reset a group's DB/part of it
+//TODO: a reminder function
