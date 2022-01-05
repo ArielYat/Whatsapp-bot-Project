@@ -6,8 +6,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HC = require("./ModulesImmediate/HandleCryptocurrency.js"),
-    HW = require("./ModuleWebsite/HandleWebsite"),
+    HC = require("./ModulesImmediate/HandleCryptocurrency.js"), HW = require("./ModuleWebsite/HandleWebsite"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 
 //Whatsapp API module
@@ -59,13 +58,12 @@ setInterval(function () {
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) {
         groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-        await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
-            HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-                HP.checkGroupUsersPermissionLevels(groupsDict, chatID, function () {
-                    HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
-                });
+        await HDB.chaArgsInDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+            HP.checkGroupUsersPermissionLevels(groupsDict, chatID, function () {
+                HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
             });
         });
+        usersDict[authorID].commandCounter++;
     } else if (bodyText.startsWith(HL.getGroupLang(groupsDict, chatID, "mute_participant"))) {
         await HP.muteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
@@ -212,20 +210,16 @@ function start(client) {
                     groupsDict[chatID] = new Group(chatID);
                 if (!(authorID in usersDict))
                     usersDict[authorID] = new Person(authorID);
-                if (groupsDict[chatID].groupAdmins.length === 0) {
+                if (groupsDict[chatID].groupAdmins !== await client.getGroupAdmins(chatID)) {
                     groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-                    await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
-                        HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-                            console.log("groupAdmins added successfully");
-                        });
+                    await HDB.chaArgsInDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                        console.log("groupAdmins added successfully");
                     });
                 }
                 if (!(groupsDict[chatID].personsIn.some(doesAuthorIDEqualPersonID))) {
-                    groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
-                    await HDB.delArgsFromDB(chatID, authorID, "personIn", function () {
-                        HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
-                            console.log("person added successfully");
-                        });
+                    await HDB.chaArgsInDB(chatID, authorID, null, null, "personIn", function () {
+                        groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
+                        console.log("person added successfully");
                     });
                 }
                 if (!(chatID in usersDict[authorID].permissionLevel))

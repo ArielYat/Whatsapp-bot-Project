@@ -27,18 +27,17 @@ class HF {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
             let filter_reply = bodyText[1].trim();
-            let regexTemp = filter_reply.match(regex);
-            if (regexTemp != null) {
-                for (let j = 0; j < regexTemp.length; j++) {
-                    let regexTempTest = regexTemp[j].replace("[", "");
-                    regexTempTest = regexTempTest.replace("]", "");
-                    if (regexTempTest in groupsDict[chatID].tags)
-                        filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
+            const regexMatch = filter_reply.match(regex);
+            if (regexMatch) {
+                for (let j = 0; j < regexMatch.length; j++) {
+                    let testTag = regexMatch[j].replace("[", "").replace("]", "");
+                    if (testTag in groupsDict[chatID].tags)
+                        filter_reply = filter_reply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
                 }
             }
             if (!groupsDict[chatID].doesFilterExist(filter)) {
-                groupsDict[chatID].filters = ["add", filter, filter_reply];
                 await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
+                    groupsDict[chatID].filters = ["add", filter, filter_reply];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error",
@@ -51,8 +50,8 @@ class HF {
         const filter = bodyText.trim();
         if (groupsDict[chatID].filters) {
             if (groupsDict[chatID].doesFilterExist(filter)) {
-                groupsDict[chatID].filters = ["delete", filter];
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
+                    groupsDict[chatID].filters = ["delete", filter];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist_error"), messageID);
@@ -78,10 +77,8 @@ class HF {
                 }
                 if (groupsDict[chatID].doesFilterExist(filter)) {
                     groupsDict[chatID].filters = ["edit", filter, filter_reply]
-                    await HDB.delArgsFromDB(chatID, filter, "filters", function () {
-                        HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
-                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
-                        });
+                    await HDB.chaArgsInDB(chatID, filter, filter_reply, null, "filters", function () {
+                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_error"), messageID);
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);

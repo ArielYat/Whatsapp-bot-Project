@@ -31,8 +31,8 @@ class HT {
             const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
             if (groupsDict[chatID].personsIn != null && (groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
-                    groupsDict[chatID].tags = ["add", tag, phoneNumber];
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
+                        groupsDict[chatID].tags = ["add", tag, phoneNumber];
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
                     });
                 } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_tag_already_exists_error", tag), messageID);
@@ -45,8 +45,8 @@ class HT {
         const tag = bodyText.trim();
         if (groupsDict[chatID].tags) {
             if (groupsDict[chatID].doesTagExist(tag)) {
-                groupsDict[chatID].tags = ["delete", tag]
                 await HDB.delArgsFromDB(chatID, tag, "tags", function () {
+                    groupsDict[chatID].tags = ["delete", tag]
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_tag_doesnt_exist_error"), messageID);

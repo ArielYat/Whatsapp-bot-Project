@@ -11,10 +11,8 @@ class HL {
                     ? "la" : null;
 
         if (lang) {
-            await HDB.delArgsFromDB(chatID, null, "lang", async function () {
-                await HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
-                    groupsDict[chatID].groupLanguage = lang;
-                })
+            await HDB.chaArgsInDB(chatID, lang, null, null, "lang", async function () {
+                groupsDict[chatID].groupLanguage = lang;
                 if (lang === "he")
                     await client.sendText(chatID, Strings["language_change_reply"]["he"]);
                 else if (lang === "en")

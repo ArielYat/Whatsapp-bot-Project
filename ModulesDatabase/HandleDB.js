@@ -38,8 +38,8 @@ class HDB {
                     objectToAddToDataBase = {ID: ID, adminsArray: value1};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" ||
-                argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+                argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
                 argType += "-persons"
@@ -90,8 +90,8 @@ class HDB {
                     objectToDelInDataBase = {ID: ID};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" ||
-                argType === "groupPermissions" || argType === "personIn" || argType === "groupAdmins")
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+                argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
                 argType += "-persons"
@@ -106,78 +106,136 @@ class HDB {
         });
     }
 
+    static async chaArgsInDB(ID, value1, value2, value3, argType, callback) {
+        let objectToChangeInDataBase;
+        MongoClient.connect(url, function (err, client) {
+            if (err) {
+                console.log(err + " in chaArgsInDB");
+                return;
+            }
+            switch (argType) {
+                case "filters":
+                    objectToChangeInDataBase = {ID: ID, filter: value1, filter_reply: value2};
+                    break;
+                case "tags":
+                    objectToChangeInDataBase = {ID: ID, name: value1, phone_number: value2};
+                    break;
+                case "birthday":
+                    objectToChangeInDataBase = {ID: ID, birthDay: value1, birthMonth: value2, birthYear: value3};
+                    break;
+                case "lang":
+                    objectToChangeInDataBase = {ID: ID, lang: value1};
+                    break;
+                case "perm":
+                    objectToChangeInDataBase = {ID: ID, author: value1, perm: value2};
+                    break;
+                case "personBirthdayGroups":
+                    objectToChangeInDataBase = {ID: ID, authorID: value1};
+                    break;
+                case "groupPermissions":
+                    objectToChangeInDataBase = {ID: ID, key: value1, perm: value2}; //key == function. Yatskan is a moron
+                    break;
+                case "personIn":
+                    objectToChangeInDataBase = {ID: ID, personID: value1};
+                    break;
+                case "groupAdmins":
+                    objectToChangeInDataBase = {ID: ID, adminsArray: value1};
+                    break;
+            }
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+                argType === "personIn" || argType === "groupAdmins")
+                argType += "-groups";
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
+                argType += "-persons"
+            client.db("WhatsappBotDB").collection(argType).deleteOne(objectToChangeInDataBase, function (err) {
+                if (err) {
+                    console.log(err + " in chaArgsInDB-deleteOne");
+                    return;
+                }
+                client.db("WhatsappBotDB").collection(argType).insertOne(objectToChangeInDataBase, function (err) {
+                    if (err) {
+                        console.log(err + " in chaArgsInDB-insertOne");
+                        return;
+                    }
+                    callback();
+                    client.close();
+                });
+            });
+        });
+    }
+
     static async GetAllGroupsFromDB(groupsDict, usersDict, callback) {
         function createGroupFilter(object) {
-            let ID = object.ID, filter = object.filter, filterReply = object.filter_reply;
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].filters = ["add", filter, filterReply];
+            let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].filters = ["add", filter, filterReply];
         }
 
         function creatGroupAdmins(object) {
-            let ID = object.ID, adminsArray = object.adminsArray;
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].groupAdmins = adminsArray;
+            let chatID = object.ID, adminsArray = object.adminsArray;
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].groupAdmins = adminsArray;
         }
 
         function createGroupTag(object) {
-            let ID = object.ID, name = object.name, phoneNumber = object.phone_number;
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].tags = ["add", name, phoneNumber];
+            let chatID = object.ID, name = object.name, phoneNumber = object.phone_number;
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].tags = ["add", name, phoneNumber];
         }
 
         function createPersonBirthday(object) {
-            let ID = object.ID, birthDay = object.birthDay, birthMonth = object.birthMonth,
+            let personID = object.ID, birthDay = object.birthDay, birthMonth = object.birthMonth,
                 birthYear = object.birthYear;
-            if (!(ID in usersDict))
-                usersDict[ID] = new Person(ID);
-            usersDict[ID].birthday = ["add", birthDay, birthMonth, birthYear];
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            usersDict[personID].birthday = ["add", birthDay, birthMonth, birthYear];
         }
 
         function createGroupLang(object) {
-            let ID = object.ID, language = object.lang;
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].groupLanguage = language;
+            let chatID = object.ID, language = object.lang;
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].groupLanguage = language;
         }
 
         function createPersonPerm(document) {
-            let ID = document.ID, author = document.author, permission = document.perm;
-            if (!(author in usersDict))
-                usersDict[author] = new Person(author);
-            usersDict[author].permissionLevel[ID] = permission;
+            let chatID = document.ID, personID = document.author, permission = document.perm;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            usersDict[personID].permissionLevel[chatID] = permission;
         }
 
         function createPersonGroupsBirthDays(document) {
-            let ID = document.ID, authorID = document.authorID;
-            if (!(authorID in usersDict))
-                usersDict[authorID] = new Person(authorID);
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            usersDict[authorID].birthDayGroups = ["add", groupsDict[ID]];
+            let chatID = document.ID, personID = document.authorID;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            usersDict[personID].birthDayGroups = ["add", groupsDict[chatID]];
         }
 
         function createPersonIn(document) {
-            let ID = document.ID, personID = document.personID;
+            let chatID = document.ID, personID = document.personID;
             if (!(personID in usersDict))
                 usersDict[personID] = new Person(personID);
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].personsIn = ["add", usersDict[personID]];
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].personsIn = ["add", usersDict[personID]];
         }
 
         function createGroupPermissions(document) {
-            let ID = document.ID, key = document.key, permission = document.perm;
-            if (!(ID in groupsDict))
-                groupsDict[ID] = new Group(ID);
-            groupsDict[ID].functionPermissions = [key, permission]
+            let chatID = document.ID, func = document.key, permission = document.perm;
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            groupsDict[chatID].functionPermissions = [func, permission]
         }
 
         MongoClient.connect(url, function (err, client) {
             if (err) {
-                console.log(err + "addArgsToDB");
+                console.log(err + "in initial retrieval of groups from DB");
                 return;
             }
             const dbo = client.db("WhatsappBotDB");
