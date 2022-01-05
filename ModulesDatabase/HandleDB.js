@@ -1,5 +1,4 @@
 const Group = require("../Classes/Group"), Person = require("../Classes/Person"), HL = require("./HandleLanguage");
-const {useragent} = require("@open-wa/wa-automate");
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
 
 class HDB {
