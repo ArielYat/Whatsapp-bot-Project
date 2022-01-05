@@ -71,7 +71,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
-        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.test(HL.getGroupLang(groupsDict, chatID, "check_tags"))) {
         await HT.whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);

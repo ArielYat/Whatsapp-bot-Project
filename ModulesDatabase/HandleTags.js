@@ -1,7 +1,7 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 
 class HT {
-    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict) {
+    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
         let splitText = bodyText.split(" ");
@@ -15,6 +15,10 @@ class HT {
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
+                    usersDict[tags[tag] + "@c.us"].messagesTaggedIn.push({
+                        chatID: chatID,
+                        messageID: messageID
+                    });
                 }
             }
         }
