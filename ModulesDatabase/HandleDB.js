@@ -1,4 +1,4 @@
-const Group = require("../Classes/Group"), Person = require("../Classes/Person"), HL = require("./HandleLanguage");
+const Group = require("../Classes/Group"), Person = require("../Classes/Person")
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
 class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
@@ -257,7 +257,7 @@ class HDB {
         });
     }
 
-    static async deleteGroupFromDB(waClient, groupsDict, chatID, messageID) {
+    static async deleteGroupFromDB(groupsDict, chatID, callback) {
         MongoClient.connect(url, function (err, mongoClient) {
             const dbo = mongoClient.db("WhatsappBotDB");
             dbo.collection("filters-groups").find({}).toArray(function (err, result) {
@@ -316,12 +316,12 @@ class HDB {
                         dbo.collection("groupAdmins-groups").deleteOne(result[i]);
             });
             mongoClient.close();
+            callback()
         });
-        waClient.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_group_from_db_reply", messageID, true));
         delete groupsDict[chatID];
     }
 
-    static async deletePersonFromDB(waClient, usersDict, personID, groupsDict, chatID, messageID) {
+    static async deletePersonFromDB(usersDict, personID, callback) {
         MongoClient.connect(url, function (err, mongoClient) {
             const dbo = mongoClient.db("WhatsappBotDB");
             dbo.collection("birthday-persons").find({}).toArray(function (err, result) {
@@ -351,9 +351,9 @@ class HDB {
                     if (result[i].id === personID)
                         dbo.collection("personBirthdayGroups-persons").deleteOne(result[i]);
             });
+            callback()
             mongoClient.close();
         });
-        waClient.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_person_from_db_reply", messageID, true));
         delete usersDict[personID];
     }
 

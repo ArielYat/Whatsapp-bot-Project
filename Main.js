@@ -6,7 +6,7 @@ const HDB = require("./ModulesDatabase/HandleDB"), HL = require("./ModulesDataba
     HT = require("./ModulesDatabase/HandleTags"), HB = require("./ModulesDatabase/HandleBirthdays"),
     HSt = require("./ModulesImmediate/HandleStickers"), HSu = require("./ModulesImmediate/HandleSurveys"),
     HAF = require("./ModulesMiscellaneous/HandleAdminFunctions"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HC = require("./ModulesImmediate/HandleCryptocurrency.js"), HW = require("./ModuleWebsite/HandleWebsite"),
+    HFM = require("./ModulesImmediate/HandleFunModules"), HW = require("./ModuleWebsite/HandleWebsite"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
@@ -92,7 +92,10 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) {
-        await HC.fetchCryptocurrency(client, chatID, messageID, groupsDict);
+        await HFM.fetchCryptocurrency(client, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_word"))) {
+        await HFM.checkWordOnUrbanDictionary(client, chatID, bodyText, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle webpage link
         await HW.sendLink(client, chatID, groupsDict);
@@ -258,9 +261,13 @@ function start(client) {
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
             //Delete group/person from DB
             if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "delete_group_from_db")) && usersDict[authorID].permissionLevel[chatID] >= 2)
-                await HDB.deleteGroupFromDB(client, groupsDict, chatID, messageID);
+                await HDB.deleteGroupFromDB(client, groupsDict, chatID, messageID, function (){
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_group_from_db_reply"), messageID);
+            });
             else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "delete_person_from_db")))
-                await HDB.deletePersonFromDB(client, usersDict, authorID, groupsDict, chatID, messageID);
+                await HDB.deletePersonFromDB(client, usersDict, authorID, groupsDict, chatID, messageID, function (){
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_person_from_db_reply"), messageID);
+                });
         }
     });
     // //clean unneeded groups from cache

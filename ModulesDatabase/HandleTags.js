@@ -15,6 +15,9 @@ class HT {
                 if (splitTextForChecking === tag) {
                     counter += 1;
                     bodyText = bodyText.replace(tag, "@" + tags[tag]);
+                    if(usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] === undefined){
+                        usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
+                    }
                     usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
                 }
             }
@@ -79,19 +82,23 @@ class HT {
         const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
-                usersDict[tag.replace("@", "") + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                if(usersDict[tagsFound[tag].replace("@", "") + "@c.us"].messagesTaggedIn[chatID] === undefined){
+                    usersDict[tagsFound[tag].replace("@", "") + "@c.us"].messagesTaggedIn[chatID] = [];
+                }
+                usersDict[tagsFound[tag].replace("@", "") + "@c.us"].messagesTaggedIn[chatID].push(messageID);
             }
         }
     }
 
     static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
-        if(usersDict[authorID].messagesTaggedIn[chatID] != null) {
+        if(usersDict[authorID].messagesTaggedIn[chatID] !== undefined &&
+            usersDict[authorID].messagesTaggedIn[chatID].length !== 0) {
             usersDict[authorID].messagesTaggedIn[chatID].forEach(messageID =>
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), messageID),
                     delete usersDict[authorID].messagesTaggedIn[chatID],
             );
         }
-        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), usersDict[authorID].messagesTaggedIn[chatID]);
+        else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
     }
 }
 

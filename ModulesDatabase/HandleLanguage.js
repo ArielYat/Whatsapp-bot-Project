@@ -1,6 +1,6 @@
 const Strings = require("../Strings.js").strings;
 const util = require("util");
-const HDB = require("./HandleDB");
+const HDB = require("./HandleDB.js");
 
 class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {

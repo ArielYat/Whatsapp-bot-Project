@@ -290,6 +290,20 @@ class Strings {
             "he": "נתקלתי בבעיה איפהשהו בדרך",
             "en": "I've ran into a problem somewhere along the way",
             "la": "Hoc non est similacrum"
+        },"crypto_check_limit": {
+            "he": "אני מצטער אבל כל קבוצה יכולה לבדוק רק פעם אחת ביום את שער הקריפטו",
+            "en": null,
+            "la": null
+        },"search_word": {
+            "he": /^הגדרת אינטרנט/i, "en": null, "la": null
+        },"search_word_reply": {
+            "he": "הגדרה",
+            "en": "definition",
+            "la": null
+        },"search_word_error": {
+            "he": "לא נמצאות תוצאות למילה",
+            "en": null,
+            "la": null
         }, "show_webpage": {
             "he": /^שלח קישור לאתר/i, "en": /^Send website link/i, "la": "Ostende situs texti"
         }, "show_webpage_reply": {
