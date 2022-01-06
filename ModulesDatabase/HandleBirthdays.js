@@ -5,7 +5,7 @@ class HB {
         const today = new Date();
         const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(), yearToday = today.getFullYear();
         for (const person in usersDict) {
-            if (usersDict[person].birthday[0] === dayToday.toString() && usersDict[person].birthday[1] === monthToday.toString()) {
+            if (usersDict[person].birthday[0] === dayToday && usersDict[person].birthday[1] === monthToday) {
                 const age = yearToday - parseInt(usersDict[person].birthday[2]);
                 for (let group in usersDict[person].birthDayGroups) {
                     let personTag = usersDict[person].personID;
@@ -31,8 +31,7 @@ class HB {
                         usersDict[authorID].birthday = ["add", birthDay, birthMonth, birthYear];
                         client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", authorTag), messageID);
                     });
-                } else await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID,
-                    "add_birthday_already_exists_error", authorTag), messageID);
+                } else await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error", authorTag), messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
     }

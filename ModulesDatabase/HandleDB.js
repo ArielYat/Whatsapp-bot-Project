@@ -1,5 +1,6 @@
 const Group = require("../Classes/Group"), Person = require("../Classes/Person")
 const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
+
 class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
@@ -358,5 +359,6 @@ class HDB {
     }
 
 }
+
 module.exports = HDB;
 

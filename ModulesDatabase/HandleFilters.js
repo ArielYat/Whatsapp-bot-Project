@@ -1,5 +1,5 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
-const regex = new RegExp('\\[(.*?)\\]', "g");
+const regex = new RegExp('\\[(.*?)\]', "g");
 
 class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
@@ -40,8 +40,7 @@ class HF {
                     groupsDict[chatID].filters = ["add", filter, filter_reply];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error",
-                filter, filter_reply), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, filter_reply), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 

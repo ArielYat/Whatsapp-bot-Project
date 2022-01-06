@@ -1,6 +1,4 @@
-const Strings = require("../Strings.js").strings;
-const util = require("util");
-const HDB = require("./HandleDB.js");
+const HDB = require("./HandleDB.js"), Strings = require("../Strings.js").strings, util = require("util");
 
 class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
@@ -14,7 +12,7 @@ class HL {
         if (lang) {
             groupsDict[chatID].groupLanguage = lang;
             await HDB.delArgsFromDB(chatID, null, "lang", function () {
-                HDB.addArgsToDB(chatID, lang, null, null, "lang", function (){
+                HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
                     if (lang === "he")
                         client.sendText(chatID, Strings["language_change_reply"]["he"]);
                     else if (lang === "en")

@@ -73,8 +73,7 @@ class HP {
         bodyText = bodyText.split(" ");
         if (bodyText.length === 2) {
             const personTag = bodyText[1].trim(), personID = personTag.replace("@", "") + "@c.us";
-            const isIDEqualPersonID = (person) => personID === person.personID;
-            if ((groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
+            if ((groupsDict[chatID].personsIn.some((person) => personID === person.personID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
                     await HDB.delArgsFromDB(chatID, personID, "perm", function () {
                         HDB.addArgsToDB(chatID, personID.personsIn, 0, null, "perm", function () {
