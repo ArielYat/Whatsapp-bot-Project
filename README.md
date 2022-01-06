@@ -7,6 +7,7 @@
 - `Change language to [language]` - changes the language the bot receives and sends messages in. For example: Change
   language to Hebrew. This command can be used at all times in every language. Languages currently supported: Hebrew,
   English & Latin.
+- `Help` - shows the help message.
 
 ### [Filters](ModulesDatabase/HandleFilters.js)
 
