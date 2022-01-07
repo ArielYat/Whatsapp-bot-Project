@@ -6,8 +6,7 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
     HB = require("./ModulesDatabase/HandleBirthdays"), HSt = require("./ModulesImmediate/HandleStickers"),
     HAF = require("./ModulesDatabase/HandleAdminFunctions"), HL = require("./ModulesDatabase/HandleLanguage"),
     HSu = require("./ModulesImmediate/HandleSurveys"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HC = require("./ModulesImmediate/HandleCrypto"), HD = require("./ModulesImmediate/HandleDictionary"),
-    HW = require("./ModuleWebsite/HandleWebsite"),
+    HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
@@ -90,10 +89,13 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) { //Handle showing crypto
-        await HC.fetchCryptocurrency(client, chatID, messageID, groupsDict);
+        await HAPI.fetchCryptocurrency(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_word_in_urban"))) { //Handle searching words in https://www.urbandictionary.com
-        await HD.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_in_urban"))) { //Handle searching words in https://www.urbandictionary.com
+        await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate"))) { //Handle searching words in https://www.urbandictionary.com
+        await HAPI.Translate(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);
@@ -167,7 +169,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
 
 async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
     if (bodyText === (HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
-        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
+        await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) ||
         bodyText.match(Strings["change_language"]["en"]) ||
@@ -186,9 +188,11 @@ function start(client) {
     });
     //Reset the crypto check everyday at 00:00
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (const group in groupsDict)
+        for (const group in groupsDict) {
             groupsDict[group].cryptoCheckedToday = false;
-    })
+            groupsDict[group].translationCounter = 0;
+        }
+    });
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
         await client.sendText(chat.id, Strings["start_message"]["all"]);
@@ -264,7 +268,6 @@ function start(client) {
             if (checkFilters && !restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
                 && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
-
         }
     });
     // //clean unneeded groups from cache
@@ -274,5 +277,10 @@ function start(client) {
     // });
 }
 
-//TODO: Dictionary/translations
 //TODO: a reminder function
+//TODO: website
+//TODO: stock checking
+//TODO: something every day
+//TODO: send bus stop times
+//TODO: chess - lichess API?
+//TODO: XO against John?

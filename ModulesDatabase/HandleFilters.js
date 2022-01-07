@@ -29,34 +29,34 @@ class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
-        let filter = bodyText, filter_reply = null;
+        let filter = bodyText.trim(), filterReply = null;
         if (messageType === "image")
-            filter_reply = "image" + await client.decryptMedia(message);
+            filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
-            filter_reply = "video" + await client.decryptMedia(message);
-        else if (messageType === "text") {
+            filterReply = "video" + await client.decryptMedia(message);
+        else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
-                filter_reply = bodyText[1].trim();
-                const regexMatch = filter_reply.match(regex);
+                filterReply = bodyText[1].trim();
+                const regexMatch = filterReply.match(regex);
                 if (regexMatch) {
                     for (let j = 0; j < regexMatch.length; j++) {
                         let testTag = regexMatch[j].replace("[", "").replace("]", "");
                         if (testTag in groupsDict[chatID].tags)
-                            filter_reply = filter_reply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
+                            filterReply = filterReply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
                     }
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
         if (!groupsDict[chatID].doesFilterExist(filter)) {
-            if (filter_reply !== null) {
-                await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
-                    groupsDict[chatID].filters = ["add", filter, filter_reply];
+            if (filterReply !== null) {
+                await HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
+                    groupsDict[chatID].filters = ["add", filter, filterReply];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filter_reply), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, filter_reply), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filterReply), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, filterReply), messageID);
     }
 
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
@@ -76,38 +76,38 @@ class HF {
         const messageType = message !== message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
-        let filter = bodyText, filter_reply = null;
+        let filter = bodyText, filterReply = null;
         if (messageType === "image")
-            filter_reply = "image" + await client.decryptMedia(message);
+            filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
-            filter_reply = "video" + await client.decryptMedia(message);
+            filterReply = "video" + await client.decryptMedia(message);
         else if (messageType === "text") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
-                filter_reply = bodyText[1].trim();
+                filterReply = bodyText[1].trim();
                 if (groupsDict[chatID].filters) {
-                    let regexTemp = filter_reply.match(regex);
+                    let regexTemp = filterReply.match(regex);
                     if (regexTemp != null) {
                         for (let j = 0; j < regexTemp.length; j++) {
                             let regexTempTest = regexTemp[j].replace("[", "");
                             regexTempTest = regexTempTest.replace("]", "");
                             if (regexTempTest in groupsDict[chatID].tags)
-                                filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
+                                filterReply = filterReply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
                         }
                     }
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
         if (groupsDict[chatID].doesFilterExist(filter)) {
-            if (filter_reply !== null) {
+            if (filterReply !== null) {
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
-                    HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
-                        groupsDict[chatID].filters = ["edit", filter, filter_reply]
+                    HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
+                        groupsDict[chatID].filters = ["edit", filter, filterReply]
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
                     });
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filter_reply), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filterReply), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_not_existent_error"), messageID);
     }
 
@@ -115,8 +115,12 @@ class HF {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
-            Object.entries(filters).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
+            Object.entries(filters).forEach(([filter, filterReply]) => {
+                if (filterReply.startsWith("image"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
+                else if (filterReply.startsWith("video"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "video") + "\n";
+                else stringForSending += filter + " - " + filterReply + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
