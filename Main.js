@@ -184,7 +184,7 @@ async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
 function start(client) {
     //Check if there are birthday everyday at 4 am
     IsraelSchedule.tz = 'Israel'; //Time zone
-    IsraelSchedule.scheduleJob('4 2 * * *', async () => {
+    IsraelSchedule.scheduleJob('0 4 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
         for(const group in groupsDict){
             groupsDict[group].cryptoCheckedToday = false;
