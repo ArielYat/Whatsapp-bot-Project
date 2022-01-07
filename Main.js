@@ -126,9 +126,9 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
     }
 }
 
-async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
+async function HandleFilters(client, message, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle adding filters
-        await HF.addFilter(client, bodyText, chatID, messageID, groupsDict);
+        await HF.addFilter(client, message, bodyText, chatID, messageID, message.type, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle removing filters
@@ -136,7 +136,7 @@ async function HandleFilters(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle editing filters
-        await HF.editFilter(client, bodyText, chatID, messageID, groupsDict);
+        await HF.editFilter(client, message, bodyText, chatID, messageID, message.type, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else return true;
@@ -182,14 +182,16 @@ async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
 
 //Main function
 function start(client) {
-    //Check if there are birthday everyday at 4 am
+    //Check if there are birthdays everyday at 4 am
     IsraelSchedule.tz = 'Israel'; //Time zone
     IsraelSchedule.scheduleJob('0 4 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
-        for(const group in groupsDict){
-            groupsDict[group].cryptoCheckedToday = false;
-        }
     });
+    //Reset the crypto check everyday at 00:00
+    IsraelSchedule.scheduleJob('0 0 * * *', async () => {
+        for (const group in groupsDict)
+            groupsDict[group].cryptoCheckedToday = false;
+    })
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
         await client.sendText(chat.id, Strings["start_message"]["all"]);
@@ -202,8 +204,7 @@ function start(client) {
             //Define quotedMsgID depending on if a message was quoted
             quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
             //Define bodeText depending on if the message a text message or a media message
-            bodyText = message.type === "image" || message.type === "video" ? message.caption : undefined;
-            bodyText = bodyText === undefined ? message.text : message.text;
+            bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
 
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
@@ -253,7 +254,7 @@ function start(client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
                         await HandleShows(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
-                        checkFilters = await HandleFilters(client, bodyText, chatID, authorID, messageID);
+                        checkFilters = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
                         await HandleTags(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
@@ -276,6 +277,5 @@ function start(client) {
     // });
 }
 
-//TODO: images/gifs/videos/stickers as filters
 //TODO: Dictionary/translations
 //TODO: a reminder function
