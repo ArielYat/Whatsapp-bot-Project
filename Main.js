@@ -134,7 +134,7 @@ async function HandleFilters(client, message, bodyText, chatID, authorID, messag
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle editing filters
-        await HF.addFilter(client, message, bodyText, chatID, messageID, groupsDict);
+        await HF.editFilter(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else return true;
@@ -204,8 +204,8 @@ function start(client) {
             //Define quotedMsgID depending on if a message was quoted
             quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
             //Define bodeText depending on if the message a text message or a media message
-            bodyText = message.type === "text" ? message.text : message.caption;
-
+            bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
+            bodyText = bodyText === undefined ? message.text : bodyText;
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
                 groupsDict[chatID] = new Group(chatID);

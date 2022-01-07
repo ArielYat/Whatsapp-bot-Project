@@ -78,7 +78,7 @@ class HF {
     }
 
     static async editFilter(client, message, bodyText, chatID, messageID, groupsDict) {
-        const messageType = message !== message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
+        const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
         let filter = bodyText, filterReply = null;
@@ -86,7 +86,7 @@ class HF {
             filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
             filterReply = "video" + await client.decryptMedia(message);
-        else if (messageType === "text") {
+        else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
