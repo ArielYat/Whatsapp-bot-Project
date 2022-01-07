@@ -11,7 +11,7 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
-let groupsDict = {}, usersDict = {}, restUsers = [], restGroups = [], restGroupsFilterSpam = [],
+let groupsDict = {}, usersDict = {}, restGroups = [], restUsers = [], restGroupsFilterSpam = [],
     restUsersCommandSpam = [];
 //Group & user rest intervals
 const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filters counter (in ms); 5 min
@@ -19,8 +19,7 @@ const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filte
     groupFilterRestResetInterval = 15 * 60 * 1000, //When to reset the groups in rest by filters spamming (in ms); 15 min
     userCommandRestResetInterval = 15 * 60 * 1000, //When to reset the users in rest by command spamming (in ms); 15 min
     groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
-//The bot developer's whatsapp IDs
-const botDevs = ["972586809911@c.us", "972543293155@c.us"];
+const botDevs = ["972586809911@c.us", "972543293155@c.us"]; //The bot developer's whatsapp IDs
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, function () {
@@ -269,6 +268,7 @@ function start(client) {
                 && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
         }
+
     });
     // //clean unneeded groups from cache
     // client.onRemovedFromGroup().then(chat => {
@@ -279,6 +279,7 @@ function start(client) {
 
 //TODO: a reminder function
 //TODO: website
+//TODO: search on ME
 //TODO: stock checking
 //TODO: something every day
 //TODO: send bus stop times
