@@ -1,5 +1,5 @@
 const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
-const regex = new RegExp('\\[(.*?)\\]', "g");
+const regex = new RegExp('\\[(.*?)\]', "g");
 
 class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
@@ -9,7 +9,7 @@ class HF {
             if (bodyText.includes(word)) {
                 if ((location <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location - 1]))) &&
                     (location + word.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[location + word.length])))) {
-                    groupsDict[chatID].addToFilterCounter();
+                    groupsDict[chatID].filterCounter += 1;
                     if (groupsDict[chatID].filterCounter < groupFilterLimit)
                         await client.sendReplyWithMentions(chatID, filters[word], messageID);
                     else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
@@ -27,23 +27,20 @@ class HF {
             bodyText = bodyText.split("-");
             const filter = bodyText[0].trim();
             let filter_reply = bodyText[1].trim();
-            let regexTemp = filter_reply.match(regex);
-            if (regexTemp != null) {
-                for (let j = 0; j < regexTemp.length; j++) {
-                    let regexTempTest = regexTemp[j].replace("[", "");
-                    regexTempTest = regexTempTest.replace("]", "");
-                    if (regexTempTest in groupsDict[chatID].tags) {
-                        filter_reply = filter_reply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
-                    }
+            const regexMatch = filter_reply.match(regex);
+            if (regexMatch) {
+                for (let j = 0; j < regexMatch.length; j++) {
+                    let testTag = regexMatch[j].replace("[", "").replace("]", "");
+                    if (testTag in groupsDict[chatID].tags)
+                        filter_reply = filter_reply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
                 }
             }
             if (!groupsDict[chatID].doesFilterExist(filter)) {
-                groupsDict[chatID].filters = ["add", filter, filter_reply];
                 await HDB.addArgsToDB(chatID, filter, filter_reply, null, "filters", function () {
+                    groupsDict[chatID].filters = ["add", filter, filter_reply];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error",
-                filter, filter_reply), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, filter_reply), messageID);
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 
@@ -52,8 +49,8 @@ class HF {
         const filter = bodyText.trim();
         if (groupsDict[chatID].filters) {
             if (groupsDict[chatID].doesFilterExist(filter)) {
-                groupsDict[chatID].filters = ["delete", filter];
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
+                    groupsDict[chatID].filters = ["delete", filter];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist_error"), messageID);
@@ -90,7 +87,7 @@ class HF {
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {
-        if (!!Object.keys(groupsDict[chatID].filters).length) {
+        if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
             Object.entries(filters).forEach(([key, value]) => {

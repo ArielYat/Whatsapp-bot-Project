@@ -1,11 +1,10 @@
 const nvt = require('node-virustotal'), time = require("usleep"), HL = require("../ModulesDatabase/HandleLanguage");
-const urlRegex = /(([hH])ttps?:\/\/[^\s]+)/g;
 
 class HURL {
     static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
-        const found = bodyText.match(urlRegex);
-        if (found != null) {
-            found.forEach(function (url) {
+        const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
+        if (urlsInMessage) {
+            urlsInMessage.forEach(function (url) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url), messageID);
@@ -30,7 +29,6 @@ class HURL {
                         });
                     } else HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                 });
-
             });
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
     }
@@ -39,8 +37,8 @@ class HURL {
         let prettyAnswerString = "";
         try {
             const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
-            let counter = 0;
             const dataParsed = parsedRes.data.attributes.last_analysis_results;
+            let counter = 0;
             for (let attribute in dataParsed) {
                 if (dataParsed[attribute].result !== "clean" && dataParsed[attribute].result !== "unrated") {
                     prettyAnswerString += (attribute + ": " + dataParsed[attribute].result) + "\n";

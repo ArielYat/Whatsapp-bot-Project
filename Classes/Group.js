@@ -7,6 +7,7 @@ class group {
     #filterCounter;
     #groupAdmins;
     #functionPermissions;
+    #cryptoCheckedToday;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -25,6 +26,7 @@ class group {
             "handleBirthdays": "1",
         };
         this.#groupAdmins = [];
+        this.#cryptoCheckedToday = false;
     }
 
     get groupID() {
@@ -98,16 +100,20 @@ class group {
         this.#functionPermissions[permissionsArray[0]] = permissionsArray[1];
     }
 
+    get cryptoCheckedToday() {
+        return this.#cryptoCheckedToday;
+    }
+
+    set cryptoCheckedToday(newValue) {
+        this.#cryptoCheckedToday = newValue;
+    }
+
     doesFilterExist(filter) {
         return this.#filters.hasOwnProperty(filter);
     }
 
     doesTagExist(tag) {
         return this.#tags.hasOwnProperty(tag);
-    }
-
-    addToFilterCounter() {
-        this.#filterCounter++;
     }
 }
 

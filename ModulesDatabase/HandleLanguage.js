@@ -1,7 +1,6 @@
-const HDB = require("./HandleDB"), Strings = require("../Strings.js").strings;
-const util = require("util");
+const HDB = require("./HandleDB.js"), Strings = require("../Strings.js").strings, util = require("util");
 
-class HandleLanguage {
+class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
         let lang, textArray = bodyText.split(" ");
 
@@ -10,17 +9,17 @@ class HandleLanguage {
                 ? "en" : textArray.includes("ללטינית") || textArray.includes("Latin") || textArray.includes("Latina")
                     ? "la" : null;
 
-        if (lang !== null) {
-            await HDB.delArgsFromDB(chatID, null, "lang", async function () {
-                await HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
-                    groupsDict[chatID].groupLanguage = lang;
-                })
-                if (lang === "he")
-                    await client.sendText(chatID, Strings["language_change_reply"]["he"]);
-                else if (lang === "en")
-                    await client.sendText(chatID, Strings["language_change_reply"]["en"]);
-                else if (lang === "la")
-                    await client.sendText(chatID, Strings["language_change_reply"]["la"]);
+        if (lang) {
+            groupsDict[chatID].groupLanguage = lang;
+            await HDB.delArgsFromDB(chatID, null, "lang", function () {
+                HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
+                    if (lang === "he")
+                        client.sendText(chatID, Strings["language_change_reply"]["he"]);
+                    else if (lang === "en")
+                        client.sendText(chatID, Strings["language_change_reply"]["en"]);
+                    else if (lang === "la")
+                        client.sendText(chatID, Strings["language_change_reply"]["la"]);
+                });
             });
         } else client.reply(chatID, Strings["language_change_error"][groupsDict[chatID].groupLanguage], messageID);
     }
@@ -41,4 +40,4 @@ class HandleLanguage {
     }
 }
 
-module.exports = HandleLanguage;
+module.exports = HL;

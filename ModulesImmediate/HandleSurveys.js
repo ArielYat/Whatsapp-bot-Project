@@ -10,10 +10,8 @@ class HSu {
         const button2Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_2");
         const button3Regex = HL.getGroupLang(groupsDict, chatID, "survey_button_3");
 
-        let title = bodyText.match(titleRegex), secondTitle = bodyText.match(secondTitleRegex),
-            thirdTitle = bodyText.match(thirdTitleRegex);
-        const button1 = bodyText.match(button1Regex), button2 = bodyText.match(button2Regex),
-            button3 = bodyText.match(button3Regex);
+        let title = bodyText.match(titleRegex), secondTitle = bodyText.match(secondTitleRegex), thirdTitle = bodyText.match(thirdTitleRegex);
+        const button1 = bodyText.match(button1Regex), button2 = bodyText.match(button2Regex), button3 = bodyText.match(button3Regex);
         if (title != null && secondTitle != null && button1 != null) {
             title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
             secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "second_survey_title_replace"), "").trim();
