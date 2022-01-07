@@ -8,6 +8,7 @@ class group {
     #groupAdmins;
     #functionPermissions;
     #cryptoCheckedToday;
+    #translateCounter;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -27,6 +28,7 @@ class group {
         };
         this.#groupAdmins = [];
         this.#cryptoCheckedToday = false;
+        this.#translateCounter = 0;
     }
 
     get groupID() {
@@ -114,6 +116,13 @@ class group {
 
     doesTagExist(tag) {
         return this.#tags.hasOwnProperty(tag);
+    }
+    get translateCounter() {
+        return this.#translateCounter;
+    }
+
+    set translateCounter(value) {
+        this.#translateCounter = value;
     }
 }
 

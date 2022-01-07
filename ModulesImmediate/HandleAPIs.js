@@ -52,80 +52,84 @@ class HAPI {
     }
 
     static async Translate(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate"), "").trim();
-        let lang, textToTranslate;
-        if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "english_lang"))) {
-            lang = "en";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "english_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"))) {
-            lang = "he";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "chinese_lang"))) {
-            lang = "zh";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "chinese_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"))) {
-            lang = "zh";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "hindi_lang"))) {
-            lang = "hi";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hindi_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "indian_lang"))) {
-            lang = "hi";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "spanish_lang"))) {
-            lang = "es";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "spanish_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "french_lang"))) {
-            lang = "fr";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "french_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "arabic_lang"))) {
-            lang = "ar";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "arabic_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "bengali_lang"))) {
-            lang = "bn";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "bengali_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "russian_lang"))) {
-            lang = "ru";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "russian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"))) {
-            lang = "pt";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"))) {
-            lang = "id";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "urdu_lang"))) {
-            lang = "ur";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "urdu_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "italian_lang"))) {
-            lang = "it";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "italian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "persian_lang"))) {
-            lang = "fa";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "persian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "romanian_lang"))) {
-            lang = "ro";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "romanian_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "greek_lang"))) {
-            lang = "el";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "greek_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "german_lang"))) {
-            lang = "de";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "german_lang"), "").trim();
-        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"))) {
-            lang = "eo";
-            textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"), "").trim();
-        }
-        if (lang != null) {
-            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${textToTranslate}`
-            request.get(url, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    const arrayWord = body.match(/"(.)+[[]]]/)[0].replace("[[]]", "").split(",");
-                    const translateWord = arrayWord[0].trim();
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply") + translateWord, messageID);
-                }
-            }, null);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
+        if (groupsDict[chatID].translateCounter < 5) {
+            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate"), "").trim();
+            let lang, textToTranslate;
+            if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "english_lang"))) {
+                lang = "en";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "english_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"))) {
+                lang = "he";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "chinese_lang"))) {
+                lang = "zh";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "chinese_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"))) {
+                lang = "zh";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "hindi_lang"))) {
+                lang = "hi";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hindi_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "indian_lang"))) {
+                lang = "hi";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "spanish_lang"))) {
+                lang = "es";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "spanish_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "french_lang"))) {
+                lang = "fr";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "french_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "arabic_lang"))) {
+                lang = "ar";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "arabic_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "bengali_lang"))) {
+                lang = "bn";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "bengali_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "russian_lang"))) {
+                lang = "ru";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "russian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"))) {
+                lang = "pt";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"))) {
+                lang = "id";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "urdu_lang"))) {
+                lang = "ur";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "urdu_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "italian_lang"))) {
+                lang = "it";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "italian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "persian_lang"))) {
+                lang = "fa";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "persian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "romanian_lang"))) {
+                lang = "ro";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "romanian_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "greek_lang"))) {
+                lang = "el";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "greek_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "german_lang"))) {
+                lang = "de";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "german_lang"), "").trim();
+            } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"))) {
+                lang = "eo";
+                textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"), "").trim();
+            }
+            if (lang != null) {
+                let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${textToTranslate}`
+                url = encodeURI(url);
+                request.get(url, async function (error, response, body) {
+                    if (!error && response.statusCode === 200) {
+                        const arrayWord = body.split(",");
+                        const translateWord = arrayWord[0].replace("[[[", "");
+                        groupsDict[chatID].translateCounter += 1;
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply") + translateWord, messageID);
+                    }
+                }, null);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);
     }
-}
+    }
 
 module.exports = HAPI;

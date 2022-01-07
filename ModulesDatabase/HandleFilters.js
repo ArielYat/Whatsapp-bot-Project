@@ -29,12 +29,12 @@ class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
-        let filter = bodyText, filter_reply = null;
+        let filter = bodyText.trim(), filter_reply = null;
         if (messageType === "image")
             filter_reply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
             filter_reply = "video" + await client.decryptMedia(message);
-        else if (messageType === "text") {
+        else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
@@ -116,7 +116,12 @@ class HF {
             let stringForSending = "";
             let filters = groupsDict[chatID].filters;
             Object.entries(filters).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
+                if(value.startsWith("image"))
+                    stringForSending += key + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
+                else if(value.startsWith("video"))
+                    stringForSending += key + " - " + HL.getGroupLang(groupsDict, chatID, "video") + "\n";
+                else
+                    stringForSending += key + " - " + value + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);

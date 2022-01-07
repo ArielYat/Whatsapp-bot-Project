@@ -94,6 +94,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_in_urban"))) { //Handle searching words in https://www.urbandictionary.com
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate"))) { //Handle searching words in https://www.urbandictionary.com
+        await HAPI.Translate(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -185,8 +188,10 @@ function start(client) {
     });
     //Reset the crypto check everyday at 00:00
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (const group in groupsDict)
+        for (const group in groupsDict){
             groupsDict[group].cryptoCheckedToday = false;
+            groupsDict[group].translateCounter = 0;
+        }
     });
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {

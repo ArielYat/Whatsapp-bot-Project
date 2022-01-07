@@ -351,14 +351,23 @@ class Strings {
         }, "esperanto_lang": {
             "he": /^רומנית/i, "en": /^Romanian/i, "la": null
         }, "translate_reply": {
-            "he": "\n *הגדרה*",
+            "he": "*תרגום* : ",
             "en": "*Definition* \n",
             "la": null
         }, "translate_language_error": {
             "he": "השפה שבחרת לא במאגר שלנו בימינו",
             "en": "The language you choose don't exist in our collection at the moment",
             "la": null
-        }, "show_webpage": {
+        },"translate_language_limit": {
+            "he": "תנסה מחר לבקש תרגום, ביקשו יותר מדי תרגומים בקבוצה זו",
+            "en": null,
+            "la": null
+        },
+        "image": {
+            "he": "תמונה", "en": "image", "la": "Ostende situs texti"
+        },"video": {
+            "he": "וידיאו", "en": "video", "la": "Ostende situs texti"
+        },"show_webpage": {
             "he": /^שלח קישור לאתר/i, "en": /^Send website link/i, "la": "Ostende situs texti"
         }, "show_webpage_reply": {
             "he": "קח את הקישור אחי: %s",
