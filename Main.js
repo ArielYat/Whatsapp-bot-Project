@@ -188,9 +188,9 @@ function start(client) {
     });
     //Reset the crypto check everyday at 00:00
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (const group in groupsDict){
+        for (const group in groupsDict) {
             groupsDict[group].cryptoCheckedToday = false;
-            groupsDict[group].translateCounter = 0;
+            groupsDict[group].translationCounter = 0;
         }
     });
     //Send a starting help message when added to a group
@@ -268,7 +268,6 @@ function start(client) {
             if (checkFilters && !restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
                 && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
-
         }
     });
     // //clean unneeded groups from cache
@@ -281,7 +280,7 @@ function start(client) {
 //TODO: a reminder function
 //TODO: website
 //TODO: stock checking
-//TODO: send image every day
+//TODO: something every day
 //TODO: send bus stop times
 //TODO: chess - lichess API?
 //TODO: XO against John?

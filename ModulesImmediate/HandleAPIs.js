@@ -52,7 +52,7 @@ class HAPI {
     }
 
     static async Translate(client, bodyText, chatID, messageID, groupsDict) {
-        if (groupsDict[chatID].translateCounter < 5) {
+        if (groupsDict[chatID].translationCounter < 10) {
             bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate"), "").trim();
             let lang, textToTranslate;
             if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "english_lang"))) {
@@ -117,19 +117,18 @@ class HAPI {
                 textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"), "").trim();
             }
             if (lang != null) {
-                let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${textToTranslate}`
-                url = encodeURI(url);
+                let url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${textToTranslate}`);
                 request.get(url, async function (error, response, body) {
                     if (!error && response.statusCode === 200) {
                         const arrayWord = body.split(",");
                         const translateWord = arrayWord[0].replace("[[[", "");
-                        groupsDict[chatID].translateCounter += 1;
+                        groupsDict[chatID].translationCounter++;
                         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply") + translateWord, messageID);
                     }
                 }, null);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);
     }
-    }
+}
 
 module.exports = HAPI;

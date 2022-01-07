@@ -8,7 +8,7 @@ class group {
     #groupAdmins;
     #functionPermissions;
     #cryptoCheckedToday;
-    #translateCounter;
+    #translationCounter;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -28,7 +28,7 @@ class group {
         };
         this.#groupAdmins = [];
         this.#cryptoCheckedToday = false;
-        this.#translateCounter = 0;
+        this.#translationCounter = 0;
     }
 
     get groupID() {
@@ -106,8 +106,16 @@ class group {
         return this.#cryptoCheckedToday;
     }
 
-    set cryptoCheckedToday(newValue) {
-        this.#cryptoCheckedToday = newValue;
+    set cryptoCheckedToday(number) {
+        this.#cryptoCheckedToday = number;
+    }
+
+    get translationCounter() {
+        return this.#translationCounter;
+    }
+
+    set translationCounter(number) {
+        this.#translationCounter = number;
     }
 
     doesFilterExist(filter) {
@@ -116,13 +124,6 @@ class group {
 
     doesTagExist(tag) {
         return this.#tags.hasOwnProperty(tag);
-    }
-    get translateCounter() {
-        return this.#translateCounter;
-    }
-
-    set translateCounter(value) {
-        this.#translateCounter = value;
     }
 }
 
