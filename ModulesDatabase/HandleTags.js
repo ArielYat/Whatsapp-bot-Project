@@ -82,10 +82,13 @@ class HT {
         const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
-                const personID = usersDict[tagsFound[tag].replace("@", "") + "@c.us"];
-                if (personID.messagesTaggedIn[chatID] === undefined)
-                    personID.messagesTaggedIn[chatID] = [];
-                personID.messagesTaggedIn[chatID].push(messageID);
+                const ID = tagsFound[tag].replace("@", "") + "@c.us";
+                if(ID in usersDict) {
+                    const personID = usersDict[ID];
+                    if (personID.messagesTaggedIn[chatID] === undefined)
+                        personID.messagesTaggedIn[chatID] = [];
+                    personID.messagesTaggedIn[chatID].push(messageID);
+                }
             }
         }
     }

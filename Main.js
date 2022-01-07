@@ -24,7 +24,7 @@ const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filte
 const botDevs = ["972586809911@c.us", "972543293155@c.us"];
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, function () {
     wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
 });
 
@@ -56,7 +56,7 @@ setInterval(function () {
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) { //Handle setting function permissions
-        groupsDict[chatID].groupAdmins = client.getGroupAdmins();
+        groupsDict[chatID].groupAdmins = await client.getGroupAdmins();
         await HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -184,8 +184,11 @@ async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
 function start(client) {
     //Check if there are birthday everyday at 4 am
     IsraelSchedule.tz = 'Israel'; //Time zone
-    IsraelSchedule.scheduleJob('0 4 * * *', async () => {
+    IsraelSchedule.scheduleJob('4 2 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
+        for(const group in groupsDict){
+            groupsDict[group].cryptoCheckedToday = false;
+        }
     });
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
@@ -213,6 +216,9 @@ function start(client) {
                     groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
                 });
             }
+            //If the author lacks a permission level give them one
+            if (!(chatID in usersDict[authorID].permissionLevel))
+                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Update group admins if they aren't updated
             if (groupsDict[chatID].groupAdmins.length === 0) {
                 groupsDict[chatID].groupAdmins = client.getGroupAdmins();
@@ -260,15 +266,7 @@ function start(client) {
             if (checkFilters && !restGroups.includes(chatID) && !restGroupsFilterSpam.includes(chatID)
                 && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                 await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
-            //Delete group/person from DB
-            if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "delete_group_from_db")) && usersDict[authorID].permissionLevel[chatID] >= 2)
-                await HDB.deleteGroupFromDB(client, groupsDict, chatID, messageID, function () {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_group_from_db_reply"), messageID);
-                });
-            else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "delete_person_from_db")))
-                await HDB.deletePersonFromDB(client, usersDict, authorID, groupsDict, chatID, messageID, function () {
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "delete_person_from_db_reply"), messageID);
-                });
+
         }
     });
     // //clean unneeded groups from cache

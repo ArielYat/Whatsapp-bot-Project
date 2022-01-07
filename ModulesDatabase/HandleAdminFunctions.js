@@ -1,17 +1,27 @@
+const HDB = require("./HandleDB")
+
 class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers, restUsersCommandSpam, user) {
         if (quotedMsg) {
             let quotedMsgAuthor = quotedMsg.author
             if (bodyText.startsWith("חסום גישה למשתמש")) {
                 restUsers.push(quotedMsgAuthor);
-                await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor +
-                    " נחסם בהצלחה, \n May God have mercy on your soul", messageID);
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function (){
+                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null,"rested", function(){
+                        client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor +
+                            " נחסם בהצלחה, \n May God have mercy on your soul", messageID);
+                    });
+                });
             }
             if (bodyText.startsWith("אפשר גישה למשתמש")) {
                 restUsers.splice(restUsers.indexOf(quotedMsgAuthor), 1);
                 restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(quotedMsgAuthor), 1);
                 user.commandCounter = 0;
-                await client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " שוחרר בהצלחה", messageID);
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function (){
+                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null,"rested", function(){
+                        client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " שוחרר בהצלחה", messageID);
+                    });
+                });
             }
         }
     }
@@ -19,13 +29,21 @@ class HAF {
     static async handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsSpam, group) {
         if (bodyText.startsWith("חסום קבוצה")) {
             restGroups.push(chatID);
-            await client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
+            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
+                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
+                    client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
+                });
+            });
         }
         if (bodyText.startsWith("שחרר קבוצה")) {
             restGroups.splice(restGroups.indexOf(chatID), 1);
             restGroupsSpam.splice(restGroupsSpam.indexOf(chatID), 1);
             group.filterCounter = 0;
-            await client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
+            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
+                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
+                    client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
+                });
+            });
         }
     }
 

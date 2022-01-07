@@ -56,13 +56,13 @@ class HP {
     static async autoAssignPersonPermissions(group, person, chatID) {
         if (group.groupAdmins.includes(person.personID)) {
             await HDB.delArgsFromDB(chatID, person.personID, "perm", function () {
-                HDB.addArgsToDB(chatID, person.personsIn, 2, null, "perm", function () {
+                HDB.addArgsToDB(chatID, person.personID, 2, null, "perm", function () {
                     person.permissionLevel[chatID] = 2;
                 });
             });
         } else {
             await HDB.delArgsFromDB(chatID, person.personID, "perm", function () {
-                HDB.addArgsToDB(chatID, person.personsIn, 1, null, "perm", function () {
+                HDB.addArgsToDB(chatID, person.personID, 1, null, "perm", function () {
                     person.permissionLevel[chatID] = 1;
                 });
             });
@@ -76,7 +76,7 @@ class HP {
             if ((groupsDict[chatID].personsIn.some((person) => personID === person.personID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
                     await HDB.delArgsFromDB(chatID, personID, "perm", function () {
-                        HDB.addArgsToDB(chatID, personID.personsIn, 0, null, "perm", function () {
+                        HDB.addArgsToDB(chatID, personID, 0, null, "perm", function () {
                             usersDict[personID].permissionLevel[chatID] = 0;
                             client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "mute_participant_reply", personTag), messageID);
                         });

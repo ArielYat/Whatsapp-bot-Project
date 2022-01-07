@@ -37,6 +37,8 @@ class HDB {
                 case "groupAdmins":
                     objectToAddToDataBase = {ID: ID, adminsArray: value1};
                     break;
+                case "rested":
+                    objectToAddToDataBase = {ID: ID, restArray: value1};
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
@@ -89,11 +91,14 @@ class HDB {
                 case "groupAdmins":
                     objectToDelInDataBase = {ID: ID};
                     break;
+                case "rested":
+                    objectToDelInDataBase = {ID: ID};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || "personBirthdayGroups")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -106,7 +111,7 @@ class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers,  restGroups, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -173,6 +178,23 @@ class HDB {
             if (!(chatID in groupsDict))
                 groupsDict[chatID] = new Group(chatID);
             groupsDict[chatID].functionPermissions = [func, permission]
+        }
+        function createRested(document) {
+            let chatID = document.ID, restArray = document.restArray;
+            switch (chatID){
+                case ("restArrayUsers"):
+                    for (let i = 0; i < restArray.length; i++) {
+                        restUsers.push(restArray[i])
+                    }
+                    break;
+                case ("restArrayGroups"):
+                    for (let i = 0; i < restArray.length; i++) {
+                        restGroups.push(restArray[i])
+                    }
+                    break;
+                default:
+                    return;
+            }
         }
 
         MongoClient.connect(url, function (err, client) {
@@ -255,109 +277,16 @@ class HDB {
                 for (let i = 0; i < result.length; i++)
                     createPersonGroupsBirthDays(result[i]);
             });
+            dbo.collection("rested").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in fetching rested from db");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++)
+                    createRested(result[i]);
+            });
         });
     }
-
-    static async deleteGroupFromDB(groupsDict, chatID, callback) {
-        MongoClient.connect(url, function (err, mongoClient) {
-            const dbo = mongoClient.db("WhatsappBotDB");
-            dbo.collection("filters-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching filters from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("filters-groups").deleteOne(result[i]);
-
-            });
-            dbo.collection("tags-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching tags from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("tags-groups").deleteOne(result[i]);
-            });
-            dbo.collection("lang-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching lang from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("lang-groups").deleteOne(result[i]);
-            });
-            dbo.collection("groupPermissions-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching groupPermissions from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("groupPermissions-groups").deleteOne(result[i]);
-            });
-            dbo.collection("personIn-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching personIn from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("personIn-groups").deleteOne(result[i]);
-            });
-            dbo.collection("groupAdmins-groups").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching groupAdmins from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === chatID)
-                        dbo.collection("groupAdmins-groups").deleteOne(result[i]);
-            });
-            mongoClient.close();
-            callback()
-        });
-        delete groupsDict[chatID];
-    }
-
-    static async deletePersonFromDB(usersDict, personID, callback) {
-        MongoClient.connect(url, function (err, mongoClient) {
-            const dbo = mongoClient.db("WhatsappBotDB");
-            dbo.collection("birthday-persons").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching birthday from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === personID)
-                        dbo.collection("birthday-persons").deleteOne(result[i]);
-            });
-            dbo.collection("perm-persons").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching permission from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === personID)
-                        dbo.collection("perm-persons").deleteOne(result[i]);
-            });
-            dbo.collection("personBirthdayGroups-persons").find({}).toArray(function (err, result) {
-                if (err) {
-                    console.log(err + " in fetching personBirthdayGroups from db");
-                    return;
-                }
-                for (let i = 0; i < result.length; i++)
-                    if (result[i].id === personID)
-                        dbo.collection("personBirthdayGroups-persons").deleteOne(result[i]);
-            });
-            callback()
-            mongoClient.close();
-        });
-        delete usersDict[personID];
-    }
-
 }
 
 module.exports = HDB;
