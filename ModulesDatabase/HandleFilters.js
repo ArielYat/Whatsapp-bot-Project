@@ -54,14 +54,14 @@ class HF {
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
-        if (!groupsDict[chatID].doesFilterExist(filter)) {
-            if (filterReply !== null) {
+        if (filterReply !== null) {
+            if (!groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
                     groupsDict[chatID].filters = ["add", filter, filterReply];
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filterReply), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, existError), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, existError), messageID);
+        }
     }
 
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
@@ -104,16 +104,16 @@ class HF {
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
-        if (groupsDict[chatID].doesFilterExist(filter)) {
-            if (filterReply !== null) {
+        if (filterReply !== null) {
+            if (groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
                         groupsDict[chatID].filters = ["edit", filter, filterReply]
                         client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
                     });
                 });
-            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filterReply), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_not_existent_error"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "edit_filter_not_existent_error"), messageID);
+        }
     }
 
     static async showFilters(client, chatID, messageID, groupsDict) {
