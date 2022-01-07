@@ -205,6 +205,7 @@ function start(client) {
             quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
             //Define bodeText depending on if the message a text message or a media message
             bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
+            bodyText = bodyText === undefined ? message.text : message.caption;
 
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
