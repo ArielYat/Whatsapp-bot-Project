@@ -84,10 +84,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
-        if (message.quotedMsgObj)
-            await HSt.handleStickers(client, message.quotedMsgObj, chatID, messageID, message.quotedMsgObj.type, groupsDict);
-        else
-            await HSt.handleStickers(client, message, chatID, messageID, message.type, groupsDict);
+        await HSt.handleStickers(client, message, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle scanning URLs
         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
@@ -128,7 +125,7 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
 
 async function HandleFilters(client, message, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_filter"))) { //Handle adding filters
-        await HF.addFilter(client, message, bodyText, chatID, messageID, message.type, groupsDict);
+        await HF.addFilter(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_filter"))) { //Handle removing filters
@@ -136,7 +133,7 @@ async function HandleFilters(client, message, bodyText, chatID, authorID, messag
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "edit_filter"))) { //Handle editing filters
-        await HF.editFilter(client, message, bodyText, chatID, messageID, message.type, groupsDict);
+        await HF.addFilter(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else return true;

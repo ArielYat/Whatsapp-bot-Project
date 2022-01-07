@@ -1,7 +1,9 @@
 const HL = require("../ModulesDatabase/HandleLanguage");
 
 class HSt {
-    static async handleStickers(client, message, chatID, messageID, messageType, groupsDict) {
+    static async handleStickers(client, message, chatID, messageID, groupsDict) {
+        const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
+        message = message.quotedMsgObj ? message.quotedMsgObj : message;
         if (messageType === "image") {
             const mediaData = await client.decryptMedia(message);
             await client.sendImageAsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול"})

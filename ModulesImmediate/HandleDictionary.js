@@ -16,11 +16,10 @@ class HD {
                 }
             );
             response = await response.json()
-            let stringForSending = HL.getGroupLang(groupsDict, chatID, "search_word_reply") + "\n";
+            let stringForSending = HL.getGroupLang(groupsDict, chatID, "search_word_reply") + "\n\n";
             if (response.list.length !== 0) {
                 for (let i = 0; i < response.list.length && i < 100; i++)
-                    stringForSending += `*Definition* ${i} \n` + response.list[i].definition +
-                        "\n definition by: " + response.list[i].definition + " \n\n";
+                    stringForSending += `*Definition ${i}* \n - ${response.list[i].definition}\n Definition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_word_error"), messageID);
         } catch (err) {
