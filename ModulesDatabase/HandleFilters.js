@@ -39,11 +39,11 @@ class HF {
             existError = HL.getGroupLang(groupsDict, chatID, "video");
         }
         else if (messageType === "chat") {
-            existError = filterReply
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
                 filterReply = bodyText[1].trim();
+                existError = filterReply
                 const regexMatch = filterReply.match(regex);
                 if (regexMatch) {
                     for (let j = 0; j < regexMatch.length; j++) {
@@ -81,7 +81,7 @@ class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
-        let filter = bodyText, filterReply = null;
+        let filter = bodyText.trim(), filterReply = null;
         if (messageType === "image")
             filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
