@@ -11,7 +11,7 @@
 
 ### [Filters](ModulesDatabase/HandleFilters.js)
 
-- `Add filter [filter] - [bot reply]` - adds a filter to the group. For example: Add filter food - banana.
+- `Add filter [filter] - [bot reply]` - adds a filter to the group. filters can be text, images or videos. For example: Add filter food - banana.
 - `Remove filter [filter]` - removes the specified filter from the group. For example: Remove filter food.
 - `Edit filter [existing filter] - [new reply]` - edits the specified filter. For example: Edit filter food - peach.
 - `Show filters` - displays the list of all filter and their replies in the group.
@@ -31,7 +31,7 @@
 
 ### [Birthdays](ModulesDatabase/HandleBirthdays.js)
 
-- `Add birthday [date in reverse international format with periods]` - adds a birthday for message's author. For
+- `Add birthday [date in international format with periods]` - adds a birthday for message's author. For
   example: Add birthday 1.11.2011.
 - `Remove birthday` - removes the author's birthday. For example: Remove birthday.
 - `Add group to birthday message` - adds the group the message was sent in to the author's birthday message broadcast.
@@ -51,12 +51,14 @@
 
 ### [Miscellaneous](ModulesImmediate)
 
-- `Create sticker` - creates a sticker out of a media file and sends it. This command can be used in the message the
+- [`Create sticker`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and sends it. This command can be used in the message the
   media was sent in and as a reply to it.
-- `Check Crypto` - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar.
-- `Internet definition [word]` - searches for the word on the website Urban Dictionary and returns the search result.
-- `Scan [link]` - scans the given link for viruses. For example: Scan https://www.google.com/.
-- Create a WhatsApp survey:
+- [`Check Crypto`](ModulesImmediate/HandleAPIs.js) - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar.
+- [`Internet definition [word]`](ModulesImmediate/HandleAPIs.js) - searches for the word on the website Urban Dictionary and returns the search result.
+- [`Translate to [some language] [text]`](ModulesImmediate/HandleAPIs.js) - translates the text with Google Translate to the desired language.
+- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses. For example: Scan https://www.google.com/.
+- [`Send link`](ModuleWebsite/HandleWebsite.js) - sends a link to the bots webpage (work in progress).
+- [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.js):
 
 ```
 Create survey
@@ -70,14 +72,14 @@ Button 3 - [third option]
 
 (The third title and buttons 1 and 2 aren't required).
 
-- `Send link` - sends a link to the bots webpage (work in progress).
-
+<!---
 ### [Deletion from the database](ModulesDatabase/HandleDB.js)
 
 - `Delete this group from the database` - deletes all of the group's information from the database.
 - `Delete me from the database` - deletes all of the author's information from the database.
 
 **Use these commands with caution, their effects are irreversible**
+--->
 
 ### Special tip
 
@@ -112,6 +114,8 @@ The bot also autotempbans groups or users who are spamming it for a short time p
 prices'
 
 [Urban Dictionary](https://api.urbandictionary.com/v0/define?term=) for Urban dictionary.
+
+[Google Translate](https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=query) for the translations.
 
 ## Credits
 
