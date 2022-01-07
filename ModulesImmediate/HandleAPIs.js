@@ -40,10 +40,10 @@ class HAPI {
                 }
             );
             response = await response.json()
-            let stringForSending = HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply") + "\n\n";
+            let stringForSending = "";
             if (response.list.length !== 0) {
-                for (let i = 1; i < response.list.length && i < 100; i++)
-                    stringForSending += `*Definition ${i}* \n - ${response.list[i].definition}\n Definition by: ${response.list[i].author} \n\n`;
+                for (let i = 0; i < response.list.length && i < 100; i++)
+                    stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i+1}* \n - ${response.list[i].definition}\n Definition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_in_urban_error"), messageID);
         } catch (err) {

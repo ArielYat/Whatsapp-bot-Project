@@ -349,11 +349,11 @@ class Strings {
         }, "romanian_lang": {
             "he": /^רומנית/i, "en": /^Romanian/i, "la": null
         }, "greek_lang": {
-            "he": /^רומנית/i, "en": /^Romanian/i, "la": null
+            "he": /^יוונית/i, "en": /^Greek/i, "la": null
         }, "german_lang": {
-            "he": /^רומנית/i, "en": /^Romanian/i, "la": null
+            "he": /^גרמנית/i, "en": /^German/i, "la": null
         }, "esperanto_lang": {
-            "he": /^רומנית/i, "en": /^Romanian/i, "la": null
+            "he": /^אספרנטו/i, "en": /^Esperanto/i, "la": null
         }, "translate_reply": {
             "he": "*תרגום*: ",
             "en": "*Definition*: ",

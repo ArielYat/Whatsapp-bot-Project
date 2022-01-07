@@ -29,12 +29,17 @@ class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
-        let filter = bodyText.trim(), filterReply = null;
-        if (messageType === "image")
+        let filter = bodyText.trim(), filterReply = null, existError = null;
+        if (messageType === "image") {
             filterReply = "image" + await client.decryptMedia(message);
-        else if (messageType === "video")
+            existError = HL.getGroupLang(groupsDict, chatID, "image");
+        }
+        else if (messageType === "video") {
             filterReply = "video" + await client.decryptMedia(message);
+            existError = HL.getGroupLang(groupsDict, chatID, "video");
+        }
         else if (messageType === "chat") {
+            existError = filterReply
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
@@ -56,7 +61,7 @@ class HF {
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_not_filter_material_error", filter, filterReply), messageID);
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, filterReply), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, existError), messageID);
     }
 
     static async remFilter(client, bodyText, chatID, messageID, groupsDict) {
