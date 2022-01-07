@@ -17,7 +17,7 @@ class HC {
                 response = await response.json()
                 let stringForSending = "";
                 for (let i = 0; i < 10; i++)
-                    stringForSending += "1 [" + response.data[i].symbol + "] = " + response.data[i].quote.USD.price + "$\n";
+                    stringForSending += `1 [${response.data[i].symbol}] = "${response.data[i].quote.USD.price}$\n`;
                 groupsDict[chatID].cryptoCheckedToday = true;
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
