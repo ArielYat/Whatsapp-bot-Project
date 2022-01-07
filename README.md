@@ -4,73 +4,78 @@
 
 ### [Language](ModulesDatabase/HandleLanguage.js)
 
-- `Change language to [language]` - changes the language the bot receives and sends messages in. For example: Change
-  language to Hebrew. This command can be used at all times in every language. Languages currently supported: Hebrew,
-  English & Latin.
+- `Change language to [language]` - changes the language the bot receives and sends messages in.
+  - For example: Change language to Hebrew.
+  - This command can be used at all times in every language. Languages currently supported: Hebrew, English & Latin.
 - `Help` - shows the help message.
 
 ### [Filters](ModulesDatabase/HandleFilters.js)
 
-- `Add filter [filter] - [bot reply]` - adds a filter to the group. filters can be text, images or videos. For example: Add filter food - banana.
-- `Remove filter [filter]` - removes the specified filter from the group. For example: Remove filter food.
-- `Edit filter [existing filter] - [new reply]` - edits the specified filter. For example: Edit filter food - peach.
+- `Add filter [filter] - [bot reply]` - adds a filter to the group.
+  - For example: Add filter food - banana.
+  - Filters can be text, images or videos.
+- `Remove filter [filter]` - removes the specified filter from the group.
+  - For example: Remove filter food.
+- `Edit filter [existing filter] - [new reply]` - edits the specified filter.
+  - For example: Edit filter food - peach.
 - `Show filters` - displays the list of all filter and their replies in the group.
 
 ### [Tags](ModulesDatabase/HandleTags.js)
 
-- `Tag [person]` - tags someone so that they get a notification even if the group is muted on their phone. For example:
-  Tag Joseph.
-- `Add tag buddy [name] - [phone number in international format]` - adds the person to the list of taggable people. For
-  example: Add tagging buddy Joseph - 972501234567.
-- `Remove tag buddy [name]` - removes the person from the list of taggable people. For example: Remove tagging buddy
-  Joseph.
+- `Tag [person]` - tags someone so that they get a notification even if the group is muted on their phone.
+  - For example: Tag Joseph.
+- `Add tag buddy [name] - [phone number in international format]` - adds the person to the list of taggable people.
+  - For example: Add tagging buddy Joseph - 972501234567.
+- `Remove tag buddy [name]` - removes the person from the list of taggable people.
+  - For example: Remove tagging buddy Joseph.
 - `Tag everyone` - tags all people in the group.
 - `Show tag buddies` - displays the list of all taggable people in the group.
-- `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the
-  front of the chat.
+- `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the front of the chat.
 
 ### [Birthdays](ModulesDatabase/HandleBirthdays.js)
 
-- `Add birthday [date in international format with periods]` - adds a birthday for message's author. For
-  example: Add birthday 1.11.2011.
-- `Remove birthday` - removes the author's birthday. For example: Remove birthday.
+- `Add birthday [date in international format with periods]` - adds a birthday for message's author.
+  - For example: Add birthday 1.11.2011.
+- `Remove birthday` - removes the author's birthday.
+  - For example: Remove birthday.
 - `Add group to birthday message` - adds the group the message was sent in to the author's birthday message broadcast.
-- `Remove group from birthday message` - removes the group the message was sent in from the author's birthday message
-  broadcast.
+- `Remove group from birthday message` - removes the group the message was sent in from the author's birthday message broadcast.
 - `Show birthdays` - displays the birthdays of the group members.
 
 ### [Permissions & Muting](ModulesDatabase/HandlePermissions.js)
 
-- `Define permission for [permission type] - [number from 0 to 2]` - defines the permission level required for a certain
-  type of commands. For example: Define permission filters - 1. Permission types: filters, tags, handleFilters,
-  handleTags, HandleBirthdays, HandleOthers. Number meaning: 0 - muted member, 1 - regular member, 2 - group admin.
-- `Mute [person tag]` - mutes the tagged person so they aren't able to use commands. For example: Mute @Joseph.
-- `Unmute person [person tag]` - unmutes the tagged person. For example: Unmute @Joseph.
+- `Define permission for [permission type] - [number from 0 to 2]` - defines the permission level required for a certain type of commands.
+  - For example: Define permission filters - 1.
+  - Permission types: filters, tags, handleFilters, handleTags, HandleBirthdays, HandleOthers.
+  Number meaning: 0 - muted member, 1 - regular member, 2 - group admin.
+- `Mute [person tag]` - mutes the tagged person so they aren't able to use commands.
+  - For example: Mute @Joseph.
+- `Unmute person [person tag]` - unmutes the tagged person.
+  - For example: Unmute @Joseph.
 - `Show function permissions` - displays the permissions levels of the different types of commands.
 - `Show people permissions` - displays the permissions levels of the people in the group.
 
 ### [Miscellaneous](ModulesImmediate)
 
-- [`Create sticker`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and sends it. This command can be used in the message the
-  media was sent in and as a reply to it.
+- [`Create sticker`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and sends it.
+  - This command can be used in the message the media was sent in and as a reply to it.
 - [`Check Crypto`](ModulesImmediate/HandleAPIs.js) - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar.
 - [`Internet definition [word]`](ModulesImmediate/HandleAPIs.js) - searches for the word on the website Urban Dictionary and returns the search result.
 - [`Translate to [some language] [text]`](ModulesImmediate/HandleAPIs.js) - translates the text with Google Translate to the desired language.
-- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses. For example: Scan https://www.google.com/.
+- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses.
+  - For example: Scan https://www.google.com/.
 - [`Send link`](ModuleWebsite/HandleWebsite.js) - sends a link to the bots webpage (work in progress).
 - [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.js):
-
-```
-Create survey
-Title - [survey title]
-Subtitle - [survey subtitle]
-Third Title - [third title]
-Button 1 - [first option]
-Button 2 - [second option]
-Button 3 - [third option]
-```
-
-(The third title and buttons 1 and 2 aren't required).
+  ```
+  Create survey
+  Title - [survey title]
+  Subtitle - [survey subtitle]
+  Third Title - [third title]
+  Button 1 - [first option]
+  Button 2 - [second option]
+  Button 3 - [third option]
+  ```
+  - (The third title and buttons 1 and 2 aren't required).
 
 <!---
 ### [Deletion from the database](ModulesDatabase/HandleDB.js)
