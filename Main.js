@@ -221,7 +221,7 @@ function start(client) {
                 await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Update group admins if they aren't updated
             if (groupsDict[chatID].groupAdmins.length === 0) {
-                groupsDict[chatID].groupAdmins = client.getGroupAdmins();
+                groupsDict[chatID].groupAdmins = client.getGroupAdmins(chatID);
                 await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
                     HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
                         HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
