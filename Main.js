@@ -55,7 +55,7 @@ setInterval(function () {
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) { //Handle setting function permissions
-        groupsDict[chatID].groupAdmins = await client.getGroupAdmins();
+        groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
         await HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -218,7 +218,7 @@ function start(client) {
                 await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Update group admins if they aren't updated
             if (groupsDict[chatID].groupAdmins.length === 0) {
-                groupsDict[chatID].groupAdmins = client.getGroupAdmins();
+                groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
                 await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
                     HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
                         HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
