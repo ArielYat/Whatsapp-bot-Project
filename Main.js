@@ -241,26 +241,26 @@ function start(client) {
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
             //If the user who sent the message isn't blocked, check for commands
             if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
+                //Check all functions for commands if the user has a high enough permission level
+                await HandleHelp(client, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
+                    await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleImmediate"])
+                    await HandleImmediate(client, message, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
+                    await HandleShows(client, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
+                    checkFilters = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
+                    await HandleTags(client, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
+                    await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
+                if (usersDict[authorID].permissionLevel[chatID] >= 2)
+                    await HandlePermissions(client, bodyText, chatID, authorID, messageID);
                 //If the user used too many commands, put them on a cool down
                 if (usersDict[authorID].commandCounter === userCommandLimit) {
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
                     restUsersCommandSpam.push(authorID);
-                } else { //If not, check all the main subfunctions for commands
-                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
-                        await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleImmediate"])
-                        await HandleImmediate(client, message, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
-                        await HandleShows(client, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
-                        checkFilters = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
-                        await HandleTags(client, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
-                        await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
-                    if (usersDict[authorID].permissionLevel[chatID] >= 2)
-                        await HandlePermissions(client, bodyText, chatID, authorID, messageID);
                 }
             }
             //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters
