@@ -1,23 +1,19 @@
-const HL = require("../ModulesDatabase/HandleLanguage");
-const requestInfo = require("node-fetch"), request = require("request");
+const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys.js");
+const nodeFetch = require("node-fetch"), request = require("request");
 
 class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
+        const apiKey = apiKeys.cryptoAPI;
         if (!groupsDict[chatID].cryptoCheckedToday) {
             try {
-                let response = await requestInfo(
-                    'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
-                        method: 'GET',
-                        headers: {
-                            'X-CMC_PRO_API_KEY': '342e0747-1402-4df4-98f2-bdf12e3dd8d2',
-                            'Accept': 'application/json'
-                        },
-                    }
-                );
-                response = await response.json()
+                let response = await nodeFetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+                    method: 'GET', headers: {
+                        'X-CMC_PRO_API_KEY': apiKey, 'Accept': 'application/json'
+                    },
+                });
+                response = await response.json();
                 let stringForSending = "";
-                for (let i = 0; i < 10; i++)
-                    stringForSending += `1 [${response.data[i].symbol}] = "${response.data[i].quote.USD.price}$\n`;
+                for (let i = 0; i < 10; i++) stringForSending += `1 [${response.data[i].symbol}] = ${response.data[i].quote.USD.price.toFixed(3)}$\n`;
                 groupsDict[chatID].cryptoCheckedToday = true;
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
@@ -29,21 +25,16 @@ class HAPI {
     static async searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "search_in_urban"), "").trim();
         try {
-            let url = "https://api.urbandictionary.com/v0/define?term=";
-            url += bodyText;
-            let response = await requestInfo(url,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                }
-            );
-            response = await response.json()
+            const url = `https://api.urbandictionary.com/v0/define?term=${bodyText}`;
+            let response = await nodeFetch(url, {
+                method: 'GET', headers: {
+                    'Accept': 'application/json'
+                },
+            });
+            response = await response.json();
             let stringForSending = "";
             if (response.list.length !== 0) {
-                for (let i = 0; i < response.list.length && i < 100; i++)
-                    stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i+1}* \n - ${response.list[i].definition}\n Definition by: ${response.list[i].author} \n\n`;
+                for (let i = 0; i < response.list.length && i < 10; i++) stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n ${response.list[i].definition} \n Definition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_in_urban_error"), messageID);
         } catch (err) {
@@ -51,101 +42,26 @@ class HAPI {
         }
     }
 
-    static async Translate(client, bodyText, chatID, messageID, groupsDict) {
+    static async translate(client, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].translationCounter < 10) {
-            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate"), "").trim();
-            let lang, textToTranslate;
-            switch (true) {
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "english_lang"))):
-                    lang = "en";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "english_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"))):
-                    lang = "he";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hebrew_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "chinese_lang"))):
-                    lang = "zh";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "chinese_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"))):
-                    lang = "zh";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "mandarin_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "hindi_lang"))):
-                    lang = "hi";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "hindi_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "indian_lang"))):
-                    lang = "hi";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "spanish_lang"))):
-                    lang = "es";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "spanish_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "french_lang"))):
-                    lang = "fr";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "french_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "arabic_lang"))):
-                    lang = "ar";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "arabic_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "bengali_lang"))):
-                    lang = "bn";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "bengali_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "russian_lang"))):
-                    lang = "ru";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "russian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"))):
-                    lang = "pt";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "portuguese_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"))):
-                    lang = "id";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "indonesian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "urdu_lang"))):
-                    lang = "ur";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "urdu_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "italian_lang"))):
-                    lang = "it";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "italian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "persian_lang"))):
-                    lang = "fa";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "persian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "romanian_lang"))):
-                    lang = "ro";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "romanian_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "greek_lang"))):
-                    lang = "el";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "greek_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "german_lang"))):
-                    lang = "de";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "german_lang"), "").trim();
-                    break;
-                case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"))):
-                    lang = "eo";
-                    textToTranslate = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "esperanto_lang"), "").trim();
-            }
-
-            if (lang != null) {
-                let url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${textToTranslate}`);
+            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
+            const textToTranslate = bodyText.replace(bodyText.split(" ")[0], "").trim();
+            const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0]}&format=json`);
+            let langResponse = await nodeFetch(url, {
+                method: 'GET', headers: {
+                    'Accept': 'application/json'
+                },
+            });
+            langResponse = await langResponse.json();
+            let langCode = Object.keys(langResponse.languagesearch)[0];
+            if (langCode) {
+                const url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${langCode}&dt=t&q=${textToTranslate}`);
                 request.get(url, async function (error, response, body) {
                     if (!error && response.statusCode === 200) {
-                        const arrayWord = body.split(",");
-                        const translateWord = arrayWord[0].replace("[[[", "");
+                        const response = body.split('"');
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", response[1], response[response.length - 2]), messageID);
                         groupsDict[chatID].translationCounter++;
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply") + translateWord, messageID);
-                    }
+                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_google_error"), messageID);
                 }, null);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);

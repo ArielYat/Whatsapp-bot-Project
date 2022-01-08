@@ -39,11 +39,15 @@ class HDB {
                     break;
                 case "rested":
                     objectToAddToDataBase = {ID: ID, restArray: value1};
+                    break;
+                case "lastTagged":
+                    objectToAddToDataBase = {ID: ID, personID: value1 ,taggedArray: value2};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -94,11 +98,14 @@ class HDB {
                 case "rested":
                     objectToDelInDataBase = {ID: ID};
                     break;
+                case "lastTagged":
+                    objectToDelInDataBase = {ID: ID, personID: key};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -196,6 +203,12 @@ class HDB {
                     return;
             }
         }
+        function createLastTagged(document){
+            let chatID = document.ID, personID = document.personID, taggedArray = document.taggedArray;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            usersDict[personID].messagesTaggedIn[chatID] = taggedArray
+        }
 
         MongoClient.connect(url, function (err, client) {
             if (err) {
@@ -210,8 +223,6 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createGroupFilter(result[i]);
-                callback();
-                client.close();
             });
             dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
@@ -277,6 +288,14 @@ class HDB {
                 for (let i = 0; i < result.length; i++)
                     createPersonGroupsBirthDays(result[i]);
             });
+            dbo.collection("lastTagged-persons").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in fetching lastTagged from db");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++)
+                    createLastTagged(result[i]);
+            });
             dbo.collection("rested").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching rested from db");
@@ -284,6 +303,8 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createRested(result[i]);
+                callback();
+                client.close();
             });
         });
     }

@@ -1,4 +1,4 @@
-//version 2.2
+//version 2.3
 
 //Command Modules
 const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesDatabase/HandleDB"),
@@ -90,11 +90,11 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) { //Handle showing crypto
         await HAPI.fetchCryptocurrency(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_in_urban"))) { //Handle searching words in https://www.urbandictionary.com
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "search_in_urban"))) { //Handle searching words in Urban Dictionary
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate"))) { //Handle searching words in https://www.urbandictionary.com
-        await HAPI.Translate(client, bodyText, chatID, messageID, groupsDict);
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate_to"))) { //Handle translating words on Google Translate
+        await HAPI.translate(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);

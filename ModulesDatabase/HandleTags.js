@@ -19,6 +19,11 @@ class HT {
                         usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
                     }
                     usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                    await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function (){
+                        HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function (){
+
+                        });
+                    });
                 }
             }
         }
@@ -84,10 +89,14 @@ class HT {
             for (let tag in tagsFound) {
                 const ID = tagsFound[tag].replace("@", "") + "@c.us";
                 if(ID in usersDict) {
-                    const personID = usersDict[ID];
-                    if (personID.messagesTaggedIn[chatID] === undefined)
-                        personID.messagesTaggedIn[chatID] = [];
-                    personID.messagesTaggedIn[chatID].push(messageID);
+                    const person = usersDict[ID];
+                    if (person.messagesTaggedIn[chatID] === undefined)
+                        person.messagesTaggedIn[chatID] = [];
+                    person.messagesTaggedIn[chatID].push(messageID);
+                    await HDB.delArgsFromDB(chatID, person.personID, "lastTagged", function (){
+                        HDB.addArgsToDB(chatID, person.personID, person.messagesTaggedIn[chatID], null, "lastTagged", function (){
+                        });
+                    });
                 }
             }
         }
@@ -97,8 +106,10 @@ class HT {
         if (usersDict[authorID].messagesTaggedIn[chatID] !== undefined && usersDict[authorID].messagesTaggedIn[chatID].length !== 0) {
             usersDict[authorID].messagesTaggedIn[chatID].forEach(messageID =>
                     client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), messageID),
-                delete usersDict[authorID].messagesTaggedIn[chatID],
             );
+            await HDB.delArgsFromDB(chatID, authorID, "lastTagged", function (){
+                delete usersDict[authorID].messagesTaggedIn[chatID];
+            });
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
     }
 }
