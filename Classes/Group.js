@@ -20,7 +20,7 @@ class group {
         this.#functionPermissions = {
             "filters": "1",
             "tags": "1",
-            "handleImmediate": "1",
+            "handleOther": "1",
             "handleShows": "1",
             "handleFilters": "1",
             "handleTags": "1",
