@@ -3,6 +3,7 @@ const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
 class HP {
     static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, functionPermissions, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
+        const mutedFunction = 4;
         if (bodyText.includes("-")) {
             const textArray = bodyText.split("-");
             let permissionType = textArray[0].trim(), newPermissionLevel = textArray[1].trim();
@@ -32,7 +33,11 @@ class HP {
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
                     return;
             }
-            if (newPermissionLevel <= personPermission && functionPermissions[permissionType] <= personPermission && newPermissionLevel > 0) {
+            if (newPermissionLevel >= 0
+                && (functionPermissions[permissionType] <= personPermission && newPermissionLevel <= personPermission||
+                    (newPermissionLevel === mutedFunction.toString() || (functionPermissions[permissionType] === mutedFunction.toString()
+                        && newPermissionLevel <= personPermission))
+                    && personPermission >= 2)) {
                 await HDB.delArgsFromDB(chatID, permissionType, "groupPermissions", function () {
                     HDB.addArgsToDB(chatID, permissionType, newPermissionLevel, null, "groupPermissions", function () {
                         groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
@@ -108,9 +113,18 @@ class HP {
 
     static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
-        for (let user in groupsDict[chatID].personsIn)
-            stringForSending += "@" + groupsDict[chatID].personsIn[user].personID.replace("@c.us", "") + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
-        await client.sendReplyWithMentions(chatID, stringForSending, messageID)
+        for (let user in groupsDict[chatID].personsIn) {
+            let tempPhoneNumber = groupsDict[chatID].personsIn[user].personID.replace("@c.us", "");
+            if (Object.keys(groupsDict[chatID].tags).length) {
+                for (const name in groupsDict[chatID].tags) {
+                    if (groupsDict[chatID].tags[name] === tempPhoneNumber){
+                        tempPhoneNumber = name;
+                    }
+                }
+            }
+            stringForSending += tempPhoneNumber + " - " + groupsDict[chatID].personsIn[user].permissionLevel[chatID] + "\n";
+        }
+        await client.reply(chatID, stringForSending, messageID)
     }
 }
 
