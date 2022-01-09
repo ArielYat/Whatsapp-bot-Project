@@ -201,77 +201,78 @@ function start(client) {
     }).then();
     //Check every module every time a message is received
     client.onMessage(async message => {
-        const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
-        let bodyText, quotedMsgID, checkFilters = true;
-        //Define quotedMsgID depending on if a message was quoted
-        quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
-        //Define bodeText depending on if the message a text message or a media message
-        bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
-        bodyText = bodyText === undefined ? message.text : bodyText;
-        //Create new group/person if they don't exist in the DB
-        if (!(chatID in groupsDict))
-            groupsDict[chatID] = new Group(chatID);
-        if (!(authorID in usersDict))
-            usersDict[authorID] = new Person(authorID);
-        //Add author to group's DB if not already in it
-        if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
-            await HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
-                groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
-            });
-        }
-        //If the author lacks a permission level give them one
-        if (!(chatID in usersDict[authorID].permissionLevel))
-            await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
-        //Update group admins if they aren't updated
-        if (groupsDict[chatID].groupAdmins.length === 0) {
-            groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-            await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
-                HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
-                    HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+        if(message != null){
+            const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
+            let bodyText, quotedMsgID, checkFilters = true;
+            //Define quotedMsgID depending on if a message was quoted
+            quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
+            //Define bodeText depending on if the message a text message or a media message
+            bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
+            bodyText = bodyText === undefined ? message.text : bodyText;
+            //Create new group/person if they don't exist in the DB
+            if (!(chatID in groupsDict))
+                groupsDict[chatID] = new Group(chatID);
+            if (!(authorID in usersDict))
+                usersDict[authorID] = new Person(authorID);
+            //Add author to group's DB if not already in it
+            if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
+                await HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
+                    groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
                 });
-            });
-        }
-        //Handle bot developer functions if the author is a dev
-        if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
-            usersDict[authorID].permissionLevel[chatID] = 3;
-            await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
-            await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
-            await HAF.handleBotJoin(client, bodyText, chatID, messageID);
-            await HAF.ping(client, bodyText, chatID, messageID)
-        }
-        //Log messages with tags for later use in HT.whichMessagesTaggedIn()
-        await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
-        if(!restGroups.includes(chatID)) {
-            //If the user who sent the message isn't blocked, check for commands
-            if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
-                //Check all functions for commands if the user has a high enough permission level
-                await HandleHelp(client, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
-                    await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleImmediate"])
-                    await HandleImmediate(client, message, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
-                    await HandleShows(client, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
-                    checkFilters = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
-                    await HandleTags(client, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
-                    await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
-                if (usersDict[authorID].permissionLevel[chatID] >= 2)
-                    await HandlePermissions(client, bodyText, chatID, authorID, messageID);
-                //If the user used too many commands, put them on a cool down
-                if (usersDict[authorID].commandCounter === userCommandLimit) {
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
-                    restUsersCommandSpam.push(authorID);
-                }
             }
-            //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters
-            if (checkFilters && !restGroupsFilterSpam.includes(chatID)
-                && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
-                await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
+            //If the author lacks a permission level give them one
+            if (!(chatID in usersDict[authorID].permissionLevel))
+                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
+            //Update group admins if they aren't updated
+            if (groupsDict[chatID].groupAdmins.length === 0) {
+                groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
+                await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
+                    HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                        HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+                    });
+                });
+            }
+            //Handle bot developer functions if the author is a dev
+            if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
+                usersDict[authorID].permissionLevel[chatID] = 3;
+                await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
+                await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
+                await HAF.handleBotJoin(client, bodyText, chatID, messageID);
+                await HAF.ping(client, bodyText, chatID, messageID)
+            }
+            //Log messages with tags for later use in HT.whichMessagesTaggedIn()
+            await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
+            if(!restGroups.includes(chatID)) {
+                //If the user who sent the message isn't blocked, check for commands
+                if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
+                    //Check all functions for commands if the user has a high enough permission level
+                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
+                        await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleImmediate"])
+                        await HandleImmediate(client, message, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
+                        await HandleShows(client, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
+                        checkFilters = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"])
+                        await HandleTags(client, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"])
+                        await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= 2)
+                        await HandlePermissions(client, bodyText, chatID, authorID, messageID);
+                    //If the user used too many commands, put them on a cool down
+                    if (usersDict[authorID].commandCounter === userCommandLimit) {
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
+                        restUsersCommandSpam.push(authorID);
+                    }
+                }
+                //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters
+                if (checkFilters && !restGroupsFilterSpam.includes(chatID)
+                    && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
+                    await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
+            }
         }
-
     }).then();
     // //clean unneeded groups from cache
     // client.onRemovedFromGroup().then(chat => {
