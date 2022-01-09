@@ -85,7 +85,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
-        await HSt.handleStickers(client, message, chatID, messageID, groupsDict);
+        await HSt.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle scanning URLs
         await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
