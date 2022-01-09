@@ -189,6 +189,10 @@ class Strings {
             "he": "רק האיש והאגדה משה יכול לשנות אופציה לא קיימת",
             "en": "Only the man, the myth, the legend Moses can select a nonexistent option",
             "la": null
+        },"permission_level_does_not_exist_error": {
+            "he": "רק ביג מוישה יכול לבחור הרשאה לא מהרשימה \n בדוק שבחרת: מנהל / רגיל/ מושתק",
+            "en": null,
+            "la": null
         }, "filters": {
             "he": "פילטרים", "en": "filters", "la": null
         }, "tags": {
@@ -201,8 +205,14 @@ class Strings {
             "he": "טיפולבימיהולדת", "en": "handleBirthdays", "la": null
         }, "handleShows": {
             "he": "טיפולבהראה", "en": "handleShows", "la": null
-        }, "handleImmediate": {
-            "he": "טיפולבמיידיות", "en": "handleImmediate", "la": null
+        },"admin": {
+            "he": "מנהל בקבוצה", "en": "Admin", "la": null
+        },"regular": {
+            "he": "רגיל", "en": "regular", "la": null
+        },"developer": {
+            "he": "אלוהים", "en": "God level", "la": null
+        },"muted": {
+            "he": "מושתק", "en": "Muted", "la": null
         }, "show_group_function_permissions": {
             "he": /^הראה הרשאות פונקציות/i, "en": /^Show function permissions/i, "la": null
         }, "show_group_user_permissions": {
