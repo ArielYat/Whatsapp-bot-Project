@@ -8,10 +8,10 @@ class HSt {
         const noCrop = !!bodyText.match(HL.getGroupLang(groupsDict, chatID, "crop_sticker"));
         if (messageType === "image") {
             const mediaData = await client.decryptMedia(message);
-            await client.sendImageAsSticker(chatID, mediaData, {author: "אלכסנדר הגדול", pack: "חצול", keepScale: noCrop})
+            await client.sendImageAsSticker(chatID, mediaData, {author: "ג'ון האגדי", pack: "חצול", keepScale: noCrop})
         } else if (messageType === "video") {
             const mediaData = await client.decryptMedia(message);
-            await client.sendMp4AsSticker(chatID, mediaData, {}, {author: "אלכסנדר הגדול", pack: "חצול", keepScale: noCrop})
+            await client.sendMp4AsSticker(chatID, mediaData, {}, {author: "ג'ון האגדי", pack: "חצול", keepScale: noCrop})
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
     }
 }
