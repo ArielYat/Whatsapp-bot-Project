@@ -31,6 +31,7 @@
 - `Tag everyone` - tags all people in the group.
 - `Show tag buddies` - displays the list of all taggable people in the group.
 - `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the front of the chat.
+- `Clear my tags` - clears the saved tags of the message's author.
 
 ### [Birthdays](ModulesDatabase/HandleBirthdays.js)
 
@@ -44,10 +45,10 @@
 
 ### [Permissions & Muting](ModulesDatabase/HandlePermissions.js)
 
-- `Define permission for [permission type] - [number from 0 to 2]` - defines the permission level required for a certain type of commands.
+- `Define permission for [permission type] - [number from 0 to 3]` - defines the permission level required for a certain type of commands.
   - For example: Define permission filters - 1.
-  - Permission types: filters, tags, handleFilters, handleTags, HandleBirthdays, HandleOthers.
-  Number meaning: 0 - muted member, 1 - regular member, 2 - group admin.
+  - Permission types: filters, tags, handleFilters, handleTags, HandleBirthdays, HandleOthers. 
+  - Number meaning: 0 - muted member, 1 - regular member, 2 - group admin, 3 - no one can use the commands with this this permission level.
 - `Mute [person tag]` - mutes the tagged person so they aren't able to use commands.
   - For example: Mute @Joseph.
 - `Unmute person [person tag]` - unmutes the tagged person.

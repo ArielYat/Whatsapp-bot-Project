@@ -34,7 +34,7 @@ class HP {
                     return;
             }
             if (newPermissionLevel >= 0
-                && (functionPermissions[permissionType] <= personPermission && newPermissionLevel <= personPermission||
+                && (functionPermissions[permissionType] <= personPermission && newPermissionLevel <= personPermission ||
                     (newPermissionLevel === mutedFunction.toString() || (functionPermissions[permissionType] === mutedFunction.toString()
                         && newPermissionLevel <= personPermission))
                     && personPermission >= 2)) {
@@ -117,7 +117,7 @@ class HP {
             let tempPhoneNumber = groupsDict[chatID].personsIn[user].personID.replace("@c.us", "");
             if (Object.keys(groupsDict[chatID].tags).length) {
                 for (const name in groupsDict[chatID].tags) {
-                    if (groupsDict[chatID].tags[name] === tempPhoneNumber){
+                    if (groupsDict[chatID].tags[name] === tempPhoneNumber) {
                         tempPhoneNumber = name;
                     }
                 }

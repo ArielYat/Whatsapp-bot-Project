@@ -41,7 +41,7 @@ class HDB {
                     objectToAddToDataBase = {ID: ID, restArray: value1};
                     break;
                 case "lastTagged":
-                    objectToAddToDataBase = {ID: ID, personID: value1 ,taggedArray: value2};
+                    objectToAddToDataBase = {ID: ID, personID: value1, taggedArray: value2};
                     break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
@@ -118,7 +118,7 @@ class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers,  restGroups, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -186,9 +186,10 @@ class HDB {
                 groupsDict[chatID] = new Group(chatID);
             groupsDict[chatID].functionPermissions = [func, permission]
         }
+
         function createRested(document) {
             let chatID = document.ID, restArray = document.restArray;
-            switch (chatID){
+            switch (chatID) {
                 case ("restArrayUsers"):
                     for (let i = 0; i < restArray.length; i++) {
                         restUsers.push(restArray[i])
@@ -203,7 +204,8 @@ class HDB {
                     return;
             }
         }
-        function createLastTagged(document){
+
+        function createLastTagged(document) {
             let chatID = document.ID, personID = document.personID, taggedArray = document.taggedArray;
             if (!(personID in usersDict))
                 usersDict[personID] = new Person(personID);

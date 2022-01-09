@@ -6,8 +6,8 @@ class HAF {
             let quotedMsgAuthor = quotedMsg.author
             if (bodyText.startsWith("חסום גישה למשתמש")) {
                 restUsers.push(quotedMsgAuthor);
-                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function (){
-                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null,"rested", function(){
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null, "rested", function () {
                         client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor +
                             " נחסם בהצלחה, \n May God have mercy on your soul", messageID);
                     });
@@ -17,8 +17,8 @@ class HAF {
                 restUsers.splice(restUsers.indexOf(quotedMsgAuthor), 1);
                 restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(quotedMsgAuthor), 1);
                 user.commandCounter = 0;
-                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function (){
-                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null,"rested", function(){
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null, "rested", function () {
                         client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " שוחרר בהצלחה", messageID);
                     });
                 });
