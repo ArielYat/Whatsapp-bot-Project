@@ -201,7 +201,7 @@ function start(client) {
     }).then();
     //Check every module every time a message is received
     client.onMessage(async message => {
-        if(message != null){
+        if (message != null) {
             const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
             let bodyText, quotedMsgID, checkFilters = true;
             //Define quotedMsgID depending on if a message was quoted
@@ -242,7 +242,7 @@ function start(client) {
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
-            if(!restGroups.includes(chatID)) {
+            if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
                 if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
                     //Check all functions for commands if the user has a high enough permission level

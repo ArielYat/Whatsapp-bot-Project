@@ -47,7 +47,7 @@
 
 - `Define permission for [permission type] - [number from 0 to 3]` - defines the permission level required for a certain type of commands.
   - For example: Define permission filters - 1.
-  - Permission types: filters, tags, handleFilters, handleTags, HandleBirthdays, HandleOthers. 
+  - Permission types: filters, tags, handleShows, handleFilters, handleTags, handleBirthdays, handleOthers. 
   - Number meaning: 0 - muted member, 1 - regular member, 2 - group admin, 3 - no one can use the commands with this this permission level.
 - `Mute [person tag]` - mutes the tagged person so they aren't able to use commands.
   - For example: Mute @Joseph.
