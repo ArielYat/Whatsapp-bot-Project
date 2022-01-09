@@ -58,8 +58,9 @@
 
 ### [Miscellaneous](ModulesImmediate)
 
-- [`Create sticker`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and sends it.
+- [`Create sticker [without cropping/-]`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and sends it.
   - This command can be used in the message the media was sent in and as a reply to it.
+  - "without cropping" is an optional parameter which creates the sticker without cropping it. 
 - [`Check Crypto`](ModulesImmediate/HandleAPIs.js) - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar.
 - [`Internet definition [word]`](ModulesImmediate/HandleAPIs.js) - searches for the word on the website Urban Dictionary and returns the search result.
 - [`Translate to [some language] [text]`](ModulesImmediate/HandleAPIs.js) - translates the text with Google Translate to the desired language.
