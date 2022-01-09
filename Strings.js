@@ -358,8 +358,167 @@ class Strings {
         }, "help": {
             "he": "עזרה", "en": "Help", "la": "Auxilium"
         }, "help_reply": {
-            "he": `*הוראות בעברית*\n _שפה_: \n - "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות \n לדוגמה: שנה שפה לאנגלית \n  אפשר להשתמש בפקודה הזו בכל שפה\nשפות שנתמכות כעת: עברית, אנגלית ולטינית  \n  \n _פילטרים_: \n- "הוסף פילטר [פילטר] - [תגובת הבוט]" - מוסיף פילטר לקבוצה  \n לדוגמה: הוסף פילטר אוכל - בננה \n  אפשר להוסיף פילטר של טקסט, תמונה או סרטון\n- "הסר פילטר [פילטר]" - מסיר את הפילטר המצויין מהקבוצה  \n לדוגמה: הסר פילטר אוכל \n- "ערוך פילטר [פילטר קיים] - [תשובה חדשה]" - עורך פילטר קיים בקבוצה  \n לדוגמה: ערוך פילטר אוכל - אפרסק \n- "הראה פילטרים" - מציג את רשימת הפילטרים הקיימים כעת בקבוצה  \n  \n _תיוגים_: \n- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו  \n לדוגמה: תייג יוסי \n- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי]" - מוסיף אדם לתיוג בקבוצה  \n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 \n- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה  \n לדוגמה: הסר חבר מתיוג יוסי \n- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה  \n- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים לתיוג שמוגדרים בקבוצה  \n  - "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים\n  \n _ימי הולדת_: \n  - "הוסף יום הולדת - [תאריך מנוקד בפורמט בינלאומי הפוך]" - מוסיף יום הולדת לכותב ההודעה\n  לדוגמה: הוסף יום הולדת 1.11.2011\n  - "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n  - "הוסף קבוצה להודעת יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הסר קבוצה מהודעת יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n  \n  _הרשאות והשתקות_:\n  - "קבע הרשאה ל[סוג הרשאה] - [מספר מ־0 עד 2]" - קובע את רמה ההרשאה הנדרשת לסוג פקודות מסוים\n  לדוגמה: קבע הרשאה לפילטרים - 1\n  סוגי ההרשאות: פילטרים, תיוגים, טיפולבפילטרים, טיפולבתיוגים, טיפולבימיהולדת, טיפולבהראה, טיפולבמיידיות\n  - "השתק [תיוג של אדם]" - משתיק את האדם המתוייג כך שלא יוכל להשתמש בפקודות\n  לדוגמה: השתק @יוסי\n  - "הסר השתקה [תיוג של אדם]" - מבטל את ההשתקה של האדם המתוייג\n  לדוגמה: בטל השתקה @יוסי\n  - "הראה הרשאות פונקציות" - מציג את רמות ההרשאות של סוגי הפקודות השונים\n  - "הראה הרשאות אנשים" - מציג את רמות ההרשאות של האנשים בקבוצה\n  משמעות המספר: 0 - חבר קבוצה מושתק, 1 - חבר קבוצה רגיל, 2 - מנהל קבוצה\n  \n _פונקציות נוספות_ \n - "הפוך לסטיקר" - הופך הודעת מדיה לסטיקר ושולח אותו \n ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה \n  - "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n  - "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  לדוגמה: הגדרת אינטרנט Chair\n  - "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  לדוגמה: תרגם לאנגלית כיסא\n  בתרגום ניתן לכתוב רק משפט אחד בגלל מגבלות של גוגל תרגום\n  - "סרוק [קישור]" - סורק קישור לוירוסים\n  לדוגמה: סרוק https://www.google.com/\n - "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה) \n  - יצירת סקר של וואטסאפ:\n "צור סקר \n כותרת - [כותרת סקר] \n כותרת משנה - [כותרת משנה] \n כותרת שלישית - [כותרת שלישית] \n כפתור 1 - [אופציה ראשונה] \n כפתור 2 - [אופציה שנייה] \n כפתור 3 - [אופציה שלישית]" \n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) \n  \n _טיפ מיוחד!_ \n בהוספת פילטר אפשר גם להשתמש ב[שם] בשביל לתייג מישהו כשהפילטר נקרא \n  לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי כשנאמר "אוכל"\n\n  _קרדיטים_\n  מפותח ומתוחזק על ידי אריאל יצקן (@972543293155) ואיתן עמירן (@972586809911)\n  קישור ל־Github Repository, לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
-            "en": `*English Instructions* \n  _Language_:\n  - "Change language to [language]" - changes the language the bot receives and sends messages in\n  For example: Change language to Hebrew\n  This command can be used at all times in every language\n  Languages currently supported: Hebrew, English & Latin\n  \n  _Filters_:\n  - "Add filter [filter] - [bot reply]" - adds a filter to the group\n  For example: Add filter food - banana\n  Filters can be text, an image or a video\n  - "Remove filter [filter]" - removes the specified filter from the group\n  For example: Remove filter food\n  - "Edit filter [existing filter] - [new reply]" - edits the specified filter\n  For example: Edit filter food - peach\n  - "Show filters" - displays the list of all filter and their replies in the group\n  \n  _Tags_:\n  - "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone\n  For example: Tag Joseph\n  - "Add tag buddy [name] - [phone number in international format]" - adds the person to the list of taggable people\n  For example: Add tagging buddy Joseph - 972501234567\n  - "Remove tag buddy [name]" - removes the person from the list of taggable people\n  For example: Remove tagging buddy Joseph\n  - "Tag everyone" - tags all people in the group\n  - "Show tag buddies" - displays the list of all taggable people in the group\n  - "Check where I've been tagged" - shows the last message in which the message author's been tagged, can be used multiple times\n  \n  _Birthdays_:\n  - "Add birthday [date in reverse international format with periods]" - adds a birthday for message's author\n  For example: Add birthday 1.11.2011\n  - "Remove birthday" - removes the author's birthday\n  - "Add group to birthday message" - adds the group the message was sent in to the author's birthday message broadcast\n  - "Remove group from birthday message" - removes the group the message was sent in from the author's birthday message broadcast\n  -"Show birthdays" - displays the birthdays of the group members  \n  \n  _Permissions & Muting_:\n  "Define permission for [permission type] - [number from 0 to 2]" - defines the permission level required for a certain type of commands\n  For example: Define permission filters - 1\n  Permission types: filters, tags, handleFilters, handleTags, handleBirthdays, handleShows, handleImmediate\n  - "Mute [person tag]" - mutes the tagged person so they aren't able to use commands\n  For example: Mute @Joseph\n  - "Unmute person [person tag]" - unmutes the tagged person\n  For example: Unmute @Joseph  \n  - "Show function permissions" - displays the permission levels of the different types of commands\n  - "Show people permissions" - displays the permission levels of the people in the group\n  Number meaning: 0 - muted member, 1 - regular member, 2 - group admin\n  \n  _Miscellaneous_:\n  - "Create sticker" - creates a sticker out of a media file and sends it\n  This command can be used in the message the media was sent in and as a reply to it\n  - "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n  - "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result\n  For example: Internet definition chair\n  - "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  For example: Translate to Hebrew chair\n  In the translation text only one sentence can be written due to Google Translate restrictions\n  - "Scan [link]" - scans the given link for viruses\n  For example: Scan https://www.google.com/\n  - "Send link" - sends a link to the bots webpage (work in progress)\n  - Create a WhatsApp survey:\n  "Create survey\n  Title - [survey title]\n  Subtitle - [survey subtitle]\n  Third Title - [third title]\n  Button 1 - [first option]\n  Button 2 - [second option]\n  Button 3 - [third option]"\n  (The third title and buttons 1 and 2 aren't required)\n    \n  _Special tip!_\n  When adding a filter you can use [name] to tag someone when the filter is invoked\n  For example: "Add filter food - [Joseph]" will make the bot tag Joseph whenever "food" is said\n  \n  _Deletion from the database_\n  - "Delete this group from the database" - deletes all of the group's information from the database\n  - "Delete me from the database" - deletes all of the author's information from the database\n  *Use these commands with caution, their effects are irreversible*\n  \n  _Credits_\n  Developed and maintained by Ariel Yatskan (@972543293155) and Ethan Amiran (@972586809911)\n  The GitHub repository, for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
+            "he": `*הוראות בעברית*
+ _שפה_: 
+ - "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות 
+ לדוגמה: שנה שפה לאנגלית 
+  אפשר להשתמש בפקודה הזו בכל שפה
+שפות שנתמכות כעת: עברית, אנגלית ולטינית  
+  
+ _פילטרים_: 
+- "הוסף פילטר [פילטר] - [תגובת הבוט]" - מוסיף פילטר לקבוצה  
+ לדוגמה: הוסף פילטר אוכל - בננה 
+  אפשר להוסיף פילטר של טקסט, תמונה או סרטון
+- "הסר פילטר [פילטר]" - מסיר את הפילטר המצויין מהקבוצה  
+ לדוגמה: הסר פילטר אוכל 
+- "ערוך פילטר [פילטר קיים] - [תשובה חדשה]" - עורך פילטר קיים בקבוצה  
+ לדוגמה: ערוך פילטר אוכל - אפרסק 
+- "הראה פילטרים" - מציג את רשימת הפילטרים הקיימים כעת בקבוצה  
+  
+ _תיוגים_: 
+- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו  
+ לדוגמה: תייג יוסי 
+- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי]" - מוסיף אדם לתיוג בקבוצה  
+ לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 
+- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה  
+ לדוגמה: הסר חבר מתיוג יוסי 
+- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה  
+- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים לתיוג שמוגדרים בקבוצה  
+  - "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים
+  - "נקה תיוגיי" - מנקה את התיוגים השמורים של כותב ההודעה
+  
+ _ימי הולדת_: 
+  - "הוסף יום הולדת - [תאריך מנוקד בפורמט בינלאומי הפוך]" - מוסיף יום הולדת לכותב ההודעה
+  לדוגמה: הוסף יום הולדת 1.11.2011
+  - "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה
+  - "הוסף קבוצה להודעת יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה
+  - "הסר קבוצה מהודעת יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה
+  - "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה
+  
+  _הרשאות והשתקות_:
+  - "קבע הרשאה ל[סוג הרשאה] - [מספר מ־0 עד 2]" - קובע את רמה ההרשאה הנדרשת לסוג פקודות מסוים
+  לדוגמה: קבע הרשאה לפילטרים - 1
+  סוגי ההרשאות: פילטרים, תיוגים, טיפולבפילטרים, טיפולבתיוגים, טיפולבימיהולדת, טיפולבהראה, טיפולבמיידיות
+  - "השתק [תיוג של אדם]" - משתיק את האדם המתוייג כך שלא יוכל להשתמש בפקודות
+  לדוגמה: השתק @יוסי
+  - "הסר השתקה [תיוג של אדם]" - מבטל את ההשתקה של האדם המתוייג
+  לדוגמה: בטל השתקה @יוסי
+  - "הראה הרשאות פונקציות" - מציג את רמות ההרשאות של סוגי הפקודות השונים
+  - "הראה הרשאות אנשים" - מציג את רמות ההרשאות של האנשים בקבוצה
+  משמעות המספר: 0 - חבר קבוצה מושתק, 1 - חבר קבוצה רגיל, 2 - מנהל קבוצה, 3 - אף אחד לא יכול להשתמש בפקודות עם רמת הרשאה זו
+  
+ _פונקציות נוספות_ 
+ - "הפוך לסטיקר" - הופך הודעת מדיה לסטיקר ושולח אותו 
+ ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה 
+  - "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר
+  - "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש
+  לדוגמה: הגדרת אינטרנט Chair
+  - "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום
+  לדוגמה: תרגם לאנגלית כיסא
+  בתרגום ניתן לכתוב רק משפט אחד בגלל מגבלות של גוגל תרגום
+  - "סרוק [קישור]" - סורק קישור לוירוסים
+  לדוגמה: סרוק https://www.google.com/
+ - "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה) 
+  - יצירת סקר של וואטסאפ:
+ "צור סקר 
+ כותרת - [כותרת סקר] 
+ כותרת משנה - [כותרת משנה] 
+ כותרת שלישית - [כותרת שלישית] 
+ כפתור 1 - [אופציה ראשונה] 
+ כפתור 2 - [אופציה שנייה] 
+ כפתור 3 - [אופציה שלישית]" 
+ (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) 
+  
+ _טיפ מיוחד!_ 
+ בהוספת פילטר אפשר גם להשתמש ב[שם] בשביל לתייג מישהו כשהפילטר נקרא 
+  לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי כשנאמר "אוכל"
+
+  _קרדיטים_
+  מפותח ומתוחזק על ידי אריאל יצקן (@972543293155) ואיתן עמירן (@972586809911)
+  קישור ל־Github Repository, לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
+            "en": `*English Instructions* 
+  _Language_:
+  - "Change language to [language]" - changes the language the bot receives and sends messages in
+  For example: Change language to Hebrew
+  This command can be used at all times in every language
+  Languages currently supported: Hebrew, English & Latin
+  
+  _Filters_:
+  - "Add filter [filter] - [bot reply]" - adds a filter to the group
+  For example: Add filter food - banana
+  Filters can be text, an image or a video
+  - "Remove filter [filter]" - removes the specified filter from the group
+  For example: Remove filter food
+  - "Edit filter [existing filter] - [new reply]" - edits the specified filter
+  For example: Edit filter food - peach
+  - "Show filters" - displays the list of all filter and their replies in the group
+  
+  _Tags_:
+  - "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone
+  For example: Tag Joseph
+  - "Add tag buddy [name] - [phone number in international format]" - adds the person to the list of taggable people
+  For example: Add tagging buddy Joseph - 972501234567
+  - "Remove tag buddy [name]" - removes the person from the list of taggable people
+  For example: Remove tagging buddy Joseph
+  - "Tag everyone" - tags all people in the group
+  - "Show tag buddies" - displays the list of all taggable people in the group
+  - "Check where I've been tagged" - shows the last message in which the message author's been tagged, can be used multiple times
+  - "Clear my tags" - clears the saved tags of the message's author
+  
+  _Birthdays_:
+  - "Add birthday [date in reverse international format with periods]" - adds a birthday for message's author
+  For example: Add birthday 1.11.2011
+  - "Remove birthday" - removes the author's birthday
+  - "Add group to birthday message" - adds the group the message was sent in to the author's birthday message broadcast
+  - "Remove group from birthday message" - removes the group the message was sent in from the author's birthday message broadcast
+  -"Show birthdays" - displays the birthdays of the group members  
+  
+  _Permissions & Muting_:
+  "Define permission for [permission type] - [number from 0 to 2]" - defines the permission level required for a certain type of commands
+  For example: Define permission filters - 1
+  Permission types: filters, tags, handleFilters, handleTags, handleBirthdays, handleShows, handleImmediate
+  - "Mute [person tag]" - mutes the tagged person so they aren't able to use commands
+  For example: Mute @Joseph
+  - "Unmute person [person tag]" - unmutes the tagged person
+  For example: Unmute @Joseph  
+  - "Show function permissions" - displays the permission levels of the different types of commands
+  - "Show people permissions" - displays the permission levels of the people in the group
+  Number meaning: 0 - muted member, 1 - regular member, 2 - group admin, 3 - no one can use the commands with this number
+  
+  _Miscellaneous_:
+  - "Create sticker" - creates a sticker out of a media file and sends it
+  This command can be used in the message the media was sent in and as a reply to it
+  - "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar
+  - "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result
+  For example: Internet definition chair
+  - "Translate to [some language] [words]" - translates the words to the given language via Google Translate
+  For example: Translate to Hebrew chair
+  In the translation text only one sentence can be written due to Google Translate restrictions
+  - "Scan [link]" - scans the given link for viruses
+  For example: Scan https://www.google.com/
+  - "Send link" - sends a link to the bots webpage (work in progress)
+  - Create a WhatsApp survey:
+  "Create survey
+  Title - [survey title]
+  Subtitle - [survey subtitle]
+  Third Title - [third title]
+  Button 1 - [first option]
+  Button 2 - [second option]
+  Button 3 - [third option]"
+  (The third title and buttons 1 and 2 aren't required)
+    
+  _Special tip!_
+  When adding a filter you can use [name] to tag someone when the filter is invoked
+  For example: "Add filter food - [Joseph]" will make the bot tag Joseph whenever "food" is said
+  
+  _Deletion from the database_
+  - "Delete this group from the database" - deletes all of the group's information from the database
+  - "Delete me from the database" - deletes all of the author's information from the database
+  *Use these commands with caution, their effects are irreversible*
+  
+  _Credits_
+  Developed and maintained by Ariel Yatskan (@972543293155) and Ethan Amiran (@972586809911)
+  The GitHub repository, for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
             "la": null
         }, "start_message": {
             "all": `שלום, אני ג'ון!\nכדי לשנות שפה כתבו "שנה שפה ל[שפה שאתם רוצים לשנות לה]".\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית ולטינית.\nכדי להציג את הודעת העזרה כתבו "עזרה" בשפה הפעילה.\n\n\nHello, I'm John!\nTo change language type "Change language to [language you want to change to]".\nThe default language is Hebrew, and the currently available languages are Hebrew, English and Latin.\nTo display a help message type "Help" in the active language.\n\n\nSalve amici, John sum!\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.\nPropter auxilium, scriba "Auxilium" in mea lingua.`
