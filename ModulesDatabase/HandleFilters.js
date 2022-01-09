@@ -33,12 +33,10 @@ class HF {
         if (messageType === "image") {
             filterReply = "image" + await client.decryptMedia(message);
             existError = HL.getGroupLang(groupsDict, chatID, "image");
-        }
-        else if (messageType === "video") {
+        } else if (messageType === "video") {
             filterReply = "video" + await client.decryptMedia(message);
             existError = HL.getGroupLang(groupsDict, chatID, "video");
-        }
-        else if (messageType === "chat") {
+        } else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
