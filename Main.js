@@ -77,6 +77,9 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_tags"))) { //Handle checking tagged messages
         await HT.whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
+        await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter++;
     }
 }
 

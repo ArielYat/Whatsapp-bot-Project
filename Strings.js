@@ -102,8 +102,14 @@ class Strings {
             "en": "You've been tagged here, Good Sir",
             "la": null
         }, "check_tags_no_messages_error": {
-            "he": "לא תוייגת מאז ההפעלה האחרונה שלי",
-            "en": "You haven't been tagged since the last time I was restarted",
+            "he": "לא תוייגת מאז שאני זוכר את עצמי",
+            "en": "You haven't been tagged for as long as I can remember myself",
+            "la": null
+        }, "clear_tags": {
+            "he": /^נקה תיוגיי/i, "en": /^Clear my tags/i, "la": null
+        }, "clear_tags_reply": {
+            "he": "נוקתה רשימת תיוגך",
+            "en": "Your tag list has been cleared",
             "la": null
         }, //birthdays
         "birthday_wishes_reply": {
