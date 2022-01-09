@@ -231,7 +231,7 @@ class Strings {
         "make_sticker": {
             "he": /^הפוך לסטיקר/i, "en": /^Create sticker/i, "la": "Fac hoc imaginem"
         }, "crop_sticker": {
-            "he": /^חתוך/i, "en": /^Crop/i, "la": null
+            "he": /^ללא חתוך/i, "en": /^not cropped/i, "la": null
         }, "not_sticker_material_error": {
             "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון לסטיקר",
             "en": "Idiot, a sticker has to be an image or a video",
