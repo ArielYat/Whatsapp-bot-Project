@@ -2,18 +2,14 @@ const HL = require("../ModulesDatabase/HandleLanguage"), HP = require("../Module
 
 class HUS {
     static async ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
-        const tagUser = "@" + usersDict[authorID].personID.replace("@c.us", "");
-        const cryptoUsed = groupsDict[chatID].cryptoCheckedToday;
-        const taggedLength = usersDict[authorID].messagesTaggedIn[chatID] === undefined ? 0 : usersDict[authorID].messagesTaggedIn[chatID].length
-        const translateTimes = groupsDict[chatID].translationCounter;
-        const rank = HP.functionPermissionToWord(groupsDict, chatID, usersDict[authorID].permissionLevel[chatID]);
-        const birthDay = !!usersDict[authorID].birthday.length ? usersDict[authorID].birthday.toString().replace("[", "").replace("]", "") : HL.getGroupLang(groupsDict, chatID, "birthDay_message_error");
-        await client.sendReplyWithMentions(chatID, `${tagUser} 
- ${HL.getGroupLang(groupsDict, chatID, "cryptoUsed", cryptoUsed.toString())}
- ${HL.getGroupLang(groupsDict, chatID, "taggedLength", taggedLength.toString())}
- ${HL.getGroupLang(groupsDict, chatID, "translateTimes", translateTimes.toString())}
- ${HL.getGroupLang(groupsDict, chatID, "rank", rank)}
- ${HL.getGroupLang(groupsDict, chatID, "birthDay_message", birthDay)}`, messageID)
+        const userTag = "@" + usersDict[authorID].personID.replace("@c.us", "");
+        const taggedMessagesAmount = usersDict[authorID].messagesTaggedIn[chatID] === undefined ? "0" : usersDict[authorID].messagesTaggedIn[chatID].length.toString();
+        const permissionLevel = HP.functionPermissionToWord(groupsDict, chatID, usersDict[authorID].permissionLevel[chatID]);
+        const birthDay = !!usersDict[authorID].birthday.length ? usersDict[authorID].birthday.toString().replace("[", "").replace("]", "") : HL.getGroupLang(groupsDict, chatID, "profile_birthday_error");
+        await client.sendReplyWithMentions(chatID, `${userTag}
+            ${HL.getGroupLang(groupsDict, chatID, "tagged_messages_amount_reply", taggedMessagesAmount)}
+            ${HL.getGroupLang(groupsDict, chatID, "permission_level_reply", permissionLevel)}
+            ${HL.getGroupLang(groupsDict, chatID, "profile_birthday_reply", birthDay)}`, messageID)
     }
 }
 

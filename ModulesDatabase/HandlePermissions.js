@@ -10,11 +10,9 @@ class HP {
                 const permissionType = this.wordToFunctionType(groupsDict, chatID, textArray[0].trim());
                 if (permissionType) {
                     if (newPermissionLevel >= 0 &&
-                        ((groupFunctionPermissions[permissionType] <= personPermission
-                        && newPermissionLevel <= personPermission) ||
-                        (personPermission >= 2 && (newPermissionLevel === 4 ||
-                            (groupFunctionPermissions[permissionType] === 4 && newPermissionLevel <= personPermission))))
-                    ) {
+                        ((groupFunctionPermissions[permissionType] <= personPermission && newPermissionLevel <= personPermission) ||
+                            (personPermission >= 2 && (newPermissionLevel === 4 ||
+                                (groupFunctionPermissions[permissionType] === 4 && newPermissionLevel <= personPermission))))) {
                         await HDB.delArgsFromDB(chatID, permissionType, "groupPermissions", function () {
                             HDB.addArgsToDB(chatID, permissionType, newPermissionLevel, null, "groupPermissions", function () {
                                 groupsDict[chatID].functionPermissions = [permissionType, newPermissionLevel];
@@ -23,7 +21,7 @@ class HP {
                         });
                     } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
                 } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_option_does_not_exist_error"), messageID)
-            }else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_level_does_not_exist_error"), messageID)
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "permission_level_does_not_exist_error"), messageID)
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
 

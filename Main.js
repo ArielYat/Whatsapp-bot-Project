@@ -6,7 +6,8 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
     HB = require("./ModulesDatabase/HandleBirthdays"), HSt = require("./ModulesImmediate/HandleStickers"),
     HAF = require("./ModulesDatabase/HandleAdminFunctions"), HL = require("./ModulesDatabase/HandleLanguage"),
     HSu = require("./ModulesImmediate/HandleSurveys"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"), HUS = require("./ModulesImmediate/HandleUserStats"),
+    HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"),
+    HUS = require("./ModulesImmediate/HandleUserStats"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
@@ -105,7 +106,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle creating surveys
         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "Profile"))) { //Show user current stats
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_profile"))) { //Show author's stats
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     }
