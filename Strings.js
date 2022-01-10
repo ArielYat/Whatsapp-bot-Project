@@ -373,7 +373,7 @@ class Strings {
             "en": "Try again tomorrow, you guys are translating too many words",
             "la": null
         }, "Profile": {
-            "he": /^\/פרופיל/i, "en": /^\/profile/i, "la": null
+            "he": /^הראה פרופיל/i, "en": /^\/show profile/i, "la": null
         }, "cryptoUsed": {
             "he": "האם נבדק קריפטו בקבוצה זו ביממה האחרונה: %s",
             "en": null,
@@ -386,12 +386,16 @@ class Strings {
             "he": "בקשות של תורגמים בקבוצה זו: %s",
             "en": null,
             "la": null
-        }, "functionsUses": {
-            "he": "שימוש בפונקציות ב5 דקות האחרונות: %s",
+        }, "rank": {
+            "he": "רמת ההרשאה בקבוצה זו: %s",
             "en": null,
             "la": null
-        }, "filtersUses": {
-            "he": "שימוש בפילטרים בקבוצה זו ב5 דקות האחרונות: %s",
+        }, "birthDay_message": {
+            "he": "אם שכחת במקרה אז יום הולדתך הוא: %s",
+            "en": null,
+            "la": null
+        }, "birthDay_message_error": {
+            "he": "מישהו פה לא הגדיר יום הולדת :(",
             "en": null,
             "la": null
         }, "show_webpage": {

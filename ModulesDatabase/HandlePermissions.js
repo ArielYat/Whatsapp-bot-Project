@@ -110,15 +110,15 @@ class HP {
     static functionPermissionToWord(groupsDict, chatID, permissionNumber) {
         switch (permissionNumber.toString()) {
             case "4":
-                return HL.getGroupLang(groupsDict, chatID, "muted_permission_level");
+                return HL.getGroupLang(groupsDict, chatID, "muted_permission_level_replace");
             case "0":
-                return HL.getGroupLang(groupsDict, chatID, "muted_permission_level");
+                return HL.getGroupLang(groupsDict, chatID, "muted_permission_level_replace");
             case "3":
-                return HL.getGroupLang(groupsDict, chatID, "developer_permission_level");
+                return HL.getGroupLang(groupsDict, chatID, "developer_permission_level_replace");
             case "2":
-                return HL.getGroupLang(groupsDict, chatID, "admin_permission_level");
+                return HL.getGroupLang(groupsDict, chatID, "admin_permission_level_replace");
             case "1":
-                return HL.getGroupLang(groupsDict, chatID, "regular_permission_level");
+                return HL.getGroupLang(groupsDict, chatID, "regular_permission_level_replace");
             default:
                 return null;
         }

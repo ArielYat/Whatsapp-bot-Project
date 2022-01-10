@@ -47,7 +47,7 @@ class HURL {
                     counter++;
                 }
             }
-            prettyAnswerString += "\n" + HL.getGroupLang(groupsDict, chatID, "scan_link_result_reply", counter);
+            prettyAnswerString += "\n" + HL.getGroupLang(groupsDict, chatID, "scan_link_result_reply", counter.toString());
             client.reply(chatID, url + "\n" + prettyAnswerString, messageID);
         } catch (err) {
             client.reply(chatID, "" + err, messageID);
