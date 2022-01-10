@@ -372,6 +372,28 @@ class Strings {
             "he": "תנסה מחר לבקש תרגום, ביקשו יותר מדי תרגומים בקבוצה זו",
             "en": "Try again tomorrow, you guys are translating too many words",
             "la": null
+        }, "Profile": {
+            "he": /^\/פרופיל/i, "en": /^\/profile/i, "la": null
+        }, "cryptoUsed": {
+            "he": "האם נבדק קריפטו בקבוצה זו ביממה האחרונה: %s",
+            "en": null,
+            "la": null
+        }, "taggedLength": {
+            "he": "תוייגת: %s פעמיים",
+            "en": null,
+            "la": null
+        }, "translateTimes": {
+            "he": "בקשות של תורגמים בקבוצה זו: %s",
+            "en": null,
+            "la": null
+        }, "functionsUses": {
+            "he": "שימוש בפונקציות ב5 דקות האחרונות: %s",
+            "en": null,
+            "la": null
+        }, "filtersUses": {
+            "he": "שימוש בפילטרים בקבוצה זו ב5 דקות האחרונות: %s",
+            "en": null,
+            "la": null
         }, "show_webpage": {
             "he": /^שלח קישור לאתר/i, "en": /^Send website link/i, "la": "Ostende situs texti"
         }, "show_webpage_reply": {
