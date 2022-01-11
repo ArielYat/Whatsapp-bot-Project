@@ -25,7 +25,7 @@ const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, function () {
     wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
-})
+}).then();
 
 //Reset filters counter for all groups every [groupFilterCounterResetInterval] minutes (automatic)
 setInterval(function () {
@@ -174,7 +174,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
 }
 
 async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText === (HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
+    if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
         await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) ||
@@ -202,7 +202,7 @@ function start(client) {
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
         await client.sendText(chat.id, Strings["start_message"]["all"]);
-    })
+    }).then();
     //Check every module every time a message is received
     client.onMessage(async message => {
         if (message != null) {
@@ -278,7 +278,7 @@ function start(client) {
                     await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
             }
         }
-    });
+    }).then();
     // //clean unneeded groups from cache
     // client.onRemovedFromGroup().then(chat => {
     //     delete groupsDict[chat]; // !! delete does not change array length (remember for the future)
