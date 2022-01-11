@@ -242,8 +242,8 @@ function start(client) {
                 await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
                 await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
                 await HAF.handleBotJoin(client, bodyText, chatID, messageID);
-                await HAF.ping(client, bodyText, chatID, messageID)
-                await HAF.execute(client, bodyText, message, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
+                await HAF.ping(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
+                await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
