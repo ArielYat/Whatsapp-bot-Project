@@ -63,14 +63,11 @@ class HAF {
 
     static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
         if (bodyText.startsWith("ping!")) {
-            let timedReq = function (url, next) {
-                let start = new Date();
-
-            };
-            const groupAmount = "כמות קבוצות סך הכל: " + groupsDict.length;
-            const userAmount = "כמות משתמשים סך הכל: " + usersDict.length;
+            const groupAmount = "כמות קבוצות סך הכל: " + Object.keys(groupsDict).length;
+            const userAmount = "כמות משתמשים סך הכל: " + Object.keys(usersDict).length;
             const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length);
             const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length);
+            await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
         }
     }
 
