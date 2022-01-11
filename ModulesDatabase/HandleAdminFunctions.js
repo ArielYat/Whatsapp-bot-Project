@@ -59,10 +59,10 @@ class HAF {
     }
 
     static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
-        const groupAmount = "כמות קבוצות סך הכל: " + Object.keys(groupsDict).length;
-        const userAmount = "כמות משתמשים סך הכל: " + Object.keys(usersDict).length;
-        const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length);
-        const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length);
+        const groupAmount = "כמות קבוצות סך הכל: " + (Object.keys(groupsDict).length).toString();
+        const userAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
+        const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
+        const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length).toString();
         await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
     }
 
@@ -70,8 +70,8 @@ class HAF {
         try {
             eval(bodyText.replace("/exec", ""));
             await client.reply(message.chat.id, "הפקודה שהרצת בוצעה בהצלחה", message.id);
-        } catch (e) {
-            await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${e.toString()} `, message.id);
+        } catch (err) {
+            await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, message.id);
         }
     }
 }
