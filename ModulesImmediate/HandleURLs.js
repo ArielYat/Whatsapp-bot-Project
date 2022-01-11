@@ -2,8 +2,9 @@ const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../a
 const nvt = require('node-virustotal'), time = require("usleep");
 
 class HURL {
-    static async stripLinks(client, bodyText, chatID, messageID, groupsDict) {
-        const virusTotalApi = apiKeys.virusAPI
+    static async stripLinks(client, message, chatID, messageID, groupsDict) {
+        message = message.quotedMsgObj ? message.quotedMsgObj : message;
+        const bodyText = message.bodyText;
         const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             urlsInMessage.forEach(function (url) {
@@ -11,7 +12,7 @@ class HURL {
                 url = url.charAt(0).toLowerCase() + url.slice(1);
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url), messageID);
                 const defaultTimedInstance = nvt.makeAPI();
-                defaultTimedInstance.setKey(virusTotalApi);
+                defaultTimedInstance.setKey(apiKeys.virusAPI);
                 defaultTimedInstance.urlLookup(nvt.sha256(url), function (err, res) {
                     if (err) {
                         defaultTimedInstance.initialScanURL(url, function (err, res) {

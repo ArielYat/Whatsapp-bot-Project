@@ -89,7 +89,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HSt.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "scan_link"))) { //Handle scanning URLs
-        await HURL.stripLinks(client, bodyText, chatID, messageID, groupsDict);
+        await HURL.stripLinks(client, message, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_crypto"))) { //Handle showing crypto
         await HAPI.fetchCryptocurrency(client, chatID, messageID, groupsDict);
