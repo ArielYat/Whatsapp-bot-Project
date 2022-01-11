@@ -52,10 +52,10 @@ class HAF {
             const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
             if (urlsInMessage) {
                 try {
-                    for (const url in urlsInMessage)
-                        await client.joinGroupViaLink(url);
+                    let URL = urlsInMessage[0];
+                    await client.joinGroupViaLink(URL);
                 } catch (err) {
-                    await client.reply(chatID, "אני חושב שהקישור/ים לא בתוקף", messageID);
+                    await client.reply(chatID, "אני חושב שהקישור לא בתוקף", messageID);
                 }
             } else await client.reply(chatID, "מאסטר! הההודעה הזו לא מכילה קישור לקבוצה!", messageID);
         }
