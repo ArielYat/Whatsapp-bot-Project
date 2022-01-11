@@ -227,7 +227,7 @@ function start(client) {
             //If the author lacks a permission level give them one
             if (!(chatID in usersDict[authorID].permissionLevel))
                 await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
-            //Update group admins if they aren't updated
+            //Update group admins if they don't exist
             if (groupsDict[chatID].groupAdmins.length === 0) {
                 groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
                 await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
@@ -239,14 +239,20 @@ function start(client) {
             //Handle bot developer functions if the author is a dev
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
-                await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
-                await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
-                await HAF.handleBotJoin(client, bodyText, chatID, messageID);
-                await HAF.ping(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
-                await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
+                if (bodyText.startsWith("חסום גישה למשתמש") || bodyText.startsWith("אפשר גישה למשתמש"))
+                    await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
+                if (bodyText.startsWith("חסום קבוצה") || bodyText.startsWith("שחרר קבוצה"))
+                    await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
+                if (bodyText.match(/^הצטרף לקבוצה/))
+                    await HAF.handleBotJoin(client, bodyText, chatID, messageID);
+                if (bodyText.match(/^\/Ping!$/i))
+                    await HAF.ping(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
+                if (bodyText.match(/^\/exec/i))
+                    await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
+            //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
                 if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
