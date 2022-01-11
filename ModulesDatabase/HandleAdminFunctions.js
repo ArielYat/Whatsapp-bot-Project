@@ -61,9 +61,24 @@ class HAF {
         }
     }
 
-    static async ping(client, bodyText, chatID, messageID) {
+    static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
         if (bodyText.startsWith("ping!")) {
-            client.reply(chatID, "שום דבר לעכשיו! חכו בסבלנות!", messageID)
+            const groupAmount = "כמות קבוצות סך הכל: " + Object.keys(groupsDict).length;
+            const userAmount = "כמות משתמשים סך הכל: " + Object.keys(usersDict).length;
+            const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length);
+            const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length);
+            await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
+        }
+    }
+
+    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs) {
+        if (bodyText.startsWith("/exec")) {
+            try {
+                eval(bodyText.replace("/exec", ""));
+                await client.reply(message.chat.id, "הפקודה שביצעת בוצעה בהצלחה", message.id);
+            } catch (e) {
+                await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה להלן השגיאה: \n ${e.toString()} `, message.id);
+            }
         }
     }
 }

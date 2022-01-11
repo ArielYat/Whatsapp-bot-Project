@@ -3,12 +3,11 @@ const nodeFetch = require("node-fetch"), request = require("request");
 
 class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
-        const apiKey = apiKeys.cryptoAPI;
         if (!groupsDict[chatID].cryptoCheckedToday) {
             try {
                 let response = await nodeFetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
                     method: 'GET', headers: {
-                        'X-CMC_PRO_API_KEY': apiKey, 'Accept': 'application/json'
+                        'X-CMC_PRO_API_KEY': apiKeys.cryptoAPI, 'Accept': 'application/json'
                     },
                 });
                 response = await response.json();
