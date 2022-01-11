@@ -263,7 +263,7 @@ class Strings {
             "la": null
         }, //Immediate commands
         "scan_link": {
-            "he": /^סרוק /i, "en": /^Scan /i, "la": /^Examina /i
+            "he": /^סרוק/i, "en": /^Scan /i, "la": /^Examina /i
         }, "link_validity_error": {
             "he": "חביבי, זה לא קישור תקין", "en": "bro that's not a valid link", "la": null
         }, "scan_link_checking_reply": {

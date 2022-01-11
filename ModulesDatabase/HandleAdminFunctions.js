@@ -61,6 +61,17 @@ class HAF {
         }
     }
 
+    static async execute(client, bodyText, message, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs) {
+        if (bodyText.startsWith("/exec")) {
+            try {
+                eval(bodyText.replace("/exec", ""));
+                await client.reply(message.chat.id, "הפקודה שביצעת בוצעה בהצלחה", message.id);
+            } catch (e) {
+                await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה להלן השגיאה: \n ${e.toString()} `, message.id);
+            }
+        }
+    }
+
     static async ping(client, bodyText, chatID, messageID) {
         if (bodyText.startsWith("ping!")) {
             client.reply(chatID, "שום דבר לעכשיו! חכו בסבלנות!", messageID)

@@ -4,7 +4,7 @@ const nvt = require('node-virustotal'), time = require("usleep");
 class HURL {
     static async stripLinks(client, message, chatID, messageID, groupsDict) {
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
-        const bodyText = message.bodyText;
+        const bodyText = message.body;
         const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             urlsInMessage.forEach(function (url) {
