@@ -241,13 +241,13 @@ function start(client) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
                 if (bodyText.startsWith("חסום גישה למשתמש") || bodyText.startsWith("אפשר גישה למשתמש"))
                     await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
-                if (bodyText.startsWith("חסום קבוצה") || bodyText.startsWith("שחרר קבוצה"))
+                else if (bodyText.startsWith("חסום קבוצה") || bodyText.startsWith("שחרר קבוצה"))
                     await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
-                if (bodyText.match(/^הצטרף לקבוצה/))
+                else if (bodyText.match(/^הצטרף לקבוצה/))
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
-                if (bodyText.match(/^\/Ping!$/i))
+                else if (bodyText.match(/^!ping$/i))
                     await HAF.ping(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
-                if (bodyText.match(/^\/exec/i))
+                else if (bodyText.match(/^\/exec/i))
                     await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
@@ -283,13 +283,8 @@ function start(client) {
                     && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                     await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
             }
-        }
-    })
-    // //clean unneeded groups from cache
-    // client.onRemovedFromGroup().then(chat => {
-    //     delete groupsDict[chat]; // !! delete does not change array length (remember for the future)
-    //     console.log("Alex was removed from" + chat)
-    // });
+        } else console.log("error occurred")
+    });
 }
 
 //TODO: a reminder function
