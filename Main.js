@@ -246,7 +246,7 @@ function start(client) {
                 else if (bodyText.match(/^הצטרף לקבוצה/))
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 else if (bodyText.match(/^!ping$/i))
-                    await HAF.ping(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
+                    await HAF.ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
                 else if (bodyText.match(/^\/exec/i))
                     await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
             }
