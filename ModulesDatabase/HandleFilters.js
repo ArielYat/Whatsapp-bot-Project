@@ -18,10 +18,15 @@ class HF {
                         groupsDict[chatID].filterCounter += 1;
                     } else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
                         let bannedDate = new Date();
-                        bannedDate.setMinutes(bannedDate + 15);
+                        bannedDate.setMinutes(bannedDate.getMinutes() + 15);
+                        bannedDate.setSeconds(0);
+                        bannedDate.setMilliseconds(0);
                         groupsDict[chatID].autoBanned = bannedDate;
                         restGroupsAuto.push(chatID);
-                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply", bannedDate.getHours(), bannedDate.getMinutes()));
+                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID,
+                            "filter_spam_reply",
+                            bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
+                                bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
                     }
                 }
             }
