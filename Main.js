@@ -1,4 +1,4 @@
-//version 2.3
+//version 2.4
 
 //Command Modules
 const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesDatabase/HandleDB"),
@@ -12,46 +12,54 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
-let groupsDict = {}, usersDict = {}, restGroups = [], restUsers = [], restGroupsFilterSpam = [],
-    restUsersCommandSpam = [];
-//Group & user rest intervals
-const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filters counter (in ms); 5 min
-    userCommandCounterResetInterval = 5 * 60 * 1000, //When to reset the command counter (in ms); 5 min
-    groupFilterRestResetInterval = 15 * 60 * 1000, //When to reset the groups in rest by filters spamming (in ms); 15 min
-    userCommandRestResetInterval = 15 * 60 * 1000, //When to reset the users in rest by command spamming (in ms); 15 min
-    groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
+let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
+    restPersonsCommandSpam = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, function () {
     wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
-})
+});
 
 //Reset filters counter for all groups every [groupFilterCounterResetInterval] minutes (automatic)
 setInterval(function () {
     for (let group in groupsDict)
         groupsDict[group].filterCounter = 0;
-}, groupFilterCounterResetInterval);
-
-//Remove all groups from filters rest list every [groupFilterRestResetInterval] minutes (automatic)
-setInterval(function () {
-    restGroupsFilterSpam = [];
-    for (let group in groupsDict)
-        groupsDict[group].filterCounter = 0;
-}, groupFilterRestResetInterval);
+}, 5 * 60 * 1000); //in ms; 5 min
 
 //Reset command counter for all users every [userCommandCounterResetInterval] minutes (automatic)
 setInterval(function () {
     for (let person in usersDict)
         usersDict[person].commandCounter = 0;
-}, userCommandCounterResetInterval)
+}, 5 * 60 * 1000); //in ms; 5 min
 
-//Remove all users from command rest list every [userCommandRestResetInterval] minutes (automatic)
+//Check if groups/persons need to be freed from prison (if 15 minutes passed)
 setInterval(function () {
-    restUsersCommandSpam = [];
-    for (let person in usersDict)
-        usersDict[person].commandCounter = 0;
-}, userCommandRestResetInterval)
+    //Remove users from command rest list
+    for (let i = 0; i < restPersonsCommandSpam.length; i++) {
+        const personID = restPersonsCommandSpam[i];
+        let date = new Date(); //Current date
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        if (usersDict[personID].autoBanned.toString() === date.toString()) {
+            usersDict[personID].autoBanned = null;
+            usersDict[personID].commandCounter = 0;
+            restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
+        }
+    }
+    //Remove groups from filters rest list
+    for (let i = 0; i < restGroupsFilterSpam.length; i++) {
+        const chatID = restGroupsFilterSpam[i];
+        let date = new Date(); //Current date
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
+            groupsDict[chatID].autoBanned = null;
+            groupsDict[chatID].filterCounter = 0;
+            restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+        }
+    }
+}, 60 * 1000); //in ms; 1 min
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) { //Handle setting function permissions
@@ -202,7 +210,7 @@ function start(client) {
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
         await client.sendText(chat.id, Strings["start_message"]["all"]);
-    })
+    });
     //Check every module every time a message is received
     client.onMessage(async message => {
         if (message != null) {
@@ -240,22 +248,22 @@ function start(client) {
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
                 if (bodyText.startsWith("חסום גישה למשתמש") || bodyText.startsWith("אפשר גישה למשתמש"))
-                    await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restUsers, restUsersCommandSpam, usersDict[authorID]);
+                    await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restPersons, restPersonsCommandSpam, usersDict[authorID]);
                 else if (bodyText.startsWith("חסום קבוצה") || bodyText.startsWith("שחרר קבוצה"))
                     await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
                 else if (bodyText.match(/^הצטרף לקבוצה/))
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 else if (bodyText.match(/^!ping$/i))
-                    await HAF.ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam);
+                    await HAF.ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
                 else if (bodyText.match(/^\/exec/i))
-                    await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs);
+                    await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
-                if (!restUsers.includes(authorID) && !restUsersCommandSpam.includes(authorID)) {
+                if (!restPersons.includes(authorID) && !restPersonsCommandSpam.includes(authorID)) {
                     //Check all functions for commands if the user has a high enough permission level
                     await HandleHelp(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
@@ -273,15 +281,23 @@ function start(client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= 2)
                         await HandlePermissions(client, bodyText, chatID, authorID, messageID);
                     //If the user used too many commands, put them on a cool down
-                    if (usersDict[authorID].commandCounter === userCommandLimit) {
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
-                        restUsersCommandSpam.push(authorID);
+                    if (usersDict[authorID].commandCounter === 15) {
+                        let bannedDate = new Date();
+                        bannedDate.setMinutes(bannedDate.getMinutes() + 15);
+                        bannedDate.setSeconds(0);
+                        bannedDate.setMilliseconds(0);
+                        usersDict[authorID].autoBanned = bannedDate;
+                        restPersonsCommandSpam.push(authorID);
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
+                            "command_spam_reply",
+                            bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
+                                bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
                     }
                 }
                 //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters
                 if (checkFilters && !restGroupsFilterSpam.includes(chatID)
                     && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
-                    await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsFilterSpam);
+                    await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, 15, restGroupsFilterSpam);
             }
         } else console.log("error occurred")
     });
