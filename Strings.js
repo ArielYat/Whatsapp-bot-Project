@@ -6,12 +6,12 @@ class Strings {
             "en": "Are you sure you used a hyphen correctly?",
             "la": "Certusne tu adhibuisse recte eo iungente te?"
         }, "command_spam_reply": {
-            "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך עד %s:%s",
-            "en": null,
+            "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך יותר עד %s:%s",
+            "en": "OK kid, calm down with the commands, will you? that's it, I'm not listening to you anymore until %s:%s",
             "la": null
         }, "filter_spam_reply": {
             "he": "כמה פילטרים שולחים פה? אני הולך לישון עד %s:%s",
-            "en": null,
+            "en": "How many filters are you guys sending here? I'm going to sleep until %s:%s",
             "la": null
         }, //filters
         "add_filter": {
