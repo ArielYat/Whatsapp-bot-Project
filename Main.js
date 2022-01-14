@@ -17,8 +17,7 @@ let groupsDict = {}, usersDict = {}, restGroups = [], restUsers = [], restGroups
 //Group & user rest intervals
 const groupFilterCounterResetInterval = 5 * 60 * 1000, //When to reset the filters counter (in ms); 5 min
     userCommandCounterResetInterval = 5 * 60 * 1000, //When to reset the command counter (in ms); 5 min
-    groupFilterRestResetInterval = 15 * 60 * 1000, //When to reset the groups in rest by filters spamming (in ms); 15 min
-    userCommandRestResetInterval = 15 * 60 * 1000, //When to reset the users in rest by command spamming (in ms); 15 min
+    minuteCounter = 60 * 1000, //every min check groups and users auto banned
     groupFilterLimit = 15, userCommandLimit = 10; //Filter & Command Limit
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
@@ -33,25 +32,36 @@ setInterval(function () {
         groupsDict[group].filterCounter = 0;
 }, groupFilterCounterResetInterval);
 
-//Remove all groups from filters rest list every [groupFilterRestResetInterval] minutes (automatic)
-setInterval(function () {
-    restGroupsFilterSpam = [];
-    for (let group in groupsDict)
-        groupsDict[group].filterCounter = 0;
-}, groupFilterRestResetInterval);
-
 //Reset command counter for all users every [userCommandCounterResetInterval] minutes (automatic)
 setInterval(function () {
     for (let person in usersDict)
         usersDict[person].commandCounter = 0;
 }, userCommandCounterResetInterval)
 
-//Remove all users from command rest list every [userCommandRestResetInterval] minutes (automatic)
 setInterval(function () {
-    restUsersCommandSpam = [];
-    for (let person in usersDict)
-        usersDict[person].commandCounter = 0;
-}, userCommandRestResetInterval)
+    //Remove user from command rest list
+    for (let userID in restUsersCommandSpam) {
+        //current date
+        let date = new Date();
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        if (usersDict[userID].autoBanned.toString() === date.toString()) {
+            usersDict[userID].autoBanned = null;
+            restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(userID), 1);
+        }
+    }
+    //Remove group from filters rest list
+    for (let chatID in restGroupsFilterSpam) {
+        //current date
+        let date = new Date();
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
+            groupsDict[chatID].autoBanned = null;
+            restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+        }
+    }
+}, minuteCounter)
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) { //Handle setting function permissions
@@ -274,8 +284,11 @@ function start(client) {
                         await HandlePermissions(client, bodyText, chatID, authorID, messageID);
                     //If the user used too many commands, put them on a cool down
                     if (usersDict[authorID].commandCounter === userCommandLimit) {
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply"), messageID);
+                        let bannedDate = new Date();
+                        bannedDate.setMinutes(bannedDate+ 15);
+                        usersDict[authorID].autoBanned = bannedDate;
                         restUsersCommandSpam.push(authorID);
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply", bannedDate.getHours(), bannedDate.getMinutes()), messageID);
                     }
                 }
                 //If the group the message was sent in isn't blocked and no filter altering commands were used, check for filters

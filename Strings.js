@@ -6,13 +6,13 @@ class Strings {
             "en": "Are you sure you used a hyphen correctly?",
             "la": "Certusne tu adhibuisse recte eo iungente te?"
         }, "command_spam_reply": {
-            "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך למשך 15 דקות",
-            "en": "Chill out with all the commands kid. You won't be getting a responce out of me for the next 15 minutes",
-            "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
+            "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך עד %s:%s",
+            "en": null,
+            "la": null
         }, "filter_spam_reply": {
-            "he": "כמה פילטרים שולחים פה? אני הולך לישון ל־15 דקות",
-            "en": "Wow you're spamming filters, I'm going to sleep for 15 minutes",
-            "la": "Retarda! Eo dormitum quoniam mittabas etiam multos invenientes"
+            "he": "כמה פילטרים שולחים פה? אני הולך לישון עד %s:%s",
+            "en": null,
+            "la": null
         }, //filters
         "add_filter": {
             "he": /^הוסף פילטר/i, "en": /^Add filter/i, "la": "Crea invenientem"

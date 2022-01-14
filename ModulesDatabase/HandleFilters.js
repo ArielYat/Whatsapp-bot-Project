@@ -17,8 +17,11 @@ class HF {
                         else await client.sendReplyWithMentions(chatID, filters[filter], messageID);
                         groupsDict[chatID].filterCounter += 1;
                     } else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
-                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply"));
+                        let bannedDate = new Date();
+                        bannedDate.setMinutes(bannedDate + 15);
+                        groupsDict[chatID].autoBanned = bannedDate;
                         restGroupsAuto.push(chatID);
+                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply", bannedDate.getHours(), bannedDate.getMinutes()));
                     }
                 }
             }

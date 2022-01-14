@@ -5,6 +5,7 @@ class Person {
     #birthdayGroups;
     #commandCounter;
     #messagesTaggedIn;
+    #autoBanned;
 
     constructor(personID) {
         this.#personID = personID;
@@ -13,6 +14,7 @@ class Person {
         this.#birthdayGroups = [];
         this.#commandCounter = 0;
         this.#messagesTaggedIn = {};
+        this.#autoBanned = null;
     }
 
     get personID() {
@@ -63,6 +65,14 @@ class Person {
 
     set messagesTaggedIn(number) {
         this.#messagesTaggedIn = number;
+    }
+
+    get autoBanned() {
+        return this.#autoBanned;
+    }
+
+    set autoBanned(date) {
+        this.#autoBanned = date;
     }
 }
 

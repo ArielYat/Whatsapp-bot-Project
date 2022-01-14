@@ -9,6 +9,7 @@ class group {
     #functionPermissions;
     #cryptoCheckedToday;
     #translationCounter;
+    #autoBanned
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -29,6 +30,7 @@ class group {
         this.#groupAdmins = [];
         this.#cryptoCheckedToday = false;
         this.#translationCounter = 0;
+        this.#autoBanned = null;
     }
 
     get groupID() {
@@ -124,6 +126,14 @@ class group {
 
     doesTagExist(tag) {
         return this.#tags.hasOwnProperty(tag);
+    }
+
+    get autoBanned() {
+        return this.#autoBanned;
+    }
+
+    set autoBanned(date) {
+        this.#autoBanned = date;
     }
 }
 
