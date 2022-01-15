@@ -17,6 +17,7 @@ class HF {
                         else await client.sendReplyWithMentions(chatID, filters[filter], messageID);
                         groupsDict[chatID].filterCounter += 1;
                     } else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
+                        groupsDict[chatID].filterCounter += 1;
                         let bannedDate = new Date();
                         bannedDate.setMinutes(bannedDate.getMinutes() + 15);
                         bannedDate.setSeconds(0);
