@@ -1,8 +1,14 @@
 const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys");
-const nvt = require('node-virustotal'), time = require("usleep");
+const nvt = require('node-virustotal')
 
 class HURL {
     static async stripLinks(client, message, chatID, messageID, groupsDict) {
+        function sleep(ms) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, ms);
+            });
+        }
+
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         const bodyText = message.body;
         const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
@@ -19,7 +25,7 @@ class HURL {
                             if (err)
                                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_upload_error"), messageID);
                             else if (res) {
-                                time.sleep(20);
+                                sleep(1000 * 30);
                                 const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
                                 const newHashed = id.match("-(.)+-")[0].replace(/-/g, "");
                                 defaultTimedInstance.urlLookup(newHashed, function (err, res) {
