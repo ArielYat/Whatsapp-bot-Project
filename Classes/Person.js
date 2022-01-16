@@ -89,8 +89,8 @@ class Person {
             delete this.#reminders[reminderArray[1]];
     }
 
-    doesReminderExist(reminderDate) {
-        return this.#reminders.hasOwnProperty(reminderDate);
+    doesReminderExist(date) {
+        return this.#reminders.hasOwnProperty(date);
     }
 }
 

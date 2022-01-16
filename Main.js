@@ -1,4 +1,4 @@
-//version 2.4
+//version 2.5
 
 //Command Modules
 const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesDatabase/HandleDB"),
@@ -12,12 +12,12 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
-let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [], personWithReminders = [],
-    restPersonsCommandSpam = [];
+let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
+    personsWithReminders = [], restPersonsCommandSpam = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personWithReminders,function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
     wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
 });
 
@@ -61,19 +61,6 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    }
-}
-async function HandleReminders(client, message, bodyText, chatID, messageID, authorID){
-    if(chatID === authorID){
-        if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_reminder"))){
-            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personWithReminders);
-        }
-        else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_reminder"))){
-            await HR.removeReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personWithReminders);
-        }
-        else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_reminders"))){
-            await HR.showReminders(client, usersDict[authorID], groupsDict, messageID, chatID);
-        }
     }
 }
 
@@ -166,6 +153,18 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
     }
 }
 
+async function HandleReminders(client, bodyText, chatID, messageID, authorID) {
+    if (chatID === authorID) {
+        if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_reminder"))) {
+            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personsWithReminders);
+        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_reminder"))) {
+            await HR.removeReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personsWithReminders);
+        } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_reminders"))) {
+            await HR.showReminders(client, usersDict[authorID], groupsDict, messageID, chatID);
+        }
+    }
+}
+
 async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
         await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
@@ -182,7 +181,7 @@ async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
 function start(client) {
     //Check if there are birthdays everyday at 4 am
     IsraelSchedule.tz = 'Israel'; //Time zone
-    IsraelSchedule.scheduleJob('0 4 * * *', async () => {
+    IsraelSchedule.scheduleJob('0 5 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
     });
     //Reset the crypto check everyday at 00:00
@@ -192,12 +191,12 @@ function start(client) {
             groupsDict[group].translationCounter = 0;
         }
     });
-    //Check if groups/persons need to be freed from prison (if 15 minutes passed) and check reminder
+    //Check if groups/persons need to be freed from prison (if 15 minutes passed) and check reminders
     setInterval(function () {
         //Remove users from command rest list
         for (let i = 0; i < restPersonsCommandSpam.length; i++) {
             const personID = restPersonsCommandSpam[i];
-            let date = new Date(); //Current date
+            const date = new Date(); //Current date
             date.setSeconds(0);
             date.setMilliseconds(0);
             if (usersDict[personID].autoBanned.toString() === date.toString()) {
@@ -209,7 +208,7 @@ function start(client) {
         //Remove groups from filters rest list
         for (let i = 0; i < restGroupsFilterSpam.length; i++) {
             const chatID = restGroupsFilterSpam[i];
-            let date = new Date(); //Current date
+            const date = new Date(); //Current date
             date.setSeconds(0);
             date.setMilliseconds(0);
             if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
@@ -218,16 +217,15 @@ function start(client) {
                 restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
             }
         }
-        //check reminders
-        for (let i = 0; i < personWithReminders.length; i++) {
-            const person = usersDict[personWithReminders[i]];
-            let date = new Date(); //Current date
+        //Check reminders
+        for (let i = 0; i < personsWithReminders.length; i++) {
+            const person = usersDict[personsWithReminders[i]];
+            const date = new Date(); //Current date
             date.setSeconds(0);
             date.setMilliseconds(0);
-            for(let reminder in person.reminders){
-                if(reminder.toString() === date.toString()){
+            for (let reminder in person.reminders) {
+                if (reminder.toString() === date.toString())
                     client.sendText(person.personID, person.reminders[reminder]).then();
-                }
             }
         }
     }, 60 * 1000); //in ms; 1 min
@@ -325,11 +323,10 @@ function start(client) {
                     && usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["filters"])
                     await HF.checkFilters(client, bodyText, chatID, messageID, groupsDict, 15, restGroupsFilterSpam);
             }
-        } else console.log("error occurred")
+        } else console.log("error occurred - message was null")
     });
 }
 
-//TODO: a reminder function
 //TODO: website
 //TODO: search on ME
 //TODO: stock checking

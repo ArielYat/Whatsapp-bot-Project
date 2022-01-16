@@ -33,7 +33,10 @@ class HAPI {
             response = await response.json();
             let stringForSending = "";
             if (response.list.length !== 0) {
-                for (let i = 0; i < response.list.length && i < 10; i++) stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n ${response.list[i].definition} \n Definition by: ${response.list[i].author} \n\n`;
+                for (let i = 0; i < response.list.length && i < 10; i++)
+                    stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n
+                    ${response.list[i].definition.replace(/\[/g, "").replace(/\]/g, "")} 
+                    \nDefinition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_in_urban_error"), messageID);
         } catch (err) {
@@ -52,7 +55,7 @@ class HAPI {
                 },
             });
             langResponse = await langResponse.json();
-            let langCode = Object.keys(langResponse.languagesearch)[0];
+            const langCode = Object.keys(langResponse.languagesearch)[0];
             if (langCode) {
                 const url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${langCode}&dt=t&q=${textToTranslate}`);
                 request.get(url, async function (error, response, body) {
