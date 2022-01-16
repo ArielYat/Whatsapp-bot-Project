@@ -123,14 +123,14 @@ class HP {
     }
 
     static wordToFunctionPermission(groupsDict, chatID, text) {
-        switch (text) {
-            case HL.getGroupLang(groupsDict, chatID, "muted_permission_level"):
+        switch (true) {
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "muted_permission_level"))):
                 return 4;
-            case HL.getGroupLang(groupsDict, chatID, "developer_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "developer_permission_level"))):
                 return 3;
-            case HL.getGroupLang(groupsDict, chatID, "admin_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "admin_permission_level"))):
                 return 2;
-            case HL.getGroupLang(groupsDict, chatID, "regular_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "regular_permission_level"))):
                 return 1;
             default:
                 return null;
