@@ -43,11 +43,15 @@ class HDB {
                 case "lastTagged":
                     objectToAddToDataBase = {ID: ID, personID: value1, taggedArray: value2};
                     break;
+                case "reminders":
+                    objectToAddToDataBase = {personID: ID, reminderDate: value1, reminderMessage: value2};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -101,11 +105,15 @@ class HDB {
                 case "lastTagged":
                     objectToDelInDataBase = {ID: ID, personID: key};
                     break;
+                case "reminders":
+                    objectToDelInDataBase = {personID: ID, reminderDate: key};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {

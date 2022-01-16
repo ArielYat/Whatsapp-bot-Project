@@ -6,6 +6,7 @@ class Person {
     #commandCounter;
     #messagesTaggedIn;
     #autoBanned;
+    #reminders;
 
     constructor(personID) {
         this.#personID = personID;
@@ -15,7 +16,9 @@ class Person {
         this.#commandCounter = 0;
         this.#messagesTaggedIn = {};
         this.#autoBanned = null;
+        this.#reminders = {};
     }
+
 
     get personID() {
         return this.#personID;
@@ -73,6 +76,21 @@ class Person {
 
     set autoBanned(date) {
         this.#autoBanned = date;
+    }
+
+    get reminders() {
+        return this.#reminders;
+    }
+
+    set reminders(reminderArray) {
+        if (reminderArray[0] === "add")
+            this.#reminders[reminderArray[1]] = reminderArray[2];
+        else if (reminderArray[0] === "delete")
+            delete this.#reminders[reminderArray[1]];
+    }
+
+    doesReminderExist(reminderDate) {
+        return this.#reminders.hasOwnProperty(reminderDate);
     }
 }
 
