@@ -401,6 +401,37 @@ class Strings {
             "he": "הקישור לא עבד לי... סליחוש",
             "en": "Sorry bro, the link didn't work...",
             "la": "Paenito frater, sed ligens non oportet..."
+        },//reminders
+        "add_reminder": {
+            "he": /^הוסף תזכורת/i, "en": null, "la": null
+        }, "add_reminder_reply": {
+            "he": "התזכורת %s נוספה בהצלחה",
+            "en": null,
+            "la": null
+        }, "reminder_already_exist_error": {
+            "he": "קיימת תזכורת כבר בשעה הזאת",
+            "en": null,
+            "la": null
+        }, "reminder_hour_error": {
+            "he": "אני מצטער אבל בימים אלו עדיין אני לא יכול לנחש שעות בעצמי \n תבדוק שכתבת נכון את השעה",
+            "en": null,
+            "la": null
+        }, "remove_reminder": {
+            "he": /^הסר תזכורת/i, "en": null, "la": null
+        }, "remove_reminder_reply": {
+            "he": "התזכורת %s הוסרה בהצלחה",
+            "en": null,
+            "la": null
+        }, "reminder_doesnt_exist_error": {
+            "he": "עדיין אין לי את היכולת למחוק התראות שלא נקבעו",
+            "en": null,
+            "la": null
+        }, "show_reminders": {
+            "he": /^הראה תזכורות/i, "en": null, "la": null
+        }, "show_reminder_error": {
+            "he": "אין לך תזכורות פעילות",
+            "en": null,
+            "la": null
         },//language
         "change_language": {
             "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad"

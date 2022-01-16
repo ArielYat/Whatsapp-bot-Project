@@ -7,17 +7,17 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
     HAF = require("./ModulesDatabase/HandleAdminFunctions"), HL = require("./ModulesDatabase/HandleLanguage"),
     HSu = require("./ModulesImmediate/HandleSurveys"), HP = require("./ModulesDatabase/HandlePermissions"),
     HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"),
-    HUS = require("./ModulesImmediate/HandleUserStats"),
+    HUS = require("./ModulesImmediate/HandleUserStats"), HR = require("./ModulesDatabase/HandleReminders"),
     Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
 //Open-Whatsapp and Schedule libraries
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
-let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
+let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [], personWithReminders = [],
     restPersonsCommandSpam = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personWithReminders,function () {
     wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
 });
 
@@ -32,34 +32,6 @@ setInterval(function () {
     for (let person in usersDict)
         usersDict[person].commandCounter = 0;
 }, 5 * 60 * 1000); //in ms; 5 min
-
-//Check if groups/persons need to be freed from prison (if 15 minutes passed)
-setInterval(function () {
-    //Remove users from command rest list
-    for (let i = 0; i < restPersonsCommandSpam.length; i++) {
-        const personID = restPersonsCommandSpam[i];
-        let date = new Date(); //Current date
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        if (usersDict[personID].autoBanned.toString() === date.toString()) {
-            usersDict[personID].autoBanned = null;
-            usersDict[personID].commandCounter = 0;
-            restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
-        }
-    }
-    //Remove groups from filters rest list
-    for (let i = 0; i < restGroupsFilterSpam.length; i++) {
-        const chatID = restGroupsFilterSpam[i];
-        let date = new Date(); //Current date
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
-            groupsDict[chatID].autoBanned = null;
-            groupsDict[chatID].filterCounter = 0;
-            restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
-        }
-    }
-}, 60 * 1000); //in ms; 1 min
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "set_permissions"))) { //Handle setting function permissions
@@ -89,6 +61,19 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
+    }
+}
+async function HandleReminders(client, message, bodyText, chatID, messageID, authorID){
+    if(chatID === authorID){
+        if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_reminder"))){
+            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personWithReminders);
+        }
+        else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_reminder"))){
+            await HR.removeReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personWithReminders);
+        }
+        else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_reminders"))){
+            await HR.showReminders(client, usersDict[authorID], groupsDict, messageID, chatID);
+        }
     }
 }
 
@@ -207,6 +192,46 @@ function start(client) {
             groupsDict[group].translationCounter = 0;
         }
     });
+    //Check if groups/persons need to be freed from prison (if 15 minutes passed) and check reminder
+    setInterval(function () {
+        //Remove users from command rest list
+        for (let i = 0; i < restPersonsCommandSpam.length; i++) {
+            const personID = restPersonsCommandSpam[i];
+            let date = new Date(); //Current date
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            if (usersDict[personID].autoBanned.toString() === date.toString()) {
+                usersDict[personID].autoBanned = null;
+                usersDict[personID].commandCounter = 0;
+                restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
+            }
+        }
+        //Remove groups from filters rest list
+        for (let i = 0; i < restGroupsFilterSpam.length; i++) {
+            const chatID = restGroupsFilterSpam[i];
+            let date = new Date(); //Current date
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
+                groupsDict[chatID].autoBanned = null;
+                groupsDict[chatID].filterCounter = 0;
+                restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+            }
+        }
+        //check reminders
+        for (let i = 0; i < personWithReminders.length; i++) {
+            const person = usersDict[personWithReminders[i]];
+            let date = new Date(); //Current date
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            for(let reminder in person.reminders){
+                if(reminder.toString() === date.toString()){
+                    client.sendText(person.personID, person.reminders[reminder]).then();
+                }
+            }
+        }
+    }, 60 * 1000); //in ms; 1 min
+
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
         await client.sendText(chat.id, Strings["start_message"]["all"]);
@@ -260,6 +285,7 @@ function start(client) {
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
+            await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands

@@ -159,20 +159,20 @@ class HP {
     }
 
     static wordToFunctionType(groupsDict, chatID, text) {
-        switch (text) {
-            case HL.getGroupLang(groupsDict, chatID, "filters_permission_type"):
+        switch (true) {
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "filters_permission_type"))):
                 return "filters"
-            case HL.getGroupLang(groupsDict, chatID, "tags_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "tags_permission_type"))):
                 return "tags"
-            case HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type"))):
                 return "handleFilters"
-            case HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type"))):
                 return "handleTags"
-            case HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type"))):
                 return "handleBirthdays"
-            case HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type"))):
                 return "handleShows"
-            case HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type"))):
                 return "handleOther"
             default:
         }
