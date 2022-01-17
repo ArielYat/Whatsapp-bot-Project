@@ -153,10 +153,10 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
     }
 }
 
-async function HandleReminders(client, bodyText, chatID, messageID, authorID) {
+async function HandleReminders(client, bodyText, chatID, messageID, authorID, message) {
     if (chatID === authorID) {
         if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_reminder"))) {
-            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personsWithReminders);
+            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, message, personsWithReminders);
         } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_reminder"))) {
             await HR.removeReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personsWithReminders);
         } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_reminders"))) {
@@ -224,8 +224,39 @@ function start(client) {
             date.setSeconds(0);
             date.setMilliseconds(0);
             for (let reminder in person.reminders) {
-                if (reminder.toString() === date.toString())
-                    client.sendText(person.personID, person.reminders[reminder]).then();
+                if (reminder.toString() === date.toString()) {
+                    let oldReminder = person.reminders[reminder];
+                    let reminderToSend = oldReminder;
+                    let repeat = false;
+                    if (reminderToSend.startsWith("repeatReminder")) {
+                        repeat = true;
+                        reminderToSend = reminderToSend.replace("repeatReminder", "");
+                    }
+                    switch (true) {
+                        case reminderToSend.startsWith("Video"):
+                            reminderToSend = reminderToSend.replace("Video", "");
+                            client.sendFile(person.personID, reminderToSend, "reminder").then();
+                            break;
+                        case reminderToSend.startsWith("Image"):
+                            reminderToSend = reminderToSend.replace("Image", "");
+                            client.sendImage(person.personID, reminderToSend, "reminder");
+                            break;
+                        default:
+                            client.sendText(person.personID, reminderToSend).then();
+                            break;
+                    }
+                    let reminderDate = new Date(reminder);
+                    HDB.delArgsFromDB(person.personID, reminderDate, "reminders", function () {
+                        person.reminders = ["delete", reminderDate];
+                    });
+                    if (repeat) {
+                        let newReminderDate = new Date(reminder);
+                        newReminderDate.setDate(newReminderDate.getDate() + 1);
+                        HDB.addArgsToDB(person.personID, newReminderDate, oldReminder, null, "reminders", function () {
+                            person.reminders = ["add", newReminderDate, oldReminder];
+                        });
+                    }
+                }
             }
         }
     }, 60 * 1000); //in ms; 1 min
@@ -283,7 +314,7 @@ function start(client) {
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
-            await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
+            await HandleReminders(client, bodyText, chatID, messageID, authorID, message);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands

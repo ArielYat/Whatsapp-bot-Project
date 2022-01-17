@@ -405,8 +405,8 @@ class Strings {
         "add_reminder": {
             "he": /^הוסף תזכורת/i, "en": /^Add reminder/i, "la": null
         }, "add_reminder_reply": {
-            "he": "התזכורת %s נוספה בהצלחה",
-            "en": "The reminder %s has been added successfully",
+            "he": "התזכורת של השעה %s נוספה בהצלחה",
+            "en": null,
             "la": null
         }, "reminder_already_exists_error": {
             "he": "קיימת תזכורת כבר בשעה הזאת",
@@ -419,8 +419,8 @@ class Strings {
         }, "remove_reminder": {
             "he": /^הסר תזכורת/i, "en": /^Remove reminder/i, "la": null
         }, "remove_reminder_reply": {
-            "he": "התזכורת %s הוסרה בהצלחה",
-            "en": "The reminder %s has been removed successfully",
+            "he": "התזכורת של השעה %s הוסרה בהצלחה",
+            "en": null,
             "la": null
         }, "reminder_doesnt_exist_error": {
             "he": "עדיין אין לי את היכולת למחוק התראות שלא נקבעו",
@@ -432,6 +432,8 @@ class Strings {
             "he": "אין לך תזכורות פעילות",
             "en": "You don't have any active reminders",
             "la": null
+        }, "repeatReminder": {
+            "he": /^קבועה/i, "en": null, "la": null
         },//language
         "change_language": {
             "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad"

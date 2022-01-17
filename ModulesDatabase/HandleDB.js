@@ -126,7 +126,7 @@ class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personWithReminders, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -216,9 +216,9 @@ class HDB {
                         restGroups.push(restArray[i])
                     }
                     break;
-                case ("personWithReminders"):
+                case ("personsWithReminders"):
                     for (let i = 0; i < restArray.length; i++) {
-                        personWithReminders.push(restArray[i]);
+                        personsWithReminders.push(restArray[i]);
                     }
                     break;
                 default:
