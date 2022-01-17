@@ -5,10 +5,6 @@ class HR {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_reminder"), "").trim();
-        let repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeatReminder")));
-        const date = new Date();
-        let matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
-        let matchedDateWithoutYear = !matchedDateWithYear ? bodyText.match(/^\d{1,2}\.\d{1,2}/g) : null;
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
         if (time) {
             time = time[0];
@@ -16,23 +12,24 @@ class HR {
             const hour = parseInt(timeArray[0]);
             const minutes = parseInt(timeArray[1]);
             if (hour > 0 && minutes > 0 && hour < 24 && minutes < 60) {
+                const date = new Date();
+                const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
+                const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
                 let month, day, year;
                 switch (true) {
                     case (!!matchedDateWithoutYear):
-                        matchedDateWithoutYear = matchedDateWithoutYear[0];
-                        const matchedDateWithoutYearArray = matchedDateWithoutYear.split(".");
+                        const matchedDateWithoutYearArray = matchedDateWithoutYear[0].split(".");
                         day = parseInt(matchedDateWithoutYearArray[0]);
                         month = parseInt(matchedDateWithoutYearArray[1]) - 1;
                         year = date.getFullYear();
-                        bodyText = bodyText.replace(matchedDateWithoutYear, "").trim();
+                        bodyText = bodyText.replace(matchedDateWithoutYear[0], "").trim();
                         break;
                     case (!!matchedDateWithYear):
-                        matchedDateWithYear = matchedDateWithYear[0];
-                        const matchedDateWithYearArray = matchedDateWithYear.split(".");
+                        const matchedDateWithYearArray = matchedDateWithYear[0].split(".");
                         day = parseInt(matchedDateWithYearArray[0]);
                         month = parseInt(matchedDateWithYearArray[1]) - 1;
                         year = parseInt(matchedDateWithYearArray[2]);
-                        bodyText = bodyText.replace(matchedDateWithYear, "").trim();
+                        bodyText = bodyText.replace(matchedDateWithYear[0], "").trim();
                         break;
                     default:
                         day = date.getDate();
@@ -40,16 +37,13 @@ class HR {
                         year = date.getFullYear();
                 }
                 const reminderDate = new Date(year, month, day, hour, minutes);
-                let reminder = null;
-                if (messageType === "image")
-                    reminder = repeatReminder ? "repeatReminderImage" + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message);
-                else if (messageType === "video")
-                    reminder = repeatReminder ? "repeatReminderVideo" + await client.decryptMedia(message) : "Video" + await client.decryptMedia(message);
-                else if (messageType === "chat")
-                    reminder = repeatReminder ? "repeatReminder" +
-                        bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeatReminder"), "") :
-                        bodyText.replace(time, "").trim()
-                if (reminder != null) {
+                const repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeatReminder")));
+                const reminder =
+                    messageType === "image " ? repeatReminder ? "repeatReminderImage" + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
+                        messageType === "video" ? repeatReminder ? "repeatReminderVideo" + await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
+                            messageType === "chat" ? repeatReminder ? "repeatReminder" + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeatReminder"), "") : bodyText.replace(time, "").trim() :
+                                null;
+                if (reminder) {
                     if (!person.doesReminderExist(reminderDate)) {
                         await HDB.addArgsToDB(chatID, reminderDate, reminder, null, "reminders", function () {
                             person.reminders = ["add", reminderDate, reminder];
@@ -68,27 +62,25 @@ class HR {
 
     static async removeReminder(client, bodyText, chatID, messageID, person, groupsDict, personsWithReminders) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_reminder"), "").trim();
-        const date = new Date();
-        let matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
-        let matchedDateWithoutYear = !matchedDateWithYear ? bodyText.match(/^\d{1,2}\.\d{1,2}/g) : null;
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
         if (time) {
+            const date = new Date();
+            const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
+            const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
             time = time[0];
-            let timeArray = time.split(":"), hour = parseInt(timeArray[0]), minutes = parseInt(timeArray[1]), month,
-                day, year;
+            let timeArray = time.split(":");
+            let hour = parseInt(timeArray[0]), minutes = parseInt(timeArray[1]), month, day, year;
             switch (true) {
                 case (!!matchedDateWithoutYear):
-                    matchedDateWithoutYear = matchedDateWithoutYear[0];
-                    let matchedDateWithoutYearArray = matchedDateWithoutYear.split(".");
+                    const matchedDateWithoutYearArray = matchedDateWithoutYear[0].split(".");
                     day = matchedDateWithoutYearArray[0];
-                    month = matchedDateWithoutYearArray[1] - 1; //month on javascript
+                    month = matchedDateWithoutYearArray[1] - 1;
                     year = date.getFullYear();
                     break;
                 case (!!matchedDateWithYear):
-                    matchedDateWithYear = matchedDateWithYear[0];
-                    let matchedDateWithYearArray = matchedDateWithYear.split(".");
+                    const matchedDateWithYearArray = matchedDateWithYear[0].split(".");
                     day = matchedDateWithYearArray[0];
-                    month = matchedDateWithYearArray[1] - 1; //month on javascript
+                    month = matchedDateWithYearArray[1] - 1;
                     year = matchedDateWithYearArray[2];
                     break;
                 default:
@@ -123,13 +115,12 @@ class HR {
                     stringForSending += "*repeat* \n";
                     reminderData = reminderData.replace("repeatReminder", "");
                 }
-                if (reminderData.startsWith("Video")) {
-                    stringForSending += `${reminderDate.getDate()}. ${reminderDate.getMonth() + 1}. ${reminderDate.getFullYear()} \n[${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${HL.getGroupLang(groupsDict, chatID, "video")}\n\n`
-                } else if (reminderData.startsWith("Image")) {
-                    stringForSending += `${reminderDate.getDate()}. ${reminderDate.getMonth() + 1}. ${reminderDate.getFullYear()} \n[${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${HL.getGroupLang(groupsDict, chatID, "image")}\n\n`;
-                } else {
-                    stringForSending += `${reminderDate.getDate()}. ${reminderDate.getMonth() + 1}. ${reminderDate.getFullYear()} \n[${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${reminderData.trim()}\n\n`;
-                }
+                if (reminderData.startsWith("Video"))
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} [${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${HL.getGroupLang(groupsDict, chatID, "video")}\n`;
+                else if (reminderData.startsWith("Image"))
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} [${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${HL.getGroupLang(groupsDict, chatID, "image")}\n`;
+                else
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} [${reminderDate.getHours()}:${reminderDate.getMinutes()}] - ${reminderData.trim()}\n`;
             }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);
