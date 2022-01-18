@@ -244,11 +244,12 @@ function start(client) {
                     }
                     await HDB.delArgsFromDB(personID, reminderDate, "reminders", function () {
                         person.reminders = ["delete", reminderDate];
-                    });
+                    })
+                    let newReminderDate = new Date(reminder);
                     if (repeat) {
-                        reminderDate.setDate(reminderDate.getDate() + 1);
-                        await HDB.addArgsToDB(personID, reminderDate, oldReminder, null, "reminders", function () {
-                            person.reminders = ["add", reminderDate, oldReminder];
+                        newReminderDate.setDate(newReminderDate.getDate() + 1);
+                        await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
+                            person.reminders = ["add", newReminderDate, oldReminder];
                         });
                     }
                 }

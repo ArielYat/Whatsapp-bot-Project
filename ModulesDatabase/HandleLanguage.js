@@ -2,10 +2,9 @@ const HDB = require("./HandleDB.js"), Strings = require("../Strings.js").strings
 
 class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.split(" ");
-        const lang = bodyText.includes("לעברית") || bodyText.includes("Hebrew") || bodyText.includes("Hebraica")
-            ? "he" : bodyText.includes("לאנגלית") || bodyText.includes("English") || bodyText.includes("Anglico")
-                ? "en" : bodyText.includes("ללטינית") || bodyText.includes("Latin") || bodyText.includes("Latina")
+        const lang = bodyText.match(/לעברית/) || bodyText.match(/hebrew/i) || bodyText.match(/hebraica/i)
+            ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/english/i) || bodyText.match(/Anglico/i)
+                ? "en" : bodyText.match(/ללטינית/) || bodyText.match(/latin/i) || bodyText.match(/latina/i)
                     ? "la" : null;
         if (lang) {
             await HDB.delArgsFromDB(chatID, null, "lang", function () {

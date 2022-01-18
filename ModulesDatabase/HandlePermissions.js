@@ -28,7 +28,7 @@ class HP {
     static async checkGroupUsersPermissionLevels(groupsDict, chatID) {
         const developerPerm = 3, mutedPerm = 0;
         for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
-            if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === null ||
+            if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === undefined ||
                 (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
                     groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== mutedPerm.toString())) {
                 await this.autoAssignPersonPermissions(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
