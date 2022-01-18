@@ -13,7 +13,7 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
-    restPersonsCommandSpam = [], personsWithReminders = [];
+    restPersonsCommandSpam = [], personsWithReminders = [], tagLists = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
@@ -39,7 +39,7 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
 
 async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tagging everyone
-        await HT.tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+        await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
         await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
@@ -49,6 +49,12 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) {
+        tagLists[chatID] = await HT.createTagList(bodyText, chatID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "next_tag_list"))) {
+        await HT.nextPersonInList(client, chatID, messageID, groupsDict, tagLists[chatID]);
         usersDict[authorID].commandCounter++;
     }
 }
