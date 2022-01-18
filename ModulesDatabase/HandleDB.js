@@ -43,11 +43,15 @@ class HDB {
                 case "lastTagged":
                     objectToAddToDataBase = {ID: ID, personID: value1, taggedArray: value2};
                     break;
+                case "reminders":
+                    objectToAddToDataBase = {personID: ID, reminderDate: value1, reminderMessage: value2};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -101,11 +105,15 @@ class HDB {
                 case "lastTagged":
                     objectToDelInDataBase = {ID: ID, personID: key};
                     break;
+                case "reminders":
+                    objectToDelInDataBase = {personID: ID, reminderDate: key};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" || argType === "personBirthdayGroups" || argType === "lastTagged")
+            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -118,7 +126,7 @@ class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -187,6 +195,14 @@ class HDB {
             groupsDict[chatID].functionPermissions = [func, permission]
         }
 
+        function createReminders(document) {
+            let personID = document.personID, reminderDate = document.reminderDate,
+                reminderMessage = document.reminderMessage;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            usersDict[personID].reminders = ["add", reminderDate, reminderMessage];
+        }
+
         function createRested(document) {
             let chatID = document.ID, restArray = document.restArray;
             switch (chatID) {
@@ -198,6 +214,11 @@ class HDB {
                 case ("restArrayGroups"):
                     for (let i = 0; i < restArray.length; i++) {
                         restGroups.push(restArray[i])
+                    }
+                    break;
+                case ("personsWithReminders"):
+                    for (let i = 0; i < restArray.length; i++) {
+                        personsWithReminders.push(restArray[i]);
                     }
                     break;
                 default:
@@ -297,6 +318,14 @@ class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createLastTagged(result[i]);
+            });
+            dbo.collection("reminders-persons").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in fetching reminders from db");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++)
+                    createReminders(result[i]);
             });
             dbo.collection("rested").find({}).toArray(function (err, result) {
                 if (err) {

@@ -28,7 +28,7 @@ class HP {
     static async checkGroupUsersPermissionLevels(groupsDict, chatID) {
         const developerPerm = 3, mutedPerm = 0;
         for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
-            if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === null ||
+            if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === undefined ||
                 (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
                     groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== mutedPerm.toString())) {
                 await this.autoAssignPersonPermissions(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
@@ -123,14 +123,14 @@ class HP {
     }
 
     static wordToFunctionPermission(groupsDict, chatID, text) {
-        switch (text) {
-            case HL.getGroupLang(groupsDict, chatID, "muted_permission_level"):
+        switch (true) {
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "muted_permission_level"))):
                 return 4;
-            case HL.getGroupLang(groupsDict, chatID, "developer_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "developer_permission_level"))):
                 return 3;
-            case HL.getGroupLang(groupsDict, chatID, "admin_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "admin_permission_level"))):
                 return 2;
-            case HL.getGroupLang(groupsDict, chatID, "regular_permission_level"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "regular_permission_level"))):
                 return 1;
             default:
                 return null;
@@ -159,20 +159,20 @@ class HP {
     }
 
     static wordToFunctionType(groupsDict, chatID, text) {
-        switch (text) {
-            case HL.getGroupLang(groupsDict, chatID, "filters_permission_type"):
+        switch (true) {
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "filters_permission_type"))):
                 return "filters"
-            case HL.getGroupLang(groupsDict, chatID, "tags_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "tags_permission_type"))):
                 return "tags"
-            case HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type"))):
                 return "handleFilters"
-            case HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type"))):
                 return "handleTags"
-            case HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type"))):
                 return "handleBirthdays"
-            case HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type"))):
                 return "handleShows"
-            case HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type"):
+            case !!(text.match(HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type"))):
                 return "handleOther"
             default:
         }
