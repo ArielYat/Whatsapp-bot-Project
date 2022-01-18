@@ -233,7 +233,7 @@ function start(client) {
                     let stringForSending = repeat ? oldReminder.replace("repeatReminder", "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
-                            await client.sendVideoAsGif(personID, stringForSending.replace("Video", ""), "reminder");
+                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
                             break;
                         case stringForSending.startsWith("Image"):
                             await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder");
