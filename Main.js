@@ -13,7 +13,7 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
-    restPersonsCommandSpam = [], personsWithReminders = [], tagLists = [];
+    restPersonsCommandSpam = [], personsWithReminders = [], tagLists = {};
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
