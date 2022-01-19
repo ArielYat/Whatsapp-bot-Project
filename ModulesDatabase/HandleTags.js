@@ -123,7 +123,7 @@ class HT {
     }
 
     static async createTagList(client, bodyText, chatID, groupsDict, tagsList) {
-        if (tagsList[chatID]) {
+        if (!tagsList[chatID]) {
             let tagStack = [];
             for (const tag in bodyText.match(/@\d+/))
                 tagStack.push(tag);
