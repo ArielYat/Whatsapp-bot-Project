@@ -62,7 +62,7 @@ class HT {
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
-    static async tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict) {
+    static async tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         let stringForSending = "";
         Object.entries(groupsDict[chatID].personsIn).forEach(person => {
@@ -120,6 +120,31 @@ class HT {
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "clear_tags_reply"), messageID);
             });
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
+    }
+
+    static async createTagList(client, bodyText, chatID, groupsDict) {
+        if (groupsDict[chatID].tagStack.length === 0) {
+            let matchTags = bodyText.match(/@\d+/g);
+            if (!matchTags)
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_empty_error"));
+            else {
+                for (let i = 0; i < matchTags.length; i++) {
+                    groupsDict[chatID].addNumberToTagStack(matchTags[i]);
+                }
+                groupsDict[chatID].tagStack = groupsDict[chatID].tagStack.reverse();
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_reply"));
+            }
+        }
+    }
+
+    static async nextPersonInList(client, chatID, messageID, groupsDict) {
+        let tagStack = groupsDict[chatID].tagStack;
+        if (tagStack.length !== 0) {
+            if (tagStack.length === 1)
+                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);
+            else if (tagStack.length > 1)
+                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_next_reply", tagStack.pop(), tagStack[tagStack.length - 1]), messageID)
+        }
     }
 }
 

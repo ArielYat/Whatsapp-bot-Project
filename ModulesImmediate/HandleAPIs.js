@@ -1,5 +1,5 @@
 const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys.js");
-const nodeFetch = require("node-fetch"), request = require("request");
+const nodeFetch = require("node-fetch"), request = require("request"), youtubeDL = require('youtube-dl-exec'), fs = require("fs");
 
 class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
@@ -67,6 +67,41 @@ class HAPI {
                 }, null);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);
+    }
+
+    static async downloadMusic(client, bodyText, chatID, messageID, groupsDict) {
+        if (groupsDict[chatID].downloadMusicCounter < 5) {
+            const regex = /https?:\/\/(.)+\.youtube\.com\/(.)+/;
+            const link = bodyText.match(regex);
+            let fileName;
+            if (link) {
+                try {
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_downloading_reply"), messageID);
+                    groupsDict[chatID].downloadMusicCounter++;
+                    await youtubeDL(link[0], {
+                        format: "bestaudio[filesize<20M]",
+                        exec: "ffmpeg -i {}  -codec:a libmp3lame -qscale:a 0 {}.mp3",
+                        restrictFilenames: true
+                    }).then(output => fileName = output.match(/ffmpeg -i(.)+-codec/)[0].replace("ffmpeg -i", "").replace("-codec", "").trim());
+                    if (fileName) {
+                        await client.sendPtt(chatID, fileName + ".mp3", messageID);
+                        fs.unlink(fileName, (err) => {
+                            if (err) {
+                                console.error(err)
+                            }
+                        });
+                        fs.unlink(fileName + ".mp3", (err) => {
+                            if (err) {
+                                console.error(err)
+                            }
+                        });
+                    }
+                } catch (error) {
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_unknown_error"), messageID);
+                }
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
+
     }
 }
 

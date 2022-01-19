@@ -39,7 +39,7 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
 
 async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tagging everyone
-        await HT.tagEveryone(client, bodyText, chatID, messageID, quotedMsgID, groupsDict);
+        await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
         await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
@@ -49,6 +49,9 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "next_tag_list"))) { //Handle moving to the next tag in a tag list
+        await HT.nextPersonInList(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -77,6 +80,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_profile"))) { //Show author's stats
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "download_music"))) { //Handle download music - BETA
+        await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -122,6 +128,9 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle removing tags
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
+        await HT.createTagList(client, bodyText, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -180,6 +189,8 @@ function start(client) {
         for (const group in groupsDict) {
             groupsDict[group].cryptoCheckedToday = false;
             groupsDict[group].translationCounter = 0;
+            groupsDict[group].downloadMusicCounter = 0;
+
         }
     });
     //Reset filters counter for all groups
