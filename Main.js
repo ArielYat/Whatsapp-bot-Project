@@ -13,7 +13,7 @@ const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesD
 const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
-    restPersonsCommandSpam = [], personsWithReminders = [], tagLists = {};
+    restPersonsCommandSpam = [], personsWithReminders = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
@@ -51,7 +51,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "next_tag_list"))) { //Handle moving to the next tag in a tag list
-        await HT.nextPersonInList(client, chatID, messageID, groupsDict, tagLists);
+        await HT.nextPersonInList(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -75,10 +75,13 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "download_music"))) { //Handle download music - BETA
+        await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_survey"))) { //Handle creating surveys
         await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_profile"))) { //Show author's stats
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_profile"))) { //Show author's stats
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     }
@@ -127,7 +130,7 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
-        await HT.createTagList(bodyText, chatID, groupsDict, tagLists);
+        await HT.createTagList(client, bodyText, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }

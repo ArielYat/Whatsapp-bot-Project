@@ -149,8 +149,8 @@ class Strings {
         }, "next_tag_list": {
             "he": /^הבא בתור/i, "en": /^Next in line/i, "la": null, "ar": null
         }, "tag_list_next_reply": {
-            "he": "האדם הבא ברשימה הינו %s ואחריו %s",
-            "en": "The next person on the list is %s and after him %s",
+            "he": "האדם הבא בתור (כלומר עכשיו!) הינו %s ואחריו %s (אז תהיה מוכן!) \nכדי לעבור לאיש הבא, כתבו 'הבא בתור'",
+            "en ": "The next person in the que (which means now!) is %s and after them it's %s (so be ready!) \n To go the next person, write 'Next in line'",
             "la": null,
             "ar": null
         }, "tag_list_last_reply": {
@@ -444,6 +444,28 @@ class Strings {
         }, "translate_language_limit": {
             "he": "תנסה מחר לבקש תרגום, ביקשו יותר מדי תרגומים בקבוצה זו",
             "en": "Try again tomorrow, you guys are translating too many words",
+            "la": null,
+            "ar": null
+        }, "download_music": {
+            "he": /^הורד מוזיקה /i, "en": null, "la": null, "ar": null
+        }, "download_music_waiting": {
+            "he": "מוריד...",
+            "en": null,
+            "la": null,
+            "ar": null
+        }, "download_music_error": {
+            "he": "שגיאה בהורדה - בדוק שבחרת שבחרת קישור תקין",
+            "en": null,
+            "la": null,
+            "ar": null
+        }, "download_music_not_found": {
+            "he": "אין קישור ליוטיוב בהודעה הזו שובב",
+            "en": null,
+            "la": null,
+            "ar": null
+        }, "download_music_limit": {
+            "he": "הורדתם יותר מדי שירים היום תנסו שוב מחר",
+            "en": null,
             "la": null,
             "ar": null
         }, //profile

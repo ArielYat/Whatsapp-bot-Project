@@ -68,7 +68,8 @@ class HAF {
 
     static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs) {
         try {
-            eval(bodyText.replace("/exec", ""));
+
+            await eval("(async () => {" + bodyText.replace("/exec", "") + "})()")
             await client.reply(message.chat.id, "הפקודה שהרצת בוצעה בהצלחה", message.id);
         } catch (err) {
             await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, message.id);

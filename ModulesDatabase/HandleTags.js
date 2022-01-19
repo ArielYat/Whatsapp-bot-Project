@@ -122,28 +122,28 @@ class HT {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
     }
 
-    static async createTagList(client, bodyText, chatID, groupsDict, tagsList) {
-        if (!tagsList[chatID]) {
-            let tagStack = [];
-            for (const tag in bodyText.match(/@\d+/))
-                tagStack.push(tag);
-            if (tagStack.length !== 0) {
-                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_reply"));
-                tagsList[chatID] = tagStack;
-            } else {
+    static async createTagList(client, bodyText, chatID, groupsDict) {
+        if (groupsDict[chatID].tagStack.length === 0) {
+            let matchTags = bodyText.match(/@\d+/g);
+            if (!matchTags)
                 await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_empty_error"));
-                tagsList[chatID] = null;
+            else {
+                for (let i = 0; i < matchTags.length; i++) {
+                    groupsDict[chatID].addNumberToTagStack(matchTags[i]);
+                }
+                groupsDict[chatID].tagStack = groupsDict[chatID].tagStack.reverse();
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_reply"));
             }
         }
     }
 
-    static async nextPersonInList(client, chatID, messageID, groupsDict, tagLists) {
-        const tagStack = tagLists[chatID];
-        if (tagStack) {
+    static async nextPersonInList(client, chatID, messageID, groupsDict) {
+        let tagStack = groupsDict[chatID].tagStack;
+        if (tagStack.length !== 0) {
             if (tagStack.length === 1)
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);
+                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);
             else if (tagStack.length > 1)
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_next_reply", tagStack.pop(), tagStack[tagStack.length - 1]), messageID)
+                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_next_reply", tagStack.pop(), tagStack[tagStack.length - 1]), messageID)
         }
     }
 }
