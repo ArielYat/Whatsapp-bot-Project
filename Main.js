@@ -189,6 +189,8 @@ function start(client) {
         for (const group in groupsDict) {
             groupsDict[group].cryptoCheckedToday = false;
             groupsDict[group].translationCounter = 0;
+            groupsDict[group].downloadMusicCounter = 0;
+
         }
     });
     //Reset filters counter for all groups
