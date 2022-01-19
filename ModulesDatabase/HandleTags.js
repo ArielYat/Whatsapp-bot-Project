@@ -122,20 +122,23 @@ class HT {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
     }
 
-    static async createTagList(client, bodyText, chatID, groupsDict) {
-        let tagStack = [];
-        for (const tag in bodyText.match(/@\d+/))
-            tagStack.push(tag);
-        if (tagStack.length !== 0) {
-            await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_reply"));
-            return tagStack;
-        } else {
-            await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_empty_error"));
-            return null;
+    static async createTagList(client, bodyText, chatID, groupsDict, tagsList) {
+        if (tagsList[chatID]) {
+            let tagStack = [];
+            for (const tag in bodyText.match(/@\d+/))
+                tagStack.push(tag);
+            if (tagStack.length !== 0) {
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_reply"));
+                tagsList[chatID] = tagStack;
+            } else {
+                await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "create_tag_list_empty_error"));
+                tagsList[chatID] = null;
+            }
         }
     }
 
-    static async nextPersonInList(client, chatID, messageID, groupsDict, tagStack) {
+    static async nextPersonInList(client, chatID, messageID, groupsDict, tagLists) {
+        const tagStack = tagLists[chatID];
         if (tagStack) {
             if (tagStack.length === 1)
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);

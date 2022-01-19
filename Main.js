@@ -50,11 +50,8 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "clear_tags"))) { //Handle clearing tagged messages
         await HT.clearTaggedMessaged(client, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) {
-        tagLists[chatID] = await HT.createTagList(bodyText, chatID, groupsDict);
-        usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "next_tag_list"))) {
-        await HT.nextPersonInList(client, chatID, messageID, groupsDict, tagLists[chatID]);
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "next_tag_list"))) { //Handle moving to the next tag in a tag list
+        await HT.nextPersonInList(client, chatID, messageID, groupsDict, tagLists);
         usersDict[authorID].commandCounter++;
     }
 }
@@ -128,6 +125,9 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_tag"))) { //Handle removing tags
         await HT.remTag(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
+        await HT.createTagList(bodyText, chatID, groupsDict, tagLists);
         usersDict[authorID].commandCounter++;
     }
 }
