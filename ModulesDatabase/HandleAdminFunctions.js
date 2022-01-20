@@ -50,8 +50,7 @@ class HAF {
         const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/chat\.whatsapp\.com\/(.)+)/g);
         if (urlsInMessage) {
             try {
-                let URL = urlsInMessage[0];
-                await client.joinGroupViaLink(URL);
+                await client.joinGroupViaLink(urlsInMessage[0]);
             } catch (err) {
                 await client.reply(chatID, "אני חושב שהקישור לא בתוקף", messageID);
             }
@@ -66,10 +65,9 @@ class HAF {
         await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
     }
 
-    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam, botDevs) {
+    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, personsWithReminders, botDevs) {
         try {
-
-            await eval("(async () => {" + bodyText.replace("/exec", "") + "})()")
+            await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
             await client.reply(message.chat.id, "הפקודה שהרצת בוצעה בהצלחה", message.id);
         } catch (err) {
             await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, message.id);

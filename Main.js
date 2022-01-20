@@ -166,13 +166,11 @@ async function HandleReminders(client, bodyText, chatID, messageID, authorID, me
     }
 }
 
-async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
+async function HandleLangAndHelp(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
-        await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
+        await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(Strings["change_language"]["he"]) ||
-        bodyText.match(Strings["change_language"]["en"]) ||
-        bodyText.match(Strings["change_language"]["la"])) { //Handle language change
+    } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"])) { //Handle language change
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
@@ -328,7 +326,7 @@ function start(client) {
                     //Check if you user handled a reminder in a DM
                     await HandleReminders(client, bodyText, chatID, messageID, authorID, message);
                     //Check all functions for commands if the user has a high enough permission level
-                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
+                    await HandleLangAndHelp(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleOther"])
