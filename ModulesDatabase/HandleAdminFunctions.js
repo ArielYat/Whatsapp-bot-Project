@@ -1,46 +1,44 @@
 const HDB = require("./HandleDB")
 
 class HAF {
-    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restUsers, restUsersCommandSpam, user) {
-        if (quotedMsg) {
-            const quotedMsgAuthor = quotedMsg.author
-            if (bodyText.startsWith("חסום גישה למשתמש")) {
-                restUsers.push(quotedMsgAuthor);
-                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
-                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null, "rested", function () {
-                        client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " נחסם בהצלחה, \n May God have mercy on your soul", messageID);
-                    });
+    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
+        const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i).replace("@", "") + "@c.us";
+        if (bodyText.match(/^\/Ban/i)) {
+            restPersons.push(personToBan);
+            await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
+                    client.reply(chatID, "The user has been banned. \nMay God have mercy on your soul", messageID);
                 });
-            }
-            if (bodyText.startsWith("אפשר גישה למשתמש")) {
-                restUsers.splice(restUsers.indexOf(quotedMsgAuthor), 1);
-                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
-                    HDB.addArgsToDB("restArrayUsers", restUsers, null, null, "rested", function () {
-                        restUsersCommandSpam.splice(restUsersCommandSpam.indexOf(quotedMsgAuthor), 1);
-                        user.commandCounter = 0;
-                        client.sendReplyWithMentions(chatID, "המשתמש @" + quotedMsgAuthor + " שוחרר בהצלחה", messageID);
-                    });
-                });
-            }
-        }
-    }
-
-    static async handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsSpam, group) {
-        if (bodyText.startsWith("חסום קבוצה")) {
-            restGroups.push(chatID);
-            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
-                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
-                    client.reply(chatID, "הקבוצה נחסמה בהצלחה", messageID);
+            });
+        } else if (bodyText.match(/^\/Unban/i)) {
+            restPersons.splice(restPersons.indexOf(personToBan), 1);
+            await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
+                    person.autoBanned = null;
+                    person.commandCounter = 0;
+                    restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personToBan), 1);
+                    client.reply(chatID, "The user has been unbanned.", messageID);
                 });
             });
         }
-        if (bodyText.startsWith("שחרר קבוצה")) {
+    }
+
+    static async handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, group) {
+        if (bodyText.match(/^\/Block group/i)) {
+            restGroups.push(chatID);
+            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
+                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
+                    client.reply(chatID, "The group has been blocked. \nSuck it idiots", messageID);
+                });
+            });
+        } else if (bodyText.match(/^\/Unblock group/i)) {
             restGroups.splice(restGroups.indexOf(chatID), 1);
             await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
                 HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
-                    restGroupsSpam.splice(restGroupsSpam.indexOf(chatID), 1);
+                    group.autoBanned = null;
                     group.filterCounter = 0;
-                    client.reply(chatID, "הקבוצה שוחררה בהצלחה", messageID);
+                    restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+                    client.reply(chatID, "The group has been unblocked.", messageID);
                 });
             });
         }
@@ -65,7 +63,8 @@ class HAF {
         await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
     }
 
-    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, personsWithReminders, botDevs) {
+    // noinspection JSUnusedLocalSymbols
+    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings) {
         try {
             await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
             await client.reply(message.chat.id, "הפקודה שהרצת בוצעה בהצלחה", message.id);
