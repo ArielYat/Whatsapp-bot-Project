@@ -29,28 +29,28 @@ class HL {
     static async sendHelpMessage(client, bodyText, chatID, messageID, groupsDict) {
         switch (true) {
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_general"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_general_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_general_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_language"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_language_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_language_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_filters"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_filters_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_filters_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_tags"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_tags_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_tags_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_birthdays"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_birthdays_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_birthdays_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_permissions"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_permissions_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_permissions_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_reminders"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reminders_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reminders_reply"), messageID);
                 break;
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_immediate"))):
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_immediate_reply"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_immediate_reply"), messageID);
                 break;
         }
     }
