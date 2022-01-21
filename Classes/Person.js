@@ -1,4 +1,4 @@
-class Person {
+export class Person {
     #personID;
     #birthday;
     #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
@@ -93,5 +93,3 @@ class Person {
         return this.#reminders.hasOwnProperty(date);
     }
 }
-
-module.exports = Person;

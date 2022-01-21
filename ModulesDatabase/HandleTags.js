@@ -1,6 +1,7 @@
-const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+import {HDB} from "./HandleDB";
+import {HL} from "./HandleLanguage";
 
-class HT {
+export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
@@ -147,5 +148,3 @@ class HT {
         }
     }
 }
-
-module.exports = HT;

@@ -1,9 +1,7 @@
-const HL = require("../ModulesDatabase/HandleLanguage");
+import {HL} from "../ModulesDatabase/HandleLanguage";
 
-class HW {
+export class HW {
     static async sendLink(client, chatID, groupsDict) {
         await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "show_webpage_reply", "~TBD~"));
     }
 }
-
-module.exports = HW

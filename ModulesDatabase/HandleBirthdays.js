@@ -1,6 +1,7 @@
-﻿const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+﻿import {HDB} from "./HandleDB";
+import {HL} from "./HandleLanguage";
 
-class HB {
+export class HB {
     static async checkBirthdays(client, usersDict, groupsDict) {
         const today = new Date();
         const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(), yearToday = today.getFullYear();
@@ -83,5 +84,3 @@ class HB {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_have_birthday_error"), messageID);
     }
 }
-
-module.exports = HB;

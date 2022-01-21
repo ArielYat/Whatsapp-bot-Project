@@ -1,16 +1,26 @@
 //version 2.5
 
 //Command Modules
-const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesDatabase/HandleDB"),
-    HF = require("./ModulesDatabase/HandleFilters"), HT = require("./ModulesDatabase/HandleTags"),
-    HB = require("./ModulesDatabase/HandleBirthdays"), HSt = require("./ModulesImmediate/HandleStickers"),
-    HAF = require("./ModulesDatabase/HandleAdminFunctions"), HL = require("./ModulesDatabase/HandleLanguage"),
-    HSu = require("./ModulesImmediate/HandleSurveys"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"),
-    HUS = require("./ModulesImmediate/HandleUserStats"), HR = require("./ModulesDatabase/HandleReminders"),
-    Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
+import {HURL} from "./ModulesImmediate/HandleURLs";
+import {HDB} from "./ModulesDatabase/HandleDB";
+import {HF} from "./ModulesDatabase/HandleFilters";
+import {HT} from "./ModulesDatabase/HandleTags";
+import {HB} from "./ModulesDatabase/HandleBirthdays";
+import {HSt} from "./ModulesImmediate/HandleStickers";
+import {HAF} from "./ModulesDatabase/HandleAdminFunctions";
+import {HL} from "./ModulesDatabase/HandleLanguage";
+import {HSu} from "./ModulesImmediate/HandleSurveys";
+import {HP} from "./ModulesDatabase/HandlePermissions";
+import {HAPI} from "./ModulesImmediate/HandleAPIs";
+import {HW} from "./ModuleWebsite/HandleWebsite";
+import {HUS} from "./ModulesImmediate/HandleUserStats";
+import {HR} from "./ModulesDatabase/HandleReminders";
+import {Group} from "./Classes/Group";
+import {Person} from "./Classes/Person";
+import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
+import wa from "@open-wa/wa-automate";
+import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
     restPersonsCommandSpam = [], personsWithReminders = [];

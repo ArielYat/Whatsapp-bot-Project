@@ -1,7 +1,8 @@
-const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+import {HDB} from "./HandleDB";
+import {HL} from "./HandleLanguage";
 const regex = new RegExp('\\[(.*?)\]', "g");
 
-class HF {
+export class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
         const filters = groupsDict[chatID].filters;
         for (const filter in filters) {
@@ -138,5 +139,3 @@ class HF {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }
 }
-
-module.exports = HF;

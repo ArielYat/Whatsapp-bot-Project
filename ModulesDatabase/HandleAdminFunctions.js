@@ -1,7 +1,7 @@
-const HDB = require("./HandleDB")
+import {HDB} from "./HandleDB";
 
-class HAF {
-    static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
+export class HAF {
+     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
         const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
         if (bodyText.match(/^\/Ban/i)) {
             restPersons.push(personToBan);
@@ -73,5 +73,3 @@ class HAF {
         }
     }
 }
-
-module.exports = HAF;

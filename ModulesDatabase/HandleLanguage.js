@@ -1,6 +1,8 @@
-const HDB = require("./HandleDB.js"), Strings = require("../Strings.js").strings, util = require("util");
+import {HDB} from "./HandleDB.js";
+import {Strings} from "../Strings.js";
+import util from "util";
 
-class HL {
+export class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
         const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hebraica/i) || bodyText.match(/Hébreu/i)
             ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglico/i) || bodyText.match(/Anglais/i)
@@ -56,5 +58,3 @@ class HL {
         }
     }
 }
-
-module.exports = HL;
