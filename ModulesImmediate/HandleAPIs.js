@@ -44,11 +44,12 @@ class HAPI {
         }
     }
 
-    static async translate(client, bodyText, chatID, messageID, quotedMsgText, groupsDict) {
+    static async translate(client, message, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].translationCounter < 10) {
             bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
-            let textToTranslate = bodyText.replace(bodyText.split(" ")[0], "").trim();
-            textToTranslate = textToTranslate === undefined ? quotedMsgText : textToTranslate;
+            let textToTranslate = message.quotedMsgObj ? message.quotedMsgObj.body :
+                bodyText.replace(bodyText.split(" ")[0], "").trim();
+
             try {
                 const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0]}&format=json`);
                 let langResponse = await nodeFetch(url, {
@@ -67,7 +68,23 @@ class HAPI {
                     });
                     response = await response.json();
                     groupsDict[chatID].translationCounter++;
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", response[1], response[response.length - 2]), messageID);
+                    let stringForSending = "";
+                    if (response[0][0][1].includes(textToTranslate)) {
+                        stringForSending = response[0][0][0];
+                    } else {
+                        for (let i = 0; i < response[0].length; i++) {
+                            let j = 0;
+                            while (response[0][i]) {
+                                if (response[0][i][j] == null) {
+                                    break;
+                                }
+                                stringForSending += response[0][i][j];
+                                j++;
+                            }
+
+                        }
+                    }
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
                 } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
             } catch (err) {
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);

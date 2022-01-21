@@ -56,7 +56,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     }
 }
 
-async function HandleImmediate(client, message, bodyText, chatID, authorID, quotedMsgText, messageID) {
+async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "make_sticker"))) { //Handle stickers
         await HSt.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -70,7 +70,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, quot
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate_to"))) { //Handle translating words on Google Translate
-        await HAPI.translate(client, bodyText, chatID, messageID, quotedMsgText, groupsDict);
+        await HAPI.translate(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);
@@ -170,7 +170,7 @@ async function HandleLangAndHelp(client, bodyText, chatID, authorID, messageID) 
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
         await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"])) { //Handle language change
+    } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) { //Handle language change
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
@@ -239,7 +239,8 @@ function start(client) {
                     const oldReminder = person.reminders[reminder];
                     const reminderDate = new Date(reminder);
                     const repeat = !!oldReminder.startsWith("repeatReminder");
-                    let stringForSending = repeat ? oldReminder.replace("repeatReminder", "") : oldReminder;
+                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")) : null;
+                    let stringForSending = repeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
                             await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
@@ -256,7 +257,7 @@ function start(client) {
                     })
                     let newReminderDate = new Date(reminder);
                     if (repeat) {
-                        newReminderDate.setDate(newReminderDate.getDate() + 1);
+                        newReminderDate.setDate(newReminderDate.getDate() + numberToAddToDate);
                         await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
                             person.reminders = ["add", newReminderDate, oldReminder];
                         });
@@ -282,9 +283,9 @@ function start(client) {
             let checkFilters = true;
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
-                await groupsDict[chatID] = new Group(chatID);
+                groupsDict[chatID] = await new Group(chatID);
             if (!(authorID in usersDict))
-                await usersDict[authorID] = new Person(authorID);
+                usersDict[authorID] = await new Person(authorID);
             //Add author to group's DB if not already in it
             if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
                 await HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
@@ -330,7 +331,7 @@ function start(client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleOther"])
-                        await HandleImmediate(client, message, bodyText, chatID, authorID, message.quotedMsg.text, messageID);
+                        await HandleImmediate(client, message, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleShows"])
                         await HandleShows(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleFilters"])
