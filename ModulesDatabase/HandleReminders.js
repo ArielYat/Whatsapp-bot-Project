@@ -77,13 +77,13 @@ class HR {
     static async removeReminder(client, bodyText, chatID, messageID, person, groupsDict, personsWithReminders) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_reminder"), "").trim();
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
-        let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
-        let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
-        bodyText = dayOfTheWeekAndBodyText[1];
         if (time) {
             const date = new Date();
             const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
             const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
+            let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
+            let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
+            bodyText = dayOfTheWeekAndBodyText[1];
             time = time[0];
             let timeArray = time.split(":");
             let hour = parseInt(timeArray[0]), minutes = parseInt(timeArray[1]), month, day, year;
