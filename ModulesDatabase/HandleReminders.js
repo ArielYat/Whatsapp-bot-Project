@@ -15,40 +15,10 @@ class HR {
                 const date = new Date();
                 const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
                 const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
-                let dayOfTheWeek;
+                let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
+                let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
+                bodyText = dayOfTheWeekAndBodyText[1];
                 let differenceForReminder = 1; //default reminder
-                switch (true) {
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))):
-                        dayOfTheWeek = 1;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))):
-                        dayOfTheWeek = 2;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))):
-                        dayOfTheWeek = 3;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))):
-                        dayOfTheWeek = 4;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))):
-                        dayOfTheWeek = 5;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))):
-                        dayOfTheWeek = 6;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))[0], "").trim();
-                        break;
-                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))):
-                        dayOfTheWeek = 7;
-                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))[0], "").trim();
-                        break;
-                    default:
-                        dayOfTheWeek = null;
-                }
                 let month, day, year;
                 switch (true) {
                     case (!!matchedDateWithYear):
@@ -107,6 +77,9 @@ class HR {
     static async removeReminder(client, bodyText, chatID, messageID, person, groupsDict, personsWithReminders) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_reminder"), "").trim();
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
+        let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
+        let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
+        bodyText = dayOfTheWeekAndBodyText[1];
         if (time) {
             const date = new Date();
             const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
@@ -127,6 +100,13 @@ class HR {
                     month = matchedDateWithoutYearArray[1] - 1;
                     year = date.getFullYear();
                     break;
+                case (!!dayOfTheWeek):
+                    let dayToAdd = dayOfTheWeek - 1 < date.getDay() ? 7 - (date.getDay() - (dayOfTheWeek - 1)) :
+                        (dayOfTheWeek - 1) - date.getDay();
+                    day = date.getDate() + dayToAdd;
+                    month = date.getMonth();
+                    year = date.getFullYear();
+                    break;
                 default:
                     day = date.getDate();
                     month = date.getMonth();
@@ -136,17 +116,54 @@ class HR {
             if (person.doesReminderExist(reminderDate)) {
                 await HDB.delArgsFromDB(chatID, reminderDate, "reminders", function () {
                     person.reminders = ["delete", reminderDate];
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time), messageID);
                     if (Object.keys(person.reminders).length === 0) {
                         personsWithReminders.splice(personsWithReminders.indexOf(chatID), 1);
                         HDB.delArgsFromDB("personsWithReminders", null, "rested", function () {
                             HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", function () {
-                                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time), messageID);
                             });
                         });
                     }
                 });
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_doesnt_exist_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
+    }
+
+    static async getDayOfTheWeek(bodyText, groupsDict, chatID) {
+        let dayOfTheWeek;
+        switch (true) {
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))):
+                dayOfTheWeek = 1;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))):
+                dayOfTheWeek = 2;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))):
+                dayOfTheWeek = 3;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))):
+                dayOfTheWeek = 4;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))):
+                dayOfTheWeek = 5;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))):
+                dayOfTheWeek = 6;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))):
+                dayOfTheWeek = 7;
+                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))[0], "").trim();
+                return [dayOfTheWeek, bodyText];
+            default:
+                dayOfTheWeek = null;
+                return [dayOfTheWeek, bodyText];
+        }
     }
 
     static async showReminders(client, person, groupsDict, messageID, chatID) {
@@ -157,7 +174,7 @@ class HR {
                 let reminderData = person.reminders[reminder];
                 if (reminderData.startsWith("repeatReminder")) {
                     stringForSending += "*repeat* \n";
-                    reminderData = reminderData.replace("repeatReminder", "");
+                    reminderData = reminderData.replace(/repeatReminder\d/, "")
                 }
                 if (reminderData.startsWith("Video"))
                     stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${HL.getGroupLang(groupsDict, chatID, "video")}\n`;
