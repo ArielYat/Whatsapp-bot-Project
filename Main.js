@@ -70,7 +70,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "translate_to"))) { //Handle translating words on Google Translate
-        await HAPI.translate(client, bodyText, chatID, messageID, groupsDict);
+        await HAPI.translate(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "show_webpage"))) { //Handle sending webpage link
         await HW.sendLink(client, chatID, groupsDict);
@@ -166,13 +166,11 @@ async function HandleReminders(client, bodyText, chatID, messageID, authorID, me
     }
 }
 
-async function HandleHelp(client, bodyText, chatID, authorID, messageID) {
+async function HandleLangAndHelp(client, bodyText, chatID, authorID, messageID) {
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
-        await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "help_reply"), messageID);
+        await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(Strings["change_language"]["he"]) ||
-        bodyText.match(Strings["change_language"]["en"]) ||
-        bodyText.match(Strings["change_language"]["la"])) { //Handle language change
+    } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) { //Handle language change
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
@@ -241,7 +239,8 @@ function start(client) {
                     const oldReminder = person.reminders[reminder];
                     const reminderDate = new Date(reminder);
                     const repeat = !!oldReminder.startsWith("repeatReminder");
-                    let stringForSending = repeat ? oldReminder.replace("repeatReminder", "") : oldReminder;
+                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")) : null;
+                    let stringForSending = repeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
                             await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
@@ -258,7 +257,7 @@ function start(client) {
                     })
                     let newReminderDate = new Date(reminder);
                     if (repeat) {
-                        newReminderDate.setDate(newReminderDate.getDate() + 1);
+                        newReminderDate.setDate(newReminderDate.getDate() + numberToAddToDate);
                         await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
                             person.reminders = ["add", newReminderDate, oldReminder];
                         });
@@ -269,24 +268,24 @@ function start(client) {
     }, 60 * 1000); //in ms; 1 min
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
-        const stringForSending = `${Strings["start_message"]["he"]}\n\n\n${Strings["start_message"]["en"]}\n\n\n${Strings["start_message"]["la"]}\n\n\n${Strings["start_message"]["ar"]}`
-        await client.sendText(chat.id, stringForSending);
+        await client.sendText(chat.id, `${Strings["start_message"]["he"]}\n\n\n${Strings["start_message"]["en"]}\n\n\n${Strings["start_message"]["la"]}\n\n\n${Strings["start_message"]["ar"]}\n\n\n${Strings["start_message"]["fr"]}`);
     });
     //Check every module every time a message is received
     client.onMessage(async message => {
         if (message != null) {
             const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
-            let bodyText, quotedMsgID, checkFilters = true;
-            //Define quotedMsgID depending on if a message was quoted
-            quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
+            //Define quotedMsgID properties depending on if a message was quoted
+            const quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
             //Define bodeText depending on if the message a text message or a media message
-            bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
+            let bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
             bodyText = bodyText === undefined ? message.text : bodyText;
+            //Boolean to check if a filter altering command was used and if not check if the message contains filters
+            let checkFilters = true;
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
-                groupsDict[chatID] = new Group(chatID);
+                groupsDict[chatID] = await new Group(chatID);
             if (!(authorID in usersDict))
-                usersDict[authorID] = new Person(authorID);
+                usersDict[authorID] = await new Person(authorID);
             //Add author to group's DB if not already in it
             if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
                 await HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {
@@ -308,16 +307,16 @@ function start(client) {
             //Handle bot developer functions if the author is a dev
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3) {
                 usersDict[authorID].permissionLevel[chatID] = 3;
-                if (bodyText.startsWith("חסום גישה למשתמש") || bodyText.startsWith("אפשר גישה למשתמש"))
+                if (bodyText.match(/^\/Ban/i) || bodyText.match(/^\/Unban/i))
                     await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restPersons, restPersonsCommandSpam, usersDict[authorID]);
-                else if (bodyText.startsWith("חסום קבוצה") || bodyText.startsWith("שחרר קבוצה"))
+                else if (bodyText.match(/^\/Block group/i) || bodyText.match(/^\/Unblock group/i))
                     await HAF.handleGroupRest(client, bodyText, chatID, messageID, restGroups, restGroupsFilterSpam, groupsDict[chatID]);
-                else if (bodyText.match(/^הצטרף לקבוצה/))
+                else if (bodyText.match(/^Join /))
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 else if (bodyText.match(/^!ping$/i))
                     await HAF.ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
                 else if (bodyText.match(/^\/exec/i))
-                    await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs);
+                    await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
@@ -328,7 +327,7 @@ function start(client) {
                     //Check if you user handled a reminder in a DM
                     await HandleReminders(client, bodyText, chatID, messageID, authorID, message);
                     //Check all functions for commands if the user has a high enough permission level
-                    await HandleHelp(client, bodyText, chatID, authorID, messageID);
+                    await HandleLangAndHelp(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleOther"])

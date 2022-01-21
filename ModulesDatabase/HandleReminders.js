@@ -15,6 +15,40 @@ class HR {
                 const date = new Date();
                 const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
                 const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
+                let dayOfTheWeek;
+                let differenceForReminder = 1; //default reminder
+                switch (true) {
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))):
+                        dayOfTheWeek = 1;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Sunday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))):
+                        dayOfTheWeek = 2;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Monday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))):
+                        dayOfTheWeek = 3;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Tuesday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))):
+                        dayOfTheWeek = 4;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Wednesday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))):
+                        dayOfTheWeek = 5;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Thursday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))):
+                        dayOfTheWeek = 6;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Friday"))[0], "").trim();
+                        break;
+                    case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))):
+                        dayOfTheWeek = 7;
+                        bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "Saturday"))[0], "").trim();
+                        break;
+                    default:
+                        dayOfTheWeek = null;
+                }
                 let month, day, year;
                 switch (true) {
                     case (!!matchedDateWithYear):
@@ -31,17 +65,27 @@ class HR {
                         year = date.getFullYear();
                         bodyText = bodyText.replace(matchedDateWithoutYear[0], "").trim();
                         break;
+
+                    case (!!dayOfTheWeek):
+                        let dayToAdd = dayOfTheWeek - 1 < date.getDay() ? 7 - (date.getDay() - (dayOfTheWeek - 1)) :
+                            (dayOfTheWeek - 1) - date.getDay();
+                        day = date.getDate() + dayToAdd;
+                        month = date.getMonth();
+                        year = date.getFullYear();
+                        differenceForReminder = 7;
+                        break;
                     default:
                         day = date.getDate();
                         month = date.getMonth();
                         year = date.getFullYear();
+
                 }
                 const reminderDate = new Date(year, month, day, hour, minutes);
                 const repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeatReminder")));
                 const reminder =
-                    messageType === "image" ? repeatReminder ? "repeatReminderImage" + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
-                        messageType === "video" ? repeatReminder ? "repeatReminderVideo" + await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
-                            messageType === "chat" ? repeatReminder ? "repeatReminder" + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeatReminder"), "") : bodyText.replace(time, "").trim() :
+                    messageType === "image" ? repeatReminder ? `repeatReminder${differenceForReminder}Image` + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
+                        messageType === "video" ? repeatReminder ? `repeatReminder${differenceForReminder}Video` + +await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
+                            messageType === "chat" ? repeatReminder ? "repeatReminder" + differenceForReminder + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeatReminder"), "") : bodyText.replace(time, "").trim() :
                                 null;
                 if (reminder) {
                     if (!person.doesReminderExist(reminderDate)) {

@@ -1,5 +1,5 @@
 const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys.js");
-const nodeFetch = require("node-fetch"), request = require("request"), youtubeDL = require('youtube-dl-exec'), fs = require("fs");
+const nodeFetch = require("node-fetch"), youtubeDL = require('youtube-dl-exec'), fs = require("fs");
 
 class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
@@ -38,34 +38,57 @@ class HAPI {
                     ${response.list[i].definition.replace(/\[/g, "").replace(/\]/g, "")} 
                     \nDefinition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_in_urban_error"), messageID);
+            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "urban_word_not_found_error"), messageID);
         } catch (err) {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "search_in_urban_error"), messageID);
+            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "urban_api_error"), messageID);
         }
     }
 
-    static async translate(client, bodyText, chatID, messageID, groupsDict) {
+    static async translate(client, message, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].translationCounter < 10) {
             bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
-            const textToTranslate = bodyText.replace(bodyText.split(" ")[0], "").trim();
-            const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0]}&format=json`);
-            let langResponse = await nodeFetch(url, {
-                method: 'GET', headers: {
-                    'Accept': 'application/json'
-                },
-            });
-            langResponse = await langResponse.json();
-            const langCode = Object.keys(langResponse.languagesearch)[0];
-            if (langCode) {
-                const url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${langCode}&dt=t&q=${textToTranslate}`);
-                request.get(url, async function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        const response = body.split('"');
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", response[1], response[response.length - 2]), messageID);
-                        groupsDict[chatID].translationCounter++;
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_google_error"), messageID);
-                }, null);
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
+            let textToTranslate = message.quotedMsgObj ? message.quotedMsgObj.body :
+                bodyText.replace(bodyText.split(" ")[0], "").trim();
+
+            try {
+                const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0]}&format=json`);
+                let langResponse = await nodeFetch(url, {
+                    method: 'GET', headers: {
+                        'Accept': 'application/json'
+                    },
+                });
+                langResponse = await langResponse.json();
+                const langCode = Object.keys(langResponse.languagesearch)[0];
+                if (langCode) {
+                    const url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${langCode}&dt=t&q=${textToTranslate}`);
+                    let response = await nodeFetch(url, {
+                        method: 'GET', headers: {
+                            'Accept': 'application/json'
+                        },
+                    });
+                    response = await response.json();
+                    groupsDict[chatID].translationCounter++;
+                    let stringForSending = "";
+                    if (response[0][0][1].includes(textToTranslate)) {
+                        stringForSending = response[0][0][0];
+                    } else {
+                        for (let i = 0; i < response[0].length; i++) {
+                            let j = 0;
+                            while (response[0][i]) {
+                                if (response[0][i][j] == null) {
+                                    break;
+                                }
+                                stringForSending += response[0][i][j];
+                                j++;
+                            }
+
+                        }
+                    }
+                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
+                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
+            } catch (err) {
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);
+            }
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);
     }
 
