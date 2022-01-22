@@ -37,9 +37,9 @@ export class HT {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
-            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim();
+            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim().match(/@?\d+/)[1];
             const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
-            if (groupsDict[chatID].personsIn != null && (groupsDict[chatID].personsIn.some(isIDEqualPersonID))) {
+            if (groupsDict[chatID].personsIn != null && groupsDict[chatID].personsIn.some(isIDEqualPersonID)) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", function () {
                         groupsDict[chatID].tags = ["add", tag, phoneNumber];
@@ -65,20 +65,18 @@ export class HT {
 
     static async tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
-        let stringForSending = "";
+        let stringForSending = bodyText + "\n\n";
         Object.entries(groupsDict[chatID].personsIn).forEach(person => {
             stringForSending += "@" + person[1].personID.replace("@c.us", "") + "\n";
         });
-        stringForSending += "\n" + bodyText;
         await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].tags).length) {
             let stringForSending = "";
-            let tags = groupsDict[chatID].tags;
-            Object.entries(tags).forEach(([key, value]) => {
-                stringForSending += key + " - " + value + "\n";
+            Object.entries(groupsDict[chatID].tags).forEach(([name, number]) => {
+                stringForSending += name + " - " + number + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);

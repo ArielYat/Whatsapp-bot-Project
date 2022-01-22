@@ -128,8 +128,7 @@ export class HF {
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
-            let filters = groupsDict[chatID].filters;
-            Object.entries(filters).forEach(([filter, filterReply]) => {
+            Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
                 if (filterReply.startsWith("image"))
                     stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
                 else if (filterReply.startsWith("video"))
