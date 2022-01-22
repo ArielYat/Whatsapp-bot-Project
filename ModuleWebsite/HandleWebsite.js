@@ -1,4 +1,4 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 
 export class HW {
     static async sendLink(client, chatID, groupsDict) {

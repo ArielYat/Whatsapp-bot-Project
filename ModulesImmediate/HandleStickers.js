@@ -1,4 +1,4 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 
 export class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {

@@ -1,5 +1,5 @@
-import {HDB} from "./HandleDB";
-import {HL} from "./HandleLanguage";
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {

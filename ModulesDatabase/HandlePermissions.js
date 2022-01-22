@@ -1,5 +1,5 @@
-import {HDB} from "./HandleDB";
-import {HL} from "./HandleLanguage";
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
 export class HP {
     static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, groupFunctionPermissions, groupsDict) {

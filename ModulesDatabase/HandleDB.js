@@ -1,6 +1,7 @@
-import {Group} from "../Classes/Group";
-import {Person} from "../Classes/Person";
+import {Group} from "../Classes/Group.js";
+import {Person} from "../Classes/Person.js";
 import {MongoClient} from "mongodb";
+
 const url = "mongodb://localhost:27017/";
 
 export class HDB {

@@ -1,10 +1,11 @@
-﻿import {HDB} from "./HandleDB";
-import {HL} from "./HandleLanguage";
+﻿import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
 export class HB {
     static async checkBirthdays(client, usersDict, groupsDict) {
         const today = new Date();
-        const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(), yearToday = today.getFullYear();
+        const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(),
+            yearToday = today.getFullYear();
         for (const person in usersDict) {
             if (usersDict[person].birthday[0] === dayToday && usersDict[person].birthday[1] === monthToday) {
                 const age = yearToday - parseInt(usersDict[person].birthday[2]);

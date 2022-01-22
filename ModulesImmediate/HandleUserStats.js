@@ -1,5 +1,5 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
-import {HP} from "../ModulesDatabase/HandlePermissions";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import {HP} from "../ModulesDatabase/HandlePermissions.js";
 
 export class HUS {
     static async ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {

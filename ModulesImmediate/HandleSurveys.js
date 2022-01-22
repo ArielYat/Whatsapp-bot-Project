@@ -1,4 +1,4 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 
 export class HSu {
     static async makeButton(client, bodyText, chatID, messageID, groupsDict) {

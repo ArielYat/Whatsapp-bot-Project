@@ -1,6 +1,6 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import nvt from "node-virustotal";
-import {apiKeys} from "../apiKeys";
+import {apiKeys} from "../apiKeys.js";
 
 export class HURL {
     static async stripLinks(client, message, chatID, messageID, groupsDict) {

@@ -1,5 +1,6 @@
-import {HDB} from "./HandleDB";
-import {HL} from "./HandleLanguage";
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
+
 const regex = new RegExp('\\[(.*?)\]', "g");
 
 export class HF {

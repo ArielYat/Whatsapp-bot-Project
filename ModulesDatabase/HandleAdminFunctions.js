@@ -1,4 +1,4 @@
-import {HDB} from "./HandleDB";
+import {HDB} from "./HandleDB.js";
 
 export class HAF {
      static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {

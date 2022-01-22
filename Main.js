@@ -1,22 +1,22 @@
 //version 2.5
 
 //Command Modules
-import {HURL} from "./ModulesImmediate/HandleURLs";
-import {HDB} from "./ModulesDatabase/HandleDB";
-import {HF} from "./ModulesDatabase/HandleFilters";
-import {HT} from "./ModulesDatabase/HandleTags";
-import {HB} from "./ModulesDatabase/HandleBirthdays";
-import {HSt} from "./ModulesImmediate/HandleStickers";
-import {HAF} from "./ModulesDatabase/HandleAdminFunctions";
-import {HL} from "./ModulesDatabase/HandleLanguage";
-import {HSu} from "./ModulesImmediate/HandleSurveys";
-import {HP} from "./ModulesDatabase/HandlePermissions";
-import {HAPI} from "./ModulesImmediate/HandleAPIs";
-import {HW} from "./ModuleWebsite/HandleWebsite";
-import {HUS} from "./ModulesImmediate/HandleUserStats";
-import {HR} from "./ModulesDatabase/HandleReminders";
-import {Group} from "./Classes/Group";
-import {Person} from "./Classes/Person";
+import {HURL} from "./ModulesImmediate/HandleURLs.js";
+import {HDB} from "./ModulesDatabase/HandleDB.js";
+import {HF} from "./ModulesDatabase/HandleFilters.js";
+import {HT} from "./ModulesDatabase/HandleTags.js";
+import {HB} from "./ModulesDatabase/HandleBirthdays.js";
+import {HSt} from "./ModulesImmediate/HandleStickers.js";
+import {HAF} from "./ModulesDatabase/HandleAdminFunctions.js";
+import {HL} from "./ModulesDatabase/HandleLanguage.js";
+import {HSu} from "./ModulesImmediate/HandleSurveys.js";
+import {HP} from "./ModulesDatabase/HandlePermissions.js";
+import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
+import {HW} from "./ModuleWebsite/HandleWebsite.js";
+import {HUS} from "./ModulesImmediate/HandleUserStats.js";
+import {HR} from "./ModulesDatabase/HandleReminders.js";
+import {Group} from "./Classes/Group.js";
+import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
 import wa from "@open-wa/wa-automate";
@@ -29,7 +29,7 @@ IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
-    wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
+    wa.create({headless: false, multiDevice: false, useChrome: true, licenseKey: "48BAD1F87-EF593720-83D849A-2970D3F5"}).then(client => start(client));
 });
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {

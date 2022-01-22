@@ -1,4 +1,4 @@
-import {HL} from "../ModulesDatabase/HandleLanguage";
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import {apiKeys} from "../apiKeys.js";
 import nodeFetch from "node-fetch";
 import youtubeDL from "youtube-dl-exec";
