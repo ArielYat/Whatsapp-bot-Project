@@ -29,7 +29,7 @@ IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
-    wa.create({headless: false, multiDevice: false, useChrome: true, licenseKey: "48BAD1F87-EF593720-83D849A-2970D3F5"}).then(client => start(client));
+    wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
 });
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
@@ -141,6 +141,12 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
         await HT.createTagList(client, bodyText, chatID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
+        await HT.addGroupTag(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
+        await HT.removeGroupTag(client, bodyText, chatID, messageID, groupsDict)
         usersDict[authorID].commandCounter++;
     }
 }

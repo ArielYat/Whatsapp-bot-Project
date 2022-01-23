@@ -15,16 +15,33 @@ export class HT {
                     splitTextForChecking = splitText[i].slice(1);
                 if (splitTextForChecking === tag) {
                     counter += 1;
-                    bodyText = bodyText.replace(tag, "@" + tags[tag]);
-                    if (usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] === undefined) {
-                        usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
-                    }
-                    usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
-                    await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function () {
-                        HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
+                    if (typeof (tags[tag]) === "object") {
+                        for (let j = 0; j < tags[tag].length; j++) {
+                            if (usersDict[tags[tag][j] + "@c.us"].messagesTaggedIn[chatID] === undefined) {
+                                usersDict[tags[tag][j] + "@c.us"].messagesTaggedIn[chatID] = [];
+                            }
+                            bodyText = bodyText.substr(0, bodyText.indexOf(tag)) + " @" + tags[tag][j]
+                                + " " + tag + bodyText.substr(bodyText.indexOf(tag) + tag.length)
+                            usersDict[tags[tag][j] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                            await HDB.delArgsFromDB(chatID, usersDict[tags[tag][j] + "@c.us"].personID, "lastTagged", function () {
+                                HDB.addArgsToDB(chatID, usersDict[tags[tag][j] + "@c.us"].personID, usersDict[tags[tag][j] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
 
+                                });
+                            });
+                        }
+                        bodyText = bodyText.replace(tag, "");
+                    } else {
+                        if (usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] === undefined) {
+                            usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
+                        }
+                        bodyText = bodyText.replace(tag, "@" + tags[tag]);
+                        usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                        await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function () {
+                            HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
+
+                            });
                         });
-                    });
+                    }
                 }
             }
         }
@@ -37,7 +54,8 @@ export class HT {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
-            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim().match(/@?\d+/)[0].replace("@", "");
+            const tag = bodyText[0].trim(),
+                phoneNumber = bodyText[1].trim().match(/@?\d+/) ? bodyText[1].trim().match(/@?\d+/)[0].replace("@", "") : bodyText[1];
             const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
             if (groupsDict[chatID].personsIn != null && groupsDict[chatID].personsIn.some(isIDEqualPersonID)) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
@@ -76,7 +94,10 @@ export class HT {
         if (Object.keys(groupsDict[chatID].tags).length) {
             let stringForSending = "";
             Object.entries(groupsDict[chatID].tags).forEach(([name, number]) => {
-                stringForSending += name + " - " + number + "\n";
+                if (typeof (number) === "object")
+                    stringForSending += `${HL.getGroupLang(groupsDict, chatID, "tagged_group")}` + name + " - " + number.toString().replace(/,/g, ", ") + "\n";
+                else
+                    stringForSending += name + " - " + number + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
@@ -119,6 +140,45 @@ export class HT {
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "clear_tags_reply"), messageID);
             });
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_no_messages_error"), messageID);
+    }
+
+    static async addGroupTag(client, bodyText, chatID, messageID, groupsDict) {
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_group_tag"), "");
+        if (bodyText.includes("-")) {
+            bodyText = bodyText.split("-");
+            const tag = bodyText[0].trim();
+            let tempArrayOfNames = bodyText[1].includes(",") ? bodyText[1].split(",") : null;
+            let phoneNumbersArray;
+            if (tempArrayOfNames) {
+                phoneNumbersArray = tempArrayOfNames.map(function (currentName) {
+                    if (currentName.trim() in groupsDict[chatID].tags) {
+                        return groupsDict[chatID].tags[currentName.trim()];
+                    }
+                });
+                phoneNumbersArray = phoneNumbersArray.filter(item => item != null);
+                if (phoneNumbersArray.length > 0) {
+                    if (!groupsDict[chatID].doesTagExist(tag)) {
+                        await HDB.addArgsToDB(chatID, tag, phoneNumbersArray, null, "tags", function () {
+                            groupsDict[chatID].tags = ["add", tag, phoneNumbersArray];
+                            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_group_tag_reply", tag), messageID);
+                        });
+                    } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_group_tag_already_exists_error", tag), messageID);
+                } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "all_phone_numbers_in_message_arent_in_group"), messageID);
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "message_doesnt_contain_any_phone_numbers"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+    }
+
+    static async removeGroupTag(client, bodyText, chatID, messageID, groupsDict) {
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"), "");
+        const tag = bodyText.trim();
+        if (groupsDict[chatID].tags) {
+            if (groupsDict[chatID].doesTagExist(tag)) {
+                await HDB.delArgsFromDB(chatID, tag, "tags", function () {
+                    groupsDict[chatID].tags = ["delete", tag]
+                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_group_tag_reply", tag), messageID);
+                });
+            } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_group_tag_doesnt_exist_error"), messageID);
+        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
     static async createTagList(client, bodyText, chatID, groupsDict) {
