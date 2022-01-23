@@ -37,7 +37,7 @@ export class HT {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_tag"), "");
         if (bodyText.includes("-")) {
             bodyText = bodyText.split("-");
-            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim().match(/@?\d+/)[1];
+            const tag = bodyText[0].trim(), phoneNumber = bodyText[1].trim().match(/@?\d+/)[0].replace("@", "");
             const isIDEqualPersonID = (person) => phoneNumber === person.personID.replace("@c.us", "");
             if (groupsDict[chatID].personsIn != null && groupsDict[chatID].personsIn.some(isIDEqualPersonID)) {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
