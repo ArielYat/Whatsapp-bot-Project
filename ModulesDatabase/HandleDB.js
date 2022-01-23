@@ -1,7 +1,10 @@
-const Group = require("../Classes/Group"), Person = require("../Classes/Person")
-const MongoClient = require('mongodb').MongoClient, url = "mongodb://localhost:27017/";
+import {Group} from "../Classes/Group.js";
+import {Person} from "../Classes/Person.js";
+import {MongoClient} from "mongodb";
 
-class HDB {
+const url = "mongodb://localhost:27017/";
+
+export class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
         MongoClient.connect(url, function (err, client) {
@@ -340,6 +343,3 @@ class HDB {
         });
     }
 }
-
-module.exports = HDB;
-

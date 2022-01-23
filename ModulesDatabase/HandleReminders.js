@@ -1,6 +1,7 @@
-const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
-class HR {
+export class HR {
     static async addReminder(client, bodyText, chatID, messageID, person, groupsDict, message, personsWithReminders) {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
@@ -15,8 +16,8 @@ class HR {
                 const date = new Date();
                 const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
                 const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
-                let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
-                let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
+                const dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
+                const dayOfTheWeek = dayOfTheWeekAndBodyText[0];
                 bodyText = dayOfTheWeekAndBodyText[1];
                 let differenceForReminder = 1; //default reminder
                 let month, day, year;
@@ -35,7 +36,6 @@ class HR {
                         year = date.getFullYear();
                         bodyText = bodyText.replace(matchedDateWithoutYear[0], "").trim();
                         break;
-
                     case (!!dayOfTheWeek):
                         let dayToAdd = dayOfTheWeek - 1 < date.getDay() ? 7 - (date.getDay() - (dayOfTheWeek - 1)) :
                             (dayOfTheWeek - 1) - date.getDay();
@@ -48,7 +48,6 @@ class HR {
                         day = date.getDate();
                         month = date.getMonth();
                         year = date.getFullYear();
-
                 }
                 const reminderDate = new Date(year, month, day, hour, minutes);
                 const repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeatReminder")));
@@ -81,9 +80,7 @@ class HR {
             const date = new Date();
             const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
             const matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g);
-            let dayOfTheWeekAndBodyText = await this.getDayOfTheWeek(bodyText, groupsDict, chatID);
-            let dayOfTheWeek = dayOfTheWeekAndBodyText[0]
-            bodyText = dayOfTheWeekAndBodyText[1];
+            const dayOfTheWeek = (await this.getDayOfTheWeek(bodyText, groupsDict, chatID))[0];
             time = time[0];
             let timeArray = time.split(":");
             let hour = parseInt(timeArray[0]), minutes = parseInt(timeArray[1]), month, day, year;
@@ -187,5 +184,3 @@ class HR {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);
     }
 }
-
-module.exports = HR;

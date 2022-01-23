@@ -1,16 +1,26 @@
 //version 2.5
 
 //Command Modules
-const HURL = require("./ModulesImmediate/HandleURLs"), HDB = require("./ModulesDatabase/HandleDB"),
-    HF = require("./ModulesDatabase/HandleFilters"), HT = require("./ModulesDatabase/HandleTags"),
-    HB = require("./ModulesDatabase/HandleBirthdays"), HSt = require("./ModulesImmediate/HandleStickers"),
-    HAF = require("./ModulesDatabase/HandleAdminFunctions"), HL = require("./ModulesDatabase/HandleLanguage"),
-    HSu = require("./ModulesImmediate/HandleSurveys"), HP = require("./ModulesDatabase/HandlePermissions"),
-    HAPI = require("./ModulesImmediate/HandleAPIs"), HW = require("./ModuleWebsite/HandleWebsite"),
-    HUS = require("./ModulesImmediate/HandleUserStats"), HR = require("./ModulesDatabase/HandleReminders"),
-    Group = require("./Classes/Group"), Person = require("./Classes/Person"), Strings = require("./Strings.js").strings;
+import {HURL} from "./ModulesImmediate/HandleURLs.js";
+import {HDB} from "./ModulesDatabase/HandleDB.js";
+import {HF} from "./ModulesDatabase/HandleFilters.js";
+import {HT} from "./ModulesDatabase/HandleTags.js";
+import {HB} from "./ModulesDatabase/HandleBirthdays.js";
+import {HSt} from "./ModulesImmediate/HandleStickers.js";
+import {HAF} from "./ModulesDatabase/HandleAdminFunctions.js";
+import {HL} from "./ModulesDatabase/HandleLanguage.js";
+import {HSu} from "./ModulesImmediate/HandleSurveys.js";
+import {HP} from "./ModulesDatabase/HandlePermissions.js";
+import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
+import {HW} from "./ModuleWebsite/HandleWebsite.js";
+import {HUS} from "./ModulesImmediate/HandleUserStats.js";
+import {HR} from "./ModulesDatabase/HandleReminders.js";
+import {Group} from "./Classes/Group.js";
+import {Person} from "./Classes/Person.js";
+import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-const wa = require("@open-wa/wa-automate"), IsraelSchedule = require('node-schedule');
+import wa from "@open-wa/wa-automate";
+import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
     restPersonsCommandSpam = [], personsWithReminders = [];
@@ -131,6 +141,12 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
         await HT.createTagList(client, bodyText, chatID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
+        await HT.addGroupTag(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
+        await HT.removeGroupTag(client, bodyText, chatID, messageID, groupsDict)
         usersDict[authorID].commandCounter++;
     }
 }

@@ -1,6 +1,6 @@
-const HL = require("../ModulesDatabase/HandleLanguage");
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
 
-class HSu {
+export class HSu {
     static async makeButton(client, bodyText, chatID, messageID, groupsDict) {
         let buttonsArray = [];
         const titleRegex = HL.getGroupLang(groupsDict, chatID, "survey_title");
@@ -15,7 +15,7 @@ class HSu {
         if (title != null && secondTitle != null && button1 != null) {
             title = title[0].replace(HL.getGroupLang(groupsDict, chatID, "survey_title_replace"), "").trim();
             secondTitle = secondTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "second_survey_title_replace"), "").trim();
-            buttonsArray = this.makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict);
+            buttonsArray = await this.makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict);
             if (thirdTitle != null) {
                 thirdTitle = thirdTitle[0].replace(HL.getGroupLang(groupsDict, chatID, "third_survey_title_replace"), "").trim();
                 await client.sendButtons(chatID, secondTitle, buttonsArray, title, thirdTitle);
@@ -23,7 +23,7 @@ class HSu {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "survey_creation_error"), messageID);
     }
 
-    static makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict) {
+    static async makeButtonsArray(buttonsArray, button1, button2, button3, chatID, groupsDict) {
         if (button1 != null) {
             buttonsArray.push({
                 id: "1",
@@ -45,5 +45,3 @@ class HSu {
         return buttonsArray;
     }
 }
-
-module.exports = HSu;

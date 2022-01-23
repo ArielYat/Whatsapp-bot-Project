@@ -1,9 +1,11 @@
-﻿const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+﻿import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
-class HB {
+export class HB {
     static async checkBirthdays(client, usersDict, groupsDict) {
         const today = new Date();
-        const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(), yearToday = today.getFullYear();
+        const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(),
+            yearToday = today.getFullYear();
         for (const person in usersDict) {
             if (usersDict[person].birthday[0] === dayToday && usersDict[person].birthday[1] === monthToday) {
                 const age = yearToday - parseInt(usersDict[person].birthday[2]);
@@ -50,14 +52,11 @@ class HB {
         if (Object.keys(groupsDict[chatID].personsIn).length) {
             let stringForSending = "";
             for (const person in groupsDict[chatID].personsIn) {
-                let birthdays = groupsDict[chatID].personsIn[person].birthday;
-                if (birthdays.length !== 0) {
-                    let tagID = groupsDict[chatID].personsIn[person].personID;
-                    tagID = "@" + tagID.replace("@c.us", "");
-                    stringForSending += tagID + " - " + birthdays[0] + "." + birthdays[1] + "." + birthdays[2] + "\n";
-                }
+                let birthday = groupsDict[chatID].personsIn[person].birthday;
+                if (birthday.length !== 0)
+                    stringForSending += groupsDict[chatID].personsIn[person].personID.replace("@c.us", "") + " - " + birthday[0] + "." + birthday[1] + "." + birthday[2] + "\n";
             }
-            await client.sendReplyWithMentions(chatID, stringForSending, messageID);
+            await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays_error"), messageID);
     }
 
@@ -83,5 +82,3 @@ class HB {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_have_birthday_error"), messageID);
     }
 }
-
-module.exports = HB;

@@ -1,7 +1,8 @@
-const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys");
-const nvt = require('node-virustotal')
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import nvt from "node-virustotal";
+import {apiKeys} from "../apiKeys.js";
 
-class HURL {
+export class HURL {
     static async stripLinks(client, message, chatID, messageID, groupsDict) {
         function sleep(ms) {
             return new Promise((resolve) => {
@@ -61,5 +62,3 @@ class HURL {
         }
     }
 }
-
-module.exports = HURL;

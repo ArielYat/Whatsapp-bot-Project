@@ -1,7 +1,10 @@
-const HL = require("../ModulesDatabase/HandleLanguage"), apiKeys = require("../apiKeys.js");
-const nodeFetch = require("node-fetch"), youtubeDL = require('youtube-dl-exec'), fs = require("fs");
+import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import {apiKeys} from "../apiKeys.js";
+import nodeFetch from "node-fetch";
+import youtubeDL from "youtube-dl-exec";
+import fs from "fs";
 
-class HAPI {
+export class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
         if (!groupsDict[chatID].cryptoCheckedToday) {
             try {
@@ -127,5 +130,3 @@ class HAPI {
 
     }
 }
-
-module.exports = HAPI;

@@ -1,13 +1,14 @@
-const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
 
-class HP {
+export class HP {
     static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, groupFunctionPermissions, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
         if (bodyText.includes("-")) {
             const textArray = bodyText.split("-");
-            const newPermissionLevel = this.wordToFunctionPermission(groupsDict, chatID, textArray[1].trim());
+            const newPermissionLevel = await this.wordToFunctionPermission(groupsDict, chatID, textArray[1].trim());
             if (newPermissionLevel) {
-                const permissionType = this.wordToFunctionType(groupsDict, chatID, textArray[0].trim());
+                const permissionType = await this.wordToFunctionType(groupsDict, chatID, textArray[0].trim());
                 if (permissionType) {
                     if (newPermissionLevel >= 0 &&
                         ((groupFunctionPermissions[permissionType] <= personPermission && newPermissionLevel <= personPermission) ||
@@ -85,8 +86,8 @@ class HP {
     static async showGroupFunctionsPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
         for (let permission in groupsDict[chatID].functionPermissions)
-            stringForSending += this.functionTypeToWord(groupsDict, chatID, permission) + " - " +
-                this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].functionPermissions[permission]) + "\n";
+            stringForSending += await this.functionTypeToWord(groupsDict, chatID, permission) + " - " +
+                await this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].functionPermissions[permission]) + "\n";
         client.reply(chatID, stringForSending, messageID)
     }
 
@@ -100,12 +101,12 @@ class HP {
                         tempPhoneNumber = name;
                 }
             }
-            stringForSending += tempPhoneNumber + " - " + this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].personsIn[user].permissionLevel[chatID]) + "\n";
+            stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].personsIn[user].permissionLevel[chatID]) + "\n";
         }
         await client.reply(chatID, stringForSending, messageID)
     }
 
-    static functionPermissionToWord(groupsDict, chatID, permissionNumber) {
+    static async functionPermissionToWord(groupsDict, chatID, permissionNumber) {
         switch (permissionNumber.toString()) {
             case "4":
                 return HL.getGroupLang(groupsDict, chatID, "muted_permission_level_replace");
@@ -122,7 +123,7 @@ class HP {
         }
     }
 
-    static wordToFunctionPermission(groupsDict, chatID, text) {
+    static async wordToFunctionPermission(groupsDict, chatID, text) {
         switch (true) {
             case !!(text.match(HL.getGroupLang(groupsDict, chatID, "muted_permission_level"))):
                 return 4;
@@ -137,7 +138,7 @@ class HP {
         }
     }
 
-    static functionTypeToWord(groupsDict, chatID, permissionType) {
+    static async functionTypeToWord(groupsDict, chatID, permissionType) {
         switch (permissionType) {
             case "filters":
                 return HL.getGroupLang(groupsDict, chatID, "filters_permission_type_replace")
@@ -158,7 +159,7 @@ class HP {
         }
     }
 
-    static wordToFunctionType(groupsDict, chatID, text) {
+    static async wordToFunctionType(groupsDict, chatID, text) {
         switch (true) {
             case !!(text.match(HL.getGroupLang(groupsDict, chatID, "filters_permission_type"))):
                 return "filters"
@@ -178,5 +179,3 @@ class HP {
         }
     }
 }
-
-module.exports = HP;

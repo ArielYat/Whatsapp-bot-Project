@@ -1,7 +1,9 @@
-const HDB = require("./HandleDB"), HL = require("./HandleLanguage");
+import {HDB} from "./HandleDB.js";
+import {HL} from "./HandleLanguage.js";
+
 const regex = new RegExp('\\[(.*?)\]', "g");
 
-class HF {
+export class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
         const filters = groupsDict[chatID].filters;
         for (const filter in filters) {
@@ -126,8 +128,7 @@ class HF {
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
-            let filters = groupsDict[chatID].filters;
-            Object.entries(filters).forEach(([filter, filterReply]) => {
+            Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
                 if (filterReply.startsWith("image"))
                     stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
                 else if (filterReply.startsWith("video"))
@@ -138,5 +139,3 @@ class HF {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }
 }
-
-module.exports = HF;

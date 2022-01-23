@@ -1,4 +1,4 @@
-class group {
+export class Group {
     #groupID;
     #filters;
     #tags;
@@ -160,5 +160,3 @@ class group {
         this.#downloadMusicCounter = value;
     }
 }
-
-module.exports = group;
