@@ -1,4 +1,4 @@
-//version 2.5
+//version 2.6
 
 //Command Modules
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -142,10 +142,10 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
         await HT.createTagList(client, bodyText, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
-    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
         await HT.addGroupTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
         await HT.removeGroupTag(client, bodyText, chatID, messageID, groupsDict)
         usersDict[authorID].commandCounter++;
     }
