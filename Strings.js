@@ -576,6 +576,8 @@ export const Strings = {
         "he": /^צור סקר/i, "en": /^Create survey/i, "la": "Crea census", "ar": null, "fr": /^Crée un sondage/i
     }, "create_text_sticker": {
         "he": /^צור סטיקר טקסט/i, "en": null, "la": null, "ar": null, "fr": null
+    }, "text_sticker_error": {
+        "he": "התרחשה שגיאה ביצירת הסטיקר\nבדוק שבחרת צבע באנגלית ומילה", "en": null, "la": null, "ar": null, "fr": null
     }, "survey_title": {
         "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/, "ar": null, "fr": /Titre - (.)+/
     }, "survey_subtitle": {

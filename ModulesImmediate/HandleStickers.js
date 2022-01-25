@@ -1,7 +1,6 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import nodeFetch from "node-fetch";
 import pkg from 'canvas';
-
 const {createCanvas} = pkg;
 
 
@@ -21,22 +20,24 @@ export class HSt {
     }
     static async createTextSticker(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
-        bodyText = bodyText.split(",")
+        let color;
+        let word;
+        if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
+            bodyText = bodyText.split("-");
+            color = bodyText[0];
+            word = bodyText[1];
+        } else {
+            color = "black";
+            word = bodyText;
+        }
+
         const canvas = createCanvas(150, 150);
         let drawingBoard = canvas.getContext("2d");
         try {
-            const url = encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${bodyText[0]}`);
-            let response = await nodeFetch(url, {
-                method: 'GET', headers: {
-                    'Accept': 'application/json'
-                },
-            });
-            response = await response.json();
-            groupsDict[chatID].translationCounter++;
-            drawingBoard.font = "10px Times New Roman";
-            drawingBoard.fillStyle = response;
+            drawingBoard.font = `${(canvas.width / word.length) * 1.2}px Arial`;
+            drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
-            drawingBoard.fillText(bodyText[1], 0, 0);
+            drawingBoard.fillText(word.trim(), 50, 50);
             await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול"});
         } catch (err) {
             await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
