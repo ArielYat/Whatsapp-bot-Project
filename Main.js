@@ -1,5 +1,4 @@
 //version 2.6
-
 //Command Modules
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
 import {HDB} from "./ModulesDatabase/HandleDB.js";
@@ -29,7 +28,7 @@ IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
-    wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
+    wa.create({headless: false}).then(client => start(client));
 });
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
@@ -93,6 +92,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "download_music"))) { //Handle download music - BETA
         await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"))) { //Handle stickers
+        await HSt.createTextSticker(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     }
 }

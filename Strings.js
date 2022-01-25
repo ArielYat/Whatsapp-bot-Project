@@ -574,6 +574,8 @@ export const Strings = {
         "fr": "Idiot, un autocollant doit être une image ou une vidéo"
     }, "create_survey": {
         "he": /^צור סקר/i, "en": /^Create survey/i, "la": "Crea census", "ar": null, "fr": /^Crée un sondage/i
+    }, "create_text_sticker": {
+        "he": /^צור סטיקר טקסט/i, "en": null, "la": null, "ar": null, "fr": null
     }, "survey_title": {
         "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/, "ar": null, "fr": /Titre - (.)+/
     }, "survey_subtitle": {
@@ -877,7 +879,7 @@ export const Strings = {
         "ar": ``,
         "fr": `Tags:\n- "Tag [personne]" - tague quelqu'un pour qu'il reçoive une notification même si le groupe est en mode silencieux sur son téléphone\n - Par exemple: tag Joseph\n- "Tag tout le monde" - tague toutes les personnes dans le groupe\n- "Ajoute la personne au tag [nom] - [numéro de téléphone au format international ou le tag de cette personne]" - ajoute la personne à la liste des personnes pouvant être taguées\n - Par exemple: Ajoute la personne au tag Joseph - 972501234567\n - Par exemple: Ajoute la personne au tag Joseph - @Joseph\n- "Supprime la personne du tag [nom]" - supprime la personne de la liste des personnes pouvant être taguées\n - Par exemple: Supprime la personne du tag Joseph\n- "Affiche la liste des personnes taguées" - affiche la liste de toutes les personnes pouvant être taguées dans le groupe\n- "Vérifie où j'ai été tagué" - affiche le dernier message dans lequel l'auteur du message a été tagué, peut être utilisé plusieurs fois\n- "Efface mes tags" - efface les tags enregistrés de l'auteur du message`
     }, "help_birthdays_reply": {
-        "he": `*ימי הולדת:*\n- "הוסף יום הולדת [תאריך מנוקד בפורמט בינלאומי]" - מוסיף יום הולדת לכותב ההודעה\n  - לדוגמה: הוסף יום הולדת 1.11.2011\n- "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n- "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n- "הוסף קבוצה להודעת יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n- "הסר קבוצה מהודעת יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה`,
+        "he": `*ימי הולדת:*\n- "הוסף יום הולדת [תאריך מנוקד בפורמט בינלאומי]" - מוסיף יום הולדת לכותב ההודעה\n  - לדוגמה: הוסף יום הולדת 1.11.2011\n- "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n- "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n- "הוסף קבוצה לרשימת התפוצה" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n- "הסר קבוצה מרשימת התפוצה" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה`,
         "en": `*Birthdays:*\n- "Add birthday [date in international format with periods]" - adds a birthday for message's author\n  - For example: Add birthday 1.11.2011\n- "Remove birthday" - removes the author's birthday\n- "Show birthdays" - displays the birthdays of the group members\n- "Add group to birthday message" - adds the group the message was sent in to the author's birthday message broadcast\n- "Remove group from birthday message" - removes the group the message was sent in from the author's birthday message broadcast`,
         "la": ``,
         "ar": ``,

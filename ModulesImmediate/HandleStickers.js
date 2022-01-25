@@ -1,6 +1,9 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import nodeFetch from "node-fetch";
-import canvas from "node-canvas";
+import pkg from 'canvas';
+
+const {createCanvas} = pkg;
+
 
 export class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -16,7 +19,6 @@ export class HSt {
             await client.sendMp4AsSticker(chatID, mediaData, {crop: !noCrop}, {author: "ג'ון האגדי", pack: "חצול", keepScale: noCrop});
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
     }
-
     static async createTextSticker(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
         bodyText = bodyText.split(",")

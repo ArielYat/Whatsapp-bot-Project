@@ -337,8 +337,7 @@ export class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createRested(result[i]);
-                callback();
-                client.close();
+                callback()
             });
         });
     }
