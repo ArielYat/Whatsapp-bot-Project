@@ -84,10 +84,9 @@ export class HT {
         try {
             await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
         } catch (e) {
-            groupsDict[chatID].personsIn = [];
             Object.entries(groupsDict[chatID].personsIn).forEach(person => {
                 HDB.delArgsFromDB(chatID, person[1].personID, "personIn", function () {
-
+                    groupsDict[chatID].personsIn = ["delete", person[1].personID];
                 });
             });
             console.log("error occurred at tagging everyone")
