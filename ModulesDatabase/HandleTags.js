@@ -81,7 +81,17 @@ export class HT {
         Object.entries(groupsDict[chatID].personsIn).forEach(person => {
             stringForSending += "@" + person[1].personID.replace("@c.us", "") + "\n";
         });
-        await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
+        try {
+            await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
+        } catch (e) {
+            groupsDict[chatID].personsIn = [];
+            Object.entries(groupsDict[chatID].personsIn).forEach(person => {
+                HDB.delArgsFromDB(chatID, person[1].personID, "personIn", function () {
+
+                });
+            });
+            console.log("error occurred at tagging everyone")
+        }
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
