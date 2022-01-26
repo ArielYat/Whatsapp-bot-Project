@@ -5,15 +5,13 @@ export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
         bodyText = bodyText.trim();
-        const splitText = bodyText.split(" ");
         const tags = groupsDict[chatID].tags;
         let counter = 0;
-        for (let i = 0; i < splitText.length; i++) {
-            for (const tag in tags) {
-                let splitTextForChecking = splitText[i];
-                if (splitText[i].charAt(0) === "ו" && tag.charAt(0) !== "ו")
-                    splitTextForChecking = splitText[i].slice(1);
-                if (splitTextForChecking === tag) {
+        for (const tag in tags) {
+            if (bodyText.includes(tag)) {
+                const index = bodyText.indexOf(tag);
+                if ((index <= 0 || !((/(?![ו])[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index - 1]))) &&
+                    (index + tag.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index + tag.length])))) {
                     counter += 1;
                     if (typeof (tags[tag]) === "object") {
                         for (let j = 0; j < tags[tag].length; j++) {

@@ -24,20 +24,20 @@ export class HSt {
         let word;
         if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
             bodyText = bodyText.split("-");
-            color = bodyText[0];
-            word = bodyText[1];
+            color = bodyText[0].trim();
+            word = bodyText[1].trim();
         } else {
             color = "black";
-            word = bodyText;
+            word = bodyText.trim();
         }
 
         const canvas = createCanvas(150, 150);
         let drawingBoard = canvas.getContext("2d");
         try {
-            drawingBoard.font = `${(canvas.width / word.length) * 1.2}px Arial`;
+            drawingBoard.font = `${50 - (word.length * 2)}px sans serif`
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
-            drawingBoard.fillText(word.trim(), 50, 50);
+            drawingBoard.fillText(word.trim(), 75, 75);
             await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול"});
         } catch (err) {
             await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
