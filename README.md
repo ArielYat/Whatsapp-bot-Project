@@ -33,7 +33,10 @@ Filters can be text, images or videos.
     - For example: Add tagging buddy Joseph - 972501234567.
 - `Remove tag buddy [name]` - removes the person from the list of taggable people.
     - For example: Remove tagging buddy Joseph.
-- `Show tag buddies` - displays the list of all taggable people in the group.
+- `Add tagging group [tagging group name] - [names of people in the group, divided by commas]` - Adds a tagging group which can be used to tag multiple people at once
+  - For example: Add tagging group Banana - Moshe, Joseph, Aviram
+- `Remove tagging group [tagging group name]` - removed the mentioned tagging group
+- `Show tag buddies` - displays the list of all taggable people in the group
 - `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the
   front of the chat.
 - `Clear my tags` - clears the saved tags of the message's author.
@@ -155,7 +158,7 @@ translations.
 
 [@TheBooker66](https://github.com/TheBooker66) - Ethan - developing the bot and English support
 
-[@Arbel99](https://github.com/Arbel99) - Arbel - Latin support (sort of)
+[@Arbel99](https://github.com/Arbel99) - Arbel - Latin support (whenever she feels like it)
 
 Maayan Ranson - French Support
 

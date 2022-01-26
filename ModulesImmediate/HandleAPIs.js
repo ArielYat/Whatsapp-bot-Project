@@ -17,11 +17,11 @@ export class HAPI {
                 let stringForSending = "";
                 for (let i = 0; i < 10; i++) stringForSending += `1 [${response.data[i].symbol}] = ${response.data[i].quote.USD.price.toFixed(3)}$\n`;
                 groupsDict[chatID].cryptoCheckedToday = true;
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_api_error"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_api_error"), messageID);
             }
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_limit_error"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_limit_error"), messageID);
     }
 
     static async searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict) {

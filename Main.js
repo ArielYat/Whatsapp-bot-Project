@@ -1,4 +1,4 @@
-//version 2.5
+//version 2.6
 
 //Command Modules
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -29,7 +29,7 @@ IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
-    wa.create({headless: false, multiDevice: false, useChrome: true}).then(client => start(client));
+    wa.create({headless: false, useChrome:true, multiDevice:false}).then(client => start(client));
 });
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
@@ -94,6 +94,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "download_music"))) { //Handle download music - BETA
         await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"))) { //Handle stickers
+        await HSt.createTextSticker(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     }
 }
 
@@ -142,10 +145,10 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_tag_list"))) { //Handle creating tag lists
         await HT.createTagList(client, bodyText, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
-    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_group_tag"))) { //Handle creating tag lists
         await HT.addGroupTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    }else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
         await HT.removeGroupTag(client, bodyText, chatID, messageID, groupsDict)
         usersDict[authorID].commandCounter++;
     }
