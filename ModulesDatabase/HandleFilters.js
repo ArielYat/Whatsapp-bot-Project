@@ -13,10 +13,10 @@ export class HF {
                 if ((index <= 0 || !(new RegExp(`(\w|${allLanguagesRegex})`).test(bodyText[index - 1]))) &&
                     (index + filter.length >= bodyText.length || !(new RegExp(`(\w|${allLanguagesRegex})`).test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
-                        if (filters[filter].startsWith("image"))
-                            await client.sendImage(chatID, filters[filter].replace("image", ""), null, null, messageID);
-                        else if (filters[filter].startsWith("video"))
-                            await client.sendVideoAsGif(chatID, filters[filter].replace("video", ""), null, null, messageID);
+                        if (filters[filter].startsWith("filter_type_image"))
+                            await client.sendImage(chatID, filters[filter].replace("filter_type_image", ""), null, null, messageID);
+                        else if (filters[filter].startsWith("filter_type_video"))
+                            await client.sendVideoAsGif(chatID, filters[filter].replace("filter_type_video", ""), null, null, messageID);
                         else await client.sendReplyWithMentions(chatID, filters[filter], messageID);
                         groupsDict[chatID].filterCounter += 1;
                     } else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
@@ -43,17 +43,17 @@ export class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
         let filter = bodyText.trim(), filterReply = null, existError = null;
         if (messageType === "image") {
-            filterReply = "image" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "image");
+            filterReply = "filter_type_image" + await client.decryptMedia(message);
+            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_image");
         } else if (messageType === "video") {
-            filterReply = "video" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "video");
+            filterReply = "filter_type_video" + await client.decryptMedia(message);
+            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_video");
         } else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
                 filter = bodyText[0].trim();
                 filterReply = bodyText[1].trim();
-                existError = filterReply
+                existError = filterReply;
                 const regexMatch = filterReply.match(tagRegex);
                 if (regexMatch) {
                     for (let j = 0; j < regexMatch.length; j++) {
@@ -93,9 +93,9 @@ export class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
         let filter = bodyText.trim(), filterReply = null;
         if (messageType === "image")
-            filterReply = "image" + await client.decryptMedia(message);
+            filterReply = "filter_type_image" + await client.decryptMedia(message);
         else if (messageType === "video")
-            filterReply = "video" + await client.decryptMedia(message);
+            filterReply = "filter_type_video" + await client.decryptMedia(message);
         else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
@@ -130,10 +130,10 @@ export class HF {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
-                if (filterReply.startsWith("image"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
-                else if (filterReply.startsWith("video"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "video") + "\n";
+                if (filterReply.startsWith("filter_type_image"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
+                else if (filterReply.startsWith("filter_type_video"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
                 else stringForSending += filter + " - " + filterReply + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);

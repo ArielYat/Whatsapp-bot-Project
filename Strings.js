@@ -19,11 +19,11 @@ export const Strings = {
         "fr": "Combien de filtres vous envoyez ici les gars? Je vais dormir jusqu'à %s:%s"
     }, //filters
     "add_filter": {
-        "he": /^הוסף פילטר *\n*/i,
-        "en": /^Add filter *\n*/i,
+        "he": /^הוסף פילטר/i,
+        "en": /^Add filter/i,
         "la": "Crea invenientem",
         "ar": null,
-        "fr": /^Ajoute le filtre *\n*/i
+        "fr": /^Ajoute le filtre/i
     }, "add_filter_reply": {
         "he": "הפילטר %s נוסף בהצלחה",
         "en": "The filters %s has been successfully added",
@@ -37,11 +37,11 @@ export const Strings = {
         "ar": null,
         "fr": "Le filtre %s existe déjà dans ce groupe\n si vous souhaitez modifier le filtre, écrivez ceci:\n Modifie le filtre %s - %s"
     }, "remove_filter": {
-        "he": /^הסר פילטר *\n*/i,
-        "en": /^Remove filter *\n*/i,
+        "he": /^הסר פילטר/i,
+        "en": /^Remove filter/i,
         "la": "Dele invenientem",
         "ar": null,
-        "fr": /^Supprime le filtre *\n*/i
+        "fr": /^Supprime le filtre/i
     }, "remove_filter_reply": {
         "he": "הפילטר %s הוסר בהצלחה",
         "en": "The filters %s has been successfully removed",
@@ -61,11 +61,11 @@ export const Strings = {
         "ar": null,
         "fr": "Ce groupe n'a aucun filtres"
     }, "edit_filter": {
-        "he": /^ערוך פילטר *\n*/i,
-        "en": /^Edit filter *\n*/i,
+        "he": /^ערוך פילטר/i,
+        "en": /^Edit filter/i,
         "la": "Recense invenientem",
         "ar": null,
-        "fr": /^Modifie le filtre *\n*/i
+        "fr": /^Modifie le filtre/i
     }, "edit_filter_reply": {
         "he": "הפילטר %s נערך בהצלחה",
         "en": "The filters %s has been successfully edited",
@@ -85,18 +85,18 @@ export const Strings = {
         "ar": null,
         "fr": "Le filtre que vous avez essayé d'ajouter n'est pas un texte, une image ou une vidéo"
     }, "show_filters": {
-        "he": /^הראה פילטרים *\n*/i,
-        "en": /^Show filters *\n*/i,
-        "la": /^Ostende invenientes *\n*/i,
+        "he": /^הראה פילטרים/i,
+        "en": /^Show filters/i,
+        "la": /^Ostende invenientes/i,
         "ar": null,
-        "fr": /^Affiche les filtres *\n*/i
-    }, "image": {
+        "fr": /^Affiche les filtres/i
+    }, "filter_type_image": {
         "he": "[תמונה]", "en": "[Image]", "la": null, "ar": null, "fr": "[Image]"
-    }, "video": {
+    }, "filter_type_video": {
         "he": "[וידאו]", "en": "[Video]", "la": null, "ar": null, "fr": "[Video]"
     }, //tags
-    "tag": {
-        "he": /^תייג +\n*/i, "en": /^Tag +\n*/i, "la": "Clama ad ", "ar": null, "fr": /^Tag +\n*/i
+    "tag_person": {
+        "he": /^תייג/i, "en": /^Tag/i, "la": "Clama ad ", "ar": null, "fr": /^Tag/i
     }, "tag_person_doesnt_exist_error": {
         "he": "אתה בטוח שצדקת בשם? בכל מקרה האדם שניסית לתייג לא נמצא פה",
         "en": "The person you tried to tags doesn't exist",
@@ -104,11 +104,11 @@ export const Strings = {
         "ar": null,
         "fr": "La personne que vous avez essayé de taguer n'existe pas"
     }, "add_tag": {
-        "he": /^הוסף חבר לתיוג *\n*/i,
-        "en": /^Add tag buddy *\n*/i,
+        "he": /^הוסף חבר לתיוג/i,
+        "en": /^Add tag buddy/i,
         "la": "Adde amicum",
         "ar": null,
-        "fr": /^Ajoute la personne au tag *\n*/i
+        "fr": /^Ajoute la personne au tag/i
     }, "add_tag_reply": {
         "he": "מספר הטלפון של האדם %s נוסף בהצלחה",
         "en": "The phone number of the person %s has been successfully added",
@@ -128,11 +128,11 @@ export const Strings = {
         "ar": null,
         "fr": "Ce numéro de téléphone n'existe pas dans ce groupe"
     }, "remove_tag": {
-        "he": /^הסר חבר מתיוג *\n*/i,
-        "en": /^Remove tag buddy *\n*/i,
+        "he": /^הסר חבר מתיוג/i,
+        "en": /^Remove tag buddy/i,
         "la": "Dele amicum",
         "ar": null,
-        "fr": /^Supprime la personne du tag *\n*/i
+        "fr": /^Supprime la personne du tag/i
     }, "remove_tag_reply": {
         "he": "מספר הטלפון של האדם %s הוסר בהצלחה",
         "en": "The phone number of the person %s has been successfully removed",
@@ -152,23 +152,23 @@ export const Strings = {
         "ar": null,
         "fr": "Ce groupe n'a aucun tags"
     }, "tag_all": {
-        "he": /^תייג כולם *\n*/i,
-        "en": /^Tag everyone *\n*/i,
+        "he": /^תייג כולם/i,
+        "en": /^Tag everyone/i,
         "la": "Clama ad quoque",
         "ar": null,
-        "fr": /^Tag tout le monde *\n*/i
+        "fr": /^Tag tout le monde/i
     }, "show_tags": {
-        "he": /^הראה רשימת חברים לתיוג *\n*/i,
-        "en": /^Show tag buddies *\n*/i,
+        "he": /^הראה רשימת חברים לתיוג/i,
+        "en": /^Show tag buddies/i,
         "la": "Ostende amici",
         "ar": null,
-        "fr": /^Affiche la liste des personnes taguées *\n*/i
+        "fr": /^Affiche la liste des personnes taguées/i
     }, "check_tags": {
-        "he": /^בדוק היכן תייגוני *\n*/i,
-        "en": /^Check where I've been tagged *\n*/i,
+        "he": /^בדוק היכן תייגוני/i,
+        "en": /^Check where I've been tagged/i,
         "la": null,
         "ar": null,
-        "fr": /^Vérifie où j'ai été tagué *\n*/i
+        "fr": /^Vérifie où j'ai été tagué/i
     }, "check_tags_reply": {
         "he": "הנה תיוגך, אדוני הטוב",
         "en": "You've been tagged here, Good Sir",
@@ -182,7 +182,7 @@ export const Strings = {
         "ar": null,
         "fr": "Vous n'avez pas été tagué depuis aussi longtemps que je me souvienne de moi"
     }, "clear_tags": {
-        "he": /^נקה תיוגיי *\n*/i, "en": /^Clear my tags *\n*/i, "la": null, "ar": null, "fr": /^Efface mes tags *\n*/i
+        "he": /^נקה תיוגיי/i, "en": /^Clear my tags/i, "la": null, "ar": null, "fr": /^Efface mes tags/i
     }, "clear_tags_reply": {
         "he": "נוקתה רשימת תיוגך",
         "en": "Your tag list has been cleared",
@@ -190,11 +190,11 @@ export const Strings = {
         "ar": null,
         "fr": "Votre liste de tags a été effacée"
     }, "create_tag_list": {
-        "he": /^צור רשימה לתיוג *\n*/i,
-        "en": /^Create tag list *\n*/i,
+        "he": /^צור רשימה לתיוג/i,
+        "en": /^Create tag list/i,
         "la": null,
         "ar": null,
-        "fr": /^Crée une liste de tags *\n*/i
+        "fr": /^Crée une liste de tags/i
     }, "create_tag_list_reply": {
         "he": "הרשימה לתיוג נוצרה בהצלחה מרובה",
         "en": "The tag list has been created",
@@ -208,7 +208,7 @@ export const Strings = {
         "ar": null,
         "fr": "Je ne peux tout simplement pas créer une liste de tags vide"
     }, "next_tag_list": {
-        "he": /^הבא בתור *\n*/i, "en": /^Next in line *\n*/i, "la": null, "ar": null, "fr": /^Au suivant *\n*/i
+        "he": /^הבא בתור/i, "en": /^Next in line/i, "la": null, "ar": null, "fr": /^Au suivant/i
     }, "tag_list_next_reply": {
         "he": "האדם הבא בתור (כלומר עכשיו!) הינו %s ואחריו %s (אז תהיה מוכן!) \nכדי לעבור לאיש הבא, כתבו 'הבא בתור'",
         "en ": "The next person in the que (which means now!) is %s and after them it's %s (so be ready!) \n To go the next person, write 'Next in line'",
@@ -222,11 +222,11 @@ export const Strings = {
         "ar": null,
         "fr": "La personne suivante dans la liste est la dernière: %s"
     }, "add_group_tag": {
-        "he": /^הוסף קבוצת תיוג *\n*/i,
-        "en": /^Add tagging group *\n*/i,
+        "he": /^הוסף קבוצת תיוג/i,
+        "en": /^Add tagging group/i,
         "la": null,
         "ar": null,
-        "fr": /^Ajoute un groupe de tags *\n*/i
+        "fr": /^Ajoute un groupe de tags/i
     }, "add_group_tag_reply": {
         "he": "קבוצת התיוג %s נוספה בהצלחה",
         "en": "The tagging group %s has been added successfully",
@@ -252,11 +252,11 @@ export const Strings = {
         "ar": null,
         "fr": "Vérifiez que vous avez utilisé le bon format pour ajouter des noms: \nAjoute un groupe de tags Banane - Moshe, Joseph, Shalom"
     }, "remove_group_tag": {
-        "he": /^הסר קבוצת תיוג *\n*/i,
-        "en": /^Remove tagging group *\n*/i,
+        "he": /^הסר קבוצת תיוג/i,
+        "en": /^Remove tagging group/i,
         "la": null,
         "ar": null,
-        "fr": /^Supprime le groupe de tags *\n*/i
+        "fr": /^Supprime le groupe de tags/i
     }, "remove_group_tag_reply": {
         "he": "קבוצת התיוג %s הוסרה בהצלחה",
         "en": "The tagging group %s has been removed successfully",
@@ -276,17 +276,17 @@ export const Strings = {
         "ar": null,
         "fr": "Groupe de tags: "
     }, "add_person_to_group_tag": {
-        "he": /^הוסף אדם לקבוצת תיוג *\n*/i,
-        "en": /^Add person to tagging group *\n*/i,
+        "he": /^הוסף אדם לקבוצת תיוג/i,
+        "en": /^Add person to tagging group/i,
         "la": null,
         "ar": null,
-        "fr": /^Ajoute une personne au groupe de tags *\n*/i
+        "fr": /^Ajoute une personne au groupe de tags/i
     }, "remove_person_from_group_tag": {
-        "he": /^הסר אדם מקבוצת תיוג *\n*/i,
-        "en": /^Remove person from tagging group *\n*/i,
+        "he": /^הסר אדם מקבוצת תיוג/i,
+        "en": /^Remove person from tagging group/i,
         "la": null,
         "ar": null,
-        "fr": /^Supprime la personne du groupe de tags *\n*/i
+        "fr": /^Supprime la personne du groupe de tags/i
     }, "add_person_to_group_tag_reply": {
         "he": "האדם נוסף בקלילות לקבוצת התיוג",
         "en": "The person was gracefully added to the tagging group",
@@ -313,11 +313,11 @@ export const Strings = {
         "ar": null,
         "fr": "Joyeux anniversaire à %s! Il/elle a %s ans!"
     }, "add_birthday": {
-        "he": /^הוסף יום הולדת *\n*/i,
-        "en": /^Add birthday *\n*/i,
+        "he": /^הוסף יום הולדת/i,
+        "en": /^Add birthday/i,
         "la": "Adde natalis dies",
         "ar": null,
-        "fr": /^Ajoute l'anniversaire *\n*/i
+        "fr": /^Ajoute l'anniversaire/i
     }, "add_birthday_reply": {
         "he": "יום ההולדת של הבחור %s נוסף בהצלחה",
         "en": "%s's birthday has been successfully added",
@@ -343,11 +343,11 @@ export const Strings = {
         "ar": null,
         "fr": "Ouais, ce n'est pas comme ça qu'on écrit une date... Vous devriez utiliser des points"
     }, "remove_birthday": {
-        "he": /^הסר יום הולדת *\n*/i,
-        "en": /^Remove birthday *\n*/i,
+        "he": /^הסר יום הולדת/i,
+        "en": /^Remove birthday/i,
         "la": "Dele natalis dies",
         "ar": null,
-        "fr": /^Supprime l'anniversaire *\n*/i
+        "fr": /^Supprime l'anniversaire/i
     }, "remove_birthday_reply": {
         "he": "יום ההולדת של הבחור %s הוסר בהצלחה",
         "en": "%s's birthday has been successfully removed",
@@ -361,11 +361,11 @@ export const Strings = {
         "ar": null,
         "fr": "Seul le Dr Doofenshmirtz peut supprimer des anniversaires qui n'existent pas"
     }, "show_birthdays": {
-        "he": /^הראה ימי הולדת *\n*/i,
-        "en": /^Show birthdays" *\n*/i,
+        "he": /^הראה ימי הולדת/i,
+        "en": /^Show birthdays"/i,
         "la": "Ostende natalis dies",
         "ar": null,
-        "fr": /^Affiche les anniversaires *\n*/i
+        "fr": /^Affiche les anniversaires/i
     }, "group_doesnt_have_birthdays_error": {
         "he": "אין לקבוצה זו ימי הולדת",
         "en": "This group don't have any birthday registered",
@@ -373,11 +373,11 @@ export const Strings = {
         "ar": null,
         "fr": "Ce groupe n'a pas d'anniversaire enregistré"
     }, "add_birthday_to_group": {
-        "he": /^הוסף קבוצה לרשימת התפוצה *\n*/i,
-        "en": /^Add group to birthday message *\n*/i,
+        "he": /^הוסף קבוצה לרשימת התפוצה/i,
+        "en": /^Add group to birthday message/i,
         "la": null,
         "ar": null,
-        "fr": /^Ajoute un groupe a la liste diffusion du message d'anniversaire *\n*/i
+        "fr": /^Ajoute un groupe a la liste diffusion du message d'anniversaire/i
     }, "birthday_added_to_group_reply": {
         "he": "הקבוצה נוספה בהצלחה לרשימת התפוצה של ימי הולדת שלך",
         "en": "The group has been successfully added to this person's birthday message broadcast list",
@@ -391,11 +391,11 @@ export const Strings = {
         "ar": null,
         "fr": "Ce groupe est déjà dans la liste de diffusion de votre message d'anniversaire"
     }, "remove_birthday_from_group": {
-        "he": /^הסר קבוצה מרשימת התפוצה *\n*/i,
-        "en": /^Remove group from birthday message *\n*/i,
+        "he": /^הסר קבוצה מרשימת התפוצה/i,
+        "en": /^Remove group from birthday message/i,
         "la": null,
         "ar": null,
-        "fr": /^Supprime le groupe de la liste de diffusion du message d'anniversaire *\n*/i
+        "fr": /^Supprime le groupe de la liste de diffusion du message d'anniversaire/i
     }, "birthday_removed_from_group_reply": {
         "he": "הקבוצה הוסרה בהצלחה מרשימת התפוצה של ימי הולדת של אדם זה",
         "en": "The group has been successfully removed from this person's birthday message broadcast list",
@@ -416,17 +416,17 @@ export const Strings = {
         "fr": "Cet homme n'a pas défini d'anniversaire"
     }, //permissions & muting
     "set_permissions": {
-        "he": /^קבע הרשאה ל *\n*/i,
-        "en": /^Define permission for *\n*/i,
+        "he": /^קבע הרשאה ל/i,
+        "en": /^Define permission for/i,
         "la": null,
         "ar": null,
-        "fr": /^Définis l'autorisation pour *\n*/i
+        "fr": /^Définis l'autorisation pour/i
     }, "set_permissions_reply": {
         "he": "ההרשאה שונתה בהצלחה",
         "en": "Permission changed successfully",
         "la": null,
         "ar": null,
-        "fr": /^L'autorisation a été modifiée avec succès *\n*/i
+        "fr": /^L'autorisation a été modifiée avec succès/i
     }, "set_permissions_error": {
         "he": "אין לך הרשאה מספיק גבוהה בשביל מה שניסית לעשות",
         "en": "You don't have a high enough clearance level for what you were trying to do",
@@ -446,23 +446,23 @@ export const Strings = {
         "ar": null,
         "fr": "Seul le grand Moïse peut choisir un niveau inexistant\n Vérifiez que vous avez choisi l'un de ces éléments: Admin/Ordinaire/En sourdine"
     }, "filters_permission_type": {
-        "he": /פילטרים *\n*/i, "en": /filters *\n*/i, "la": null, "ar": null, "fr": /^Filtres *\n*/i
+        "he": /פילטרים/i, "en": /filters/i, "la": null, "ar": null, "fr": /^Filtres/i
     }, "tags_permission_type": {
-        "he": /תיוגים *\n*/i, "en": /tags *\n*/i, "la": null, "ar": null, "fr": /^Tags *\n*/i
+        "he": /תיוגים/i, "en": /tags/i, "la": null, "ar": null, "fr": /^Tags/i
     }, "handleFilters_permission_type": {
-        "he": /ניהול_פילטרים *\n*/i, "en": /handle_Filters *\n*/i, "la": null, "ar": null, "fr": /^Gérer_Filtres *\n*/i
+        "he": /ניהול_פילטרים/i, "en": /handle_Filters/i, "la": null, "ar": null, "fr": /^Gérer_Filtres/i
     }, "handleTags_permission_type": {
-        "he": /ניהול_תיוגים *\n*/i, "en": /handle_Tags *\n*/i, "la": null, "ar": null, "fr": /^Gérer_Tags *\n*/i
+        "he": /ניהול_תיוגים/i, "en": /handle_Tags/i, "la": null, "ar": null, "fr": /^Gérer_Tags/i
     }, "handleBirthdays_permission_type": {
-        "he": /ניהול_ימיהולדת *\n*/i,
-        "en": /handle_Birthdays *\n*/i,
+        "he": /ניהול_ימיהולדת/i,
+        "en": /handle_Birthdays/i,
         "la": null,
         "ar": null,
-        "fr": /^Gérer_Anniversaires *\n*/i
+        "fr": /^Gérer_Anniversaires/i
     }, "handleShows_permission_type": {
-        "he": /ניהול_הראה *\n*/i, "en": /handle_Shows *\n*/i, "la": null, "ar": null, "fr": /^Gérer_Affiches *\n*/i
+        "he": /ניהול_הראה/i, "en": /handle_Shows/i, "la": null, "ar": null, "fr": /^Gérer_Affiches/i
     }, "handleOther_permission_type": {
-        "he": /ניהול_שונות *\n*/i, "en": /handle_Other *\n*/i, "la": null, "ar": null, "fr": /^Gérer_Autre *\n*/i
+        "he": /ניהול_שונות/i, "en": /handle_Other/i, "la": null, "ar": null, "fr": /^Gérer_Autre/i
     }, "filters_permission_type_replace": {
         "he": "פילטרים", "en": "filters", "la": null, "ar": null, "fr": "Filtres"
     }, "tags_permission_type_replace": {
@@ -478,13 +478,13 @@ export const Strings = {
     }, "handleOther_permission_type_replace": {
         "he": "ניהול_שונות", "en": "handle_Other", "la": null, "ar": null, "fr": "Gérer_Autre"
     }, "muted_permission_level": {
-        "he": /מושתק/, "en": /Muted *\n*/i, "la": null, "ar": null, "fr": /En sourdine *\n*/i
+        "he": /מושתק/, "en": /Muted/i, "la": null, "ar": null, "fr": /En sourdine/i
     }, "regular_permission_level": {
-        "he": /רגיל/, "en": /Regular *\n*/i, "la": null, "ar": null, "fr": /Ordinaire *\n*/i
+        "he": /רגיל/, "en": /Regular/i, "la": null, "ar": null, "fr": /Ordinaire/i
     }, "admin_permission_level": {
-        "he": /מנהל/, "en": /Admin *\n*/i, "la": null, "ar": null, "fr": /Admin *\n*/i
+        "he": /מנהל/, "en": /Admin/i, "la": null, "ar": null, "fr": /Admin/i
     }, "developer_permission_level": {
-        "he": /אלוהים/, "en": /God *\n*/i, "la": null, "ar": null, "fr": /Dieu *\n*/i
+        "he": /אלוהים/, "en": /God/i, "la": null, "ar": null, "fr": /Dieu/i
     }, "muted_permission_level_replace": {
         "he": "מושתק", "en": "Muted", "la": null, "ar": null, "fr": "En sourdine"
     }, "regular_permission_level_replace": {
@@ -494,19 +494,19 @@ export const Strings = {
     }, "developer_permission_level_replace": {
         "he": "אלוהים", "en": "God", "la": null, "ar": null, "fr": "Dieu"
     }, "show_group_function_permissions": {
-        "he": /^הראה הרשאות פונקציות *\n*/i,
-        "en": /^Show function permissions *\n*/i,
+        "he": /^הראה הרשאות פונקציות/i,
+        "en": /^Show function permissions/i,
         "la": null,
         "ar": null,
-        "fr": /^Affiche les niveaux de fonction *\n*/i
+        "fr": /^Affiche les niveaux de fonction/i
     }, "show_group_user_permissions": {
-        "he": /^הראה הרשאות אנשים *\n*/i,
-        "en": /^Show people permissions *\n*/i,
+        "he": /^הראה הרשאות אנשים/i,
+        "en": /^Show people permissions/i,
         "la": null,
         "ar": null,
-        "fr": /^Affiche les niveaux des personnes *\n*/i
+        "fr": /^Affiche les niveaux des personnes/i
     }, "mute_participant": {
-        "he": /^השתק +\n*/i, "en": /^Mute +\n*/i, "la": null, "ar": null, "fr": /^Met en sourdine +\n*/i
+        "he": /^השתק/i, "en": /^Mute/i, "la": null, "ar": null, "fr": /^Met en sourdine/i
     }, "mute_participant_reply": {
         "he": "המשתמש %s לא יכול להשתמש בפקודות יותר",
         "en": "User %s cannot use commands anymore",
@@ -514,11 +514,11 @@ export const Strings = {
         "ar": null,
         "fr": "L'utilisateur %s ne peut plus utiliser les commandes"
     }, "unmute_participant": {
-        "he": /^הסר השתקה *\n*/i,
-        "en": /^Unmute person *\n*/i,
+        "he": /^הסר השתקה/i,
+        "en": /^Unmute person/i,
         "la": null,
         "ar": null,
-        "fr": /^Réactive la personne *\n*/i
+        "fr": /^Réactive la personne/i
     }, "unmute_participant_reply": {
         "he": "המשתמש %s יכול להשתמש בפקודות שוב",
         "en": "User %S can use commands again",
@@ -539,7 +539,7 @@ export const Strings = {
         "fr": "Je ne peux pas mettre personne en sourdine, tu dois choisir quelqu'un"
     }, //immediate commands
     "scan_link": {
-        "he": /^סרוק +\n*/i, "en": /^Scan +\n*/i, "la": /^Examina +\n*/i, "ar": null, "fr": /^Analyse +\n*/i
+        "he": /^סרוק/i, "en": /^Scan/i, "la": /^Examina/i, "ar": null, "fr": /^Analyse/i
     }, "link_validity_error": {
         "he": "חביבי, זה לא קישור תקין",
         "en": "bro that's not a valid link",
@@ -571,17 +571,17 @@ export const Strings = {
         "ar": null,
         "fr": "Erreur reçue lors de la vérification du lien"
     }, "make_sticker": {
-        "he": /^הפוך לסטיקר *\n*/i,
-        "en": /^Create sticker *\n*/i,
+        "he": /^הפוך לסטיקר/i,
+        "en": /^Create sticker/i,
         "la": "Fac hoc imaginem",
         "ar": null,
-        "fr": /^Crée un autocollant *\n*/i
+        "fr": /^Crée un autocollant/i
     }, "crop_sticker": {
-        "he": /^ללא חיתוך *\n*/i, "en": /^without cropping *\n*/i, "la": null, "ar": null, "fr": /^Sans coupures *\n*/i
+        "he": /^ללא חיתוך/i, "en": /^without cropping/i, "la": null, "ar": null, "fr": /^Sans coupures/i
     }, "high_Quality": {
-        "he": /^איכות גבוהה *\n*/i, "en": /^High Quality *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות גבוהה/i, "en": /^High Quality/i, "la": null, "ar": null, "fr": null
     }, "medium_Quality": {
-        "he": /^איכות בינונית *\n*/i, "en": /^Medium Quality *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות בינונית/i, "en": /^Medium Quality/i, "la": null, "ar": null, "fr": null
     }, "not_sticker_material_error": {
         "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון או הודעה לסטיקר",
         "en": "Idiot, a sticker has to be an image or a video or a message",
@@ -589,11 +589,11 @@ export const Strings = {
         "ar": null,
         "fr": null
     }, "create_text_sticker": {
-        "he": /^צור סטיקר טקסט *\n*/i,
-        "en": /^Create text sticker *\n*/i,
+        "he": /^צור סטיקר טקסט/i,
+        "en": /^Create text sticker/i,
         "la": null,
         "ar": null,
-        "fr": /^Crée un autocollant de texte *\n*/i
+        "fr": /^Crée un autocollant de texte/i
     }, "text_sticker_error": {
         "he": "התרחשה שגיאה ביצירת הסטיקר\nבדוק שבחרת צבע באנגלית ומילה",
         "en": "An error occurred while making your sticker \nCheck you've chosen a colour in English and at least one word",
@@ -601,17 +601,17 @@ export const Strings = {
         "ar": null,
         "fr": "Une erreur s'est produite lors de la création de votre autocollant \nVérifiez que vous avez choisi une couleur en anglais et au moins un mot"
     }, "create_combined_sticker": {
-        "he": /^צור סטיקר משולב *\n*/i,
-        "en": /^Create combined sticker *\n*/i,
+        "he": /^צור סטיקר משולב/i,
+        "en": /^Create combined sticker/i,
         "la": null,
         "ar": null,
         "fr": null
     }, "create_survey": {
-        "he": /^צור סקר *\n*/i,
-        "en": /^Create survey *\n*/i,
+        "he": /^צור סקר/i,
+        "en": /^Create survey/i,
         "la": "Crea census",
         "ar": null,
-        "fr": /^Crée un sondage *\n*/i
+        "fr": /^Crée un sondage/i
     }, "survey_title": {
         "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/, "ar": null, "fr": /Titre - (.)+/
     }, "survey_subtitle": {
@@ -663,11 +663,11 @@ export const Strings = {
         "ar": null,
         "fr": "J'ai besoin d'un titre, d'un corps et d'au moins un bouton pour faire un sondage"
     }, "check_crypto": {
-        "he": /^בדוק קריפטו *\n*/i,
-        "en": /^Check Crypto *\n*/i,
+        "he": /^בדוק קריפטו/i,
+        "en": /^Check Crypto/i,
         "la": null,
         "ar": null,
-        "fr": /^Verifie la Crypto *\n*/i
+        "fr": /^Verifie la Crypto/i
     }, "crypto_check_reply": {
         "he": "הנה השטויות שביקשת: \n %s",
         "en": "Here's the junk you requsted: \n %s",
@@ -687,11 +687,11 @@ export const Strings = {
         "ar": null,
         "fr": "Pardonnez-moi mais chaque groupe ne peut vérifier les taux de change Crypto qu'une seule fois par jour"
     }, "search_in_urban": {
-        "he": /^הגדרת אינטרנט *\n*/i,
-        "en": /^Internet definition *\n*/i,
+        "he": /^הגדרת אינטרנט/i,
+        "en": /^Internet definition/i,
         "la": null,
         "ar": null,
-        "fr": /^Définition Internet *\n*/i
+        "fr": /^Définition Internet/i
     }, "search_in_urban_reply": {
         "he": "הגדרה", "en": "Definition", "la": null, "ar": null, "fr": "Définition"
     }, "urban_word_not_found_error": {
@@ -707,7 +707,7 @@ export const Strings = {
         "ar": null,
         "fr": "Pardonnez-moi, mais je me heurte à un problème en allant chercher la définition"
     }, "translate_to": {
-        "he": /^תרגם ל *\n*/i, "en": /^Translate To *\n*/i, "la": null, "ar": null, "fr": /^Traduis en *\n*/i
+        "he": /^תרגם ל/i, "en": /^Translate To/i, "la": null, "ar": null, "fr": /^Traduis en/i
     }, "translate_reply": {
         "he": "*תרגום*: \n %s \n משפה (קוד שפה): \n %s",
         "en": "*Translation*: \n %s \n From language (language code): \n %s",
@@ -733,7 +733,7 @@ export const Strings = {
         "ar": null,
         "fr": "Réessayez demain, vous traduisez trop de mots"
     }, "show_profile": {
-        "he": /^פרופיל *\n*/i, "en": /^Profile *\n*/i, "la": null, "ar": null, "fr": /^Profil *\n*/i
+        "he": /^פרופיל/i, "en": /^Profile/i, "la": null, "ar": null, "fr": /^Profil/i
     }, "tagged_messages_amount_reply": {
         "he": "תוייגת: %s פעמים מאז הבדיקה/ניקיון האחרון",
         "en": "You've been tagged %s time since the last check/reset",
@@ -759,11 +759,11 @@ export const Strings = {
         "ar": null,
         "fr": "Quelqu'un ici n'a pas fixé d'anniversaire :("
     }, "download_music": {
-        "he": /^הורד מוזיקה *\n*/i,
-        "en": /^Download music *\n*/i,
+        "he": /^הורד מוזיקה/i,
+        "en": /^Download music/i,
         "la": null,
         "ar": null,
-        "fr": /^Télécharge la musique *\n*/i
+        "fr": /^Télécharge la musique/i
     }, "download_music_downloading_reply": {
         "he": "מוריד...", "en": "Downloading...", "la": null, "ar": null, "fr": "Téléchargement..."
     }, "download_music_unknown_error": {
@@ -785,11 +785,11 @@ export const Strings = {
         "ar": null,
         "fr": "Vous avez téléchargé trop de chansons aujourd'hui - réessayez demain"
     }, "show_webpage": {
-        "he": /^שלח קישור לאתר *\n*/i,
-        "en": /^Send website link *\n*/i,
+        "he": /^שלח קישור לאתר/i,
+        "en": /^Send website link/i,
         "la": "Ostende situs texti",
         "ar": null,
-        "fr": /^Envoie le lien *\n*/i
+        "fr": /^Envoie le lien/i
     }, "show_webpage_reply": {
         "he": "קח את הקישור אחי: %s",
         "en": "Here's the link you requested: %s",
@@ -804,7 +804,7 @@ export const Strings = {
         "fr": "Désolé frère, le lien ne fonctionne pas..."
     },//reminders
     "add_reminder": {
-        "he": /^הוסף תזכורת *\n*/i, "en": /^Add reminder *\n*/i, "la": null, "ar": null, "fr": /^Ajoute un rappel *\n*/i
+        "he": /^הוסף תזכורת/i, "en": /^Add reminder/i, "la": null, "ar": null, "fr": /^Ajoute un rappel/i
     }, "add_reminder_reply": {
         "he": "התזכורת נוספה בהצלחה בשעה %s",
         "en": "The reminder has been successfully set to %s",
@@ -824,11 +824,11 @@ export const Strings = {
         "ar": null,
         "fr": "Je suis désolé, mais à ce jour, je ne suis toujours pas capable de deviner l'heure par moi-même \nVeuillez vérifier que vous l'avez écrite correctement"
     }, "remove_reminder": {
-        "he": /^הסר תזכורת *\n*/i,
-        "en": /^Remove reminder *\n*/i,
+        "he": /^הסר תזכורת/i,
+        "en": /^Remove reminder/i,
         "la": null,
         "ar": null,
-        "fr": /^Supprime le rappel *\n*/i
+        "fr": /^Supprime le rappel/i
     }, "remove_reminder_reply": {
         "he": "התזכורת שנקבעה לשעה %s הוסרה בהצלחה",
         "en": "The reminder set at %s has been removed",
@@ -842,40 +842,40 @@ export const Strings = {
         "ar": null,
         "fr": "Je ne parviens toujours pas à supprimer des rappels qui n'ont jamais été définis"
     }, "show_reminders": {
-        "he": /^הראה תזכורות *\n*/i,
-        "en": /^Show reminders *\n*/i,
+        "he": /^הראה תזכורות/i,
+        "en": /^Show reminders/i,
         "la": null,
         "ar": null,
-        "fr": /^Affiche les rappels *\n*/i
+        "fr": /^Affiche les rappels/i
     }, "show_reminder_error": {
         "he": "אין לך תזכורות פעילות",
         "en": "You don't have any active reminders",
         "la": null,
         "ar": null,
         "fr": "Vous n'avez aucun rappel actif"
-    }, "repeatReminder": {
-        "he": /^חוזרת *\n*/i, "en": /Repeat *\n*/i, "la": null, "ar": null, "fr": /Répète *\n*/i
-    }, "Sunday": {
-        "he": /ליום ראשון *\n*/i, "en": /Sunday *\n*/i, "la": null, "ar": null, "fr": /Dimanche *\n*/i
-    }, "Monday": {
-        "he": /ליום שני *\n*/i, "en": /Monday *\n*/i, "la": null, "ar": null, "fr": /Lundi *\n*/i
-    }, "Tuesday": {
-        "he": /ליום שלישי *\n*/i, "en": /Tuesday *\n*/i, "la": null, "ar": null, "fr": /Mardi *\n*/i
-    }, "Wednesday": {
-        "he": /ליום רביעי *\n*/i, "en": /Wednesday *\n*/i, "la": null, "ar": null, "fr": /Mercredi *\n*/i
-    }, "Thursday": {
-        "he": /ליום חמישי *\n*/i, "en": /^Thursday *\n*/i, "la": null, "ar": null, "fr": /Jeudi *\n*/i
-    }, "Friday": {
-        "he": /ליום שישי *\n*/i, "en": /^Friday *\n*/i, "la": null, "ar": null, "fr": /Vendredi *\n*/i
-    }, "Saturday": {
-        "he": /ליום שבת *\n*/i, "en": /^Saturday *\n*/i, "la": null, "ar": null, "fr": /^Samedi *\n*/i
+    }, "repeat_reminder": {
+        "he": /^חוזרת/i, "en": /Repeat/i, "la": null, "ar": null, "fr": /Répète/i
+    }, "day_Sunday": {
+        "he": /ליום ראשון/i, "en": /Sunday/i, "la": null, "ar": null, "fr": /Dimanche/i
+    }, "day_Monday": {
+        "he": /ליום שני/i, "en": /Monday/i, "la": null, "ar": null, "fr": /Lundi/i
+    }, "day_Tuesday": {
+        "he": /ליום שלישי/i, "en": /Tuesday/i, "la": null, "ar": null, "fr": /Mardi/i
+    }, "day_Wednesday": {
+        "he": /ליום רביעי/i, "en": /Wednesday/i, "la": null, "ar": null, "fr": /Mercredi/i
+    }, "day_Thursday": {
+        "he": /ליום חמישי/i, "en": /^Thursday/i, "la": null, "ar": null, "fr": /Jeudi/i
+    }, "day_Friday": {
+        "he": /ליום שישי/i, "en": /^Friday/i, "la": null, "ar": null, "fr": /Vendredi/i
+    }, "day_Saturday": {
+        "he": /ליום שבת/i, "en": /^Saturday/i, "la": null, "ar": null, "fr": /^Samedi/i
     },//language
     "change_language": {
-        "he": /^שנה שפה *\n*/i,
-        "en": /^Change language to *\n*/i,
+        "he": /^שנה שפה/i,
+        "en": /^Change language to/i,
         "la": "Muta lingua ad",
         "ar": null,
-        "fr": /^Change la langue en *\n*/i
+        "fr": /^Change la langue en/i
     }, "language_change_reply": {
         "he": "השפה שונתה בהצלחה",
         "en": "Language successfully changed",
@@ -888,40 +888,40 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Seuls l'hébreu, l'anglais, le latin et le français sont actuellement pris en charge par le bot"
-    }, "help": {
-        "he": /^עזרה *\n*/i, "en": /^Help *\n*/i, "la": /^Auxilium$ *\n*/i, "ar": null, "fr": /^Aide *\n*/i
+    }, "help_me_pwease": {
+        "he": /^עזרה/i, "en": /^Help/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide/i
     }, "help_general": {
-        "he": /^עזרה$ *\n*/i, "en": /^Help$ *\n*/i, "la": /^Auxilium$ *\n*/i, "ar": null, "fr": /^Aide$ *\n*/i
+        "he": /^עזרה$/i, "en": /^Help$/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide$/i
     }, "help_language": {
-        "he": /^עזרה שפה$ *\n*/i, "en": /^Help language$ *\n*/i, "la": null, "ar": null, "fr": /^Aide langue$ *\n*/i
+        "he": /^עזרה שפה$/i, "en": /^Help language$/i, "la": null, "ar": null, "fr": /^Aide langue$/i
     }, "help_filters": {
-        "he": /^עזרה פילטרים$ *\n*/i, "en": /^Help filters$ *\n*/i, "la": null, "ar": null, "fr": /^Aide filtres$ *\n*/i
+        "he": /^עזרה פילטרים$/i, "en": /^Help filters$/i, "la": null, "ar": null, "fr": /^Aide filtres$/i
     }, "help_tags": {
-        "he": /^עזרה תיוגים$ *\n*/i, "en": /^Help tags$ *\n*/i, "la": null, "ar": null, "fr": /^Aide tags$ *\n*/i
+        "he": /^עזרה תיוגים$/i, "en": /^Help tags$/i, "la": null, "ar": null, "fr": /^Aide tags$/i
     }, "help_birthdays": {
-        "he": /^עזרה ימי הולדת$ *\n*/i,
-        "en": /^Help birthdays$ *\n*/i,
+        "he": /^עזרה ימי הולדת$/i,
+        "en": /^Help birthdays$/i,
         "la": null,
         "ar": null,
-        "fr": /^Aide anniversaires$ *\n*/i
+        "fr": /^Aide anniversaires$/i
     }, "help_permissions": {
-        "he": /^עזרה הרשאות$ *\n*/i,
-        "en": /^Help permissions$ *\n*/i,
+        "he": /^עזרה הרשאות$/i,
+        "en": /^Help permissions$/i,
         "la": null,
         "ar": null,
-        "fr": /^Aide niveaux$ *\n*/i
+        "fr": /^Aide niveaux$/i
     }, "help_reminders": {
-        "he": /^עזרה תזכורות$ *\n*/i,
-        "en": /^Help reminders$ *\n*/i,
+        "he": /^עזרה תזכורות$/i,
+        "en": /^Help reminders$/i,
         "la": null,
         "ar": null,
-        "fr": /^Aide rappels$ *\n*/i
+        "fr": /^Aide rappels$/i
     }, "help_stickers": {
-        "he": /^עזרה סטיקרים$ *\n*/i, "en": /^Help sticker$ *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^עזרה סטיקרים$/i, "en": /^Help sticker$/i, "la": null, "ar": null, "fr": null
     }, "help_internet": {
-        "he": /^עזרה אינטרנט$ *\n*/i, "en": /^Help internet$ *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^עזרה אינטרנט$/i, "en": /^Help internet$/i, "la": null, "ar": null, "fr": null
     }, "help_others": {
-        "he": /^עזרה אחר$ *\n*/i, "en": /^Help others$ *\n*/i, "la": null, "ar": null, "fr": /^Aide autre$ *\n*/i
+        "he": /^עזרה אחר$/i, "en": /^Help others$/i, "la": null, "ar": null, "fr": /^Aide autre$/i
     }, "help_general_reply": {
         "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן (972543293155) ואיתן עמירן (972586809911)\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help stickers", "Help internet", "Help others"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan (972543293155) and Ethan Amiran (972586809911)\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,

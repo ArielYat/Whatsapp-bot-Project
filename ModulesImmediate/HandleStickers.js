@@ -69,7 +69,7 @@ export class HSt {
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         const noCrop = !!bodyText.match(HL.getGroupLang(groupsDict, chatID, "crop_sticker"));
         try {
-            if (messageType === "image") {
+            if (messageType === "filter_type_image") {
                 const mediaData = await client.decryptMedia(message);
                 await client.sendImageAsSticker(chatID, mediaData, {
                     author: "ג'ון האגדי",
@@ -88,8 +88,8 @@ export class HSt {
                 let date = new Date(message.timestamp * 1000),
                     hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
                     minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-                let time = hour + ":" + minutes;
-                let canvas = createCanvas(512, 512), ctx = canvas.getContext('2d'),
+                let time = hour + ":" + minutes,
+                    canvas = createCanvas(512, 512), ctx = canvas.getContext('2d'),
                     phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
                 await (async () => {
                     let messageBody = encode(message.body), messageTime = encode(time),
@@ -200,7 +200,7 @@ export class HSt {
             drawingBoard.textAlign = "center";
             drawingBoard.textBaseline = "top";
             drawingBoard.fillText(text.trim(), 75, 75);
-            if (messageType === "image")
+            if (messageType === "filter_type_image")
                 await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול",});
             else if (messageType === "video")
                 await client.sendMp4AsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול",});

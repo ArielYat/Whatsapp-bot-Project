@@ -51,7 +51,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag_all"))) { //Handle tagging everyone
         await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag"))) { //Handle tagging someone
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "tag_person"))) { //Handle tagging someone
         await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "check_tags"))) { //Handle checking tagged messages
@@ -189,7 +189,7 @@ async function HandleReminders(client, bodyText, chatID, messageID, authorID, me
 }
 
 async function HandleLangAndHelp(client, bodyText, chatID, authorID, messageID) {
-    if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help"))) { //Handle show help
+    if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_me_pwease"))) { //Handle show help
         await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) { //Handle language change
@@ -260,9 +260,9 @@ function start(client) {
                 if (reminder.toString() === date.toString()) {
                     const oldReminder = person.reminders[reminder];
                     const reminderDate = new Date(reminder);
-                    const repeat = !!oldReminder.startsWith("repeatReminder");
-                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")) : null;
-                    let stringForSending = repeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
+                    const repeat = !!oldReminder.startsWith("repeat_reminder");
+                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeat_reminder\d/)[0].replace("repeat_reminder", "")) : null;
+                    let stringForSending = repeat ? oldReminder.replace(/repeat_reminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
                             await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
@@ -290,7 +290,7 @@ function start(client) {
     }, 60 * 1000); //in ms; 1 min
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
-        await client.sendText(chat.id, `${Strings["start_message"]["he"]}\n\n\n${Strings["start_message"]["en"]}\n\n\n${Strings["start_message"]["la"]}\n\n\n${Strings["start_message"]["ar"]}\n\n\n${Strings["start_message"]["fr"]}`);
+        await client.sendText(chat.id, `${Strings["start_message"]["he"]}\n\n\n${Strings["start_message"]["en"]}\n\n\n${Strings["start_message"]["la"]}\n\n\n${Strings["start_message"]["fr"]}`);
     });
     //Check every module every time a message is received
     client.onMessage(async message => {

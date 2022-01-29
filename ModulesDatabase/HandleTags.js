@@ -5,7 +5,7 @@ const allLanguagesRegex = "/^[\u0041-\u005A\u0061-\u007A\u00AA\u00B5\u00BA\u00C0
 
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag"), "");
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_person"), "");
         bodyText = bodyText.trim();
         const tags = groupsDict[chatID].tags;
         let counter = 0;
