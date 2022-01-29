@@ -17,7 +17,18 @@ export class HF {
                             await client.sendImage(chatID, filters[filter].replace("filter_type_image", ""), null, null, messageID);
                         else if (filters[filter].startsWith("filter_type_video"))
                             await client.sendVideoAsGif(chatID, filters[filter].replace("filter_type_video", ""), null, null, messageID);
-                        else await client.sendReplyWithMentions(chatID, filters[filter], messageID);
+                        else {
+                            try {
+                                await client.sendReplyWithMentions(chatID, filters[filter], messageID);
+                                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed44"), messageID);
+                            } catch (e) {
+                                console.log("error occurred on filter reply");
+                                await HDB.delArgsFromDB(chatID, filter, "filters", function () {
+                                    groupsDict[chatID].filters = ["delete", filter];
+                                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_error_removed"), messageID);
+                                });
+                            }
+                        }
                         groupsDict[chatID].filterCounter += 1;
                     } else if (groupsDict[chatID].filterCounter === groupFilterLimit) {
                         groupsDict[chatID].filterCounter += 1;

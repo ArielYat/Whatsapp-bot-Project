@@ -41,9 +41,19 @@ export class HT {
                 }
             }
         }
-        if (counter !== 0)
-            await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
-        else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist_error"), messageID);
+        if (counter !== 0) {
+            try {
+                await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
+            } catch (error) {
+                console.log("error occurred on tag");
+                for (let tag in groupsDict[chatID].tags) {
+                    await HDB.delArgsFromDB(chatID, tag, "tags", function () {
+                        groupsDict[chatID].tags = ["delete", tag]
+                    });
+                }
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed"), messageID);
+            }
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist_error"), messageID);
     }
 
     static async addTag(client, bodyText, chatID, messageID, groupsDict) {

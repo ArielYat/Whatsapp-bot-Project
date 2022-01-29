@@ -97,9 +97,6 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"))) { //Handle text stickers
         await HSt.createTextSticker(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"))) { //Handle combined stickers
-        await HSt.createCombinedSticker(client, message, bodyText, chatID, messageID, groupsDict);
-        usersDict[authorID].commandCounter++;
     }
 }
 

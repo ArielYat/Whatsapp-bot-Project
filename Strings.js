@@ -305,6 +305,18 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Monsieur, le groupe de tags que vous avez demandé n'existe pas"
+    }, "tags_removed": {
+        "he": "התיוגים בקבוצה זו הוסרו מפני שנוסף תויג בעייתי עמכם הסליחה",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "filter_error_removed": {
+        "he": "הפילטר היה מחובר לתיוג בעייתי לכן הוסר",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
     }, //birthdays
     "birthday_wishes_reply": {
         "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
@@ -600,12 +612,6 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Une erreur s'est produite lors de la création de votre autocollant \nVérifiez que vous avez choisi une couleur en anglais et au moins un mot"
-    }, "create_combined_sticker": {
-        "he": /^צור סטיקר משולב/i,
-        "en": /^Create combined sticker/i,
-        "la": null,
-        "ar": null,
-        "fr": null
     }, "create_survey": {
         "he": /^צור סקר/i,
         "en": /^Create survey/i,
