@@ -52,8 +52,14 @@ export class HL {
             case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_reminders"))):
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reminders_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_immediate"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_immediate_reply"), messageID);
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_stickers"))):
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_stickers_reply"), messageID);
+                break;
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_internet"))):
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_internet_reply"), messageID);
+                break;
+            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_others"))):
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_others_reply"), messageID);
                 break;
         }
     }
