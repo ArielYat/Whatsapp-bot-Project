@@ -11,10 +11,10 @@ export class HF {
                 if ((index <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index - 1]))) &&
                     (index + filter.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
-                        if (filters[filter].startsWith("filter_type_image"))
-                            await client.sendImage(chatID, filters[filter].replace("filter_type_image", ""), null, null, messageID);
-                        else if (filters[filter].startsWith("filter_type_video"))
-                            await client.sendVideoAsGif(chatID, filters[filter].replace("filter_type_video", ""), null, null, messageID);
+                        if (filters[filter].startsWith("image"))
+                            await client.sendImage(chatID, filters[filter].replace("image", ""), null, null, messageID);
+                        else if (filters[filter].startsWith("video"))
+                            await client.sendVideoAsGif(chatID, filters[filter].replace("video", ""), null, null, messageID);
                         else {
                             try {
                                 await client.sendReplyWithMentions(chatID, filters[filter], messageID);
@@ -51,11 +51,11 @@ export class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
         let filter = bodyText.trim(), filterReply = null, existError = null;
         if (messageType === "image") {
-            filterReply = "filter_type_image" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_image");
+            filterReply = "image" + await client.decryptMedia(message);
+            existError = HL.getGroupLang(groupsDict, chatID, "image");
         } else if (messageType === "video") {
-            filterReply = "filter_type_video" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_video");
+            filterReply = "video" + await client.decryptMedia(message);
+            existError = HL.getGroupLang(groupsDict, chatID, "video");
         } else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
@@ -101,9 +101,9 @@ export class HF {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
         let filter = bodyText.trim(), filterReply = null;
         if (messageType === "image")
-            filterReply = "filter_type_image" + await client.decryptMedia(message);
+            filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
-            filterReply = "filter_type_video" + await client.decryptMedia(message);
+            filterReply = "video" + await client.decryptMedia(message);
         else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
@@ -138,10 +138,10 @@ export class HF {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
             Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
-                if (filterReply.startsWith("filter_type_image"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
-                else if (filterReply.startsWith("filter_type_video"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
+                if (filterReply.startsWith("image"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
+                else if (filterReply.startsWith("video"))
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "video") + "\n";
                 else stringForSending += filter + " - " + filterReply + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
