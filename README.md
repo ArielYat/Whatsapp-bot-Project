@@ -158,6 +158,8 @@ translations.
 
 [@TheBooker66](https://github.com/TheBooker66) - Ethan - developing the bot and English support
 
+[@Lainad27](https://github.com/Lainad27) - Daniel - developing make message to a sticker functionality
+
 [@Arbel99](https://github.com/Arbel99) - Arbel - Latin support (whenever she feels like it)
 
 Maayan Ranson - French Support
