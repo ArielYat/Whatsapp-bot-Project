@@ -578,12 +578,16 @@ export const Strings = {
         "fr": /^Crée un autocollant *\n*/i
     }, "crop_sticker": {
         "he": /^ללא חיתוך *\n*/i, "en": /^without cropping *\n*/i, "la": null, "ar": null, "fr": /^Sans coupures *\n*/i
+    }, "high_Quality": {
+        "he": /^איכות גבוהה *\n*/i, "en": /^high Quality *\n*/i, "la": null, "ar": null, "fr": null
+    }, "medium_Quality": {
+        "he": /^איכות בינונית *\n*/i, "en": /^medium Quality *\n*/i, "la": null, "ar": null, "fr": null
     }, "not_sticker_material_error": {
-        "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון לסטיקר",
-        "en": "Idiot, a sticker has to be an image or a video",
-        "la": "Hoc non est similacrum",
+        "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון או הודעה לסטיקר",
+        "en": "Idiot, a sticker has to be an image or a video or a message",
+        "la": null,
         "ar": null,
-        "fr": "Idiot, un autocollant doit être une image ou une vidéo"
+        "fr": null
     }, "create_text_sticker": {
         "he": /^צור סטיקר טקסט *\n*/i,
         "en": /^Create text sticker *\n*/i,
