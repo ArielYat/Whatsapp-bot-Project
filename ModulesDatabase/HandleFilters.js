@@ -52,10 +52,10 @@ export class HF {
         let filter = bodyText.trim(), filterReply = null, existError = null;
         if (messageType === "image") {
             filterReply = "image" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "image");
+            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_image");
         } else if (messageType === "video") {
             filterReply = "video" + await client.decryptMedia(message);
-            existError = HL.getGroupLang(groupsDict, chatID, "video");
+            existError = HL.getGroupLang(groupsDict, chatID, "filter_type_video");
         } else if (messageType === "chat") {
             if (bodyText.includes("-")) {
                 bodyText = bodyText.split("-");
@@ -139,9 +139,9 @@ export class HF {
             let stringForSending = "";
             Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
                 if (filterReply.startsWith("image"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "image") + "\n";
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
                 else if (filterReply.startsWith("video"))
-                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "video") + "\n";
+                    stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
                 else stringForSending += filter + " - " + filterReply + "\n";
             });
             await client.reply(chatID, stringForSending, messageID);
