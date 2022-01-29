@@ -29,7 +29,7 @@ IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
-    wa.create({headless: false, useChrome: true, multiDevice: false}).then(client => start(client));
+    wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
 });
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {

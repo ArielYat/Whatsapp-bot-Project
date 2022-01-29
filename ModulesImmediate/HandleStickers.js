@@ -142,7 +142,7 @@ export class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
-                    await page.goto(`${__dirname}\\template.mhtml`);
+                    await page.goto(`file://${__dirname}//template.mhtml`);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
                         domBody.innerHTML = messageBody
