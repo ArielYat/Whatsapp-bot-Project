@@ -19,7 +19,11 @@ export const Strings = {
         "fr": "Combien de filtres vous envoyez ici les gars? Je vais dormir jusqu'à %s:%s"
     }, //filters
     "add_filter": {
-        "he": /^הוסף פילטר/i, "en": /^Add filter/i, "la": "Crea invenientem", "ar": null, "fr": /^Ajoute le filtre/i
+        "he": /^הוסף פילטר/i,
+        "en": /^Add filter/i,
+        "la": "Crea invenientem",
+        "ar": null,
+        "fr": /^Ajoute le filtre/i
     }, "add_filter_reply": {
         "he": "הפילטר %s נוסף בהצלחה",
         "en": "The filters %s has been successfully added",
@@ -86,13 +90,13 @@ export const Strings = {
         "la": /^Ostende invenientes/i,
         "ar": null,
         "fr": /^Affiche les filtres/i
-    }, "image": {
+    }, "filter_type_image": {
         "he": "[תמונה]", "en": "[Image]", "la": null, "ar": null, "fr": "[Image]"
-    }, "video": {
+    }, "filter_type_video": {
         "he": "[וידאו]", "en": "[Video]", "la": null, "ar": null, "fr": "[Video]"
     }, //tags
-    "tag": {
-        "he": /^תייג /i, "en": /^Tag /i, "la": "Clama ad ", "ar": null, "fr": /^Tag/i
+    "tag_person": {
+        "he": /^תייג/i, "en": /^Tag/i, "la": "Clama ad ", "ar": null, "fr": /^Tag/i
     }, "tag_person_doesnt_exist_error": {
         "he": "אתה בטוח שצדקת בשם? בכל מקרה האדם שניסית לתייג לא נמצא פה",
         "en": "The person you tried to tags doesn't exist",
@@ -301,6 +305,18 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Monsieur, le groupe de tags que vous avez demandé n'existe pas"
+    }, "tags_removed": {
+        "he": "התיוגים בקבוצה זו נמצאו בעייתיים. בהתאם לכך ואם לזאת, הם כולם נמחקו. יום טוב!",
+        "en": "The tags in this group has been found to be troublesome. In accordance, all the tags in this group have been deleted. Good day!",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "filter_error_removed": {
+        "he": "הפילטר היה מחובר לתיוג בעייתי לכן הוסר",
+        "en": "This filter was attached to a problematic tag and as such, was removed",
+        "la": null,
+        "ar": null,
+        "fr": null
     }, //birthdays
     "birthday_wishes_reply": {
         "he": "מזל טוב ל%s! הוא/היא בן/בת %s!",
@@ -450,7 +466,11 @@ export const Strings = {
     }, "handleTags_permission_type": {
         "he": /ניהול_תיוגים/i, "en": /handle_Tags/i, "la": null, "ar": null, "fr": /^Gérer_Tags/i
     }, "handleBirthdays_permission_type": {
-        "he": /ניהול_ימיהולדת/i, "en": /handle_Birthdays/i, "la": null, "ar": null, "fr": /^Gérer_Anniversaires/i
+        "he": /ניהול_ימיהולדת/i,
+        "en": /handle_Birthdays/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Gérer_Anniversaires/i
     }, "handleShows_permission_type": {
         "he": /ניהול_הראה/i, "en": /handle_Shows/i, "la": null, "ar": null, "fr": /^Gérer_Affiches/i
     }, "handleOther_permission_type": {
@@ -498,7 +518,7 @@ export const Strings = {
         "ar": null,
         "fr": /^Affiche les niveaux des personnes/i
     }, "mute_participant": {
-        "he": /^השתק /i, "en": /^Mute /i, "la": null, "ar": null, "fr": /^Met en sourdine/i
+        "he": /^השתק/i, "en": /^Mute/i, "la": null, "ar": null, "fr": /^Met en sourdine/i
     }, "mute_participant_reply": {
         "he": "המשתמש %s לא יכול להשתמש בפקודות יותר",
         "en": "User %s cannot use commands anymore",
@@ -506,7 +526,11 @@ export const Strings = {
         "ar": null,
         "fr": "L'utilisateur %s ne peut plus utiliser les commandes"
     }, "unmute_participant": {
-        "he": /^הסר השתקה/i, "en": /^Unmute person/i, "la": null, "ar": null, "fr": /^Réactive la personne/i
+        "he": /^הסר השתקה/i,
+        "en": /^Unmute person/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Réactive la personne/i
     }, "unmute_participant_reply": {
         "he": "המשתמש %s יכול להשתמש בפקודות שוב",
         "en": "User %S can use commands again",
@@ -525,9 +549,9 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Je ne peux pas mettre personne en sourdine, tu dois choisir quelqu'un"
-    }, //Immediate commands
+    }, //immediate commands
     "scan_link": {
-        "he": /^סרוק/i, "en": /^Scan /i, "la": /^Examina /i, "ar": null, "fr": /^Analyse /i
+        "he": /^סרוק/i, "en": /^Scan/i, "la": /^Examina/i, "ar": null, "fr": /^Analyse/i
     }, "link_validity_error": {
         "he": "חביבי, זה לא קישור תקין",
         "en": "bro that's not a valid link",
@@ -567,9 +591,9 @@ export const Strings = {
     }, "crop_sticker": {
         "he": /^ללא חיתוך/i, "en": /^without cropping/i, "la": null, "ar": null, "fr": /^Sans coupures/i
     }, "high_Quality": {
-        "he": /^איכות גבוהה/i, "en": /^high Quality/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות גבוהה/i, "en": /^High Quality/i, "la": null, "ar": null, "fr": null
     }, "medium_Quality": {
-        "he": /^איכות בינונית/i, "en": /^medium Quality/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות בינונית/i, "en": /^Medium Quality/i, "la": null, "ar": null, "fr": null
     }, "not_sticker_material_error": {
         "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון או הודעה לסטיקר",
         "en": "Idiot, a sticker has to be an image or a video or a message",
@@ -578,7 +602,7 @@ export const Strings = {
         "fr": null
     }, "create_text_sticker": {
         "he": /^צור סטיקר טקסט/i,
-        "en": "Create text sticker",
+        "en": /^Create text sticker/i,
         "la": null,
         "ar": null,
         "fr": /^Crée un autocollant de texte/i
@@ -589,7 +613,11 @@ export const Strings = {
         "ar": null,
         "fr": "Une erreur s'est produite lors de la création de votre autocollant \nVérifiez que vous avez choisi une couleur en anglais et au moins un mot"
     }, "create_survey": {
-        "he": /^צור סקר/i, "en": /^Create survey/i, "la": "Crea census", "ar": null, "fr": /^Crée un sondage/i
+        "he": /^צור סקר/i,
+        "en": /^Create survey/i,
+        "la": "Crea census",
+        "ar": null,
+        "fr": /^Crée un sondage/i
     }, "survey_title": {
         "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/, "ar": null, "fr": /Titre - (.)+/
     }, "survey_subtitle": {
@@ -641,7 +669,11 @@ export const Strings = {
         "ar": null,
         "fr": "J'ai besoin d'un titre, d'un corps et d'au moins un bouton pour faire un sondage"
     }, "check_crypto": {
-        "he": /^בדוק קריפטו/i, "en": /^Check Crypto/i, "la": null, "ar": null, "fr": /^Verifie la Crypto/i
+        "he": /^בדוק קריפטו/i,
+        "en": /^Check Crypto/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Verifie la Crypto/i
     }, "crypto_check_reply": {
         "he": "הנה השטויות שביקשת: \n %s",
         "en": "Here's the junk you requsted: \n %s",
@@ -733,7 +765,11 @@ export const Strings = {
         "ar": null,
         "fr": "Quelqu'un ici n'a pas fixé d'anniversaire :("
     }, "download_music": {
-        "he": /^הורד מוזיקה/i, "en": /^Download music/i, "la": null, "ar": null, "fr": /^Télécharge la musique/i
+        "he": /^הורד מוזיקה/i,
+        "en": /^Download music/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Télécharge la musique/i
     }, "download_music_downloading_reply": {
         "he": "מוריד...", "en": "Downloading...", "la": null, "ar": null, "fr": "Téléchargement..."
     }, "download_music_unknown_error": {
@@ -794,7 +830,11 @@ export const Strings = {
         "ar": null,
         "fr": "Je suis désolé, mais à ce jour, je ne suis toujours pas capable de deviner l'heure par moi-même \nVeuillez vérifier que vous l'avez écrite correctement"
     }, "remove_reminder": {
-        "he": /^הסר תזכורת/i, "en": /^Remove reminder/i, "la": null, "ar": null, "fr": /^Supprime le rappel/i
+        "he": /^הסר תזכורת/i,
+        "en": /^Remove reminder/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Supprime le rappel/i
     }, "remove_reminder_reply": {
         "he": "התזכורת שנקבעה לשעה %s הוסרה בהצלחה",
         "en": "The reminder set at %s has been removed",
@@ -808,28 +848,32 @@ export const Strings = {
         "ar": null,
         "fr": "Je ne parviens toujours pas à supprimer des rappels qui n'ont jamais été définis"
     }, "show_reminders": {
-        "he": /^הראה תזכורות/i, "en": /^Show reminders/i, "la": null, "ar": null, "fr": /^Affiche les rappels/i
+        "he": /^הראה תזכורות/i,
+        "en": /^Show reminders/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Affiche les rappels/i
     }, "show_reminder_error": {
         "he": "אין לך תזכורות פעילות",
         "en": "You don't have any active reminders",
         "la": null,
         "ar": null,
         "fr": "Vous n'avez aucun rappel actif"
-    }, "repeatReminder": {
+    }, "repeat_reminder": {
         "he": /^חוזרת/i, "en": /Repeat/i, "la": null, "ar": null, "fr": /Répète/i
-    }, "Sunday": {
+    }, "day_Sunday": {
         "he": /ליום ראשון/i, "en": /Sunday/i, "la": null, "ar": null, "fr": /Dimanche/i
-    }, "Monday": {
+    }, "day_Monday": {
         "he": /ליום שני/i, "en": /Monday/i, "la": null, "ar": null, "fr": /Lundi/i
-    }, "Tuesday": {
+    }, "day_Tuesday": {
         "he": /ליום שלישי/i, "en": /Tuesday/i, "la": null, "ar": null, "fr": /Mardi/i
-    }, "Wednesday": {
+    }, "day_Wednesday": {
         "he": /ליום רביעי/i, "en": /Wednesday/i, "la": null, "ar": null, "fr": /Mercredi/i
-    }, "Thursday": {
+    }, "day_Thursday": {
         "he": /ליום חמישי/i, "en": /^Thursday/i, "la": null, "ar": null, "fr": /Jeudi/i
-    }, "Friday": {
+    }, "day_Friday": {
         "he": /ליום שישי/i, "en": /^Friday/i, "la": null, "ar": null, "fr": /Vendredi/i
-    }, "Saturday": {
+    }, "day_Saturday": {
         "he": /ליום שבת/i, "en": /^Saturday/i, "la": null, "ar": null, "fr": /^Samedi/i
     },//language
     "change_language": {
@@ -850,7 +894,7 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Seuls l'hébreu, l'anglais, le latin et le français sont actuellement pris en charge par le bot"
-    }, "help": {
+    }, "help_me_pwease": {
         "he": /^עזרה/i, "en": /^Help/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide/i
     }, "help_general": {
         "he": /^עזרה$/i, "en": /^Help$/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide$/i
@@ -861,16 +905,32 @@ export const Strings = {
     }, "help_tags": {
         "he": /^עזרה תיוגים$/i, "en": /^Help tags$/i, "la": null, "ar": null, "fr": /^Aide tags$/i
     }, "help_birthdays": {
-        "he": /^עזרה ימי הולדת$/i, "en": /^Help birthdays$/i, "la": null, "ar": null, "fr": /^Aide anniversaires$/i
+        "he": /^עזרה ימי הולדת$/i,
+        "en": /^Help birthdays$/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Aide anniversaires$/i
     }, "help_permissions": {
-        "he": /^עזרה הרשאות$/i, "en": /^Help permissions$/i, "la": null, "ar": null, "fr": /^Aide niveaux$/i
+        "he": /^עזרה הרשאות$/i,
+        "en": /^Help permissions$/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Aide niveaux$/i
     }, "help_reminders": {
-        "he": /^עזרה תזכורות$/i, "en": /^Help reminders$/i, "la": null, "ar": null, "fr": /^Aide rappels$/i
-    }, "help_immediate": {
+        "he": /^עזרה תזכורות$/i,
+        "en": /^Help reminders$/i,
+        "la": null,
+        "ar": null,
+        "fr": /^Aide rappels$/i
+    }, "help_stickers": {
+        "he": /^עזרה סטיקרים$/i, "en": /^Help sticker$/i, "la": null, "ar": null, "fr": null
+    }, "help_internet": {
+        "he": /^עזרה אינטרנט$/i, "en": /^Help internet$/i, "la": null, "ar": null, "fr": null
+    }, "help_others": {
         "he": /^עזרה אחר$/i, "en": /^Help others$/i, "la": null, "ar": null, "fr": /^Aide autre$/i
     }, "help_general_reply": {
-        "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן (972543293155) ואיתן עמירן (972586809911)\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
-        "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help other"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan (972543293155) and Ethan Amiran (972586809911)\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
+        "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן (972543293155) ואיתן עמירן (972586809911)\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
+        "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help stickers", "Help internet", "Help others"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan (972543293155) and Ethan Amiran (972586809911)\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "la": ``,
         "ar": ``,
         "fr": `_*Liste des commandes en français et aide générale*_\nSi vous souhaitez obtenir de l'aide concernant une commande spécifique, essayez l'une des options suivantes:\n"Aide langue", "Aide filtres", "Aide tags", "Aide anniversaires", "Aide niveaux " "Aide rappels", "Aide autre"\nSi ce n'est pas le cas, et que vous vouliez simplement voir ce message, n'hésitez pas à rester! \nDéveloppé et maintenu par Ariel Yatskan (972543293155) et Ethan Amiran (972586809911)\nLe référentiel GitHub (le code), pour les curieux: https://github.com/ArielYat/Whatsapp-bot-Project`
@@ -910,12 +970,24 @@ export const Strings = {
         "la": ``,
         "ar": ``,
         "fr": `Rappels:\n_Toutes les commandes liées aux rappels ne fonctionnent que dans un chat privé avec le bot_\n_Les rappels peuvent être du texte, des images ou des vidéos_\nLa date est facultative (si aucune date n'est saisie, l'hypothèse est que le rappel est pour la même date que celle à laquelle le message a été écrit) et peut inclure ou non une année\n- "Ajoute un rappel [Répète] [date/jour de la semaine] [heure] [texte]" - ajoute un rappel à l'auteur du message\n  - Par exemple: Ajoute un rappel Répète 2.5.2023 7:34 Promener le chat\n  - Par exemple: Ajoute un rappel Mercredi 16:52 Promener le chat\n  - Le paramètre facultatif "répète" crée un rappel répétitif tous les jours à partir de la première date spécifiée à l'heure spécifiée\n- "Supprime le rappel [date] [heure]" - supprime le rappel défini à l'heure spécifiée\n  - Par exemple: Supprime le rappel 7:34\n- "Affiche les rappels" - Affiche les rappels de l'auteur du message`
-    }, "help_immediate_reply": {
-        "he": `פקודות נוספות:\n- "הפוך לסטיקר [ללא חיתוך]" - הופך הודעת מדיה או הודעה לסטיקר ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - "ללא חיתוך" הוא פרמטר אופציונלי, הוא יוצר סטיקר לא חתוך\n- "צור סטיקר טקסט [צבע באנגלית] - [טקסט]" - יוצר סטיקר בעל רקע שקוף מהטקסט שניתן\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת\n- "פרופיל" - מראה את המידע של הבוט על כותב ההודעה\n- "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה)\n- יצירת סקר של וואטסאפ:\n- "צור סקר\nכותרת - [כותרת סקר]  \nכותרת משנה - [כותרת משנה]  \nכותרת שלישית - [כותרת שלישית]  \nכפתור 1 - [אופציה ראשונה]  \nכפתור 2 - [אופציה שנייה]  \nכפתור 3 - [אופציה שלישית]"  \n  - (הכותרת השלישית והכפתורים השני והשלישי אופציונליים)`,
-        "en": `Miscellaneous Commands:\n- "Create sticker [without cropping]" - creates a sticker out of a media file or a message and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - "without cropping" is an optional parameter which creates the sticker without cropping it\n- "Create text sticker [colour] - [text]" - creates a sticker without a background with the given text\n  - If the parameter "colour" isn't given, the default is black \n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message\n- "Profile" - shows the bot's information about the message's author\n- "Send link" - sends a link to the bots webpage (work in progress)\n- Create a WhatsApp survey:\n- "Create survey\n    Title - [survey title]\n    Subtitle - [survey subtitle]\n    Third Title - [third title]\n    Button 1 - [first option]\n    Button 2 - [second option]\n    Button 3 - [third option]"\n  - (The third title and buttons 1 and 2 aren't required)`,
+    }, "help_stickers_reply": {
+        "he": `פקודות סטיקרים:\n- "הפוך לסטיקר [ללא חיתוך] [איכות גבוהה/איכות בינונית]" - הופך הודעה או מדיה לסטיקר ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - "ללא חיתוך" הוא פרמטר אופציונלי, הוא יוצר סטיקר לא חתוך\n  - "איכות גבוהה" ו"איכות בינונית" הם פרמטרים אופציונליים להכנה סטיקר מהודעה ששולטים על איכות התמונה; ברירת המחדל היא איכות בינונית\n- "צור סטיקר טקסט [צבע באנגלית] - [טקסט]" - יוצר סטיקר בעל רקע שקוף מהטקסט שניתן\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור`,
+        "en": `Sticker Commands:\n- "Create sticker [without cropping] [High Quality/Medium Quality]" - creates a sticker out of a message or a media file and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - "without cropping" is an optional parameter which creates the sticker without cropping it\n  - "High Quality" and "Medium Quality" and option parameter which control the sticker's resolution; the default is medium quality\n- "Create text sticker [colour] - [text]" - creates a sticker without a background with the given text\n  - If the parameter "colour" isn't given, the default is black`,
         "la": ``,
         "ar": ``,
-        "fr": `Commandes diverses:\n- "Crée un autocollant [sans coupures]" - crée un autocollant à partir d'un fichier multimédia et l'envoie\n  - Cette commande peut être utilisée dans le message dans lequel le media a été envoyé et en réponse à celui-ci \n  - "sans coupures" est un paramètre facultatif qui crée l'autocollant sans le recadrer\n- "Crée un autocollant de texte [couleur en anglais] - [texte]" - crée un autocollant sans fond avec le texte donné\n  - Si le paramètre "couleur en anglais" n'est pas donné, la couleur sera noir par défaut\n- "Vérifie le Crypto" - envoie un message avec les taux de change de dix crypto-monnaies différentes par rapport au dollar\n- "Définition Internet [Mot en anglais] " - recherche le mot sur le site Web Urban Dictionary et renvoie le résultat de la recherche\n  - Par exemple: définition Internet chaise\n- "Traduis en [Code de la langue] [mots]" - traduit les mots dans la langue donnée via Google Traduction \n  - Par exemple: Traduis en Hebreux Chaise\n- "Télécharge musique [lien vers youtube]" - télécharge une chanson depuis youtube et l'envoie en tant que message vocal\n- "Analyse [lien]" - analyse le lien donné à la recherche de virus\n  - Par exemple: Analyse https://www.google.com/\n  - Les liens peuvent être analysé dans le message dans lequel la commande est envoyée ou dans un message entre guillemets\n- "Profil" - affiche les informations du bot sur l'auteur du message\n  - "Envoie le lien" - envoie un lien vers la page Web des bots (travail en cours)\n- Crée un sondage:\n- "Crée un sondage\n Titre - [titre du sondage]\n Deuxième titre - [Deuxième titre du sondage]\n Troisième titre - [troisième titre]\n Bouton 1 - [première option]\n Bouton 2 - [deuxième option]\n Bouton 3 - [troisième option]"\n - (Le troisième titre et les boutons 1 et 2 ne sont pas obligatoire)`
+        "fr": `Commandes diverses:\n- "Crée un autocollant [sans coupures]" - crée un autocollant à partir d'un fichier multimédia et l'envoie\n  - Cette commande peut être utilisée dans le message dans lequel le media a été envoyé et en réponse à celui-ci \n  - "sans coupures" est un paramètre facultatif qui crée l'autocollant sans le recadrer\n- "Crée un autocollant de texte [couleur en anglais] - [texte]" - crée un autocollant sans fond avec le texte donné\n  - Si le paramètre "couleur en anglais" n'est pas donné, la couleur sera noir par défaut`
+    }, "help_internet_reply": {
+        "he": `פקודות אינטרנט:\n_יש לכל הפקודות האלו מגבלה יומית מסויימת_\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת`,
+        "en": `Internet Commands:\n_All of the commands below have a certain daily limit_\n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message`,
+        "la": ``,
+        "ar": ``,
+        "fr": `Commandes diverses:\n- "Vérifie le Crypto" - envoie un message avec les taux de change de dix crypto-monnaies différentes par rapport au dollar\n- "Définition Internet [Mot en anglais] " - recherche le mot sur le site Web Urban Dictionary et renvoie le résultat de la recherche\n  - Par exemple: définition Internet chaise\n- "Traduis en [Code de la langue] [mots]" - traduit les mots dans la langue donnée via Google Traduction \n  - Par exemple: Traduis en Hebreux Chaise\n- "Télécharge musique [lien vers youtube]" - télécharge une chanson depuis youtube et l'envoie en tant que message vocal\n- "Analyse [lien]" - analyse le lien donné à la recherche de virus\n  - Par exemple: Analyse https://www.google.com/\n  - Les liens peuvent être analysé dans le message dans lequel la commande est envoyée ou dans un message entre guillemets`
+    }, "help_others_reply": {
+        "he": `פקודות נוספות:\n- "פרופיל" - מראה את המידע של הבוט על כותב ההודעה\n- "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה)\n- יצירת סקר של וואטסאפ:\n- "צור סקר\nכותרת - [כותרת סקר]  \nכותרת משנה - [כותרת משנה]  \nכותרת שלישית - [כותרת שלישית]  \nכפתור 1 - [אופציה ראשונה]  \nכפתור 2 - [אופציה שנייה]  \nכפתור 3 - [אופציה שלישית]"  \n  - (הכותרת השלישית והכפתורים השני והשלישי אופציונליים)`,
+        "en": `Miscellaneous Commands:\n- "Send link" - sends a link to the bots webpage (work in progress)\n- Create a WhatsApp survey:\n- "Create survey\n    Title - [survey title]\n    Subtitle - [survey subtitle]\n    Third Title - [third title]\n    Button 1 - [first option]\n    Button 2 - [second option]\n    Button 3 - [third option]"\n  - (The third title and buttons 1 and 2 aren't required)`,
+        "la": ``,
+        "ar": ``,
+        "fr": `Commandes diverses:\n- "Profil" - affiche les informations du bot sur l'auteur du message\n  - "Envoie le lien" - envoie un lien vers la page Web des bots (travail en cours)\n- Crée un sondage:\n- "Crée un sondage\n Titre - [titre du sondage]\n Deuxième titre - [Deuxième titre du sondage]\n Troisième titre - [troisième titre]\n Bouton 1 - [première option]\n Bouton 2 - [deuxième option]\n Bouton 3 - [troisième option]"\n - (Le troisième titre et les boutons 1 et 2 ne sont pas obligatoire)`
     }, "help_reply_old": {
         "he_old": `*הוראות בעברית*\n _שפה_: \n - "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות \n לדוגמה: שנה שפה לאנגלית \n  אפשר להשתמש בפקודה הזו בכל שפה\nשפות שנתמכות כעת: עברית, אנגלית ולטינית  \n  \n _פילטרים_: \n- "הוסף פילטר [פילטר] - [תגובת הבוט]" - מוסיף פילטר לקבוצה  \n לדוגמה: הוסף פילטר אוכל - בננה \n  אפשר להוסיף פילטר של טקסט, תמונה או סרטון\n- "הסר פילטר [פילטר]" - מסיר את הפילטר המצויין מהקבוצה  \n לדוגמה: הסר פילטר אוכל \n- "ערוך פילטר [פילטר קיים] - [תשובה חדשה]" - עורך פילטר קיים בקבוצה  \n לדוגמה: ערוך פילטר אוכל - אפרסק \n- "הראה פילטרים" - מציג את רשימת הפילטרים הקיימים כעת בקבוצה  \n  \n _תיוגים_: \n- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו  \n לדוגמה: תייג יוסי \n- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי]" - מוסיף אדם לתיוג בקבוצה  \n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 \n- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה  \n לדוגמה: הסר חבר מתיוג יוסי \n- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה  \n- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים לתיוג שמוגדרים בקבוצה  \n  - "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים\n  - "נקה תיוגיי" - מנקה את התיוגים השמורים של כותב ההודעה\n  \n _ימי הולדת_: \n  - "הוסף יום הולדת - [תאריך מנוקד בפורמט בינלאומי הפוך]" - מוסיף יום הולדת לכותב ההודעה\n  לדוגמה: הוסף יום הולדת 1.11.2011\n  - "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n  - "הוסף קבוצה להודעת יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הסר קבוצה מהודעת יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n  \n  _הרשאות והשתקות_:\n  - "קבע הרשאה ל[סוג הרשאה] - [מספר מ־0 עד 2]" - קובע את רמה ההרשאה הנדרשת לסוג פקודות מסוים\n  לדוגמה: קבע הרשאה לפילטרים - רגיל\n  סוגי ההרשאות: פילטרים, תיוגים, טיפול-פילטרים, טיפול-תיוגים, טיפול-ימיהולדת, טיפול-הראה, טיפול-שונות\n  רמות הרשאה אפשריות: מושתק, רגיל ומנהל\n  - "השתק [תיוג של אדם]" - משתיק את האדם המתוייג כך שלא יוכל להשתמש בפקודות\n  לדוגמה: השתק @יוסי\n  - "הסר השתקה [תיוג של אדם]" - מבטל את ההשתקה של האדם המתוייג\n  לדוגמה: בטל השתקה @יוסי\n  - "הראה הרשאות פונקציות" - מציג את רמות ההרשאות של סוגי הפקודות השונים\n  - "הראה הרשאות אנשים" - מציג את רמות ההרשאות של האנשים בקבוצה\n  \n _פונקציות נוספות_ \n - "הפוך לסטיקר [ללא חיתוך/-]" - הופך הודעת מדיה לסטיקר ושולח אותו \n ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה \n  ללא חיתוך הוא פרמטר שלא חייבים לשים, הוא יוצר סטיקר לא חתוך\n  - "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n  - "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  לדוגמה: הגדרת אינטרנט Chair\n  - "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  לדוגמה: תרגם לאנגלית כיסא\n  בתרגום ניתן לכתוב רק משפט אחד בגלל מגבלות של גוגל תרגום\n  - "סרוק [קישור]" - סורק קישור לוירוסים\n  לדוגמה: סרוק https://www.google.com/\n - "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה) \n  - יצירת סקר של וואטסאפ:\n "צור סקר \n כותרת - [כותרת סקר] \n כותרת משנה - [כותרת משנה] \n כותרת שלישית - [כותרת שלישית] \n כפתור 1 - [אופציה ראשונה] \n כפתור 2 - [אופציה שנייה] \n כפתור 3 - [אופציה שלישית]" \n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) \n  \n _טיפ מיוחד!_ \n בהוספת פילטר אפשר גם להשתמש ב[שם] בשביל לתייג מישהו כשהפילטר נקרא \n  לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי כשנאמר "אוכל"\n\n  _קרדיטים_\n  מפותח ומתוחזק על ידי אריאל יצקן (@972543293155) ואיתן עמירן (@972586809911)\n  קישור ל־Github Repository, לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en_old": `*English Instructions* \n  _Language_:\n  - "Change language to [language]" - changes the language the bot receives and sends messages in\n  For example: Change language to Hebrew\n  This command can be used at all times in every language\n  Languages currently supported: Hebrew, English & Latin\n  \n  _Filters_:\n  - "Add filter [filter] - [bot reply]" - adds a filter to the group\n  For example: Add filter food - banana\n  Filters can be text, an image or a video\n  - "Remove filter [filter]" - removes the specified filter from the group\n  For example: Remove filter food\n  - "Edit filter [existing filter] - [new reply]" - edits the specified filter\n  For example: Edit filter food - peach\n  - "Show filters" - displays the list of all filter and their replies in the group\n  \n  _Tags_:\n  - "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone\n  For example: Tag Joseph\n  - "Add tag buddy [name] - [phone number in international format]" - adds the person to the list of taggable people\n  For example: Add tagging buddy Joseph - 972501234567\n  - "Remove tag buddy [name]" - removes the person from the list of taggable people\n  For example: Remove tagging buddy Joseph\n  - "Tag everyone" - tags all people in the group\n  - "Show tag buddies" - displays the list of all taggable people in the group\n  - "Check where I've been tagged" - shows the last message in which the message author's been tagged, can be used multiple times\n  - "Clear my tags" - clears the saved tags of the message's author\n  \n  _Birthdays_:\n  - "Add birthday [date in reverse international format with periods]" - adds a birthday for message's author\n  For example: Add birthday 1.11.2011\n  - "Remove birthday" - removes the author's birthday\n  - "Add group to birthday message" - adds the group the message was sent in to the author's birthday message broadcast\n  - "Remove group from birthday message" - removes the group the message was sent in from the author's birthday message broadcast\n  -"Show birthdays" - displays the birthdays of the group members  \n  \n  _Permissions & Muting_:\n  "Define permission for [permission type] - [number from 0 to 2]" - defines the permission level required for a certain type of commands\n  For example: Define permission filters - Regular\n  Permission types: filters, tags, handle-Filters, handle-Tags, handle-Birthdays, handle-Shows, handle-Other\n  Permission levels: Muted, Regular & Admin\n  - "Mute [person tag]" - mutes the tagged person so they aren't able to use commands\n  For example: Mute @Joseph\n  - "Unmute person [person tag]" - unmutes the tagged person\n  For example: Unmute @Joseph  \n  - "Show function permissions" - displays the permission levels of the different types of commands\n  - "Show people permissions" - displays the permission levels of the people in the group\n  \n  _Miscellaneous_:\n  - "Create sticker [without cropping/-]" - creates a sticker out of a media file and sends it\n  This command can be used in the message the media was sent in and as a reply to it\n  "without cropping" is an optional parameter which creates the sticker without cropping it  \n  - "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n  - "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result\n  For example: Internet definition chair\n  - "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  For example: Translate to Hebrew chair\n  In the translation text only one sentence can be written due to Google Translate restrictions\n  - "Scan [link]" - scans the given link for viruses\n  For example: Scan https://www.google.com/\n  - "Send link" - sends a link to the bots webpage (work in progress)\n  - Create a WhatsApp survey:\n  "Create survey\n  Title - [survey title]\n  Subtitle - [survey subtitle]\n  Third Title - [third title]\n  Button 1 - [first option]\n  Button 2 - [second option]\n  Button 3 - [third option]"\n  (The third title and buttons 1 and 2 aren't required)\n    \n  _Special tip!_\n  When adding a filter you can use [name] to tag someone when the filter is invoked\n  For example: "Add filter food - [Joseph]" will make the bot tag Joseph whenever "food" is said\n  \n  _Deletion from the database_\n  - "Delete this group from the database" - deletes all of the group's information from the database\n  - "Delete me from the database" - deletes all of the author's information from the database\n  *Use these commands with caution, their effects are irreversible*\n  \n  _Credits_\n  Developed and maintained by Ariel Yatskan (@972543293155) and Ethan Amiran (@972586809911)\n  The GitHub repository, for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`

@@ -1,5 +1,5 @@
 import {HDB} from "./HandleDB.js";
-
+let startupDate = new Date();
 export class HAF {
      static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
         const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
@@ -60,7 +60,17 @@ export class HAF {
         const userAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
         const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
         const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length).toString();
-        await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}`, messageID);
+        const currentDate = new Date();
+        const passedTimeDate = new Date(currentDate - startupDate);
+        const passedTimePassed = (passedTimeDate.getFullYear() - 1970).toString() + " ימים, "
+            + passedTimeDate.getUTCHours().toString() + " שעות, "
+            + passedTimeDate.getUTCMinutes().toString() + " דקות, "
+            + passedTimeDate.getUTCSeconds().toString() + " שניות";
+        const passedTime = "עבר מאז ההדלקה: " + passedTimePassed;
+        const currentGroups = await client.getAllChats();
+        const currentGroupsAmounts = "כמות צאטים נוכחית: " + (currentGroups.length).toString();
+
+        await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}\n${passedTime}\n${currentGroupsAmounts}`, messageID);
     }
 
     // noinspection JSUnusedLocalSymbols

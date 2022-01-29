@@ -14,7 +14,11 @@ export class HB {
                     personTag = "@" + personTag.replace("@c.us", "");
                     let stringForSending = HL.getGroupLang(groupsDict, usersDict[person].birthDayGroups[group].groupID,
                         "birthday_wishes_reply", personTag, age)
-                    await client.sendTextWithMentions(usersDict[person].birthDayGroups[group].groupID, stringForSending)
+                    try {
+                        await client.sendTextWithMentions(usersDict[person].birthDayGroups[group].groupID, stringForSending)
+                    } catch (e) {
+                        console.log("error occurred during sending birthday");
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import pkg from 'canvas';
 
-const {createCanvas, loadImage} = pkg;
+const {createCanvas, loadImage, Image} = pkg;
 import puppeteer from "puppeteer";
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
@@ -182,41 +182,29 @@ export class HSt {
             console.log("error occurred at sticker making")
         }
     }
+
     static async createTextSticker(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
-        let color;
-        let word;
-        if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
-            bodyText = bodyText.split("-");
-            color = bodyText[0].trim();
-            word = bodyText[1].trim();
-        } else {
-            color = "black";
-            word = bodyText.trim();
-        }
-
-        const canvas = createCanvas(150, 150);
-        let drawingBoard = canvas.getContext("2d");
+        const canvas = createCanvas(150, 150), drawingBoard = canvas.getContext("2d"),
+            [color, text] = await this.setColorAndText(bodyText);
         try {
-            let lainadIndex = 0;
-            let words = word.split(" ");
-            let finalWord = "";
+            let lainadIndex = 0, words = text.split(" "), finalWord = "";
             //written by Laniad27
             while (lainadIndex !== words.length) {
                 if (drawingBoard.measureText(words.slice(0, lainadIndex + 1).join(' ')).width > 100) {
                     if (lainadIndex === 0) {
-                        finalWord += words.slice(0, 1).join(' ') + '\n'
-                        words = words.slice(lainadIndex + 1)
+                        finalWord += words.slice(0, 1).join(' ') + '\n';
+                        words = words.slice(lainadIndex + 1);
                     } else {
-                        finalWord += words.slice(0, lainadIndex).join(' ') + '\n'
-                        words = words.slice(lainadIndex)
+                        finalWord += words.slice(0, lainadIndex).join(' ') + '\n';
+                        words = words.slice(lainadIndex);
                     }
-                    lainadIndex = -1
+                    lainadIndex = -1;
                 }
-                lainadIndex++
+                lainadIndex++;
             }
-            finalWord += words.join(' ')
-            drawingBoard.font = `16px sans serif`
+            finalWord += words.join(' ');
+            drawingBoard.font = `16px Sans serif`;
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
             drawingBoard.fillText(finalWord, 75, 75);
@@ -224,5 +212,18 @@ export class HSt {
         } catch (err) {
             await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
         }
+    }
+
+    static async setColorAndText(bodyText) {
+        let color, text;
+        if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
+            bodyText = bodyText.split("-");
+            color = bodyText[0].trim();
+            text = bodyText[1].trim();
+        } else {
+            color = "black";
+            text = bodyText.trim();
+        }
+        return [color, text];
     }
 }
