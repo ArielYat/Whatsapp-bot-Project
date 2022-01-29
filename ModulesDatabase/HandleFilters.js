@@ -20,7 +20,6 @@ export class HF {
                         else {
                             try {
                                 await client.sendReplyWithMentions(chatID, filters[filter], messageID);
-                                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed44"), messageID);
                             } catch (e) {
                                 console.log("error occurred on filter reply");
                                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
