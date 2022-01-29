@@ -291,7 +291,7 @@ function start(client) {
     });
     //Check every module every time a message is received
     client.onMessage(async message => {
-        if (message != null) {
+        if (message !== null) {
             const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
             //Define quotedMsgID properties depending on if a message was quoted
             const quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
