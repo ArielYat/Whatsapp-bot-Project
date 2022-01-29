@@ -579,9 +579,9 @@ export const Strings = {
     }, "crop_sticker": {
         "he": /^ללא חיתוך *\n*/i, "en": /^without cropping *\n*/i, "la": null, "ar": null, "fr": /^Sans coupures *\n*/i
     }, "high_Quality": {
-        "he": /^איכות גבוהה *\n*/i, "en": /^high Quality *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות גבוהה *\n*/i, "en": /^High Quality *\n*/i, "la": null, "ar": null, "fr": null
     }, "medium_Quality": {
-        "he": /^איכות בינונית *\n*/i, "en": /^medium Quality *\n*/i, "la": null, "ar": null, "fr": null
+        "he": /^איכות בינונית *\n*/i, "en": /^Medium Quality *\n*/i, "la": null, "ar": null, "fr": null
     }, "not_sticker_material_error": {
         "he": "טיפש אי אפשר להפוך משהו שהוא לא תמונה או סרטון או הודעה לסטיקר",
         "en": "Idiot, a sticker has to be an image or a video or a message",
@@ -917,9 +917,9 @@ export const Strings = {
         "ar": null,
         "fr": /^Aide rappels$ *\n*/i
     }, "help_stickers": {
-        "he": /^עזרה סטיקרים$ *\n*/i, "en": /^Help sticker$ *\n*/i, "la": null, "ar": null, "fr": /^Aide autre$ *\n*/i
+        "he": /^עזרה סטיקרים$ *\n*/i, "en": /^Help sticker$ *\n*/i, "la": null, "ar": null, "fr": null
     }, "help_internet": {
-        "he": /^עזרה אינטרנט$ *\n*/i, "en": /^Help internet$ *\n*/i, "la": null, "ar": null, "fr": /^Aide autre$ *\n*/i
+        "he": /^עזרה אינטרנט$ *\n*/i, "en": /^Help internet$ *\n*/i, "la": null, "ar": null, "fr": null
     }, "help_others": {
         "he": /^עזרה אחר$ *\n*/i, "en": /^Help others$ *\n*/i, "la": null, "ar": null, "fr": /^Aide autre$ *\n*/i
     }, "help_general_reply": {
@@ -965,8 +965,8 @@ export const Strings = {
         "ar": ``,
         "fr": `Rappels:\n_Toutes les commandes liées aux rappels ne fonctionnent que dans un chat privé avec le bot_\n_Les rappels peuvent être du texte, des images ou des vidéos_\nLa date est facultative (si aucune date n'est saisie, l'hypothèse est que le rappel est pour la même date que celle à laquelle le message a été écrit) et peut inclure ou non une année\n- "Ajoute un rappel [Répète] [date/jour de la semaine] [heure] [texte]" - ajoute un rappel à l'auteur du message\n  - Par exemple: Ajoute un rappel Répète 2.5.2023 7:34 Promener le chat\n  - Par exemple: Ajoute un rappel Mercredi 16:52 Promener le chat\n  - Le paramètre facultatif "répète" crée un rappel répétitif tous les jours à partir de la première date spécifiée à l'heure spécifiée\n- "Supprime le rappel [date] [heure]" - supprime le rappel défini à l'heure spécifiée\n  - Par exemple: Supprime le rappel 7:34\n- "Affiche les rappels" - Affiche les rappels de l'auteur du message`
     }, "help_stickers_reply": {
-        "he": `פקודות סטיקרים:\n- "הפוך לסטיקר [ללא חיתוך]" - הופך הודעת מדיה לסטיקר ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - "ללא חיתוך" הוא פרמטר אופציונלי, הוא יוצר סטיקר לא חתוך\n- "צור סטיקר טקסט [צבע באנגלית] - [טקסט]" - יוצר סטיקר בעל רקע שקוף מהטקסט שניתן\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור\n- "צור סטיקר משולב [צבע באנגלית] - [טקסט]" - הופך הודעת מדיה לסטיקר, כותב את הטקסט מעליה ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור`,
-        "en": `Sticker Commands:\n- "Create sticker [without cropping]" - creates a sticker out of a media file and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - "without cropping" is an optional parameter which creates the sticker without cropping it\n- "Create text sticker [colour] - [text]" - creates a sticker without a background with the given text\n  - If the parameter "colour" isn't given, the default is black\n- "Create combined sticker [colour] - [text]" - creates a sticker out of a media file, write the text on top of it and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - If the parameter "colour" isn't given, the default is black`,
+        "he": `פקודות סטיקרים:\n- "הפוך לסטיקר [ללא חיתוך] [איכות גבוהה/איכות בינונית]" - הופך הודעה או מדיה לסטיקר ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - "ללא חיתוך" הוא פרמטר אופציונלי, הוא יוצר סטיקר לא חתוך\n  - "איכות גבוהה" ו"איכות בינונית" הם פרמטרים אופציונליים להכנה סטיקר מהודעה ששולטים על איכות התמונה; ברירת המחדל היא איכות בינונית\n- "צור סטיקר טקסט [צבע באנגלית] - [טקסט]" - יוצר סטיקר בעל רקע שקוף מהטקסט שניתן\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור\n- "צור סטיקר משולב [צבע באנגלית] - [טקסט]" - הופך הודעת מדיה לסטיקר, כותב את הטקסט מעליה ושולח אותו\n  - ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה\n  - אם הפרטמר "צבע באנגלית" לא ניתן, ברירת המחדל תהיה שחור`,
+        "en": `Sticker Commands:\n- "Create sticker [without cropping] [High Quality/Medium Quality]" - creates a sticker out of a message or a media file and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - "without cropping" is an optional parameter which creates the sticker without cropping it\n  - "High Quality" and "Medium Quality" and option parameter which control the sticker's resolution; the default is medium quality\n- "Create text sticker [colour] - [text]" - creates a sticker without a background with the given text\n  - If the parameter "colour" isn't given, the default is black\n- "Create combined sticker [colour] - [text]" - creates a sticker out of a media file, write the text on top of it and sends it\n  - This command can be used in the message the media was sent in and as a reply to it\n  - If the parameter "colour" isn't given, the default is black`,
         "la": ``,
         "ar": ``,
         "fr": `Commandes diverses:\n- "Crée un autocollant [sans coupures]" - crée un autocollant à partir d'un fichier multimédia et l'envoie\n  - Cette commande peut être utilisée dans le message dans lequel le media a été envoyé et en réponse à celui-ci \n  - "sans coupures" est un paramètre facultatif qui crée l'autocollant sans le recadrer\n- "Crée un autocollant de texte [couleur en anglais] - [texte]" - crée un autocollant sans fond avec le texte donné\n  - Si le paramètre "couleur en anglais" n'est pas donné, la couleur sera noir par défaut`
