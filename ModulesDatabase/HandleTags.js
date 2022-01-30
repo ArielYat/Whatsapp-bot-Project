@@ -10,7 +10,7 @@ export class HT {
         for (const tag in tags) {
             if (bodyText.includes(tag)) {
                 const index = bodyText.indexOf(tag);
-                if ((index <= 0 || ((/(?![ולשמבה])\s/).test(bodyText[index - 1]))) &&
+                if ((index <= 0 || ((/[\s|,ו]/).test(bodyText[index - 1]))) &&
                     (index + tag.length >= bodyText.length || ((/\s/).test(bodyText[index + tag.length])))) {
                     counter += 1;
                     if (typeof (tags[tag]) === "object") {
@@ -99,7 +99,8 @@ export class HT {
                     groupsDict[chatID].personsIn = ["delete", person[1].personID];
                 });
             });
-            console.log("error occurred at tagging everyone")
+            console.log("error occurred at tagging everyone");
+            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "personIn_removed_problematic_error"), quotedMsgID);
         }
     }
 

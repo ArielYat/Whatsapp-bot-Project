@@ -311,6 +311,12 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Les tags de ce groupe se sont avérés gênants. Conformément, tout les tags de ce groupe ont été supprimés. Bonne journée"
+    }, "personIn_removed_problematic_error": {
+        "he": "רשימת האנשים בקבוצה זו נמחקה. תאשימו את החזירים הקפיטליסטים",
+        "en": "The list of people in this group has been deleted. Blame the Capitalist pigs",
+        "la": null,
+        "ar": null,
+        "fr": null
     }, "filter_removed_problematic_tag_error": {
         "he": "הפילטר היה מחובר לתיוג בעייתי לכן הוסר",
         "en": "This filter was attached to a problematic tag and as such, was removed",

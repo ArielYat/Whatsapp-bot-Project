@@ -26,7 +26,7 @@ export class HURL {
                             if (err)
                                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_upload_error"), messageID);
                             else if (res) {
-                                sleep(1000 * 60);
+                                sleep(1000 * 90);
                                 const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
                                 const newHashed = id.match("-(.)+-")[0].replace(/-/g, "");
                                 defaultTimedInstance.urlLookup(newHashed, function (err, res) {
