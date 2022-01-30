@@ -257,9 +257,9 @@ function start(client) {
                 if (reminder.toString() === date.toString()) {
                     const oldReminder = person.reminders[reminder];
                     const reminderDate = new Date(reminder);
-                    const repeat = !!oldReminder.startsWith("repeat_reminder");
-                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeat_reminder\d/)[0].replace("repeat_reminder", "")) : null;
-                    let stringForSending = repeat ? oldReminder.replace(/repeat_reminder\d/, "") : oldReminder;
+                    const repeat = !!oldReminder.startsWith("repeatReminder");
+                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")) : null;
+                    let stringForSending = repeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
                             await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
