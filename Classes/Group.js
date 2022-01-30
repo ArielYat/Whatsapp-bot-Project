@@ -73,7 +73,7 @@ export class Group {
         if (authorArray[0] === "add")
             this.#personsIn.push(authorArray[1]);
         else if (authorArray[0] === "delete")
-            delete this.#personsIn[authorArray[1]];
+            this.#personsIn.splice(this.#personsIn.indexOf(authorArray[1]), 1);
     }
 
     get groupLanguage() {

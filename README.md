@@ -8,11 +8,11 @@
   - For example: Change language to Hebrew.
   - This command can be used at all times in every language.
   - Languages currently supported: Hebrew, English, Arabic, French. Latin is semisupported.
-- `Help` - shows the help message, which lists all the commands (except those available only to admins).
+- `Help [null|language|filters|tags|birthdays|permissions|reminders|stickers|internet|others]` - shows the various help messages, which in total list all the commands (except those available only to bot devs).
 
 ### [Filters](ModulesDatabase/HandleFilters.js)
 
-Filters can be text, images or videos.
+_Filters can be text, images or videos_
 
 - `Add filter [filter] - [bot reply]` - adds a filter to the group.
   - For example: Add filter food - banana.
@@ -37,8 +37,7 @@ Filters can be text, images or videos.
   - For example: Add tagging group Banana - Moshe, Joseph, Aviram
 - `Remove tagging group [tagging group name]` - removed the mentioned tagging group
 - `Show tag buddies` - displays the list of all taggable people in the group
-- `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the
-  front of the chat.
+- `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the front of the chat.
 - `Clear my tags` - clears the saved tags of the message's author.
 
 ### [Birthdays](ModulesDatabase/HandleBirthdays.js)
@@ -47,16 +46,15 @@ Filters can be text, images or videos.
   - For example: Add birthday 1.11.2011.
 - `Remove birthday` - removes the author's birthday.
 - `Show birthdays` - displays the birthdays of the group members.
-- `Add group to birthday message` - adds the group the message was sent in to the author's birthday message broadcast.
-- `Remove group from birthday message` - removes the group the message was sent in from the author's birthday message
+- `Add group to the birthday distribution list` - adds the group the message was sent in to the author's birthday message broadcast.
+- `Remove group from the birthday distribution list` - removes the group the message was sent in from the author's birthday message
   broadcast.
 
 ### [Permissions](ModulesDatabase/HandlePermissions.js)
 
-- `Define permission for [permission type] - [Admin/Regular/Muted]` - defines the permission level required for a
-  certain type of commands.
+- `Define permission for [permission type] - [Admin/Regular/Muted]` - defines the permission level required for a certain type of commands.
   - For example: Define permission filters - Admin.
-  - Permission types: filters, tags, handleShows, handleFilters, handleTags, handleBirthdays, handleOthers.
+  - Permission types: filters, tags, handle_Filters, handle_Tags, handle_Birthdays, handle_Shows, handle_Other.
 - `Mute [person tag]` - mutes the tagged person so they aren't able to use commands.
   - For example: Mute @Joseph.
 - `Unmute person [person tag]` - unmutes the tagged person.
@@ -66,9 +64,9 @@ Filters can be text, images or videos.
 
 ### [Reminders](ModulesDatabase/HandleReminders.js)
 
-All the reminder related commands work only in a private chat with the bot. The date in the commands is optional (if no
-date is inputted the assumption is that the reminder is for the same date the message was written in) and can include or
-not include a year.
+_All the reminder related commands work only in a private chat with the bot.
+Reminders can be text, images or videos
+The date in the commands is optional (if no date is inputted the assumption is that the reminder is for the same date the message was written in) and can include or not include a year._
 
 - `Add reminder [repeat] [date] [time] [text]` - adds a reminder to the message's author.
   - For example: Add reminder 2.5.2023 7:34 Walk the cat
@@ -79,29 +77,36 @@ not include a year.
   - For example: Remove reminder 7:34
 - `Show reminders` - Shows the author's reminders.
 
-### [Miscellaneous Commands](ModulesImmediate)
+### [Stickers](ModulesImmediate/HandleStickers.js)
 
-- [`Create sticker [without cropping]`](ModulesImmediate/HandleStickers.js) - creates a sticker out of a media file and
-  sends it
+- `Create sticker [without cropping] [High Quality/Medium Quality]` - creates a sticker out of a message or a media file and sends it
   - This command can be used in the message the media was sent in and as a reply to it
   - `without cropping` is an optional parameter which creates the sticker without cropping it
-- [`Check Crypto`](ModulesImmediate/HandleAPIs.js) - sends a message with the exchange rates of ten different
-  cryptocurrencies compared to the Dollar
-- [`Internet definition [work]`](ModulesImmediate/HandleAPIs.js) - searches for the word on the website Urban Dictionary
-  and returns the search result
+  - `high quality` and `medium quality` and option parameter which control the sticker's resolution; the default is medium quality
+- `Create text sticker [colour] - [text]` - creates a sticker without a background with the given text
+  - If the parameter "colour" isn't given, the default is black
+
+### [Internet Commands](ModulesImmediate/HandleAPIs.js)
+
+_All of the commands below have a certain daily limit_
+
+- `Check Crypto` - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar.
+- `Internet definition [word]` - searches for the word in the website Urban Dictionary and returns the search result.
   - For example: Internet definition chair
-- [`Translate to [some language] [words]`](ModulesImmediate/HandleAPIs.js) - translates the words to the given language
-  via Google Translate
+- `Translate to [some language] [words]` - translates the words to the given language via Google Translate.
   - For example: Translate to Hebrew chair
-  - In the translation text only one sentence can be written due to Google Translate restrictions
-- [`Download music [link to youtube]`](ModulesImmediate/HandleAPIs.js) - downloads a song from youtube and sends it as
-  voice message
-- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses
+  - In the translation text only one sentence can be written due to Google Translate restrictions.
+- `Download music [link to youtube]` - downloads a song from youtube and sends it as
+  voice message.
+- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses.
   - For example: Scan https://www.google.com/
-  - Links can be scanned in the message the command is sent in or in a quoted message
+
+### Miscellaneous Commands
+
+- Links can be scanned in the message the command is sent in or in a quoted message
 - [`Profile`](ModulesImmediate/HandleUserStats.js) - shows the bot's information about the message's author
 - [`Send link`](ModuleWebsite/HandleWebsite.js) - sends a link to the bots webpage (work in progress)
-- [Create a WhatsApp survey](ModulesImmediate/HandleStickers.js):
+- [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.js):
 - `Create survey Title - [survey title]
   Subtitle - [survey subtitle]
   Third Title - [third title]
@@ -154,11 +159,11 @@ translations.
 
 ## Credits
 
-[@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing the bot
+[@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing a lot of the bot's functionality
 
-[@TheBooker66](https://github.com/TheBooker66) - Ethan - developing the bot and English support
+[@TheBooker66](https://github.com/TheBooker66) - Ethan - Developing a lot of the bot's functionality and English support
 
-[@Lainad27](https://github.com/Lainad27) - Daniel - developing make message to a sticker functionality
+[@Lainad27](https://github.com/Lainad27) - Daniel - Developing the message to a sticker functionality
 
 [@Arbel99](https://github.com/Arbel99) - Arbel - Latin support (whenever she feels like it)
 

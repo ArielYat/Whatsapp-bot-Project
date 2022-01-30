@@ -1,5 +1,6 @@
 import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
+
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_person"), "");
@@ -9,8 +10,8 @@ export class HT {
         for (const tag in tags) {
             if (bodyText.includes(tag)) {
                 const index = bodyText.indexOf(tag);
-                if ((index <= 0 || !((/(?![ו])[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index - 1]))) &&
-                    (index + tag.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index + tag.length])))) {
+                if ((index <= 0 || ((/[\s|,ו]/).test(bodyText[index - 1]))) &&
+                    (index + tag.length >= bodyText.length || ((/\s/).test(bodyText[index + tag.length])))) {
                     counter += 1;
                     if (typeof (tags[tag]) === "object") {
                         for (let j = 0; j < tags[tag].length; j++) {
@@ -48,7 +49,7 @@ export class HT {
                         groupsDict[chatID].tags = ["delete", tag]
                     });
                 }
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed"), messageID);
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed_problematic_tag_error"), messageID);
             }
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tag_person_doesnt_exist_error"), messageID);
     }
@@ -98,7 +99,8 @@ export class HT {
                     groupsDict[chatID].personsIn = ["delete", person[1].personID];
                 });
             });
-            console.log("error occurred at tagging everyone")
+            console.log("error occurred at tagging everyone");
+            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "personIn_removed_problematic_error"), quotedMsgID);
         }
     }
 

@@ -1,14 +1,12 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import pkg from 'canvas';
-
-const {createCanvas, loadImage, Image} = pkg;
 import puppeteer from "puppeteer";
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import {encode} from "html-entities";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const {createCanvas, loadImage, Image} = pkg;
+const _dirname = dirname(fileURLToPath(import.meta.url));
 
 export class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -29,43 +27,36 @@ export class HSt {
             removeBlack();
         }
 
-        function trimCanvas(c) {
-            let ctx = c.getContext('2d'),
+        function trimCanvas(canvas) {
+            let ctx = canvas.getContext('2d'),
                 copy = createCanvas(512, 512).getContext('2d'),
-                pixels = ctx.getImageData(0, 0, c.width, c.height),
-                l = pixels.data.length,
-                i,
+                pixels = ctx.getImageData(0, 0, canvas.width, canvas.height),
+                l = pixels.data.length, i, x, y,
                 bound = {
                     top: null,
                     left: null,
                     right: null,
                     bottom: null
-                },
-                x, y;
-
+                };
             // Iterate over every pixel to find the highest
             // and where it ends on every axis ()
             for (i = 0; i < l; i += 4) {
                 if (pixels.data[i + 3] !== 0) {
-                    x = (i / 4) % c.width;
-                    y = ~~((i / 4) / c.width);
-
+                    x = (i / 4) % canvas.width;
+                    y = ~~((i / 4) / canvas.width);
                     if (bound.top === null) {
                         bound.top = y;
                     }
-
                     if (bound.left === null) {
                         bound.left = x + 5;
                     } else if (x < bound.left && x > 5) {
                         bound.left = x;
                     }
-
                     if (bound.right === null) {
                         bound.right = x;
                     } else if (bound.right < x) {
                         bound.right = x;
                     }
-
                     if (bound.bottom === null) {
                         bound.bottom = y;
                     } else if (bound.bottom < y && x > 5) {
@@ -77,11 +68,9 @@ export class HSt {
             let trimHeight = bound.bottom - bound.top,
                 trimWidth = bound.right - bound.left,
                 trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
-
             copy.canvas.width = trimWidth;
             copy.canvas.height = trimHeight;
             copy.putImageData(trimmed, 0, 0);
-
             // Return trimmed canvas
             return copy.canvas;
         }
@@ -142,7 +131,7 @@ export class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
-                    await page.goto(`file://${__dirname}//template.mhtml`);
+                    await page.goto(`file://${_dirname}//template.mhtml`);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
                         domBody.innerHTML = messageBody
@@ -185,11 +174,19 @@ export class HSt {
 
     static async createTextSticker(client, bodyText, chatID, messageID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
-        const canvas = createCanvas(150, 150), drawingBoard = canvas.getContext("2d"),
-            [color, text] = await this.setColorAndText(bodyText);
+        const canvas = createCanvas(150, 150), drawingBoard = canvas.getContext("2d");
+        let color, text;
+        if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
+            bodyText = bodyText.split("-");
+            color = bodyText[0].trim();
+            text = bodyText[1].trim();
+        } else {
+            color = "black";
+            text = bodyText.trim();
+        }
         try {
-            let lainadIndex = 0, words = text.split(" "), finalWord = "";
             //written by Laniad27
+            let lainadIndex = 0, words = text.split(" "), finalWord = "";
             while (lainadIndex !== words.length) {
                 if (drawingBoard.measureText(words.slice(0, lainadIndex + 1).join(' ')).width > 100) {
                     if (lainadIndex === 0) {
@@ -212,18 +209,5 @@ export class HSt {
         } catch (err) {
             await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
         }
-    }
-
-    static async setColorAndText(bodyText) {
-        let color, text;
-        if (bodyText.includes("-") && bodyText.split("-").length >= 2) {
-            bodyText = bodyText.split("-");
-            color = bodyText[0].trim();
-            text = bodyText[1].trim();
-        } else {
-            color = "black";
-            text = bodyText.trim();
-        }
-        return [color, text];
     }
 }
