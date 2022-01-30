@@ -8,8 +8,8 @@ export class HF {
         for (const filter in filters) {
             if (bodyText.includes(filter)) {
                 const index = bodyText.indexOf(filter);
-                if ((index <= 0 || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index - 1]))) &&
-                    (index + filter.length >= bodyText.length || !((/[A-Z\a-z\u0590-\u05fe]/).test(bodyText[index + filter.length])))) {
+                if ((index <= 0 || ((/\s/).test(bodyText[index - 1]))) &&
+                    (index + filter.length >= bodyText.length || ((/\s/).test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
                         if (filters[filter].startsWith("image"))
                             await client.sendImage(chatID, filters[filter].replace("image", ""), null, null, messageID);
@@ -22,7 +22,7 @@ export class HF {
                                 console.log("error occurred on filter reply");
                                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                                     groupsDict[chatID].filters = ["delete", filter];
-                                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_error_removed"), messageID);
+                                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "filter_removed_problematic_tag_error"), messageID);
                                 });
                             }
                         }
