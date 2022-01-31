@@ -57,7 +57,8 @@ export class HAF {
     }
 
     static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
-        const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats().length).toString();
+        const allChatsID = await client.getAllChats();
+        const currentChatAmount = "כמות צ'טים נוכחית: " + allChatsID.length.toString();
         const totalChatAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
         const totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
         const currentMutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
