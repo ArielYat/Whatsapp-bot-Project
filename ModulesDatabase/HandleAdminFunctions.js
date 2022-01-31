@@ -1,5 +1,6 @@
 import {HDB} from "./HandleDB.js";
-let startupDate = new Date();
+const startupDate = new Date();
+
 export class HAF {
      static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
         const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
@@ -56,21 +57,18 @@ export class HAF {
     }
 
     static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
-        const groupAmount = "כמות קבוצות סך הכל: " + (Object.keys(groupsDict).length).toString();
-        const userAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
-        const mutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
-        const mutedUsers = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length).toString();
-        const currentDate = new Date();
-        const passedTimeDate = new Date(currentDate - startupDate);
-        const passedTimePassed = (passedTimeDate.getFullYear() - 1970).toString() + " ימים, "
-            + passedTimeDate.getUTCHours().toString() + " שעות, "
-            + passedTimeDate.getUTCMinutes().toString() + " דקות, "
-            + passedTimeDate.getUTCSeconds().toString() + " שניות";
-        const passedTime = "עבר מאז ההדלקה: " + passedTimePassed;
-        const currentGroups = await client.getAllChats();
-        const currentGroupsAmounts = "כמות צאטים נוכחית: " + (currentGroups.length).toString();
-
-        await client.reply(chatID, `${groupAmount}\n${userAmount}\n${mutedGroups}\n${mutedUsers}\n${passedTime}\n${currentGroupsAmounts}`, messageID);
+        const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats().length).toString();
+        const totalChatAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
+        const totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
+        const currentMutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
+        const currentMutedPersons = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length).toString();
+        const timeSinceStartup = new Date(new Date() - startupDate);
+        const passedTime = "זמן מאז ההדלקה האחרונה: " +
+            (timeSinceStartup.getFullYear() - 1970).toString() + " ימים, "
+            + timeSinceStartup.getUTCHours().toString() + " שעות, "
+            + timeSinceStartup.getUTCMinutes().toString() + " דקות, "
+            + timeSinceStartup.getUTCSeconds().toString() + " שניות";
+        await client.reply(chatID, `${totalChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${passedTime}\n${currentChatAmount}`, messageID);
     }
 
     // noinspection JSUnusedLocalSymbols
