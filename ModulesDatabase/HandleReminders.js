@@ -51,9 +51,9 @@ export class HR {
                 const reminderDate = new Date(year, month, day, hour, minutes);
                 const repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeat_reminder")));
                 const reminder =
-                    messageType === "image" ? repeatReminder ? `repeat_reminder${reminderInterval}Image` + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
-                        messageType === "video" ? repeatReminder ? `repeat_reminder${reminderInterval}Video` + +await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
-                            messageType === "chat" ? repeatReminder ? "repeat_reminder" + reminderInterval + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeat_reminder"), "") : bodyText.replace(time, "").trim() :
+                    messageType === "image" ? repeatReminder ? `repeatReminder${reminderInterval}Image` + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
+                        messageType === "video" ? repeatReminder ? `repeatReminder${reminderInterval}Video` + +await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
+                            messageType === "chat" ? repeatReminder ? "repeatReminder" + reminderInterval + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeat_reminder"), "") : bodyText.replace(time, "").trim() :
                                 null;
                 if (reminder) {
                     if (!person.doesReminderExist(reminderDate)) {
@@ -168,9 +168,9 @@ export class HR {
             for (let reminder in person.reminders) {
                 const reminderDate = new Date(reminder);
                 let reminderData = person.reminders[reminder];
-                if (reminderData.startsWith("repeat_reminder")) {
+                if (reminderData.startsWith("repeatReminder")) {
                     stringForSending += "*repeat* \n";
-                    reminderData = reminderData.replace(/repeat_reminder\d/, "")
+                    reminderData = reminderData.replace(/repeatReminder\d/, "")
                 }
                 if (reminderData.startsWith("Video"))
                     stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
