@@ -170,7 +170,7 @@ export class HR {
                 let reminderData = person.reminders[reminder];
                 if (reminderData.startsWith("repeatReminder")) {
                     stringForSending += "*repeat* \n";
-                    stringForSending = reminderData.replace(/repeatReminder\d/, "")
+                    reminderData = reminderData.replace(/repeatReminder\d/, "")
                 }
                 if (reminderData.startsWith("Video"))
                     stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
