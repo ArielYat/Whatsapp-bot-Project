@@ -57,19 +57,18 @@ export class HAF {
     }
 
     static async ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restUsers, restGroupsFilterSpam, restUsersCommandSpam) {
-        const allChatsID = await client.getAllChats();
-        const currentChatAmount = "כמות צ'טים נוכחית: " + allChatsID.length.toString();
+        const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString();
         const totalChatAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
         const totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
         const currentMutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
         const currentMutedPersons = "משתמשים מושתקים כעת: " + (restUsers.length + restUsersCommandSpam.length).toString();
         const timeSinceStartup = new Date(new Date() - startupDate);
-        const passedTime = "זמן מאז ההדלקה האחרונה: " +
+        const timeString = "זמן מאז ההדלקה האחרונה: " +
             (timeSinceStartup.getFullYear() - 1970).toString() + " ימים, "
             + timeSinceStartup.getUTCHours().toString() + " שעות, "
             + timeSinceStartup.getUTCMinutes().toString() + " דקות, "
             + timeSinceStartup.getUTCSeconds().toString() + " שניות";
-        await client.reply(chatID, `${totalChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${passedTime}\n${currentChatAmount}`, messageID);
+        await client.reply(chatID, `${totalChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${timeString}\n${currentChatAmount}`, messageID);
     }
 
     // noinspection JSUnusedLocalSymbols

@@ -27,7 +27,7 @@ let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGrou
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
     console.log(err)
 })
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
@@ -210,28 +210,24 @@ function start(client) {
             groupsDict[group].cryptoCheckedToday = false;
             groupsDict[group].translationCounter = 0;
             groupsDict[group].downloadMusicCounter = 0;
-
         }
     });
-    //Reset filters counter for all groups
+    //Reset the filter & command counters for all the groups & persons
     setInterval(function () {
         for (let group in groupsDict)
             groupsDict[group].filterCounter = 0;
-    }, 5 * 60 * 1000); //in ms; 5 min
-    //Reset command counter for all persons
-    setInterval(function () {
         for (let person in usersDict)
             usersDict[person].commandCounter = 0;
     }, 5 * 60 * 1000); //in ms; 5 min
-    //Check if groups/persons need to be freed from prison (if 15 minutes passed) and check reminders
+    //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
     setInterval(async function () {
+        const currentDate = new Date();
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
         //Remove users from command rest list
         for (let i = 0; i < restPersonsCommandSpam.length; i++) {
             const personID = restPersonsCommandSpam[i];
-            const date = new Date(); //Current date
-            date.setSeconds(0);
-            date.setMilliseconds(0);
-            if (usersDict[personID].autoBanned.toString() === date.toString()) {
+            if (usersDict[personID].autoBanned.toString() === currentDate.toString()) {
                 usersDict[personID].autoBanned = null;
                 usersDict[personID].commandCounter = 0;
                 restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
@@ -240,53 +236,14 @@ function start(client) {
         //Remove groups from filters rest list
         for (let i = 0; i < restGroupsFilterSpam.length; i++) {
             const chatID = restGroupsFilterSpam[i];
-            const date = new Date(); //Current date
-            date.setSeconds(0);
-            date.setMilliseconds(0);
-            if (groupsDict[chatID].autoBanned.toString() === date.toString()) {
+            if (groupsDict[chatID].autoBanned.toString() === currentDate.toString()) {
                 groupsDict[chatID].autoBanned = null;
                 groupsDict[chatID].filterCounter = 0;
                 restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
             }
         }
         //Check reminders
-        for (let i = 0; i < personsWithReminders.length; i++) {
-            const person = usersDict[personsWithReminders[i]];
-            const personID = person.personID;
-            const date = new Date(); //Current date
-            date.setSeconds(0);
-            date.setMilliseconds(0);
-            for (const reminder in person.reminders) {
-                if (reminder.toString() === date.toString()) {
-                    const oldReminder = person.reminders[reminder];
-                    const reminderDate = new Date(reminder);
-                    const repeat = !!oldReminder.startsWith("repeatReminder");
-                    let numberToAddToDate = repeat ? parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")) : null;
-                    let stringForSending = repeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
-                    switch (true) {
-                        case stringForSending.startsWith("Video"):
-                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
-                            break;
-                        case stringForSending.startsWith("Image"):
-                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder");
-                            break;
-                        default:
-                            await client.sendText(personID, stringForSending);
-                            break;
-                    }
-                    await HDB.delArgsFromDB(personID, reminderDate, "reminders", function () {
-                        person.reminders = ["delete", reminderDate];
-                    })
-                    let newReminderDate = new Date(reminder);
-                    if (repeat) {
-                        newReminderDate.setDate(newReminderDate.getDate() + numberToAddToDate);
-                        await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
-                            person.reminders = ["add", newReminderDate, oldReminder];
-                        });
-                    }
-                }
-            }
-        }
+        await HR.checkReminders(client, usersDict, personsWithReminders, currentDate);
     }, 60 * 1000); //in ms; 1 min
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
@@ -372,8 +329,7 @@ function start(client) {
                         bannedDate.setMilliseconds(0);
                         usersDict[authorID].autoBanned = bannedDate;
                         restPersonsCommandSpam.push(authorID);
-                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID,
-                            "command_spam_reply",
+                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply",
                             bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
                                 bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
                     }

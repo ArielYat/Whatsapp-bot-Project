@@ -2,6 +2,41 @@ import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
 
 export class HR {
+    static async checkReminders(client, usersDict, personsWithReminders, currentDate){
+        for (let i = 0; i < personsWithReminders.length; i++) {
+            const person = usersDict[personsWithReminders[i]];
+            const personID = person.personID;
+            for (const reminder in person.reminders) {
+                if (reminder.toString() === currentDate.toString()) {
+                    const oldReminder = person.reminders[reminder], reminderDate = new Date(reminder);
+                    const doRepeat = !!oldReminder.startsWith("repeatReminder");
+                    let stringForSending = doRepeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
+                    switch (true) {
+                        case stringForSending.startsWith("Video"):
+                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
+                            break;
+                        case stringForSending.startsWith("Image"):
+                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder");
+                            break;
+                        default:
+                            await client.sendText(personID, stringForSending);
+                            break;
+                    }
+                    await HDB.delArgsFromDB(personID, reminderDate, "reminders", function () {
+                        person.reminders = ["delete", reminderDate];
+                    });
+                    if (doRepeat) {
+                        let newReminderDate = new Date(reminder);
+                        newReminderDate.setDate(newReminderDate.getDate() + parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")));
+                        await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
+                            person.reminders = ["add", newReminderDate, oldReminder];
+                        });
+                    }
+                }
+            }
+        }
+    }
+
     static async addReminder(client, bodyText, chatID, messageID, person, groupsDict, message, personsWithReminders) {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
