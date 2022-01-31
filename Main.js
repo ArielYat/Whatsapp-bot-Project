@@ -27,6 +27,9 @@ let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGrou
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
+process.on('uncaughtException', function(err) {
+    console.log(err)
+})
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
     wa.create({headless: false, useChrome: true, multiDevice: false}).then(client => start(client));
