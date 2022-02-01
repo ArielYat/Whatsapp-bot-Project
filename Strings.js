@@ -96,7 +96,7 @@ export const Strings = {
         "he": "[וידאו]", "en": "[Video]", "la": null, "ar": null, "fr": "[Video]"
     }, //tags
     "tag_person": {
-        "he": /^תייג/i, "en": /^Tag/i, "la": "Clama ad ", "ar": null, "fr": /^Tag/i
+        "he": /^תייג /i, "en": /^Tag /i, "la": "Clama ad ", "ar": null, "fr": /^Tag /i
     }, "tag_person_doesnt_exist_error": {
         "he": "אתה בטוח שצדקת בשם? בכל מקרה האדם שניסית לתייג לא נמצא פה",
         "en": "The person you tried to tags doesn't exist",
@@ -276,29 +276,59 @@ export const Strings = {
         "ar": null,
         "fr": "Groupe de tags: "
     }, "add_person_to_group_tag": {
-        "he": /^הוסף אדם לקבוצת תיוג/i,
-        "en": /^Add person to tagging group/i,
+        "he": /^הוסף את (.+) לקבוצת התיוג (.+)/i,
+        "en": null,
         "la": null,
         "ar": null,
-        "fr": /^Ajoute une personne au groupe de tags/i
+        "fr": null
     }, "remove_person_from_group_tag": {
-        "he": /^הסר אדם מקבוצת תיוג/i,
-        "en": /^Remove person from tagging group/i,
+        "he": /^הסר את (.+) מקבוצת התיוג (.+)/i,
+        "en": null,
         "la": null,
         "ar": null,
-        "fr": /^Supprime la personne du groupe de tags/i
+        "fr": null
     }, "add_person_to_group_tag_reply": {
-        "he": "האדם נוסף בקלילות לקבוצת התיוג",
-        "en": "The person was gracefully added to the tagging group",
+        "he": "האדם %s נוסף לקבוצת התיוג %s",
+        "en": null,
         "la": null,
         "ar": null,
-        "fr": "La personne a été gracieusement ajoutée au groupe de tags"
+        "fr": null
+    }, "add_person_to_group_tag_already_exists_error": {
+        "he": "האדם %s כבר נמצא בקבוצת התיוג %s",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "group_tag_group_doesnt_exist_error": {
+        "he": "קבוצת התיוג %s לא קיימת במאגר של קבוצה זו",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "person_doesnt_exist_in_this_group_error": {
+        "he": "האדם %s לא קיים במאגר של קבוצה זו",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
     }, "remove_person_from_group_tag_reply": {
-        "he": "האדם הוסר בקלילות מקבוצת התיוג",
-        "en": "The person was gracefully removed from the tagging group",
+        "he": "האדם %s הוסר מקבוצת התיוג %s",
+        "en": null,
         "la": null,
         "ar": null,
         "fr": "La personne a été gracieusement supprimée du groupe de tags"
+    }, "remove_person_from_group_tag_doesnt_exist_error": {
+        "he": "האדם %s לא נמצא בקבוצת התיוג %s",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "group_tag_no_more_persons": {
+        "he": "כל האנשים בקבוצה %s נמחקו ולכן הקבוצה הוסרה מהמאגר",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
     }, "tagging_group_does_not_exist_error": {
         "he": "כבודו, קבוצת התיוג שביקשתך אינה קיימת",
         "en": "Sir, the tagging group you requested does not exist",
@@ -745,7 +775,7 @@ export const Strings = {
         "ar": null,
         "fr": "Réessayez demain, vous traduisez trop de mots"
     }, "show_profile": {
-        "he": /^פרופיל/i, "en": /^Profile/i, "la": null, "ar": null, "fr": /^Profil/i
+        "he": /^פרופיל$/i, "en": /^Profile$/i, "la": null, "ar": null, "fr": /^Profil$/i
     }, "tagged_messages_amount_reply": {
         "he": "תוייגת: %s פעמים מאז הבדיקה/ניקיון האחרון",
         "en": "You've been tagged %s time since the last check/reset",
@@ -901,7 +931,7 @@ export const Strings = {
         "ar": null,
         "fr": "Seuls l'hébreu, l'anglais, le latin et le français sont actuellement pris en charge par le bot"
     }, "help_me_pwease": {
-        "he": /^עזרה/i, "en": /^Help/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide/i
+        "he": /^עזרה/i, "en": /^Help/i, "la": /^Auxilium/i, "ar": null, "fr": /^Aide/i
     }, "help_general": {
         "he": /^עזרה$/i, "en": /^Help$/i, "la": /^Auxilium$/i, "ar": null, "fr": /^Aide$/i
     }, "help_language": {

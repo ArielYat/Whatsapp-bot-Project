@@ -154,6 +154,12 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_group_tag"))) { //Handle creating tag lists
         await HT.removeGroupTag(client, bodyText, chatID, messageID, groupsDict)
         usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_person_to_group_tag"))) { //add user to group tag
+        await HT.addPersonToGroupTag(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_person_from_group_tag"))) { //remove user from group tag
+        await HT.removePersonFromTagGroup(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     }
 }
 
@@ -293,12 +299,12 @@ function start(client) {
                 else if (bodyText.match(/^Join /))
                     await HAF.handleBotJoin(client, bodyText, chatID, messageID);
                 else if (bodyText.match(/^!ping$/i))
-                    await HAF.ping(client, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
+                    await HAF.ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
                 else if (bodyText.match(/^\/exec/i))
                     await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings);
             }
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
-            await HT.logMessagesWithTags(bodyText, chatID, messageID, usersDict);
+            await HT.logMessagesWithTags(message, bodyText, chatID, messageID, usersDict);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
