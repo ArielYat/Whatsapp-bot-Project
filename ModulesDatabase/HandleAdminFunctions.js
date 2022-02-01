@@ -73,7 +73,7 @@ export class HAF {
             + timeSinceStartup.getUTCHours().toString() + " שעות, "
             + timeSinceStartup.getUTCMinutes().toString() + " דקות, "
             + timeSinceStartup.getUTCSeconds().toString() + " שניות";
-        await client.reply(chatID, `${ping}\n${totalChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${timeString}\n${currentChatAmount}`, messageID);
+        await client.reply(chatID, `${ping}\n${currentChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${timeString}\n${totalChatAmount}`, messageID);
     }
 
     // noinspection JSUnusedLocalSymbols
