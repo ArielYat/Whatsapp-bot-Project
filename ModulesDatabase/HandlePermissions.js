@@ -94,6 +94,7 @@ export class HP {
     static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
         for (let user in groupsDict[chatID].personsIn) {
+            // put person name instead phone number if its exists
             let tempPhoneNumber = groupsDict[chatID].personsIn[user].personID.replace("@c.us", "");
             if (groupsDict[chatID].tags.length !== 0) {
                 for (const name in groupsDict[chatID].tags) {

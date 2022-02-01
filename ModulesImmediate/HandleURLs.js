@@ -2,9 +2,12 @@ import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import nvt from "node-virustotal";
 import {apiKeys} from "../apiKeys.js";
 
+const defaultTimedInstance = nvt.makeAPI();
+defaultTimedInstance.setKey(apiKeys.virusAPI);
+
 export class HURL {
     static async stripLinks(client, message, chatID, messageID, groupsDict) {
-        function sleep(ms) {
+        async function sleep(ms) {
             return new Promise((resolve) => {
                 setTimeout(resolve, ms);
             });
@@ -18,26 +21,24 @@ export class HURL {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url), messageID);
-                const defaultTimedInstance = nvt.makeAPI();
-                defaultTimedInstance.setKey(apiKeys.virusAPI);
-                defaultTimedInstance.urlLookup(nvt.sha256(url), function (err, res) {
+                defaultTimedInstance.urlLookup(nvt.sha256(url), async function (err, res) {
                     if (err) {
-                        defaultTimedInstance.initialScanURL(url, function (err, res) {
+                        defaultTimedInstance.initialScanURL(url, async function (err, res) {
                             if (err)
                                 client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_upload_error"), messageID);
                             else if (res) {
-                                sleep(1000 * 90);
+                                await sleep(1000 * 60);
                                 const id = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.id;
-                                const newHashed = id.match("-(.)+-")[0].replace(/-/g, "");
-                                defaultTimedInstance.urlLookup(newHashed, function (err, res) {
+                                const newHashed = id.match(/-(.)+-/)[0].replace(/-/g, "");
+                                defaultTimedInstance.urlLookup(newHashed, async function (err, res) {
                                     if (err)
-                                        client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_error"), messageID);
+                                        await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "scan_link_checking_error"), messageID);
                                     else if (res)
-                                        HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
+                                        await HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                                 });
                             }
                         });
-                    } else HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
+                    } else await HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                 });
             });
         } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);

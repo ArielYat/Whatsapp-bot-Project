@@ -57,8 +57,16 @@ export class HB {
             let stringForSending = "";
             for (const person in groupsDict[chatID].personsIn) {
                 let birthday = groupsDict[chatID].personsIn[person].birthday;
+                // put person name instead phone number if its exists
+                let tempPhoneNumber = groupsDict[chatID].personsIn[person].personID.replace("@c.us", "");
+                if (groupsDict[chatID].tags.length !== 0) {
+                    for (const name in groupsDict[chatID].tags) {
+                        if (groupsDict[chatID].tags[name] === tempPhoneNumber)
+                            tempPhoneNumber = name;
+                    }
+                }
                 if (birthday.length !== 0)
-                    stringForSending += groupsDict[chatID].personsIn[person].personID.replace("@c.us", "") + " - " + birthday[0] + "." + birthday[1] + "." + birthday[2] + "\n";
+                    stringForSending += tempPhoneNumber + " - " + birthday[0] + "." + birthday[1] + "." + birthday[2] + "\n";
             }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_birthdays_error"), messageID);
