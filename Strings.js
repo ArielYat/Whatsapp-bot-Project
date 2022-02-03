@@ -911,7 +911,34 @@ export const Strings = {
         "he": /ליום שישי/i, "en": /^Friday/i, "la": null, "ar": null, "fr": /Vendredi/i
     }, "day_Saturday": {
         "he": /ליום שבת/i, "en": /^Saturday/i, "la": null, "ar": null, "fr": /^Samedi/i
-    },//language
+    }, //
+    "init_tic_tac_toe": {
+        "he": /^התחל איקס עיגול/i, "en": /^Start tic tac toe/i, "la": null, "ar": null, "fr": null
+    }, "move_tic_tac_toe": {
+        "he": /^מהלך/i, "en": /^Move/i, "la": null, "ar": null, "fr": null
+    }, "move_tic_tac_toe_reply": {
+        "he": "הנה הלוח הנוכחי:\n",
+        "en": "Here's the current board:\n",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "win_tic_tac_toe_reply": {
+        "he": "ניצחת באיקס עיגול!", "en": "You won Tic Tac Toe!", "la": null, "ar": null, "fr": null
+    }, "lose_tic_tac_toe_reply": {
+        "he": "הפסדת במשחק.", "en": "You lost the game.", "la": null, "ar": null, "fr": null
+    }, "draw_tic_tac_toe_reply": {
+        "he": "המשחק הגיע למצב של פט בו איני יכול לזוז עוד",
+        "en": "The game has reached a point of stalemate in which I cannot make any more moves",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "tic_tac_toe_time_out_error": {
+        "he": "אם אתה רוצה לנצח אולי כדאי שתשחק מהר יותר, יא חמור",
+        "en": "If you want to win you should consider playing faster, ye donkey",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, //language
     "change_language": {
         "he": /^שנה שפה/i,
         "en": /^Change language to/i,
