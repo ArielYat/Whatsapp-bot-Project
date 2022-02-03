@@ -1,35 +1,37 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js"
 
 export class H3T {
-    static async TicTacToe(client, bodyText, chatID, messageID, groupsDict) {
+    static async TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict) {
         async function init() {
-            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"));
-            bodyText = bodyText.split(",");
+            bodyText = bodyText.match(HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"));
             const clickedRow = bodyText[1].trim(), clickedCol = bodyText[2].trim();
             board[clickedRow][clickedCol] = 1;
+            originalSender = authorID;
             await client.reply(chatID, board.toString(), messageID);
         }
 
-        async function playerMove() {
+        async function playerMove(previousMessage) {
             const catchMessages = message => message.body.match(HL.getGroupLang(groupsDict, chatID, "move_tic_tac_toe"));
-            await chatID.awaitMessages(catchMessages, {max: 1, time: 6000, errors: ['time']})
+            await chatID.awaitMessages(catchMessages, {time: 6000, errors: ['time']})
                 .then(caught => async function () {
-                    const text = caught[0].value.split(",");
-                    let clickedRow = text[0].trim(), clickedCol = text[1].trim();
-                    board[clickedRow][clickedCol] = 1;
-                    await sendMoveReply();
-                    if (await checkWin(board, clickedRow, clickedCol))
-                        await client.sendText(HL.getGroupLang(groupsDict, chatID, "win_tic_tac_toe_reply"));
-                    else {
-                        [clickedRow, clickedCol] = await computerMove();
+                    if (caught[0].value.sender.id.toString() === originalSender.toString() && (previousMessage === null || caught[0].value.quotedMsgObj === previousMessage)) {
+                        const text = caught[0].key;
+                        let clickedRow = text[1].trim(), clickedCol = text[2].trim();
+                        board[clickedRow][clickedCol] = 1;
                         await sendMoveReply();
-                        if (clickedRow !== null && clickedCol !== null) {
-                            if (await checkWin(board, clickedRow, clickedCol)) {
-                                await client.sendText(HL.getGroupLang(groupsDict, chatID, "lose_tic_tac_toe_reply"));
-                            } else if (board.includes(0)) {
-                                await playerMove();
+                        if (await checkWin(board, clickedRow, clickedCol))
+                            await client.sendText(HL.getGroupLang(groupsDict, chatID, "win_tic_tac_toe_reply"));
+                        else {
+                            [clickedRow, clickedCol] = await computerMove();
+                            await sendMoveReply();
+                            if (clickedRow && clickedCol) {
+                                if (await checkWin(board, clickedRow, clickedCol)) {
+                                    await client.sendText(HL.getGroupLang(groupsDict, chatID, "lose_tic_tac_toe_reply"));
+                                } else if (board.includes(0)) {
+                                    await playerMove(caught[0].value);
+                                } else await client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
                             } else await client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
-                        } else await client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
+                        }
                     }
                 })
                 .catch(client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tic_tac_toe_time_out_error"), messageID));
@@ -52,24 +54,20 @@ export class H3T {
         }
 
         async function checkWin(b = board, clickedRow = 1, clickedCol = 1) {
-            if (b === null)
-                return false;
             let count = 1, colToCheck, rowToCheck;
             colToCheck = clickedCol - 1;
             while (colToCheck > -1) {
                 if (1 === b[clickedRow][colToCheck]) {
                     count++;
                     colToCheck--;
-                } else
-                    break;
+                } else break;
             }
             colToCheck = clickedCol + 1;
             while (colToCheck < maxCol) {
                 if (1 === b[clickedRow][colToCheck]) {
                     count++;
                     colToCheck++;
-                } else
-                    break;
+                } else break;
             }
             if (count >= sequence)
                 return true;
@@ -79,16 +77,14 @@ export class H3T {
                 if (1 === b[rowToCheck][clickedCol]) {
                     count++;
                     rowToCheck--;
-                } else
-                    break;
+                } else break;
             }
             rowToCheck = clickedRow + 1;
             while (rowToCheck < maxRow) {
                 if (1 === b[rowToCheck][clickedCol]) {
                     count++;
                     rowToCheck++;
-                } else
-                    break;
+                } else break;
             }
 
             if (count >= sequence)
@@ -101,8 +97,7 @@ export class H3T {
                     count++;
                     colToCheck--;
                     rowToCheck--;
-                } else
-                    break;
+                } else break;
             }
             colToCheck = clickedRow + 1;
             rowToCheck = clickedRow + 1;
@@ -111,8 +106,7 @@ export class H3T {
                     count++;
                     colToCheck++;
                     rowToCheck++;
-                } else
-                    break;
+                } else break;
             }
 
             if (count >= sequence)
@@ -125,8 +119,7 @@ export class H3T {
                     count++;
                     colToCheck++;
                     rowToCheck--;
-                } else
-                    break;
+                } else break;
             }
             colToCheck = clickedCol + 1;
             rowToCheck = clickedRow + 1;
@@ -135,15 +128,14 @@ export class H3T {
                     count++;
                     colToCheck--;
                     rowToCheck++;
-                } else
-                    break;
+                } else break;
             }
             return count >= sequence;
 
         }
 
         async function computerMove() {
-            if (board.includes(0)) {
+            if (board.some(row => row.includes(0))) {
                 let itemsToReturn;
                 for (let i = 0; i < board.length; i++) {
                     for (let j = 0; j < board[i].length; j++) {
@@ -165,9 +157,14 @@ export class H3T {
             } else return [null, null];
         }
 
-        let maxRow = 3, maxCol = 3, sequence = 3;
-        let board = [maxRow, maxCol];
+        let maxRow = 3, maxCol = 3, sequence = 3, originalSender, board = new Array(maxRow);
+        for (let i = 0; i < maxRow; i++) {
+            board[i] = new Array(maxCol);
+            for (let j = 0; j < maxRow; j++) {
+                board[j][j] = 0;
+            }
+        }
         await init();
-        await playerMove();
+        await playerMove(null);
     }
 }

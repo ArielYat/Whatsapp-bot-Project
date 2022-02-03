@@ -62,7 +62,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"))) { //Play a game of Tic Tac Toe!
-        await H3T.TicTacToe(client, bodyText, chatID, messageID, groupsDict);
+        await H3T.TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(HL.getGroupLang(groupsDict, chatID, "download_music"))) { //Handle download music - BETA
         await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
