@@ -3,38 +3,40 @@ import {HL} from "../ModulesDatabase/HandleLanguage.js"
 export class H3T {
     static async TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict) {
         async function init() {
-            bodyText = bodyText.match(HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"));
-            const clickedRow = bodyText[1].trim(), clickedCol = bodyText[2].trim();
-            board[clickedRow][clickedCol] = 1;
-            originalSender = authorID;
-            await client.reply(chatID, board.toString(), messageID);
+            const matched = bodyText.match(HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"));
+            if (matched) {
+                const clickedRow = matched[1].trim(), clickedCol = matched[2].trim();
+                board[clickedRow][clickedCol] = 1;
+                originalSender = authorID;
+                return await sendMoveReply(board);
+            }
         }
 
         async function playerMove(previousMessage) {
-            const catchMessages = message => message.body.match(HL.getGroupLang(groupsDict, chatID, "move_tic_tac_toe"));
-            await chatID.awaitMessages(catchMessages, {time: 6000, errors: ['time']})
-                .then(caught => async function () {
+            const catchMessages = message => !!(message.body.match(HL.getGroupLang(groupsDict, chatID, "move_tic_tac_toe"))) && message.quotedMsgObj && originalMessageID === message.quotedMsgObj.id;
+            await client.awaitMessages(chatID, catchMessages, {time: 60000, errors: ['time']})
+                .then(caught => {
                     if (caught[0].value.sender.id.toString() === originalSender.toString() && (previousMessage === null || caught[0].value.quotedMsgObj === previousMessage)) {
                         const text = caught[0].key;
                         let clickedRow = text[1].trim(), clickedCol = text[2].trim();
                         board[clickedRow][clickedCol] = 1;
-                        await sendMoveReply();
-                        if (await checkWin(board, clickedRow, clickedCol))
-                            await client.sendText(HL.getGroupLang(groupsDict, chatID, "win_tic_tac_toe_reply"));
+                        sendMoveReply();
+                        if (checkWin(board, clickedRow, clickedCol))
+                            client.sendText(HL.getGroupLang(groupsDict, chatID, "win_tic_tac_toe_reply"));
                         else {
-                            [clickedRow, clickedCol] = await computerMove();
-                            await sendMoveReply();
+                            [clickedRow, clickedCol] = computerMove();
+                            sendMoveReply();
                             if (clickedRow && clickedCol) {
-                                if (await checkWin(board, clickedRow, clickedCol)) {
-                                    await client.sendText(HL.getGroupLang(groupsDict, chatID, "lose_tic_tac_toe_reply"));
+                                if (checkWin(board, clickedRow, clickedCol)) {
+                                    client.sendText(HL.getGroupLang(groupsDict, chatID, "lose_tic_tac_toe_reply"));
                                 } else if (board.includes(0)) {
-                                    await playerMove(caught[0].value);
-                                } else await client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
-                            } else await client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
+                                    playerMove(caught[0].value, originalMessageID);
+                                } else client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
+                            } else client.sendText(HL.getGroupLang(groupsDict, chatID, "draw_tic_tac_toe_reply"));
                         }
                     }
                 })
-                .catch(client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tic_tac_toe_time_out_error"), messageID));
+                .catch(caught => client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tic_tac_toe_time_out_error"), messageID));
         }
 
         async function sendMoveReply() {
@@ -50,7 +52,7 @@ export class H3T {
                 }
                 stringForSending += "\n"
             }
-            await client.sendText(stringForSending);
+            return (await client.sendText(chatID, stringForSending));
         }
 
         async function checkWin(b = board, clickedRow = 1, clickedCol = 1) {
@@ -161,10 +163,10 @@ export class H3T {
         for (let i = 0; i < maxRow; i++) {
             board[i] = new Array(maxCol);
             for (let j = 0; j < maxRow; j++) {
-                board[j][j] = 0;
+                board[i][j] = 0;
             }
         }
-        await init();
-        await playerMove(null);
+        const originalMessageID = await init();
+        await playerMove(null, originalMessageID);
     }
 }

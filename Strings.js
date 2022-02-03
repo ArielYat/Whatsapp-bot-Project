@@ -913,13 +913,13 @@ export const Strings = {
         "he": /ליום שבת/i, "en": /^Saturday/i, "la": null, "ar": null, "fr": /^Samedi/i
     }, //
     "init_tic_tac_toe": {
-        "he": /^התחל איקס עיגול (\d+),(\d+)/i,
-        "en": /^Start tic tac toe (\d+),(\d+)/i,
+        "he": /^התחל איקס עיגול (\d),(\d)/i,
+        "en": /^Start tic tac toe (\d),(\d)/i,
         "la": null,
         "ar": null,
         "fr": null
     }, "move_tic_tac_toe": {
-        "he": /^מהלך (\d+),(\d+)/i, "en": /^Move (\d+),(\d+)/i, "la": null, "ar": null, "fr": null
+        "he": /^מהלך (\d),(\d)/i, "en": /^Move (\d),(\d)/i, "la": null, "ar": null, "fr": null
     }, "move_tic_tac_toe_reply": {
         "he": "הנה הלוח הנוכחי:\n",
         "en": "Here's the current board:\n",
