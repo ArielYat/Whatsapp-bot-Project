@@ -50,11 +50,9 @@ export class HAPI {
     static async translate(client, message, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].translationCounter < 10) {
             bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
-            let textToTranslate = message.quotedMsgObj ? message.quotedMsgObj.body :
-                bodyText.replace(bodyText.split(" ")[0], "").trim();
-
+            let textToTranslate = message.quotedMsgObj ? message.quotedMsgObj.body : bodyText.replace(bodyText.split(" ")[0], "").trim();
             try {
-                const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0]}&format=json`);
+                const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0].replace("\n", "")}&format=json`);
                 let langResponse = await nodeFetch(url, {
                     method: 'GET', headers: {
                         'Accept': 'application/json'
@@ -78,9 +76,8 @@ export class HAPI {
                         for (let i = 0; i < response[0].length; i++) {
                             let j = 0;
                             while (response[0][i]) {
-                                if (response[0][i][j] == null) {
+                                if (response[0][i][j] == null)
                                     break;
-                                }
                                 stringForSending += response[0][i][j];
                                 j++;
                             }
