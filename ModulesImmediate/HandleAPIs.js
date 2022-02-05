@@ -15,7 +15,8 @@ export class HAPI {
                 });
                 response = await response.json();
                 let stringForSending = "";
-                for (let i = 0; i < 10; i++) stringForSending += `1 [${response.data[i].symbol}] = ${response.data[i].quote.USD.price.toFixed(3)}$\n`;
+                for (let i = 0; i < 10; i++)
+                    stringForSending += `1 [${response.data[i].symbol}] = ${response.data[i].quote.USD.price.toFixed(3)}$\n`;
                 groupsDict[chatID].cryptoCheckedToday = true;
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
@@ -39,7 +40,7 @@ export class HAPI {
                 for (let i = 0; i < response.list.length && i < 10; i++)
                     stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n
                     ${response.list[i].definition.replace(/\[/g, "").replace(/\]/g, "")} 
-                    \nDefinition by: ${response.list[i].author} \n\n`;
+                  \nDefinition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "urban_word_not_found_error"), messageID);
         } catch (err) {
@@ -70,18 +71,15 @@ export class HAPI {
                     response = await response.json();
                     groupsDict[chatID].translationCounter++;
                     let stringForSending = "";
-                    if (response[0][0][1].includes(textToTranslate)) {
+                    if (response[0][0][1].includes(textToTranslate))
                         stringForSending = response[0][0][0];
-                    } else {
+                    else {
                         for (let i = 0; i < response[0].length; i++) {
-                            let j = 0;
-                            while (response[0][i]) {
+                            for (let j = 0; true; j++) {
                                 if (response[0][i][j] == null)
                                     break;
                                 stringForSending += response[0][i][j];
-                                j++;
                             }
-
                         }
                     }
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
@@ -94,8 +92,7 @@ export class HAPI {
 
     static async downloadMusic(client, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].downloadMusicCounter < 5) {
-            const regex = /https?:\/\/(.)+\.youtube\.com\/(.)+/;
-            const link = bodyText.match(regex);
+            const link = bodyText.match(/https?:\/\/(.)+\.youtube\.com\/(.)+/);
             let fileName;
             if (link) {
                 try {

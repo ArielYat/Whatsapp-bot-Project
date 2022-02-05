@@ -15,7 +15,7 @@ export class HURL {
 
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         const bodyText = message.body;
-        const urlsInMessage = bodyText.match(/(([hH])ttps?:\/\/[^\s]+)/g);
+        const urlsInMessage = bodyText.match(/([hH]ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             urlsInMessage.forEach(function (url) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
@@ -47,8 +47,7 @@ export class HURL {
     static async parseAndSendResults(client, chatID, res, url, messageID, groupsDict) {
         let prettyAnswerString = "";
         try {
-            const parsedRes = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, ''));
-            const dataParsed = parsedRes.data.attributes.last_analysis_results;
+            const dataParsed = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.attributes.last_analysis_results;
             let counter = 0;
             for (let attribute in dataParsed) {
                 if (dataParsed[attribute].result !== "clean" && dataParsed[attribute].result !== "unrated") {
