@@ -165,7 +165,7 @@ export const Strings = {
         "fr": /^Affiche la liste des personnes taguées/i
     }, "check_tags": {
         "he": /^בדוק היכן תייגוני/i,
-        "en": /^Check where I've been tagged/i,
+        "en": /^Check my tags/i,
         "la": null,
         "ar": null,
         "fr": /^Vérifie où j'ai été tagué/i
@@ -911,7 +911,38 @@ export const Strings = {
         "he": /ליום שישי/i, "en": /^Friday/i, "la": null, "ar": null, "fr": /Vendredi/i
     }, "day_Saturday": {
         "he": /ליום שבת/i, "en": /^Saturday/i, "la": null, "ar": null, "fr": /^Samedi/i
-    },//language
+    }, //
+    "init_tic_tac_toe": {
+        "he": /^התחל איקס עיגול (\d),(\d)/i,
+        "en": /^Start tic tac toe (\d),(\d)/i,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "move_tic_tac_toe": {
+        "he": /^מהלך (\d),(\d)/i, "en": /^Move (\d),(\d)/i, "la": null, "ar": null, "fr": null
+    }, "move_tic_tac_toe_reply": {
+        "he": "הנה הלוח הנוכחי:\n",
+        "en": "Here's the current board:\n",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "win_tic_tac_toe_reply": {
+        "he": "ניצחת באיקס עיגול!", "en": "You won Tic Tac Toe!", "la": null, "ar": null, "fr": null
+    }, "lose_tic_tac_toe_reply": {
+        "he": "הפסדת במשחק.", "en": "You lost the game.", "la": null, "ar": null, "fr": null
+    }, "draw_tic_tac_toe_reply": {
+        "he": "המשחק הגיע למצב של פט בו איני יכול לזוז עוד",
+        "en": "The game has reached a point of stalemate in which I cannot make any more moves",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "tic_tac_toe_time_out_error": {
+        "he": "אם אתה רוצה לנצח אולי כדאי שתשחק מהר יותר, יא חמור",
+        "en": "If you want to win you should consider playing faster, ye donkey",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, //language
     "change_language": {
         "he": /^שנה שפה/i,
         "en": /^Change language to/i,
@@ -983,11 +1014,11 @@ export const Strings = {
         "ar": ``,
         "fr": `*Filtres:*\n_Les filtres peuvent être un texte, une image ou une vidéo_ \n- "Ajoute le filtre [filtre] - [réponse du bot]" - ajoute un filtre au groupe\n  - Par exemple: Ajoute le filtre Nourriture - banane\n- "Supprime le filtre [filtre]" - supprime le filtre spécifié du groupe\n  - Par exemple : Supprime le filtre Nourriture\n- "Modifie le filtre [filtre existant] - [nouvelle réponse]" - modifie le filtre spécifié\n  - Par exemple: Modifie le filtre Nourriture - pêche\n- "Affiche les filtres" - affiche la liste de tous les filtres et leurs réponses dans le groupe\n_Conseil spécial!_\n- Lors de l'ajout d'un filtre, vous pouvez utiliser [nom] pour marquer quelqu'un lorsque le filtre est appelé\n  - Par exemple: "Ajoute le filtre Nourriture - [Joseph]" fera que le bot marquera Joseph chaque fois que "nourriture" sera dit`
     }, "help_tags_reply": {
-        "he": `*תיוגים:*\n- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו\n  - לדוגמה: תייג יוסי\n- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה\n- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי או תיוג של האדם]" - מוסיף אדם לתיוג בקבוצה\n  - לדוגמה: הוסף חבר לתיוג יוסי - 972501234567\n  - לדוגמה: הוסף חבר לתיוג יוסי - @יוסי\n- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה\n  - לדוגמה: הסר חבר מתיוג יוסי\n- "הוסף קבוצת תיוג [שמה של קבוצת התיוג] - [שמות של אנשים שנמצאים בקבוצה, מופרדים בפסיקים]" - מוסיף קבוצת תיוג שניתן להשתמש בה כדי לתייג אנשים מרובים במכה אחת\n  - לדוגמה: הוסף קבוצת תיוג ירושלמיים - משה, אבירם, יוסי\n- "הסר קבוצת תיוג [קבוצת תיוג]" - מסיר את קבוצת התיוג הנזכרת\n- "הוסף את [אדם] לקבוצת התיוג [קבוצת תיוג]" - מוסיף את האדם הנזכר לקבוצת התיוג\n  - לדוגמה: הוסף את יוסי לקבוצת התיוג ירושלמים\n- "הסר את [אדם] מקבוצת התיוג [קבוצת תיוג]" - מסיר את האדם הנזכר מקבוצת התיוג\n  - לדוגמה: הסר את יוסי מקבוצת התיוג ירושלמים\n- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים והקבוצות לתיוג שמוגדרים בקבוצה\n- "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים\n- "נקה תיוגיי" - מנקה את התיוגים השמורים של כותב ההודעה`,
-        "en": `*Tags:*\n- "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone\n  - For example: Tag Joseph\n- "Tag everyone" - tags all people in the group\n- "Add tag buddy [person] - [phone number in international format or a that person's tag]" - adds the person to the list of taggable people\n  - For example: Add tagging buddy Joseph - 972501234567\n  - For example: Add tagging buddy Joseph - @Joseph\n- "Remove tag buddy [person]" - removes the person from the list of taggable people\n  - For example: Remove tagging buddy Joseph\n- "Add tagging group [tagging group name] - [names of people in the group, divided by commas]" - Adds a tagging group which can be used to tag multiple people at once\n  - For example: Add tagging group Banana - Moshe, Joseph, Aviram\n- "Remove tagging group [tagging group]" - removed the mentioned tagging group\n- "Add [person] to tagging group [tagging group]" - adds the specified person to the tagging group  \n  - For example: Add Joseph to tagging group Banana\n- "Remove [person] from tagging group [tagging group]" - removed the specified person from the tagging group\n  - For example: Remove Joseph from tagging group Banana\n- "Show tag buddies" - displays the list of all taggable people in the group\n- "Check where I've been tagged" - shows the last message in which the message author's been tagged, bringing them to the front of the chat\n- "Clear my tags" - clears the saved tags of the message's author`,
+        "he": `*תיוגים:*\n- "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים\n- "נקה תיוגיי" - מנקה את התיוגים השמורים של כותב ההודעה\n- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו\n  - לדוגמה: תייג יוסי\n- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה\n- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי או תיוג של האדם]" - מוסיף אדם לתיוג בקבוצה\n  - לדוגמה: הוסף חבר לתיוג יוסי - 972501234567\n  - לדוגמה: הוסף חבר לתיוג יוסי - @יוסי\n- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה\n  - לדוגמה: הסר חבר מתיוג יוסי\n- "הוסף קבוצת תיוג [שמה של קבוצת התיוג] - [שמות של אנשים שנמצאים בקבוצה, מופרדים בפסיקים]" - מוסיף קבוצת תיוג שניתן להשתמש בה כדי לתייג אנשים מרובים במכה אחת\n  - לדוגמה: הוסף קבוצת תיוג ירושלמיים - משה, אבירם, יוסי\n- "הסר קבוצת תיוג [קבוצת תיוג]" - מסיר את קבוצת התיוג הנזכרת\n- "הוסף את [אדם] לקבוצת התיוג [קבוצת תיוג]" - מוסיף את האדם הנזכר לקבוצת התיוג\n  - לדוגמה: הוסף את יוסי לקבוצת התיוג ירושלמים\n- "הסר את [אדם] מקבוצת התיוג [קבוצת תיוג]" - מסיר את האדם הנזכר מקבוצת התיוג\n  - לדוגמה: הסר את יוסי מקבוצת התיוג ירושלמים\n- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים והקבוצות לתיוג שמוגדרים בקבוצה`,
+        "en": `*Tags:*\n- "Check my tags" - shows the last message in which the message author's been tagged, bringing them to the front of the chat\n- "Clear my tags" - clears the saved tags of the message's author\n- "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone\n  - For example: Tag Joseph\n- "Tag everyone" - tags all people in the group\n- "Add tag buddy [person] - [phone number in international format or a that person's tag]" - adds the person to the list of taggable people\n  - For example: Add tagging buddy Joseph - 972501234567\n  - For example: Add tagging buddy Joseph - @Joseph\n- "Remove tag buddy [person]" - removes the person from the list of taggable people\n  - For example: Remove tagging buddy Joseph\n- "Add tagging group [tagging group name] - [names of people in the group, divided by commas]" - Adds a tagging group which can be used to tag multiple people at once\n  - For example: Add tagging group Banana - Moshe, Joseph, Aviram\n- "Remove tagging group [tagging group]" - removed the mentioned tagging group\n- "Add [person] to tagging group [tagging group]" - adds the specified person to the tagging group  \n  - For example: Add Joseph to tagging group Banana\n- "Remove [person] from tagging group [tagging group]" - removed the specified person from the tagging group\n  - For example: Remove Joseph from tagging group Banana\n- "Show tag buddies" - displays the list of all taggable people in the group`,
         "la": ``,
         "ar": ``,
-        "fr": `*Tags:*\n- "Tag [personne]" - tague quelqu'un pour qu'il reçoive une notification même si le groupe est en mode silencieux sur son téléphone\n  - Par exemple: tag Joseph\n- "Tag tout le monde" - tague toutes les personnes dans le groupe\n- "Ajoute la personne au tag [nom] - [numéro de téléphone au format international ou le tag de cette personne]" - ajoute la personne à la liste des personnes pouvant être taguées\n  - Par exemple: Ajoute la personne au tag Joseph - 972501234567\n  - Par exemple: Ajoute la personne au tag Joseph - @Joseph\n- "Supprime la personne du tag [nom]" - supprime la personne de la liste des personnes pouvant être taguées\n  - Par exemple: Supprime la personne du tag Joseph\n- "Affiche la liste des personnes taguées" - affiche la liste de toutes les personnes pouvant être taguées dans le groupe\n- "Vérifie où j'ai été tagué" - affiche le dernier message dans lequel l'auteur du message a été tagué, peut être utilisé plusieurs fois\n- "Efface mes tags" - efface les tags enregistrés de l'auteur du message`
+        "fr": `*Tags:*\n- "Vérifie où j'ai été tagué" - affiche le dernier message dans lequel l'auteur du message a été tagué, peut être utilisé plusieurs fois\n- "Efface mes tags" - efface les tags enregistrés de l'auteur du message\n- "Tag [personne]" - tague quelqu'un pour qu'il reçoive une notification même si le groupe est en mode silencieux sur son téléphone\n  - Par exemple: tag Joseph\n- "Tag tout le monde" - tague toutes les personnes dans le groupe\n- "Ajoute la personne au tag [nom] - [numéro de téléphone au format international ou le tag de cette personne]" - ajoute la personne à la liste des personnes pouvant être taguées\n  - Par exemple: Ajoute la personne au tag Joseph - 972501234567\n  - Par exemple: Ajoute la personne au tag Joseph - @Joseph\n- "Supprime la personne du tag [nom]" - supprime la personne de la liste des personnes pouvant être taguées\n  - Par exemple: Supprime la personne du tag Joseph\n- "Affiche la liste des personnes taguées" - affiche la liste de toutes les personnes pouvant être taguées dans le groupe`
     }, "help_birthdays_reply": {
         "he": `*ימי הולדת:*\n- "הוסף יום הולדת [תאריך מנוקד בפורמט בינלאומי]" - מוסיף יום הולדת לכותב ההודעה\n  - לדוגמה: הוסף יום הולדת 1.11.2011\n- "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n- "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n- "הוסף קבוצה לרשימת התפוצה של יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n- "הסר קבוצה מרשימת התפוצה של יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה`,
         "en": `*Birthdays:*\n- "Add birthday [date in international format with periods]" - adds a birthday for message's author\n  - For example: Add birthday 1.11.2011\n- "Remove birthday" - removes the author's birthday\n- "Show birthdays" - displays the birthdays of the group members\n- "Add group to the birthday distribution list" - adds the group the message was sent in to the author's birthday message broadcast\n- "Remove group from the birthday distribution list" - removes the group the message was sent in from the author's birthday message broadcast`,

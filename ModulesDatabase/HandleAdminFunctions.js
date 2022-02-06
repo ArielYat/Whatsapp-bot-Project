@@ -1,6 +1,6 @@
 import {HDB} from "./HandleDB.js";
 
-const startupDate = new Date();
+const startupTime = new Date();
 
 export class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
@@ -58,31 +58,29 @@ export class HAF {
     }
 
     static async ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam) {
-        const currentDate = new Date();
-        let messageTime = new Date(0); // The 0 there is the key, which sets the date to the epoch
-        messageTime.setUTCSeconds(message.timestamp);
-        const ping = "זמן התגובה של ג'ון: " + (currentDate.getUTCSeconds() - messageTime.getUTCSeconds()).toString() + " שניות";
+        const currentTime = new Date();
+        const timeSinceStartup = new Date(currentTime - startupTime);
+        const ping = "זמן התגובה של ג'ון בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString();
         const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString();
-        const totalChatAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
+        const totalGroupAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
         const totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
-        const currentMutedGroups = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
-        const currentMutedPersons = "משתמשים מושתקים כעת: " + (restPersons.length + restPersonsCommandSpam.length).toString();
-        const timeSinceStartup = new Date(currentDate - startupDate);
-        const timeString = "זמן מאז ההדלקה האחרונה: " +
-            (timeSinceStartup.getFullYear() - 1970).toString() + " ימים, "
-            + timeSinceStartup.getUTCHours().toString() + " שעות, "
+        const currentMutedGroupAmount = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
+        const currentMutedPersonAmount = "משתמשים מושתקים כעת: " + (restPersons.length + restPersonsCommandSpam.length).toString();
+        const timeSinceStartupString = "זמן מאז ההדלקה האחרונה: "
+            + ((timeSinceStartup.getUTCDate()) - 1).toString() + " ימים, " +
+            +timeSinceStartup.getUTCHours().toString() + " שעות, "
             + timeSinceStartup.getUTCMinutes().toString() + " דקות, "
             + timeSinceStartup.getUTCSeconds().toString() + " שניות";
-        await client.reply(chatID, `${ping}\n${currentChatAmount}\n${totalPersonAmount}\n${currentMutedGroups}\n${currentMutedPersons}\n${timeString}\n${totalChatAmount}`, messageID);
+        await client.reply(chatID, `${ping}\n${currentChatAmount}\n${totalGroupAmount}\n${totalPersonAmount}\n${currentMutedGroupAmount}\n${currentMutedPersonAmount}\n${timeSinceStartupString}`, messageID);
     }
 
     // noinspection JSUnusedLocalSymbols
     static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings) {
         try {
             await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
-            await client.reply(message.chat.id, "הפקודה שהרצת בוצעה בהצלחה", message.id);
+            await client.reply(chatID, "הפקודה שהרצת בוצעה בהצלחה", messageID);
         } catch (err) {
-            await client.reply(message.chat.id, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, message.id);
+            await client.reply(chatID, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, messageID);
         }
     }
 }

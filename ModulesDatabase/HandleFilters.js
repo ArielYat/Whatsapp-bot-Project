@@ -1,5 +1,6 @@
 import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
+
 const tagRegex = new RegExp('\\[(.*?)\]', "g");
 
 export class HF {
@@ -35,8 +36,7 @@ export class HF {
                         bannedDate.setMilliseconds(0);
                         groupsDict[chatID].autoBanned = bannedDate;
                         restGroupsAuto.push(chatID);
-                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID,
-                            "filter_spam_reply",
+                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply",
                             bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
                                 bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
                     }
@@ -72,7 +72,7 @@ export class HF {
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
-        if (filterReply !== null) {
+        if (filterReply) {
             if (!groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
                     groupsDict[chatID].filters = ["add", filter, filterReply];
@@ -122,7 +122,7 @@ export class HF {
                 }
             } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
         }
-        if (filterReply !== null) {
+        if (filterReply) {
             if (groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", function () {
