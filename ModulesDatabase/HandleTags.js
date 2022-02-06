@@ -107,22 +107,23 @@ export class HT {
     }
 
     static async showTags(client, chatID, messageID, groupsDict) {
-        if (Object.keys(groupsDict[chatID].tags).length) {
+        const group = groupsDict[chatID];
+        if (Object.keys(group.tags).length) {
             let stringForSending = "";
-            Object.entries(groupsDict[chatID].tags).forEach(([name, tag]) => {
+            Object.entries(group.tags).forEach(([name, tag]) => {
                 if (typeof (tag) === "object") {
                     stringForSending += name + " - ";
                     for (let i = 0; i < tag.length; i++) {
-                        let tempPhoneNumber = groupsDict[chatID].personsIn[tag[i]].personID.replace("@c.us", "");
-                        for (const personName in groupsDict[chatID].tags) {
-                            if (groupsDict[chatID].tags[personName] === tempPhoneNumber)
+                        let tempPhoneNumber = tag[i];
+                        for (const personName in group.tags) {
+                            if (group.tags[personName] === tempPhoneNumber)
                                 tempPhoneNumber = personName;
                         }
                         stringForSending += tempPhoneNumber + ", ";
                     }
                     stringForSending += "\n";
                 } else
-                    stringForSending += name + " - " + tag + "\n";
+                    stringForSending += `${name} - ${tag}\n`;
             });
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);

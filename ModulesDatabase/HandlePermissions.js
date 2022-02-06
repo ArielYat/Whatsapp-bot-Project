@@ -83,6 +83,15 @@ export class HP {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "no_participant_chosen_error"), messageID);
     }
 
+    static async updateGroupAdmins(client, chatID, groupsDict) {
+        groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
+        await HDB.delArgsFromDB(chatID, null, "groupAdmins", function () {
+            HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", function () {
+                HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+            });
+        });
+    }
+
     static async showGroupFunctionsPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
         for (let permission in groupsDict[chatID].functionPermissions)
@@ -91,18 +100,18 @@ export class HP {
         client.reply(chatID, stringForSending, messageID)
     }
 
-    static async showGroupUsersPermissions(client, chatID, messageID, groupsDict) {
+    static async showGroupPersonsPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
-        for (let user in groupsDict[chatID].personsIn) {
-            // put person name instead phone number if its exists
-            let tempPhoneNumber = groupsDict[chatID].personsIn[user].personID.replace("@c.us", "");
-            if (groupsDict[chatID].tags.length !== 0) {
-                for (const name in groupsDict[chatID].tags) {
-                    if (groupsDict[chatID].tags[name] === tempPhoneNumber)
+        const group = groupsDict[chatID];
+        for (let person in group.personsIn) {
+            let tempPhoneNumber = person;
+            if (group.tags.length !== 0) {
+                for (const name in group.tags) {
+                    if (group.tags[name] === tempPhoneNumber)
                         tempPhoneNumber = name;
                 }
             }
-            stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].personsIn[user].permissionLevel[chatID]) + "\n";
+            stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, group.personsIn[person].permissionLevel[chatID]) + "\n";
         }
         await client.reply(chatID, stringForSending, messageID)
     }
