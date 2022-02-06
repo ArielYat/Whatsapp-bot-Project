@@ -60,17 +60,17 @@ export class HAF {
     static async ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam) {
         const currentTime = new Date();
         const timeSinceStartup = new Date(currentTime - startupTime);
-        const ping = "זמן התגובה של ג'ון בשניות בקירוב: " + (currentTime.getUTCSeconds() - new Date(message.timestamp).getUTCSeconds()).toString();
+        const ping = "זמן התגובה של ג'ון בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString();
         const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString();
         const totalGroupAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
         const totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString();
         const currentMutedGroupAmount = "קבוצות מושתקות כעת: " + (restGroups.length + restGroupsFilterSpam.length).toString();
         const currentMutedPersonAmount = "משתמשים מושתקים כעת: " + (restPersons.length + restPersonsCommandSpam.length).toString();
         const timeSinceStartupString = "זמן מאז ההדלקה האחרונה: "
-            + timeSinceStartup.getDay().toString() + " ימים, " +
-            +timeSinceStartup.getHours().toString() + " שעות, "
-            + timeSinceStartup.getMinutes().toString() + " דקות, "
-            + timeSinceStartup.getSeconds().toString() + " שניות";
+            + ((timeSinceStartup.getUTCDate()) - 1).toString() + " ימים, " +
+            +timeSinceStartup.getUTCHours().toString() + " שעות, "
+            + timeSinceStartup.getUTCMinutes().toString() + " דקות, "
+            + timeSinceStartup.getUTCSeconds().toString() + " שניות";
         await client.reply(chatID, `${ping}\n${currentChatAmount}\n${totalGroupAmount}\n${totalPersonAmount}\n${currentMutedGroupAmount}\n${currentMutedPersonAmount}\n${timeSinceStartupString}`, messageID);
     }
 

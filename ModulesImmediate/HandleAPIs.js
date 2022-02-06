@@ -2,7 +2,11 @@ import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import {apiKeys} from "../apiKeys.js";
 import nodeFetch from "node-fetch";
 import youtubeDL from "youtube-dl-exec";
+
+const _dirname = dirname(fileURLToPath(import.meta.url));
 import fs from "fs";
+import {dirname} from "path";
+import {fileURLToPath} from "url";
 
 export class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
@@ -75,11 +79,13 @@ export class HAPI {
                         stringForSending = response[0][0][0];
                     else {
                         for (let i = 0; i < response[0].length; i++) {
-                            for (let j = 0; true; j++) {
-                                if (response[0][i][j] == null)
+                            for (let j = 0; response[0][i]; j += 2) {
+                                if (response[0][i][j] == null) {
                                     break;
+                                }
                                 stringForSending += response[0][i][j];
                             }
+
                         }
                     }
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
@@ -101,7 +107,7 @@ export class HAPI {
                     await youtubeDL(link[0], {
                         format: "bestaudio[filesize<20M]",
                         exec: "ffmpeg -i {}  -codec:a libmp3lame -qscale:a 0 {}.mp3",
-                        restrictFilenames: true
+                        restrictFilenames: true,
                     }).then(output => fileName = output.match(/ffmpeg -i(.)+-codec/)[0].replace("ffmpeg -i", "").replace("-codec", "").trim());
                     if (fileName) {
                         await client.sendPtt(chatID, fileName + ".mp3", messageID);
