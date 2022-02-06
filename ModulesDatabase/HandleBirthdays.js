@@ -53,15 +53,16 @@ export class HB {
     }
 
     static async showBirthdays(client, chatID, messageID, groupsDict) {
-        if (Object.keys(groupsDict[chatID].personsIn).length) {
+        const group = groupsDict[chatID];
+        if (Object.keys(group.personsIn).length) {
             let stringForSending = "";
-            for (const person in groupsDict[chatID].personsIn) {
-                let birthday = groupsDict[chatID].personsIn[person].birthday;
-                // put person name instead phone number if its exists
-                let tempPhoneNumber = groupsDict[chatID].personsIn[person].personID.replace("@c.us", "");
-                if (groupsDict[chatID].tags.length !== 0) {
-                    for (const name in groupsDict[chatID].tags) {
-                        if (groupsDict[chatID].tags[name] === tempPhoneNumber)
+            for (let i = 0; i < group.personsIn.length; i++) {
+                const person = group.personsIn[i];
+                const birthday = person.birthday;
+                let tempPhoneNumber = person.personID.replace("@c.us", "");
+                if (group.tags.length !== 0) {
+                    for (const name in group.tags) {
+                        if (group.tags[name] === tempPhoneNumber)
                             tempPhoneNumber = name;
                     }
                 }
