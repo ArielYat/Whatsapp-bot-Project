@@ -212,9 +212,9 @@ function start(client) {
     IsraelSchedule.scheduleJob('0 5 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
     });
-    //Reset the crypto check everyday at 00:00
+    //Reset the crypto check, translation counter and download music counter everyday at 12 am
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (const group in groupsDict) {
+        for (let group in groupsDict) {
             groupsDict[group].cryptoCheckedToday = false;
             groupsDict[group].translationCounter = 0;
             groupsDict[group].downloadMusicCounter = 0;
@@ -255,7 +255,7 @@ function start(client) {
     }, 60 * 1000); //in ms; 1 min
     //Send a starting help message when added to a group
     client.onAddedToGroup(async chat => {
-        await client.sendText(chat.id, `${Strings["start_message"]["he"]}\n\n\n${Strings["start_message"]["en"]}\n\n\n${Strings["start_message"]["la"]}\n\n\n${Strings["start_message"]["fr"]}`);
+        await HL.sendStartMessage(client, chat.id);
     });
     //Check every module every time a message is received
     client.onMessage(async message => {

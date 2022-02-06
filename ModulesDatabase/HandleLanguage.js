@@ -63,4 +63,11 @@ export class HL {
                 break;
         }
     }
+
+    static async sendStartMessage(client, chatID) {
+        let stringForSending = "";
+        for (const [, startMessage] of Object.entries(Strings["start_message"]))
+            stringForSending += `${startMessage}\n\n\n`;
+        await client.sendText(chatID, stringForSending);
+    }
 }
