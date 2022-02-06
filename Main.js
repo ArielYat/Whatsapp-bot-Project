@@ -177,8 +177,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "set_permissions").test(bodyText)) {
-        groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
-        await HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+        groupsDict[chatID].groupAdmins = await HP.updateGroupAdmins(client, chatID, groupsDict);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "mute_participant").test(bodyText)) {

@@ -103,15 +103,16 @@ export class HP {
     static async showGroupPersonsPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
         const group = groupsDict[chatID];
-        for (let person in group.personsIn) {
-            let tempPhoneNumber = person;
+        for (let i = 0; i < group.personsIn.length; i++) {
+            const person = group.personsIn[i];
+            let tempPhoneNumber = person.personID.replace("@c.us", "")
             if (group.tags.length !== 0) {
                 for (const name in group.tags) {
                     if (group.tags[name] === tempPhoneNumber)
                         tempPhoneNumber = name;
                 }
             }
-            stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, group.personsIn[person].permissionLevel[chatID]) + "\n";
+            stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, person.permissionLevel[chatID]) + "\n";
         }
         await client.reply(chatID, stringForSending, messageID)
     }

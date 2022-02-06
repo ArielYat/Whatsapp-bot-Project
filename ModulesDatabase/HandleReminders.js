@@ -207,12 +207,14 @@ export class HR {
                     stringForSending += "*repeat* \n";
                     reminderData = reminderData.replace(/repeatReminder\d/, "")
                 }
+                const hour = reminderDate.getHours() < 10 ? "0" + reminderDate.getHours() : reminderDate.getHours();
+                const minutes = reminderDate.getMinutes() < 10 ? "0" + reminderDate.getMinutes() : reminderDate.getMinutes();
                 if (reminderData.startsWith("Video"))
-                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
                 else if (reminderData.startsWith("Image"))
-                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
                 else
-                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${reminderDate.getHours()}:${reminderDate.getMinutes()} - ${reminderData.trim()}\n`;
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${reminderData.trim()}\n`;
             }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);

@@ -56,9 +56,10 @@ export class HB {
         const group = groupsDict[chatID];
         if (Object.keys(group.personsIn).length) {
             let stringForSending = "";
-            for (const person in group.personsIn) {
-                const birthday = group.personsIn[person].birthday;
-                let tempPhoneNumber = person;
+            for (let i = 0; i < group.personsIn.length; i++) {
+                const person = group.personsIn[i];
+                const birthday = person.birthday;
+                let tempPhoneNumber = person.personID.replace("@c.us", "");
                 if (group.tags.length !== 0) {
                     for (const name in group.tags) {
                         if (group.tags[name] === tempPhoneNumber)

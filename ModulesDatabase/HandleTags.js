@@ -119,7 +119,8 @@ export class HT {
                             if (group.tags[personName] === tempPhoneNumber)
                                 tempPhoneNumber = personName;
                         }
-                        stringForSending += tempPhoneNumber + ", ";
+                        //add , to every tag in tag list expect the last
+                        stringForSending += i !== (tag.length - 1) ? tempPhoneNumber + ", " : tempPhoneNumber;
                     }
                     stringForSending += "\n";
                 } else
