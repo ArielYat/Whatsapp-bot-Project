@@ -768,7 +768,7 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "La langue que vous avez choisie n'a pas pu être traduite, désolé!"
-    }, "translate_language_limit": {
+    }, "translate_language_limit_error": {
         "he": "תנסה מחר לבקש תרגום, ביקשו יותר מדי תרגומים בקבוצה זו",
         "en": "Try again tomorrow, you guys are translating too many words",
         "la": null,
@@ -826,6 +826,30 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": "Vous avez téléchargé trop de chansons aujourd'hui - réessayez demain"
+    }, "fetch_stock": {
+        "he": /^בדוק מנייה/i,
+        "en": /^Check stock/i,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "fetch_stock_reply": {
+        "he": "הנה המידע שביקשת על המנייה של %s:\n%s",
+        "en": "Here's the information you requested about %s's stock:\n%s",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "fetch_stock_api_error": {
+        "he": "אופס... משהו לא עבד לי...",
+        "en": "Oops... something went wrong...",
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "check_stock_limit_error": {
+        "he": "אני מצטער אבל כל קבוצה יכולה לבדוק מניות רק שלוש פעמים ביום",
+        "en": "Forgive me but each group can check the stocks only thrice per day",
+        "la": null,
+        "ar": null,
+        "fr": null
     }, "show_webpage": {
         "he": /^שלח קישור לאתר/i,
         "en": /^Send website link/i,

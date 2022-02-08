@@ -15,7 +15,6 @@ import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
 import {HW} from "./ModuleWebsite/HandleWebsite.js";
 import {HUS} from "./ModulesImmediate/HandleUserStats.js";
 import {HR} from "./ModulesDatabase/HandleReminders.js";
-import {H3T} from "./ModulesImmediate/HandleTicTacToe.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
@@ -35,7 +34,7 @@ process.on('uncaughtException', function (err) {
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
     wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
-}).then(_ => console.log("Bot started successfully at " + new Date()));
+}).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "make_sticker").test(bodyText)) {
@@ -49,6 +48,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "translate_to").test(bodyText)) {
         await HAPI.translate(client, message, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if (HL.getGroupLang(groupsDict, chatID, "fetch_stock").test(bodyText)) {
+        await HAPI.fetchStock(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "search_in_urban").test(bodyText)) {
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
@@ -224,19 +226,16 @@ function start(client) {
     IsraelSchedule.scheduleJob('0 5 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
     });
-    //Reset the crypto check, translation counter and download music counter everyday at 12 am
+    //Reset all group counters everyday at midnight
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (let group in groupsDict) {
-            groupsDict[group].cryptoCheckedToday = false;
-            groupsDict[group].translationCounter = 0;
-            groupsDict[group].downloadMusicCounter = 0;
-        }
+        for (const group in groupsDict)
+            groupsDict[group].resetCounters();
     });
     //Reset the filter & command counters for all the groups & persons
     setInterval(function () {
-        for (let group in groupsDict)
+        for (const group in groupsDict)
             groupsDict[group].filterCounter = 0;
-        for (let person in usersDict)
+        for (const person in usersDict)
             usersDict[person].commandCounter = 0;
     }, 5 * 60 * 1000); //in ms; 5 min
     //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
