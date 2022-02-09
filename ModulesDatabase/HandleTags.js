@@ -33,7 +33,7 @@ export class HT {
                             usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
                         bodyText = bodyText.replace(tag, "@" + tags[tag]);
                         usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
-                        await HA.afkPersonTagged(client, chatID, afkPersons, tags[tag] + "@c.us", groupsDict, usersDict, messageID);
+                        await HA.afkPersonTagged(client, chatID, messageID, tags[tag] + "@c.us", afkPersons, groupsDict, usersDict);
                         await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function () {
                             HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
 
@@ -142,7 +142,7 @@ export class HT {
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
                     person.messagesTaggedIn[chatID].push(messageID);
-                    await HA.afkPersonTagged(client, chatID, afkPersons, ID, groupsDict, usersDict, messageID);
+                    await HA.afkPersonTagged(client, chatID, messageID, ID, afkPersons, groupsDict, usersDict);
                     await HDB.delArgsFromDB(chatID, person.personID, "lastTagged", function () {
                         HDB.addArgsToDB(chatID, person.personID, person.messagesTaggedIn[chatID], null, "lastTagged", function () {
                         });
@@ -157,7 +157,7 @@ export class HT {
                     if (usersDict[quotedAuthorID].messagesTaggedIn[chatID] === undefined)
                         usersDict[quotedAuthorID].messagesTaggedIn[chatID] = [];
                     usersDict[quotedAuthorID].messagesTaggedIn[chatID].push(messageID);
-                    await HA.afkPersonTagged(client, chatID, afkPersons, quotedAuthorID, groupsDict, usersDict, messageID);
+                    await HA.afkPersonTagged(client, chatID, messageID, quotedAuthorID, afkPersons, groupsDict, usersDict);
                 }
             }
         }

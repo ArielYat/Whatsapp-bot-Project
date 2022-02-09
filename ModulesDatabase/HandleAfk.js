@@ -4,25 +4,25 @@ import {HDB} from "./HandleDB.js";
 export class HA {
     static async afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
         const person = usersDict[authorID];
-        if (person.afk && !(afkPersons.includes(authorID))) {
+        if (!person.afk && !(afkPersons.includes(authorID))) {
             person.afk = new Date();
+            await afkPersons.push(authorID);
             await HDB.addArgsToDB(authorID, person.afk, null, null, "afk", function () {
-                afkPersons.push(authorID);
             });
             await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
                 HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {
                     client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "afk_reply", authorID.replace("@c.us", "")), messageID);
                 });
             });
-        } else client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "afk_already_error"), messageID);
+        }
     }
 
     static async afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
         const person = usersDict[authorID];
-        if (person.afk && afkPersons.includes(authorID)) {
+        if (!!person.afk && afkPersons.includes(authorID)) {
             person.afk = null;
+            afkPersons.splice(afkPersons.indexOf(authorID), 1);
             await HDB.delArgsFromDB(authorID, null, "afk", function () {
-                afkPersons.splice(afkPersons.indexOf(authorID), 1);
             });
             await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
                 HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {

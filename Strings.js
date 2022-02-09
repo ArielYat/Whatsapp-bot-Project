@@ -280,7 +280,7 @@ export const Strings = {
         "en": /^Add (.+) to tagging group (.+)/i,
         "la": "",
         "ar": "",
-        "fr": ""
+        "fr": /^Add (.+) to tagging group (.+)/i
     }, "remove_person_from_tagging_group": {
         "he": /^הסר את (.+) מקבוצת התיוג (.+)/i,
         "en": /^Remove (.+) from tagging group (.+)/,
@@ -831,7 +831,7 @@ export const Strings = {
         "en": /^Check stock/i,
         "la": "",
         "ar": "",
-        "fr": ""
+        "fr": /^Check stock/i
     }, "fetch_stock_reply": {
         "he": "הנה המידע שביקשת על המנייה של %s:\n%s",
         "en": "Here's the information you requested about %s's stock:\n%s",
@@ -839,8 +839,8 @@ export const Strings = {
         "ar": "",
         "fr": ""
     }, "fetch_stock_api_error": {
-        "he": "אופס... משהו לא עבד לי...",
-        "en": "Oops... something went wrong...",
+        "he": "חבריה, קוד המנייה שלכם לא תקין",
+        "en": "Guys, your stock code is invalid",
         "la": "",
         "ar": "",
         "fr": ""
@@ -855,9 +855,9 @@ export const Strings = {
         "en": /^!afk$/i,
         "la": "",
         "ar": "",
-        "fr": ""
+        "fr": /^!afk$/i
     }, "afk_reply": {
-        "he": "הבחור @%s נכנס למצב שינה (ידוע גם כנא לא להפריע) הוא לא יהיה זמין יותר לזמן הקרוב",
+        "he": "הבחור/ה @%s נכנס למצב שינה (ידוע גם כנא לא להפריע) הוא/היא לא יהיה זמין בזמן הקרוב",
         "en": "@%s has entered deep sleep mode (also known as Do Not Disturb) and will not be available for the time being",
         "la": "",
         "ar": "",
@@ -1092,8 +1092,8 @@ export const Strings = {
         "ar": ``,
         "fr": `*Commandes autocollantes:*\n- "Crée un autocollant [sans coupures]" - crée un autocollant à partir d'un fichier multimédia et l'envoie\n  - Cette commande peut être utilisée dans le message dans lequel le media a été envoyé et en réponse à celui-ci \n  - "sans coupures" est un paramètre facultatif qui crée l'autocollant sans le recadrer\n- "Crée un autocollant de texte [couleur en anglais] - [texte]" - crée un autocollant sans fond avec le texte donné\n  - Si le paramètre "couleur en anglais" n'est pas donné, la couleur sera noir par défaut`
     }, "help_internet_reply": {
-        "he": `*פקודות אינטרנט:*\n_יש לכל הפקודות האלו מגבלה יומית מסויימת_\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "בדוק מנייה [קוד מנייה]" - מציג מידע על המנייה שנבחרה\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת`,
-        "en": `*Internet Commands:*\n_All of the commands below have a certain daily limit_\n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Check stock [stock code]" - shows information about the stock given\n- "Internet definition [word]" - searches for the word in the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message`,
+        "he": `*פקודות אינטרנט:*\n_יש לכל הפקודות האלו מגבלה יומית מסויימת_\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "בדוק מנייה [קוד מנייה]" - מציג מידע על המנייה שנבחרה\n  - לדוגמה בדוק מנייה GOOGL\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת`,
+        "en": `*Internet Commands:*\n_All of the commands below have a certain daily limit_\n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Check stock [stock code]" - shows information about the stock given\n  - for example Check stock GOOGL\n- "Internet definition [word]" - searches for the word in the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message`,
         "la": ``,
         "ar": ``,
         "fr": `*Commandes Aide internet:*\n- "Vérifie le Crypto" - envoie un message avec les taux de change de dix crypto-monnaies différentes par rapport au dollar\n- "Définition Internet [Mot en anglais] " - recherche le mot sur le site Web Urban Dictionary et renvoie le résultat de la recherche\n  - Par exemple: définition Internet chaise\n- "Traduis en [Code de la langue] [mots]" - traduit les mots dans la langue donnée via Google Traduction \n  - Par exemple: Traduis en Hebreux Chaise\n- "Télécharge musique [lien vers youtube]" - télécharge une chanson depuis youtube et l'envoie en tant que message vocal\n- "Analyse [lien]" - analyse le lien donné à la recherche de virus\n  - Par exemple: Analyse https://www.google.com/\n  - Les liens peuvent être analysé dans le message dans lequel la commande est envoyée ou dans un message entre guillemets`
