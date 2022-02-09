@@ -170,7 +170,6 @@ export class Group {
         this.#stockCounter = number;
     }
 
-    //a function which resets the group's counters; called everyday at midnight
     resetCounters() {
         this.#cryptoCheckedToday = false;
         this.#translationCounter = 0;

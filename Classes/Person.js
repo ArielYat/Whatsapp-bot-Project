@@ -84,19 +84,19 @@ export class Person {
         return this.#reminders;
     }
 
+    set reminders(reminderArray) {
+        if (reminderArray[0] === "add")
+            this.#reminders[reminderArray[1]] = reminderArray[2];
+        else if (reminderArray[0] === "delete")
+            delete this.#reminders[reminderArray[1]];
+    }
+
     get afk() {
         return this.#afk;
     }
 
     set afk(date) {
         this.#afk = date;
-    }
-
-    set reminders(reminderArray) {
-        if (reminderArray[0] === "add")
-            this.#reminders[reminderArray[1]] = reminderArray[2];
-        else if (reminderArray[0] === "delete")
-            delete this.#reminders[reminderArray[1]];
     }
 
     doesReminderExist(date) {

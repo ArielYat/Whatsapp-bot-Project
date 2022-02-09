@@ -1,4 +1,4 @@
-//version 2.7
+//version 2.8
 
 //Command Modules
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -15,7 +15,7 @@ import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
 import {HW} from "./ModuleWebsite/HandleWebsite.js";
 import {HUS} from "./ModulesImmediate/HandleUserStats.js";
 import {HR} from "./ModulesDatabase/HandleReminders.js";
-import {HA} from "./ModulesDatabase/handleAfk.js";
+import {HA} from "./ModulesDatabase/HandleAfk.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
@@ -36,6 +36,7 @@ process.on('uncaughtException', function (err) {
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, function () {
     wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
+
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "make_sticker").test(bodyText)) {
         await HSt.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
@@ -64,6 +65,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (HL.getGroupLang(groupsDict, chatID, "show_profile").test(bodyText)) {
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
+    } else if (HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)) {
+        await HA.afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
+        usersDict[authorID].commandCounter++;
         /* } else if (HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe").test(bodyText)) {
                await H3T.TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict);
                usersDict[authorID].commandCounter++; */
@@ -75,9 +79,6 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "show_webpage").test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
-        usersDict[authorID].commandCounter++;
-    } else if (HL.getGroupLang(groupsDict, chatID, "afk_command").test(bodyText)) {
-        await HA.handleAfk(client, usersDict[authorID], chatID, groupsDict, messageID, afkPersons);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
@@ -305,8 +306,9 @@ function start(client) {
                 await HandleAdminFunction(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons);
-            if(afkPersons.includes(authorID) && !(HL.getGroupLang(groupsDict, chatID, "afk_command").test(bodyText)))
-                await HA.afkOff(client, usersDict[authorID], chatID, groupsDict, messageID, afkPersons);
+            //Remove a person from afk
+            if (afkPersons.includes(authorID) && !(HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)))
+                await HA.afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
@@ -350,6 +352,7 @@ function start(client) {
     });
 }
 
+//TODO: add male/female strings
 //TODO: website
 //TODO: search on ME
 //TODO: stock checking

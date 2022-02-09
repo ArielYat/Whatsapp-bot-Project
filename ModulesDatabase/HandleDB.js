@@ -7,7 +7,7 @@ const url = "mongodb://localhost:27017/";
 export class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
-        MongoClient.connect(url, function (err, client) {
+        MongoClient.connect(url, async function (err, client) {
             if (err) {
                 console.log(err + " in addArgsToDB");
                 return;
@@ -53,13 +53,7 @@ export class HDB {
                     objectToAddToDataBase = {personID: ID, dateOfAFk: value1};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
-                argType === "personIn" || argType === "groupAdmins")
-                argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
-                argType += "-persons"
-            client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
+            client.db("WhatsappBotDB").collection(await HDB.getArgType(argType)).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
                     console.log(err + " in addArgsToDB-insertOne");
                     return;
@@ -72,7 +66,7 @@ export class HDB {
 
     static async delArgsFromDB(ID, key, argType, callback) {
         let objectToDelInDataBase;
-        MongoClient.connect(url, function (err, client) {
+        MongoClient.connect(url, async function (err, client) {
             if (err) {
                 console.log(err + " in delArgsFromDB");
                 return;
@@ -118,13 +112,7 @@ export class HDB {
                     objectToDelInDataBase = {personID: ID};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
-                argType === "personIn" || argType === "groupAdmins")
-                argType += "-groups";
-            else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
-                argType += "-persons"
-            client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
+            client.db("WhatsappBotDB").collection(await HDB.getArgType(argType)).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
                     console.log(err + " in delArgsFromDB-deleteOne");
                     return;
@@ -133,6 +121,16 @@ export class HDB {
                 client.close();
             });
         });
+    }
+
+    static async getArgType(argType) {
+        if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+            argType === "personIn" || argType === "groupAdmins")
+            return argType + "-groups";
+        if (argType === "name" || argType === "birthday" || argType === "perm" ||
+            argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
+            return argType + "-persons";
+        return "error"; //Shouldn't ever happen
     }
 
     static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
