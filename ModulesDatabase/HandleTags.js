@@ -4,10 +4,9 @@ import {HA} from "./HandleAfk.js";
 
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_person"), "");
-        bodyText = bodyText.trim();
+        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_person"), "").trim();
         const tags = groupsDict[chatID].tags;
-        let counter = 0;
+        let counter = 0, afkPersonEh = false;
         for (const tag in tags) {
             if (bodyText.includes(tag)) {
                 const index = bodyText.indexOf(tag);
@@ -19,7 +18,7 @@ export class HT {
                         for (let i = 0; i < taggingGroup.length; i++) {
                             if (usersDict[taggingGroup[i] + "@c.us"].messagesTaggedIn[chatID] === undefined)
                                 usersDict[taggingGroup[i] + "@c.us"].messagesTaggedIn[chatID] = [];
-                            bodyText = bodyText.substr(0, bodyText.indexOf(tag)) + " @" + taggingGroup[i] + " " + tag + bodyText.substr(bodyText.indexOf(tag) + tag.length)
+                            bodyText = bodyText.substring(0, tag.length - 1) + " @" + taggingGroup[i] + " " + tag + bodyText.substring(bodyText.indexOf(tag) + tag.length);
                             if (authorID.replace("@c.us", "") !== taggingGroup[i])
                                 usersDict[taggingGroup[i] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
                             await HDB.delArgsFromDB(chatID, usersDict[taggingGroup[i] + "@c.us"].personID, "lastTagged", function () {
@@ -32,7 +31,7 @@ export class HT {
                         if (usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] === undefined)
                             usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
                         bodyText = bodyText.replace(tag, "@" + tags[tag]);
-                        usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                        afkPersonEh = usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
                         await HA.afkPersonTagged(client, chatID, messageID, tags[tag] + "@c.us", afkPersons, groupsDict, usersDict);
                         await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function () {
                             HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
@@ -43,14 +42,14 @@ export class HT {
                 }
             }
         }
-        if (counter !== 0) {
+        if (counter !== 0 && !afkPersonEh) {
             try {
                 await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
-            } catch (error) {
-                console.log("error occurred on tag");
-                for (let tag in groupsDict[chatID].tags) {
+            } catch (err) {
+                console.log("error occurred while tagging: " + err);
+                for (const tag in groupsDict[chatID].tags) {
                     await HDB.delArgsFromDB(chatID, tag, "tags", function () {
-                        groupsDict[chatID].tags = ["delete", tag]
+                        groupsDict[chatID].tags = ["delete", tag];
                     });
                 }
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tags_removed_problematic_tag_error"), messageID);

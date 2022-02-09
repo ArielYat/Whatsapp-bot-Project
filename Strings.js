@@ -19,11 +19,7 @@ export const Strings = {
         "fr": "Combien de filtres vous envoyez ici les gars? Je vais dormir jusqu'à %s:%s"
     }, //filters
     "add_filter": {
-        "he": /^הוסף פילטר/i,
-        "en": /^Add filter/i,
-        "la": "Crea invenientem",
-        "ar": "",
-        "fr": /^Ajoute le filtre/i
+        "he": /^הוסף פילטר/i, "en": /^Add filter/i, "la": "Crea invenientem", "ar": "", "fr": /^Ajoute le filtre/i
     }, "add_filter_reply": {
         "he": "הפילטר %s נוסף בהצלחה",
         "en": "The filters %s has been successfully added",
@@ -37,11 +33,7 @@ export const Strings = {
         "ar": "",
         "fr": "Le filtre %s existe déjà dans ce groupe\n si vous souhaitez modifier le filtre, écrivez ceci:\n Modifie le filtre %s - %s"
     }, "remove_filter": {
-        "he": /^הסר פילטר/i,
-        "en": /^Remove filter/i,
-        "la": "Dele invenientem",
-        "ar": "",
-        "fr": /^Supprime le filtre/i
+        "he": /^הסר פילטר/i, "en": /^Remove filter/i, "la": "Dele invenientem", "ar": "", "fr": /^Supprime le filtre/i
     }, "remove_filter_reply": {
         "he": "הפילטר %s הוסר בהצלחה",
         "en": "The filters %s has been successfully removed",
@@ -61,11 +53,7 @@ export const Strings = {
         "ar": "",
         "fr": "Ce groupe n'a aucun filtres"
     }, "edit_filter": {
-        "he": /^ערוך פילטר/i,
-        "en": /^Edit filter/i,
-        "la": "Recense invenientem",
-        "ar": "",
-        "fr": /^Modifie le filtre/i
+        "he": /^ערוך פילטר/i, "en": /^Edit filter/i, "la": "Recense invenientem", "ar": "", "fr": /^Modifie le filtre/i
     }, "edit_filter_reply": {
         "he": "הפילטר %s נערך בהצלחה",
         "en": "The filters %s has been successfully edited",
@@ -152,11 +140,7 @@ export const Strings = {
         "ar": "",
         "fr": "Ce groupe n'a aucun tags"
     }, "tag_all": {
-        "he": /^תייג כולם/i,
-        "en": /^Tag everyone/i,
-        "la": "Clama ad quoque",
-        "ar": "",
-        "fr": /^Tag tout le monde/i
+        "he": /^תייג כולם/i, "en": /^Tag everyone/i, "la": "Clama ad quoque", "ar": "", "fr": /^Tag tout le monde/i
     }, "show_tags": {
         "he": /^הראה רשימת חברים לתיוג/i,
         "en": /^Show tag buddies/i,
@@ -164,11 +148,7 @@ export const Strings = {
         "ar": "",
         "fr": /^Affiche la liste des personnes taguées/i
     }, "check_tags": {
-        "he": /^בדוק היכן תייגוני/i,
-        "en": /^Check my tags/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Vérifie où j'ai été tagué/i
+        "he": /^בדוק היכן תייגוני/i, "en": /^Check my tags/i, "la": "", "ar": "", "fr": /^Vérifie où j'ai été tagué/i
     }, "check_tags_reply": {
         "he": "הנה תיוגך, אדוני הטוב",
         "en": "You've been tagged here, Good Sir",
@@ -190,11 +170,7 @@ export const Strings = {
         "ar": "",
         "fr": "Votre liste de tags a été effacée"
     }, "create_tag_list": {
-        "he": /^צור רשימה לתיוג/i,
-        "en": /^Create tag list/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Crée une liste de tags/i
+        "he": /^צור רשימה לתיוג/i, "en": /^Create tag list/i, "la": "", "ar": "", "fr": /^Crée une liste de tags/i
     }, "create_tag_list_reply": {
         "he": "הרשימה לתיוג נוצרה בהצלחה מרובה",
         "en": "The tag list has been created",
@@ -222,11 +198,7 @@ export const Strings = {
         "ar": "",
         "fr": "La personne suivante dans la liste est la dernière: %s"
     }, "add_tagging_group": {
-        "he": /^הוסף קבוצת תיוג/i,
-        "en": /^Add tagging group/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Ajoute un groupe de tags/i
+        "he": /^הוסף קבוצת תיוג/i, "en": /^Add tagging group/i, "la": "", "ar": "", "fr": /^Ajoute un groupe de tags/i
     }, "add_tagging_group_reply": {
         "he": "קבוצת התיוג %s נוספה בהצלחה",
         "en": "The tagging group %s has been added successfully",
@@ -270,11 +242,7 @@ export const Strings = {
         "ar": "",
         "fr": "Seule grand-mère peut supprimer des groupes qui n'existent pas"
     }, "tagging_group": {
-        "he": "קבוצת תיוגים: ",
-        "en": "Tagging group: ",
-        "la": "",
-        "ar": "",
-        "fr": "Groupe de tags: "
+        "he": "קבוצת תיוגים: ", "en": "Tagging group: ", "la": "", "ar": "", "fr": "Groupe de tags: "
     }, "add_person_to_tagging_group": {
         "he": /^הוסף את (.+) לקבוצת התיוג (.+)/i,
         "en": /^Add (.+) to tagging group (.+)/i,
@@ -502,11 +470,7 @@ export const Strings = {
     }, "handleTags_permission_type": {
         "he": /ניהול_תיוגים/i, "en": /handle_Tags/i, "la": "", "ar": "", "fr": /^Gérer_Tags/i
     }, "handleBirthdays_permission_type": {
-        "he": /ניהול_ימיהולדת/i,
-        "en": /handle_Birthdays/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Gérer_Anniversaires/i
+        "he": /ניהול_ימיהולדת/i, "en": /handle_Birthdays/i, "la": "", "ar": "", "fr": /^Gérer_Anniversaires/i
     }, "handleShows_permission_type": {
         "he": /ניהול_הראה/i, "en": /handle_Shows/i, "la": "", "ar": "", "fr": /^Gérer_Affiches/i
     }, "handleOther_permission_type": {
@@ -562,11 +526,7 @@ export const Strings = {
         "ar": "",
         "fr": "L'utilisateur %s ne peut plus utiliser les commandes"
     }, "unmute_participant": {
-        "he": /^הסר השתקה/i,
-        "en": /^Unmute person/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Réactive la personne/i
+        "he": /^הסר השתקה/i, "en": /^Unmute person/i, "la": "", "ar": "", "fr": /^Réactive la personne/i
     }, "unmute_participant_reply": {
         "he": "המשתמש %s יכול להשתמש בפקודות שוב",
         "en": "User %S can use commands again",
@@ -595,11 +555,7 @@ export const Strings = {
         "ar": "",
         "fr": "frère, ce n'est pas un lien valide"
     }, "scan_link_checking_reply": {
-        "he": "%s \n בודק...",
-        "en": "%s \n Checking...",
-        "la": "%s \n Examino...",
-        "ar": "",
-        "fr": "%s \n J'examine..."
+        "he": "%s \n בודק...", "en": "%s \n Checking...", "la": "%s \n Examino...", "ar": "", "fr": "%s \n J'examine..."
     }, "scan_link_result_reply": {
         "he": " וואלה אחי בדקתי את הקישור כמו שביקשת ומצאתי ש־%s אנטי וירוסים מצאו אותו סאחי",
         "en": "%s antivirus engines detected this link as malicious",
@@ -649,11 +605,7 @@ export const Strings = {
         "ar": "",
         "fr": "Une erreur s'est produite lors de la création de votre autocollant \nVérifiez que vous avez choisi une couleur en anglais et au moins un mot"
     }, "create_survey": {
-        "he": /^צור סקר/i,
-        "en": /^Create survey/i,
-        "la": "Crea census",
-        "ar": "",
-        "fr": /^Crée un sondage/i
+        "he": /^צור סקר/i, "en": /^Create survey/i, "la": "Crea census", "ar": "", "fr": /^Crée un sondage/i
     }, "survey_title": {
         "he": /כותרת - (.)+/, "en": /Title - (.)+/, "la": /Nomen - (.)+/, "ar": "", "fr": /Titre - (.)+/
     }, "survey_subtitle": {
@@ -669,23 +621,11 @@ export const Strings = {
         "ar": "",
         "fr": /Troisième titre - (.)+/
     }, "survey_button_1": {
-        "he": /כפתור 1 - (.)+/,
-        "en": /Button 1 - (.)+/,
-        "la": /Buttonus 1 - (.)+/,
-        "ar": "",
-        "fr": /Bouton 1 - (.)+/
+        "he": /כפתור 1 - (.)+/, "en": /Button 1 - (.)+/, "la": /Buttonus 1 - (.)+/, "ar": "", "fr": /Bouton 1 - (.)+/
     }, "survey_button_2": {
-        "he": /כפתור 2 - (.)+/,
-        "en": /Button 2 - (.)+/,
-        "la": /Buttonus 2 - (.)+/,
-        "ar": "",
-        "fr": /Bouton 2 - (.)+/
+        "he": /כפתור 2 - (.)+/, "en": /Button 2 - (.)+/, "la": /Buttonus 2 - (.)+/, "ar": "", "fr": /Bouton 2 - (.)+/
     }, "survey_button_3": {
-        "he": /כפתור 3 - (.)+/,
-        "en": /Button 3 - (.)+/,
-        "la": /Buttonus 3 - (.)+/,
-        "ar": "",
-        "fr": /Bouton 3 - (.)+/
+        "he": /כפתור 3 - (.)+/, "en": /Button 3 - (.)+/, "la": /Buttonus 3 - (.)+/, "ar": "", "fr": /Bouton 3 - (.)+/
     }, "survey_title_replace": {
         "he": "כותרת -", "en": "Title -", "la": "Nomen -", "ar": "", "fr": "Titre -"
     }, "second_survey_title_replace": {
@@ -705,11 +645,7 @@ export const Strings = {
         "ar": "",
         "fr": "J'ai besoin d'un titre, d'un corps et d'au moins un bouton pour faire un sondage"
     }, "check_crypto": {
-        "he": /^בדוק קריפטו/i,
-        "en": /^Check Crypto/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Verifie la Crypto/i
+        "he": /^בדוק קריפטו/i, "en": /^Check Crypto/i, "la": "", "ar": "", "fr": /^Verifie la Crypto/i
     }, "crypto_check_reply": {
         "he": "הנה השטויות שביקשת: \n %s",
         "en": "Here's the junk you requsted: \n %s",
@@ -729,11 +665,7 @@ export const Strings = {
         "ar": "",
         "fr": "Pardonnez-moi mais chaque groupe ne peut vérifier les taux de change Crypto qu'une seule fois par jour"
     }, "search_in_urban": {
-        "he": /^הגדרת אינטרנט/i,
-        "en": /^Internet definition/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Définition Internet/i
+        "he": /^הגדרת אינטרנט/i, "en": /^Internet definition/i, "la": "", "ar": "", "fr": /^Définition Internet/i
     }, "search_in_urban_reply": {
         "he": "הגדרה", "en": "Definition", "la": "", "ar": "", "fr": "Définition"
     }, "urban_word_not_found_error": {
@@ -801,11 +733,7 @@ export const Strings = {
         "ar": "",
         "fr": "Quelqu'un ici n'a pas fixé d'anniversaire :("
     }, "download_music": {
-        "he": /^הורד מוזיקה/i,
-        "en": /^Download music/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Télécharge la musique/i
+        "he": /^הורד מוזיקה/i, "en": /^Download music/i, "la": "", "ar": "", "fr": /^Télécharge la musique/i
     }, "download_music_downloading_reply": {
         "he": "מוריד...", "en": "Downloading...", "la": "", "ar": "", "fr": "Téléchargement..."
     }, "download_music_unknown_error": {
@@ -827,11 +755,7 @@ export const Strings = {
         "ar": "",
         "fr": "Vous avez téléchargé trop de chansons aujourd'hui - réessayez demain"
     }, "fetch_stock": {
-        "he": /^בדוק מנייה/i,
-        "en": /^Check stock/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Check stock/i
+        "he": /^בדוק מנייה/i, "en": /^Check stock/i, "la": "", "ar": "", "fr": /^Check stock/i
     }, "fetch_stock_reply": {
         "he": "הנה המידע שביקשת על המנייה של %s:\n%s",
         "en": "Here's the information you requested about %s's stock:\n%s",
@@ -839,11 +763,7 @@ export const Strings = {
         "ar": "",
         "fr": ""
     }, "fetch_stock_api_error": {
-        "he": "חבריה, קוד המנייה שלכם לא תקין",
-        "en": "Guys, your stock code is invalid",
-        "la": "",
-        "ar": "",
-        "fr": ""
+        "he": "חבריה, קוד המנייה שלכם לא תקין", "en": "Guys, your stock code is invalid", "la": "", "ar": "", "fr": ""
     }, "check_stock_limit_error": {
         "he": "אני מצטער אבל כל קבוצה יכולה לבדוק מניות רק שלוש פעמים ביום",
         "en": "Forgive me but each group can check the stocks only thrice per day",
@@ -851,11 +771,7 @@ export const Strings = {
         "ar": "",
         "fr": ""
     }, "afk_me_pwease": {
-        "he": /^!afk$/i,
-        "en": /^!afk$/i,
-        "la": "",
-        "ar": "",
-        "fr": /^!afk$/i
+        "he": /^!afk$/i, "en": /^!afk$/i, "la": "", "ar": "", "fr": /^!afk$/i
     }, "afk_reply": {
         "he": "הבחור/ה @%s נכנס למצב שינה (ידוע גם כנא לא להפריע) הוא/היא לא יהיה זמין בזמן הקרוב",
         "en": "@%s has entered deep sleep mode (also known as Do Not Disturb) and will not be available for the time being",
@@ -914,11 +830,7 @@ export const Strings = {
         "ar": "",
         "fr": "Je suis désolé, mais à ce jour, je ne suis toujours pas capable de deviner l'heure par moi-même \nVeuillez vérifier que vous l'avez écrite correctement"
     }, "remove_reminder": {
-        "he": /^הסר תזכורת/i,
-        "en": /^Remove reminder/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Supprime le rappel/i
+        "he": /^הסר תזכורת/i, "en": /^Remove reminder/i, "la": "", "ar": "", "fr": /^Supprime le rappel/i
     }, "remove_reminder_reply": {
         "he": "התזכורת שנקבעה לשעה %s הוסרה בהצלחה",
         "en": "The reminder set at %s has been removed",
@@ -932,11 +844,7 @@ export const Strings = {
         "ar": "",
         "fr": "Je ne parviens toujours pas à supprimer des rappels qui n'ont jamais été définis"
     }, "show_reminders": {
-        "he": /^הראה תזכורות/i,
-        "en": /^Show reminders/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Affiche les rappels/i
+        "he": /^הראה תזכורות/i, "en": /^Show reminders/i, "la": "", "ar": "", "fr": /^Affiche les rappels/i
     }, "show_reminder_error": {
         "he": "אין לך תזכורות פעילות",
         "en": "You don't have any active reminders",
@@ -959,21 +867,13 @@ export const Strings = {
         "he": /ליום שישי/i, "en": /^Friday/i, "la": "", "ar": "", "fr": /Vendredi/i
     }, "day_Saturday": {
         "he": /ליום שבת/i, "en": /^Saturday/i, "la": "", "ar": "", "fr": /^Samedi/i
-    }, //
+    }, //Tic Tac Toe
     "init_tic_tac_toe": {
-        "he": /^התחל איקס עיגול (\d),(\d)/i,
-        "en": /^Start tic tac toe (\d),(\d)/i,
-        "la": "",
-        "ar": "",
-        "fr": ""
+        "he": /^התחל איקס עיגול (\d),(\d)/i, "en": /^Start tic tac toe (\d),(\d)/i, "la": "", "ar": "", "fr": ""
     }, "move_tic_tac_toe": {
         "he": /^מהלך (\d),(\d)/i, "en": /^Move (\d),(\d)/i, "la": "", "ar": "", "fr": ""
     }, "move_tic_tac_toe_reply": {
-        "he": "הנה הלוח הנוכחי:\n",
-        "en": "Here's the current board:\n",
-        "la": "",
-        "ar": "",
-        "fr": ""
+        "he": "הנה הלוח הנוכחי:\n", "en": "Here's the current board:\n", "la": "", "ar": "", "fr": ""
     }, "win_tic_tac_toe_reply": {
         "he": "ניצחת באיקס עיגול!", "en": "You won Tic Tac Toe!", "la": "", "ar": "", "fr": ""
     }, "lose_tic_tac_toe_reply": {
@@ -990,13 +890,9 @@ export const Strings = {
         "la": "",
         "ar": "",
         "fr": ""
-    }, //language
+    }, //language and help
     "change_language": {
-        "he": /^שנה שפה/i,
-        "en": /^Change language to/i,
-        "la": "Muta lingua ad",
-        "ar": "",
-        "fr": /^Change la langue en/i
+        "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad", "ar": "", "fr": /^Change la langue en/i
     }, "language_change_reply": {
         "he": "השפה שונתה בהצלחה",
         "en": "Language successfully changed",
@@ -1020,23 +916,11 @@ export const Strings = {
     }, "help_tags": {
         "he": /^עזרה תיוגים$/i, "en": /^Help tags$/i, "la": "", "ar": "", "fr": /^Aide tags$/i
     }, "help_birthdays": {
-        "he": /^עזרה ימי הולדת$/i,
-        "en": /^Help birthdays$/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Aide anniversaires$/i
+        "he": /^עזרה ימי הולדת$/i, "en": /^Help birthdays$/i, "la": "", "ar": "", "fr": /^Aide anniversaires$/i
     }, "help_permissions": {
-        "he": /^עזרה הרשאות$/i,
-        "en": /^Help permissions$/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Aide niveaux$/i
+        "he": /^עזרה הרשאות$/i, "en": /^Help permissions$/i, "la": "", "ar": "", "fr": /^Aide niveaux$/i
     }, "help_reminders": {
-        "he": /^עזרה תזכורות$/i,
-        "en": /^Help reminders$/i,
-        "la": "",
-        "ar": "",
-        "fr": /^Aide rappels$/i
+        "he": /^עזרה תזכורות$/i, "en": /^Help reminders$/i, "la": "", "ar": "", "fr": /^Aide rappels$/i
     }, "help_stickers": {
         "he": /^עזרה סטיקרים$/i, "en": /^Help sticker$/i, "la": "", "ar": "", "fr": /^Aide autocollant$/i
     }, "help_internet": {
@@ -1092,8 +976,8 @@ export const Strings = {
         "ar": ``,
         "fr": `*Commandes autocollantes:*\n- "Crée un autocollant [sans coupures]" - crée un autocollant à partir d'un fichier multimédia et l'envoie\n  - Cette commande peut être utilisée dans le message dans lequel le media a été envoyé et en réponse à celui-ci \n  - "sans coupures" est un paramètre facultatif qui crée l'autocollant sans le recadrer\n- "Crée un autocollant de texte [couleur en anglais] - [texte]" - crée un autocollant sans fond avec le texte donné\n  - Si le paramètre "couleur en anglais" n'est pas donné, la couleur sera noir par défaut`
     }, "help_internet_reply": {
-        "he": `*פקודות אינטרנט:*\n_יש לכל הפקודות האלו מגבלה יומית מסויימת_\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "בדוק מנייה [קוד מנייה]" - מציג מידע על המנייה שנבחרה\n  - לדוגמה בדוק מנייה GOOGL\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת`,
-        "en": `*Internet Commands:*\n_All of the commands below have a certain daily limit_\n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Check stock [stock code]" - shows information about the stock given\n  - for example Check stock GOOGL\n- "Internet definition [word]" - searches for the word in the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message`,
+        "he": `*פקודות אינטרנט:*\n_יש לכל הפקודות האלו מגבלה יומית מסויימת_\n- "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n- "בדוק מנייה [סמל מנייה]" - מציג מידע על המנייה שנבחרה\n  - לדוגמה בדוק מנייה GOOGL\n- "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  - לדוגמה: הגדרת אינטרנט Chair\n- "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  - לדוגמה: תרגם לאנגלית כיסא\n- "הורד מוזיקה [קישור ליוטיוב]" - מוריד שיר כלשהו מיוטיוב ושולח אותו בקבוצה בתור הודעה קולית\n- "סרוק [קישור]" - סורק קישור לוירוסים\n  - לדוגמה: סרוק https://www.google.com/\n  - ניתן לסרוק קישורים בהודעה בה נשלחת הפקודה או בהודעה מצוטטת`,
+        "en": `*Internet Commands:*\n_All of the commands below have a certain daily limit_\n- "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n- "Check stock [stock symbol]" - shows information about the stock given\n  - for example Check stock GOOGL\n- "Internet definition [word]" - searches for the word in the website Urban Dictionary and returns the search result\n  - For example: Internet definition chair\n- "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  - For example: Translate to Hebrew chair\n- "Download music [link to youtube]" - downloads a song from youtube and sends it as voice message\n- "Scan [link]" - scans the given link for viruses\n  - For example: Scan https://www.google.com/\n  - Links can be scanned in the message the command is sent in or in a quoted message`,
         "la": ``,
         "ar": ``,
         "fr": `*Commandes Aide internet:*\n- "Vérifie le Crypto" - envoie un message avec les taux de change de dix crypto-monnaies différentes par rapport au dollar\n- "Définition Internet [Mot en anglais] " - recherche le mot sur le site Web Urban Dictionary et renvoie le résultat de la recherche\n  - Par exemple: définition Internet chaise\n- "Traduis en [Code de la langue] [mots]" - traduit les mots dans la langue donnée via Google Traduction \n  - Par exemple: Traduis en Hebreux Chaise\n- "Télécharge musique [lien vers youtube]" - télécharge une chanson depuis youtube et l'envoie en tant que message vocal\n- "Analyse [lien]" - analyse le lien donné à la recherche de virus\n  - Par exemple: Analyse https://www.google.com/\n  - Les liens peuvent être analysé dans le message dans lequel la commande est envoyée ou dans un message entre guillemets`
