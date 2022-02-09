@@ -49,12 +49,15 @@ export class HDB {
                 case "reminders":
                     objectToAddToDataBase = {personID: ID, reminderDate: value1, reminderMessage: value2};
                     break;
+                case "afk":
+                    objectToAddToDataBase = {personID: ID, dateOfAFk: value1};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -111,12 +114,15 @@ export class HDB {
                 case "reminders":
                     objectToDelInDataBase = {personID: ID, reminderDate: key};
                     break;
+                case "afk":
+                    objectToDelInDataBase = {personID: ID};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -129,7 +135,7 @@ export class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -222,6 +228,11 @@ export class HDB {
                 case ("personsWithReminders"):
                     for (let i = 0; i < restArray.length; i++) {
                         personsWithReminders.push(restArray[i]);
+                    }
+                    break;
+                case ("afkPersons"):
+                    for (let i = 0; i < restArray.length; i++) {
+                        afkPersons.push(restArray[i]);
                     }
                     break;
                 default:

@@ -4,11 +4,10 @@ import util from "util";
 
 export class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
-        const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hebraica/i) || bodyText.match(/Hébreu/i)
-            ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglico/i) || bodyText.match(/Anglais/i)
-                ? "en" : bodyText.match(/ללטינית/) || bodyText.match(/Latin/i) || bodyText.match(/Latina/i) || bodyText.match(/Latin/i)
-                    ? "la" : bodyText.match(/לצרפתית/) || bodyText.match(/France/i) || bodyText.match(/Gallica/i) || bodyText.match(/Français/i)
-                        ? "fr" : null;
+        const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hébreu/i)
+            ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglais/i)
+                ? "en" : bodyText.match(/לצרפתית/) || bodyText.match(/France/i) || bodyText.match(/Français/i)
+                    ? "fr" : null;
         if (lang) {
             await HDB.delArgsFromDB(chatID, null, "lang", function () {
                 HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {

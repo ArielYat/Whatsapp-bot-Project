@@ -7,6 +7,7 @@ export class Person {
     #messagesTaggedIn;
     #autoBanned;
     #reminders;
+    #afk;
 
     constructor(personID) {
         this.#personID = personID;
@@ -17,6 +18,7 @@ export class Person {
         this.#messagesTaggedIn = {};
         this.#autoBanned = null;
         this.#reminders = {};
+        this.#afk = null;
     }
 
 
@@ -80,6 +82,14 @@ export class Person {
 
     get reminders() {
         return this.#reminders;
+    }
+
+    get afk() {
+        return this.#afk;
+    }
+
+    set afk(date) {
+        this.#afk = date;
     }
 
     set reminders(reminderArray) {

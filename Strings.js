@@ -850,6 +850,37 @@ export const Strings = {
         "la": null,
         "ar": null,
         "fr": null
+    }, "afk_command": {
+        "he": /^!afk$/i,
+        "en": /^!afk$/i,
+        "la": null,
+        "ar": null,
+        "fr": null
+
+    }, "afk_reply": {
+        "he": "הבחור @%s נכנס למצב שינה הוא לא יהיה זמין יותר לזמן הקרוב",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "afk_off_reply": {
+        "he": "ברוך שובך משנת החורף שלך מר בחור תייגו אותך %s פעמים במהלך השינה",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "afk_tagged_reply_date": {
+        "he": "מהתאריך %s בשעה %s",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
+    }, "afk_tagged_reply": {
+        "he": "הבחור %s ישן שנת חורף עמוקה %s ולכן כנראה הוא לא יראה את התיוג עכשיו\nכשהוא יקום הוא יוכל לראות למה מפריעים לו בשינה",
+        "en": null,
+        "la": null,
+        "ar": null,
+        "fr": null
     }, "show_webpage": {
         "he": /^שלח קישור לאתר/i,
         "en": /^Send website link/i,
@@ -980,7 +1011,7 @@ export const Strings = {
         "ar": null,
         "fr": "Langue modifiée avec succès"
     }, "language_change_error": {
-        "he": "בימינו רק עברית, אנגלית, צרפתית ולטינית נתמכות על ידי הבוט",
+        "he": "בימינו רק עברית, אנגלית, וצרפתית נתמכות על ידי הבוט",
         "en": "Only Hebrew, English, French and Latin are currently supported by the bot",
         "la": null,
         "ar": null,
@@ -1026,11 +1057,11 @@ export const Strings = {
         "ar": ``,
         "fr": `_*Liste des commandes en français et aide générale*_\nSi vous souhaitez obtenir de l'aide concernant une commande spécifique, essayez l'une des options suivantes:\n"Aide langue", "Aide filtres", "Aide tags", "Aide anniversaires", "Aide niveaux " "Aide rappels", "Aide autocollant", "Aide internet", "Aide autre"\nSi ce n'est pas le cas, et que vous vouliez simplement voir ce message, n'hésitez pas à rester! \nDéveloppé et maintenu par Ariel Yatskan (972543293155) et Ethan Amiran (972586809911)\nLe référentiel GitHub (le code), pour les curieux: https://github.com/ArielYat/Whatsapp-bot-Project`
     }, "help_language_reply": {
-        "he": `*שפת הבוט:*\n- "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות\n  - לדוגמה: שנה שפה לאנגלית\n  - אפשר להשתמש בפקודה הזו בכל שפה\n  - שפות שנתמכות כעת: עברית, אנגלית, צרפתית וחלקית לטינית`,
-        "en": `*Bot's Language:*\n- "Change language to [language]" - changes the language the bot receives and sends messages in\n  - For example: Change language to Hebrew\n  - This command can be used at all times in every language\n  - Languages currently supported: Hebrew, English, French & Semi-Latin`,
+        "he": `*שפת הבוט:*\n- "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות\n  - לדוגמה: שנה שפה לאנגלית\n  - אפשר להשתמש בפקודה הזו בכל שפה\n  - שפות שנתמכות כעת: עברית, אנגלית, צרפתית`,
+        "en": `*Bot's Language:*\n- "Change language to [language]" - changes the language the bot receives and sends messages in\n  - For example: Change language to Hebrew\n  - This command can be used at all times in every language\n  - Languages currently supported: Hebrew, English, French`,
         "la": ``,
         "ar": ``,
-        "fr": `*Langue du bot:*\n- "Change la langue en [langue]" - change la langue dans laquelle le bot reçoit et envoie des messages\\n  - Par exemple: Change la langue en hébreu\n  - Cette commande peut être utilisée à tout moment dans toutes les langues\\n  - Langues actuellement prises en charge: Hébreu, Anglais, semi-Latin et Français`
+        "fr": `*Langue du bot:*\n- "Change la langue en [langue]" - change la langue dans laquelle le bot reçoit et envoie des messages\\n  - Par exemple: Change la langue en hébreu\n  - Cette commande peut être utilisée à tout moment dans toutes les langues\\n  - Langues actuellement prises en charge: Hébreu, Anglais et Français`
     }, "help_filters_reply": {
         "he": `*פילטרים:*\n_פילטרים יכולים להיות טקסט, תמונה או סרטון_\n- "הוסף פילטר [פילטר] - [תגובת הבוט]" - מוסיף פילטר לקבוצה\n  - לדוגמה: הוסף פילטר אוכל - בננה\n- "הסר פילטר [פילטר]" - מסיר את הפילטר המצויין מהקבוצה\n  - לדוגמה: הסר פילטר אוכל\n- "ערוך פילטר [פילטר קיים] - [תשובה חדשה]" - עורך פילטר קיים בקבוצה\n  - לדוגמה: ערוך פילטר אוכל - אפרסק\n- "הראה פילטרים" - מציג את רשימת הפילטרים הקיימים כעת בקבוצה\n_טיפ מיוחד!_\n- בהוספת פילטר אפשר גם להשתמש ב[שם] בשביל לתייג מישהו כשהפילטר נקרא\n  - לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי כשנאמר "אוכל"`,
         "en": `*Filters:*\n_Filters can be text, an image or a video_\n- "Add filter [filter] - [bot reply]" - adds a filter to the group\n  - For example: Add filter food - banana\n- "Remove filter [filter]" - removes the specified filter from the group\n  - For example: Remove filter food\n- "Edit filter [existing filter] - [new reply]" - edits the specified filter\n  - For example: Edit filter food - peach\n- "Show filters" - displays the list of all filter and their replies in the group\n_Special tip!_\n- When adding a filter you can use [name] to tag someone when the filter is invoked\n  - For example: "Add filter food - [Joseph]" will make the bot tag Joseph whenever "food" is said`,

@@ -15,6 +15,7 @@ import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
 import {HW} from "./ModuleWebsite/HandleWebsite.js";
 import {HUS} from "./ModulesImmediate/HandleUserStats.js";
 import {HR} from "./ModulesDatabase/HandleReminders.js";
+import {HA} from "./ModulesDatabase/handleAfk.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
@@ -23,7 +24,7 @@ import wa from "@open-wa/wa-automate";
 import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
-    restPersonsCommandSpam = [], personsWithReminders = [];
+    restPersonsCommandSpam = [], personsWithReminders = [], afkPersons = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
@@ -32,10 +33,9 @@ process.on('uncaughtException', function (err) {
 });
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, function () {
     wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
-
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "make_sticker").test(bodyText)) {
         await HSt.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
@@ -76,6 +76,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (HL.getGroupLang(groupsDict, chatID, "show_webpage").test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if (HL.getGroupLang(groupsDict, chatID, "afk_command").test(bodyText)) {
+        await HA.handleAfk(client, usersDict[authorID], chatID, groupsDict, messageID, afkPersons);
+        usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -106,7 +109,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "tag_person").test(bodyText)) {
-        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "check_tags").test(bodyText)) {
         await HT.whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);
@@ -179,7 +182,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "set_permissions").test(bodyText)) {
-        groupsDict[chatID].groupAdmins = await HP.updateGroupAdmins(client, chatID, groupsDict);
+        await HP.updateGroupAdmins(client, chatID, groupsDict);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "mute_participant").test(bodyText)) {
@@ -291,17 +294,19 @@ function start(client) {
                     groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
                 });
             }
-            //If the author lacks a permission level give them one
-            if (!(chatID in usersDict[authorID].permissionLevel))
-                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Update group admins if they don't exist
             if (groupsDict[chatID].groupAdmins.length === 0)
                 await HP.updateGroupAdmins(client, chatID, groupsDict);
+            //If the author lacks a permission level give them one
+            if (!(chatID in usersDict[authorID].permissionLevel))
+                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Handle bot developer functions if the author is a dev
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3)
                 await HandleAdminFunction(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
-            await HT.logMessagesWithTags(message, bodyText, chatID, messageID, usersDict);
+            await HT.logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons);
+            if(afkPersons.includes(authorID) && !(HL.getGroupLang(groupsDict, chatID, "afk_command").test(bodyText)))
+                await HA.afkOff(client, usersDict[authorID], chatID, groupsDict, messageID, afkPersons);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
