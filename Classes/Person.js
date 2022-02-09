@@ -7,6 +7,7 @@ export class Person {
     #messagesTaggedIn;
     #autoBanned;
     #reminders;
+    #afk;
 
     constructor(personID) {
         this.#personID = personID;
@@ -17,6 +18,7 @@ export class Person {
         this.#messagesTaggedIn = {};
         this.#autoBanned = null;
         this.#reminders = {};
+        this.#afk = null;
     }
 
 
@@ -87,6 +89,14 @@ export class Person {
             this.#reminders[reminderArray[1]] = reminderArray[2];
         else if (reminderArray[0] === "delete")
             delete this.#reminders[reminderArray[1]];
+    }
+
+    get afk() {
+        return this.#afk;
+    }
+
+    set afk(date) {
+        this.#afk = date;
     }
 
     doesReminderExist(date) {

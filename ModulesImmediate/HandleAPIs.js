@@ -89,7 +89,7 @@ export class HAPI {
             } catch (err) {
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);
             }
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit"), messageID);
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit_error"), messageID);
     }
 
     static async downloadMusic(client, bodyText, chatID, messageID, groupsDict) {
@@ -123,6 +123,29 @@ export class HAPI {
                 }
             } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
+    }
 
+    static async fetchStock(client, bodyText, chatID, messageID, groupsDict) {
+        if (groupsDict[chatID].stockCounter < 3) {
+            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "fetch_stock"), "").trim();
+            try {
+                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${bodyText}&interval=30min&apikey=${apiKeys.stockAPI}`;
+                let response = await nodeFetch(url, {
+                    method: 'GET', headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'request'
+                    },
+                });
+                response = await response.json();
+                response = response["Time Series (30min)"];
+                response = Object.values(response)[0];
+                response = JSON.stringify(response);
+                response = response.replace("{", "").replace("}", "").replace(/"/g, "").replace(/:/g, ": ").replace(/,/g, ",\n").trim();
+                groupsDict[chatID].stockCounter++;
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "fetch_stock_reply", bodyText, response), messageID);
+            } catch (err) {
+                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "fetch_stock_api_error"), messageID);
+            }
+        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_stock_limit_error"), messageID);
     }
 }

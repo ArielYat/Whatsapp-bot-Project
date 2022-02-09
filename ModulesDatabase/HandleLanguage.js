@@ -4,11 +4,10 @@ import util from "util";
 
 export class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
-        const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hebraica/i) || bodyText.match(/Hébreu/i)
-            ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglico/i) || bodyText.match(/Anglais/i)
-                ? "en" : bodyText.match(/ללטינית/) || bodyText.match(/Latin/i) || bodyText.match(/Latina/i) || bodyText.match(/Latin/i)
-                    ? "la" : bodyText.match(/לצרפתית/) || bodyText.match(/France/i) || bodyText.match(/Gallica/i) || bodyText.match(/Français/i)
-                        ? "fr" : null;
+        const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hébreu/i)
+            ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglais/i)
+                ? "en" : bodyText.match(/לצרפתית/) || bodyText.match(/France/i) || bodyText.match(/Français/i)
+                    ? "fr" : null;
         if (lang) {
             await HDB.delArgsFromDB(chatID, null, "lang", function () {
                 HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
@@ -19,9 +18,11 @@ export class HL {
         } else client.reply(chatID, Strings["language_change_error"][groupsDict[chatID].groupLanguage], messageID);
     }
 
-    static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null) {
+    static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null, value3 = null) {
         if (parameter === "add_filter_already_exists_error")
             return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value1, value2);
+        if (value1 && value2 && value3)
+            return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value2, value3);
         if (value1 && value2)
             return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value2);
         if (value1)

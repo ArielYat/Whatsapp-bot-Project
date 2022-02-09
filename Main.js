@@ -1,4 +1,4 @@
-//version 2.7
+//version 2.8
 
 //Command Modules
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -15,7 +15,7 @@ import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
 import {HW} from "./ModuleWebsite/HandleWebsite.js";
 import {HUS} from "./ModulesImmediate/HandleUserStats.js";
 import {HR} from "./ModulesDatabase/HandleReminders.js";
-import {H3T} from "./ModulesImmediate/HandleTicTacToe.js";
+import {HA} from "./ModulesDatabase/HandleAfk.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
@@ -24,7 +24,7 @@ import wa from "@open-wa/wa-automate";
 import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
-    restPersonsCommandSpam = [], personsWithReminders = [];
+    restPersonsCommandSpam = [], personsWithReminders = [], afkPersons = [];
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
@@ -33,9 +33,9 @@ process.on('uncaughtException', function (err) {
 });
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, function () {
+HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, function () {
     wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
-}).then(_ => console.log("Bot started successfully at " + new Date()));
+}).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "make_sticker").test(bodyText)) {
@@ -50,6 +50,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if (HL.getGroupLang(groupsDict, chatID, "translate_to").test(bodyText)) {
         await HAPI.translate(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if (HL.getGroupLang(groupsDict, chatID, "fetch_stock").test(bodyText)) {
+        await HAPI.fetchStock(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "search_in_urban").test(bodyText)) {
         await HAPI.searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -61,6 +64,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "show_profile").test(bodyText)) {
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
+        usersDict[authorID].commandCounter++;
+    } else if (HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)) {
+        await HA.afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
         usersDict[authorID].commandCounter++;
         /* } else if (HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe").test(bodyText)) {
                await H3T.TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict);
@@ -104,7 +110,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "tag_person").test(bodyText)) {
-        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, usersDict);
+        await HT.checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "check_tags").test(bodyText)) {
         await HT.whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict);
@@ -177,7 +183,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
     if (HL.getGroupLang(groupsDict, chatID, "set_permissions").test(bodyText)) {
-        groupsDict[chatID].groupAdmins = await HP.updateGroupAdmins(client, chatID, groupsDict);
+        await HP.updateGroupAdmins(client, chatID, groupsDict);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "mute_participant").test(bodyText)) {
@@ -224,19 +230,16 @@ function start(client) {
     IsraelSchedule.scheduleJob('0 5 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);
     });
-    //Reset the crypto check, translation counter and download music counter everyday at 12 am
+    //Reset all group counters everyday at midnight
     IsraelSchedule.scheduleJob('0 0 * * *', async () => {
-        for (let group in groupsDict) {
-            groupsDict[group].cryptoCheckedToday = false;
-            groupsDict[group].translationCounter = 0;
-            groupsDict[group].downloadMusicCounter = 0;
-        }
+        for (const group in groupsDict)
+            groupsDict[group].resetCounters();
     });
     //Reset the filter & command counters for all the groups & persons
     setInterval(function () {
-        for (let group in groupsDict)
+        for (const group in groupsDict)
             groupsDict[group].filterCounter = 0;
-        for (let person in usersDict)
+        for (const person in usersDict)
             usersDict[person].commandCounter = 0;
     }, 5 * 60 * 1000); //in ms; 5 min
     //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
@@ -292,17 +295,20 @@ function start(client) {
                     groupsDict[chatID].personsIn = ["add", usersDict[authorID]];
                 });
             }
-            //If the author lacks a permission level give them one
-            if (!(chatID in usersDict[authorID].permissionLevel))
-                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Update group admins if they don't exist
             if (groupsDict[chatID].groupAdmins.length === 0)
                 await HP.updateGroupAdmins(client, chatID, groupsDict);
+            //If the author lacks a permission level give them one
+            if (!(chatID in usersDict[authorID].permissionLevel))
+                await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Handle bot developer functions if the author is a dev
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3)
                 await HandleAdminFunction(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
-            await HT.logMessagesWithTags(message, bodyText, chatID, messageID, usersDict);
+            await HT.logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons);
+            //Remove a person from afk
+            if (afkPersons.includes(authorID) && !(HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)))
+                await HA.afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
@@ -346,6 +352,7 @@ function start(client) {
     });
 }
 
+//TODO: add male/female strings
 //TODO: website
 //TODO: search on ME
 //TODO: stock checking

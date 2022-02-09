@@ -12,6 +12,7 @@ export class Group {
     #autoBanned
     #tagStack;
     #downloadMusicCounter;
+    #stockCounter;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -35,6 +36,7 @@ export class Group {
         this.#autoBanned = null;
         this.#tagStack = [];
         this.#downloadMusicCounter = 0;
+        this.#stockCounter = 0;
     }
 
     get groupID() {
@@ -112,8 +114,8 @@ export class Group {
         return this.#cryptoCheckedToday;
     }
 
-    set cryptoCheckedToday(number) {
-        this.#cryptoCheckedToday = number;
+    set cryptoCheckedToday(bool) {
+        this.#cryptoCheckedToday = bool;
     }
 
     get translationCounter() {
@@ -156,7 +158,22 @@ export class Group {
         return this.#downloadMusicCounter;
     }
 
-    set downloadMusicCounter(value) {
-        this.#downloadMusicCounter = value;
+    set downloadMusicCounter(number) {
+        this.#downloadMusicCounter = number;
+    }
+
+    get stockCounter() {
+        return this.#stockCounter;
+    }
+
+    set stockCounter(number) {
+        this.#stockCounter = number;
+    }
+
+    resetCounters() {
+        this.#cryptoCheckedToday = false;
+        this.#translationCounter = 0;
+        this.#downloadMusicCounter = 0;
+        this.#stockCounter = 0;
     }
 }

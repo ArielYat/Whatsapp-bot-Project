@@ -1,8 +1,9 @@
 import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
+import {HA} from "./HandleAfk.js";
 
 export class HT {
-    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict) {
+    static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_person"), "");
         bodyText = bodyText.trim();
         const tags = groupsDict[chatID].tags;
@@ -10,7 +11,7 @@ export class HT {
         for (const tag in tags) {
             if (bodyText.includes(tag)) {
                 const index = bodyText.indexOf(tag);
-                if ((index <= 0 || ((/[\s|,ו]/).test(bodyText[index - 1]))) &&
+                if ((index <= 0 || ((/[\sו,]/).test(bodyText[index - 1]))) &&
                     (index + tag.length >= bodyText.length || ((/\s/).test(bodyText[index + tag.length])))) {
                     counter += 1;
                     if (typeof (tags[tag]) === "object") {
@@ -32,6 +33,7 @@ export class HT {
                             usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID] = [];
                         bodyText = bodyText.replace(tag, "@" + tags[tag]);
                         usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID].push(messageID);
+                        await HA.afkPersonTagged(client, chatID, messageID, tags[tag] + "@c.us", afkPersons, groupsDict, usersDict);
                         await HDB.delArgsFromDB(chatID, usersDict[tags[tag] + "@c.us"].personID, "lastTagged", function () {
                             HDB.addArgsToDB(chatID, usersDict[tags[tag] + "@c.us"].personID, usersDict[tags[tag] + "@c.us"].messagesTaggedIn[chatID], null, "lastTagged", function () {
 
@@ -130,7 +132,7 @@ export class HT {
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
-    static async logMessagesWithTags(message, bodyText, chatID, messageID, usersDict) {
+    static async logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons) {
         const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
@@ -140,6 +142,7 @@ export class HT {
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
                     person.messagesTaggedIn[chatID].push(messageID);
+                    await HA.afkPersonTagged(client, chatID, messageID, ID, afkPersons, groupsDict, usersDict);
                     await HDB.delArgsFromDB(chatID, person.personID, "lastTagged", function () {
                         HDB.addArgsToDB(chatID, person.personID, person.messagesTaggedIn[chatID], null, "lastTagged", function () {
                         });
@@ -147,16 +150,17 @@ export class HT {
                 }
             }
         }
-        /*
-        if(message.quotedMsgObj && message.sender.id !==message.quotedMsgObj.sender.id) {
+        if (message.quotedMsgObj && message.sender.id !== message.quotedMsgObj.sender.id) {
             const quotedAuthorID = message.quotedMsgObj.sender.id;
-            if(quotedAuthorID in usersDict) {
-                if (usersDict[quotedAuthorID].messagesTaggedIn[chatID] === undefined)
-                    usersDict[quotedAuthorID].messagesTaggedIn[chatID] = [];
-                usersDict[quotedAuthorID].messagesTaggedIn[chatID].push(messageID);
+            if (quotedAuthorID in usersDict) {
+                if (afkPersons.includes(quotedAuthorID)) {
+                    if (usersDict[quotedAuthorID].messagesTaggedIn[chatID] === undefined)
+                        usersDict[quotedAuthorID].messagesTaggedIn[chatID] = [];
+                    usersDict[quotedAuthorID].messagesTaggedIn[chatID].push(messageID);
+                    await HA.afkPersonTagged(client, chatID, messageID, quotedAuthorID, afkPersons, groupsDict, usersDict);
+                }
             }
         }
-         */
     }
 
     static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {

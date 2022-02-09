@@ -49,12 +49,15 @@ export class HDB {
                 case "reminders":
                     objectToAddToDataBase = {personID: ID, reminderDate: value1, reminderMessage: value2};
                     break;
+                case "afk":
+                    objectToAddToDataBase = {personID: ID, dateOfAFk: value1};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -111,12 +114,15 @@ export class HDB {
                 case "reminders":
                     objectToDelInDataBase = {personID: ID, reminderDate: key};
                     break;
+                case "afk":
+                    objectToDelInDataBase = {personID: ID};
+                    break;
             }
             if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
             client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -129,7 +135,7 @@ export class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, callback) {
+    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -206,6 +212,13 @@ export class HDB {
             usersDict[personID].reminders = ["add", reminderDate, reminderMessage];
         }
 
+        function createAfk(document) {
+            let personID = document.personID, afkDate = document.dateOfAFk;
+            if (!(personID in usersDict))
+                usersDict[personID] = new Person(personID);
+            usersDict[personID].afk = new Date(afkDate);
+        }
+
         function createRested(document) {
             let chatID = document.ID, restArray = document.restArray;
             switch (chatID) {
@@ -222,6 +235,11 @@ export class HDB {
                 case ("personsWithReminders"):
                     for (let i = 0; i < restArray.length; i++) {
                         personsWithReminders.push(restArray[i]);
+                    }
+                    break;
+                case ("afkPersons"):
+                    for (let i = 0; i < restArray.length; i++) {
+                        afkPersons.push(restArray[i]);
                     }
                     break;
                 default:
@@ -329,6 +347,14 @@ export class HDB {
                 }
                 for (let i = 0; i < result.length; i++)
                     createReminders(result[i]);
+            });
+            dbo.collection("afk-persons").find({}).toArray(function (err, result) {
+                if (err) {
+                    console.log(err + " in fetching reminders from db");
+                    return;
+                }
+                for (let i = 0; i < result.length; i++)
+                    createAfk(result[i]);
             });
             dbo.collection("rested").find({}).toArray(function (err, result) {
                 if (err) {
