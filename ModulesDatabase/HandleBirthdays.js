@@ -26,12 +26,12 @@ export class HB {
 
     static async addBirthday(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_birthday"), "");
-        let fullBirthday = bodyText.trim();
-        if (fullBirthday.split(".").length === 3) {
-            fullBirthday = fullBirthday.split(".");
-            const birthDay = fullBirthday[0].trim(), birthMonth = fullBirthday[1].trim(), birthYear = fullBirthday[2].trim();
+        const fullBirthday = bodyText.trim().split(".");
+        if (fullBirthday.length === 3) {
+            const birthDay = fullBirthday[0].trim(), birthMonth = fullBirthday[1].trim(),
+                birthYear = fullBirthday[2].trim();
             if (birthDay <= 31 && birthMonth <= 12 && birthYear <= 2100 && birthDay >= 0 && birthMonth >= 0) {
-                let authorTag = "@" + authorID.replace("@c.us", "");
+                const authorTag = "@" + authorID.replace("@c.us", "");
                 if (!usersDict[authorID].birthday.length) {
                     await HDB.addArgsToDB(authorID, birthDay, birthMonth, birthYear, "birthday", function () {
                         usersDict[authorID].birthday = ["add", birthDay, birthMonth, birthYear];
@@ -43,7 +43,7 @@ export class HB {
     }
 
     static async remBirthday(client, bodyText, authorID, chatID, messageID, groupsDict, usersDict) {
-        let authorTag = "@" + authorID.replace("@c.us", "");
+        const authorTag = "@" + authorID.replace("@c.us", "");
         if (!!usersDict[authorID].birthday.length) {
             await HDB.delArgsFromDB(authorID, null, "birthday", function () {
                 usersDict[authorID].birthday = ["delete"];
