@@ -709,6 +709,8 @@ export const Strings = {
     },//reminders
     "add_reminder": {
         "he": /^הוסף תזכורת/i, "en": /^Add reminder/i, "la": "", "fr": /^Ajoute un rappel/i
+    }, "reminder_reminding": {
+        "he": "תזכורת!", "en": "Reminder!", "la": "", "fr": "Rappel!"
     }, "add_reminder_reply": {
         "he": "התזכורת נוספה בהצלחה בשעה %s",
         "en": "The reminder has been successfully set to %s",

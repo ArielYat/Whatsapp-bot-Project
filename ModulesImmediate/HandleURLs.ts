@@ -6,15 +6,13 @@ const defaultTimedInstance = nvt.makeAPI();
 defaultTimedInstance.setKey(apiKeys.virusAPI);
 
 export class HURL {
-    static async stripLinks(client, message, chatID, messageID, groupsDict) {
+    static async stripLinks(client, message, bodyText, chatID, messageID, groupsDict) {
         async function sleep(ms) {
             return new Promise((resolve) => {
                 setTimeout(resolve, ms);
             });
         }
 
-        message = message.quotedMsgObj ? message.quotedMsgObj : message;
-        const bodyText = message.body;
         const urlsInMessage = bodyText.match(/([hH]ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             urlsInMessage.forEach(function (url) {

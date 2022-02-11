@@ -2,7 +2,7 @@
 
 ## Commands
 
-### [Language](ModulesDatabase/HandleLanguage.js)
+### [Language](ModulesDatabase/HandleLanguage.ts)
 
 - `Change language to [language]` - changes the language the bot receives and sends messages in.
   - For example: Change language to Hebrew.
@@ -11,7 +11,7 @@
 - `Help [-|language|filters|tags|birthdays|permissions|reminders|stickers|internet|others]` - shows the various help
   messages, which in total list all the commands (except those available only to bot devs).
 
-### [Filters](ModulesDatabase/HandleFilters.js)
+### [Filters](ModulesDatabase/HandleFilters.ts)
 
 _Filters can be text, images or videos_
 
@@ -25,7 +25,7 @@ _Filters can be text, images or videos_
 - Special Tip: When adding a filter you can use `[name]` to tag someone when the filter is invoked.
   - For example: `Add filter food - [Joseph]` will make the bot tag Joseph whenever "food" is said.
 
-### [Tags](ModulesDatabase/HandleTags.js)
+### [Tags](ModulesDatabase/HandleTags.ts)
 
 - `Tag [person]` - tags someone so that they get a notification even if the group is muted on their phone.
   - For example: Tag Joseph.
@@ -43,7 +43,7 @@ _Filters can be text, images or videos_
   front of the chat.
 - `Clear my tags` - clears the saved tags of the message's author.
 
-### [Birthdays](ModulesDatabase/HandleBirthdays.js)
+### [Birthdays](ModulesDatabase/HandleBirthdays.ts)
 
 - `Add birthday [date in international format with periods]` - adds a birthday for message's author.
   - For example: Add birthday 1.11.2011.
@@ -54,7 +54,7 @@ _Filters can be text, images or videos_
 - `Remove group from the birthday distribution list` - removes the group the message was sent in from the author's
   birthday message broadcast.
 
-### [Permissions](ModulesDatabase/HandlePermissions.js)
+### [Permissions](ModulesDatabase/HandlePermissions.ts)
 
 - `Define permission for [permission type] - [Admin/Regular/Muted]` - defines the permission level required for a
   certain type of commands.
@@ -67,7 +67,7 @@ _Filters can be text, images or videos_
 - `Show function permissions` - displays the permissions levels of the different types of commands.
 - `Show people permissions` - displays the permissions levels of the people in the group.
 
-### [Reminders](ModulesDatabase/HandleReminders.js)
+### [Reminders](ModulesDatabase/HandleReminders.ts)
 
 _All the reminder related commands work only in a private chat with the bot. Reminders can be text, images or videos The
 date in the commands is optional (if no date is inputted the assumption is that the reminder is for the same date the
@@ -82,7 +82,7 @@ message was written in) and can include or not include a year._
   - For example: Remove reminder 7:34
 - `Show reminders` - Shows the author's reminders.
 
-### [Stickers](ModulesImmediate/HandleStickers.js)
+### [Stickers](ModulesImmediate/HandleStickers.ts)
 
 - `Create sticker [without cropping] [High Quality/Medium Quality]` - creates a sticker out of a message or a media file
   and sends it
@@ -93,7 +93,7 @@ message was written in) and can include or not include a year._
 - `Create text sticker [colour] - [text]` - creates a sticker without a background with the given text
   - If the parameter "colour" isn't given, the default is black
 
-### [Internet Commands](ModulesImmediate/HandleAPIs.js)
+### [Internet Commands](ModulesImmediate/HandleAPIs.ts)
 
 _All of the commands below have a certain daily limit_
 
@@ -105,16 +105,16 @@ _All of the commands below have a certain daily limit_
   - For example: Translate to Hebrew chair
   - In the translation text only one sentence can be written due to Google Translate restrictions.
 - `Download music [link to youtube]` - downloads a song from youtube and sends it as voice message.
-- [`Scan [link]`](ModulesImmediate/HandleURLs.js) - scans the given link for viruses.
+- [`Scan [link]`](ModulesImmediate/HandleURLs.ts) - scans the given link for viruses.
   - For example: Scan https://www.google.com/
 
 ### Miscellaneous Commands
 
 - Links can be scanned in the message the command is sent in or in a quoted message
-- [`Profile`](ModulesImmediate/HandleUserStats.js) - shows the bot's information about the message's author
-- [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAfk.js) - sets the the user's status to "afk", which means
+- [`Profile`](ModulesImmediate/HandleUserStats.ts) - shows the bot's information about the message's author
+- [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAFK.ts) - sets the the user's status to "afk", which means
   they won't get pings
-- [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.js):
+- [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.ts):
 - `Create survey Title - [survey title]
   Subtitle - [survey subtitle]
   Third Title - [third title]
@@ -122,10 +122,10 @@ _All of the commands below have a certain daily limit_
   Button 2 - [second option]
   Button 3 - [third option]`
   - (The third title and buttons 1 and 2 aren't required)
-- [`Send link`](ModuleWebsite/HandleWebsite.js) - sends a link to the bots webpage (work in progress)
+- [`Send link`](ModuleWebsite/HandleWebsite.ts) - sends a link to the bots webpage (work in progress)
 
 <!--
-### [Deletion from the database](ModulesDatabase/HandleDB.js)
+### [Deletion from the database](ModulesDatabase/HandleDB.ts)
 
 - `Delete this group from the database` - deletes all of the group's information from the database.
 - `Delete me from the database` - deletes all of the author's information from the database.
@@ -133,7 +133,7 @@ _All of the commands below have a certain daily limit_
 **Use these commands with caution, their effects are irreversible**
 -->
 
-### [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.js)
+### [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts)
 
 - `/Ban [user]` & `/Unban [user]` - ban a user from using the bot.
 - `/Block group` & `/Unblock group` - block a group's members from using the bot.

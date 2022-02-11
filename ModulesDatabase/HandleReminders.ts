@@ -2,7 +2,7 @@ import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
 
 export class HR {
-    static async checkReminders(client, usersDict, personsWithReminders, currentDate){
+    static async checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate) {
         for (let i = 0; i < personsWithReminders.length; i++) {
             const person = usersDict[personsWithReminders[i]];
             const personID = person.personID;
@@ -13,10 +13,10 @@ export class HR {
                     let stringForSending = doRepeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
-                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder");
+                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder", HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
                             break;
                         case stringForSending.startsWith("Image"):
-                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder");
+                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder", HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
                             break;
                         default:
                             await client.sendText(personID, stringForSending);
@@ -199,7 +199,7 @@ export class HR {
 
     static async showReminders(client, person, groupsDict, messageID, chatID) {
         let stringForSending = "";
-        if (Object.keys(person.reminders).length !== 0) {
+        if (Object.keys(person.reminders).length) {
             for (let reminder in person.reminders) {
                 const reminderDate = new Date(reminder);
                 let reminderData = person.reminders[reminder];

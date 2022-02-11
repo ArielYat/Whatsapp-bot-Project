@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import pkg from 'canvas';
 import puppeteer from "puppeteer";
@@ -5,7 +7,7 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import {encode} from "html-entities";
 
-const {createCanvas, loadImage, Image} = pkg;
+const {createCanvas, loadImage} = pkg;
 const _dirname = dirname(fileURLToPath(import.meta.url));
 
 export class HSt {

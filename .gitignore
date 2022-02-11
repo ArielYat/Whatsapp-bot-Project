@@ -1,8 +1,7 @@
 _IGNORE_session
 session.data.json
 package-lock.json
-package.json
-apiKeys.js
+apiKeys.ts
 /node_modules
 /.idea
 /logs/

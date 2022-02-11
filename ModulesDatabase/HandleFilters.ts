@@ -9,8 +9,8 @@ export class HF {
         for (const filter in filters) {
             if (bodyText.includes(filter)) {
                 const index = bodyText.indexOf(filter);
-                if ((index <= 0 || ((/[\s|,!?]/).test(bodyText[index - 1]))) &&
-                    (index + filter.length >= bodyText.length || ((/[\s|,!?]/).test(bodyText[index + filter.length])))) {
+                if ((index <= 0 || (/[\s|,!?]/.test(bodyText[index - 1]))) &&
+                    (index + filter.length >= bodyText.length || (/[\s|,!?]/.test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
                         if (filters[filter].startsWith("image"))
                             await client.sendImage(chatID, filters[filter].replace("image", ""), null, null, messageID);
@@ -37,8 +37,8 @@ export class HF {
                         groupsDict[chatID].autoBanned = bannedDate;
                         restGroupsAuto.push(chatID);
                         await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply",
-                            bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
-                                bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
+                            bannedDate.getHours().toString(), bannedDate.getMinutes() > 10 ?
+                                bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()));
                     }
                 }
             }
@@ -49,7 +49,7 @@ export class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_filter"), "");
-        let filter = bodyText.trim(), filterReply = null, existError = null;
+        let filter = bodyText.trim(), filterReply = "", existError = null;
         if (messageType === "image") {
             filterReply = "image" + await client.decryptMedia(message);
             existError = HL.getGroupLang(groupsDict, chatID, "filter_type_image");
@@ -99,7 +99,7 @@ export class HF {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "edit_filter"), "");
-        let filter = bodyText.trim(), filterReply = null;
+        let filter = bodyText.trim(), filterReply = "";
         if (messageType === "image")
             filterReply = "image" + await client.decryptMedia(message);
         else if (messageType === "video")
@@ -137,13 +137,14 @@ export class HF {
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
-            Object.entries(groupsDict[chatID].filters).forEach(([filter, filterReply]) => {
+            for (const [filter, filterReply] of groupsDict[chatID].filters) {
                 if (filterReply.startsWith("image"))
                     stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
                 else if (filterReply.startsWith("video"))
                     stringForSending += filter + " - " + HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
-                else stringForSending += filter + " - " + filterReply + "\n";
-            });
+                else
+                    stringForSending += filter + " - " + filterReply + "\n";
+            }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }

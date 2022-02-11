@@ -1,6 +1,6 @@
 import {HDB} from "./HandleDB.js";
 import {HL} from "./HandleLanguage.js";
-import {HA} from "./HandleAfk.js";
+import {HAFK} from "./HandleAFK.js";
 
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons) {
@@ -10,8 +10,8 @@ export class HT {
         for (const tag in tags) {
             if (bodyText.includes(tag)) {
                 const index = bodyText.indexOf(tag);
-                if ((index <= 0 || ((/[\sו,]/).test(bodyText[index - 1]))) &&
-                    (index + tag.length >= bodyText.length || ((/\s/).test(bodyText[index + tag.length])))) {
+                if ((index <= 0 || (/[\sו,]/.test(bodyText[index - 1]))) &&
+                    (index + tag.length >= bodyText.length || (/\s/.test(bodyText[index + tag.length])))) {
                     counter += 1;
                     if (typeof (tags[tag]) === "object") {
                         const taggingGroup = tags[tag];
@@ -37,7 +37,7 @@ export class HT {
                         if (usersDict[personID].messagesTaggedIn[chatID] === undefined)
                             usersDict[personID].messagesTaggedIn[chatID] = [];
                         usersDict[personID].messagesTaggedIn[chatID].push(messageID);
-                        await HA.afkPersonTagged(client, chatID, messageID, personID, afkPersons, groupsDict, usersDict);
+                        await HAFK.afkPersonTagged(client, chatID, messageID, personID, afkPersons, groupsDict, usersDict);
                         await HDB.delArgsFromDB(chatID, personID, "lastTagged", function () {
                             HDB.addArgsToDB(chatID, personID, usersDict[personID].messagesTaggedIn[chatID], null, "lastTagged", function () {
 
@@ -96,20 +96,20 @@ export class HT {
     static async tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict) {
         bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "tag_all"), "");
         let stringForSending = bodyText + "\n\n";
-        Object.entries(groupsDict[chatID].personsIn).forEach(person => {
+        for (const person of groupsDict[chatID].personsIn) {
             if (!person.afk)
-                stringForSending += "@" + person[1].personID.replace("@c.us", "") + "\n";
-        });
+                stringForSending += "@" + person.personID.replace("@c.us", "") + "\n";
+        }
         stringForSending += HL.getGroupLang(groupsDict, chatID, "someone_not_tagged_because_afk_reply");
         try {
             await client.sendReplyWithMentions(chatID, stringForSending, quotedMsgID);
-        } catch (e) {
-            Object.entries(groupsDict[chatID].personsIn).forEach(person => {
-                HDB.delArgsFromDB(chatID, person[1].personID, "personIn", function () {
+        } catch (err) {
+            for (const person of groupsDict[chatID].personsIn) {
+                await HDB.delArgsFromDB(chatID, person.personID, "personIn", function () {
                     groupsDict[chatID].personsIn = ["delete", person[1].personID];
                 });
-            });
-            console.log("error occurred while tagging everyone");
+            }
+            console.log("error occurred while tagging everyone: " + err);
             await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "personIn_removed_problematic_error"), quotedMsgID);
         }
     }
@@ -118,22 +118,21 @@ export class HT {
         const group = groupsDict[chatID];
         if (Object.keys(group.tags).length) {
             let stringForSending = "";
-            Object.entries(group.tags).forEach(([name, tag]) => {
+            for (const [name, tag] of group.tags) {
                 if (typeof (tag) === "object") {
                     stringForSending += name + " - ";
-                    for (let i = 0; i < tag.length; i++) {
+                    for (let i = 0; i < Object.keys(tag).length; i++) {
                         let tempPhoneNumber = tag[i];
                         for (const personName in group.tags) {
                             if (group.tags[personName] === tempPhoneNumber)
                                 tempPhoneNumber = personName;
                         }
-                        //add a comma to every tag in tagging group except the last
-                        stringForSending += i !== (tag.length - 1) ? tempPhoneNumber + ", " : tempPhoneNumber;
+                        stringForSending += i !== (Object.keys(tag).length - 1) ? tempPhoneNumber + ", " : tempPhoneNumber;
                     }
                     stringForSending += "\n";
                 } else
                     stringForSending += `${name} - ${tag}\n`;
-            });
+            }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
@@ -148,7 +147,7 @@ export class HT {
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
                     person.messagesTaggedIn[chatID].push(messageID);
-                    await HA.afkPersonTagged(client, chatID, messageID, ID, afkPersons, groupsDict, usersDict);
+                    await HAFK.afkPersonTagged(client, chatID, messageID, ID, afkPersons, groupsDict, usersDict);
                     await HDB.delArgsFromDB(chatID, person.personID, "lastTagged", function () {
                         HDB.addArgsToDB(chatID, person.personID, person.messagesTaggedIn[chatID], null, "lastTagged", function () {
                         });
@@ -163,7 +162,7 @@ export class HT {
                     if (usersDict[quotedAuthorID].messagesTaggedIn[chatID] === undefined)
                         usersDict[quotedAuthorID].messagesTaggedIn[chatID] = [];
                     usersDict[quotedAuthorID].messagesTaggedIn[chatID].push(messageID);
-                    await HA.afkPersonTagged(client, chatID, messageID, quotedAuthorID, afkPersons, groupsDict, usersDict);
+                    await HAFK.afkPersonTagged(client, chatID, messageID, quotedAuthorID, afkPersons, groupsDict, usersDict);
                 }
             }
         }
@@ -171,9 +170,8 @@ export class HT {
 
     static async whichMessagesTaggedIn(client, chatID, messageID, authorID, groupsDict, usersDict) {
         if (usersDict[authorID].messagesTaggedIn[chatID] !== undefined && usersDict[authorID].messagesTaggedIn[chatID].length !== 0) {
-            usersDict[authorID].messagesTaggedIn[chatID].forEach(messageID =>
-                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), messageID),
-            );
+            for (const messageID of usersDict[authorID].messagesTaggedIn[chatID])
+                client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_tags_reply"), messageID)
             await HDB.delArgsFromDB(chatID, authorID, "lastTagged", function () {
                 delete usersDict[authorID].messagesTaggedIn[chatID];
             });

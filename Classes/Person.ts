@@ -1,5 +1,6 @@
+// noinspection TypeScriptFieldCanBeMadeReadonly
 export class Person {
-    #personID;
+    readonly #personID;
     #birthday;
     #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
     #birthdayGroups;

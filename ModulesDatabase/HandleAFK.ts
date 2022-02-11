@@ -1,7 +1,7 @@
 import {HL} from "./HandleLanguage.js";
 import {HDB} from "./HandleDB.js";
 
-export class HA {
+export class HAFK {
     static async afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
         const person = usersDict[authorID];
         if (!person.afk && !(afkPersons.includes(authorID))) {

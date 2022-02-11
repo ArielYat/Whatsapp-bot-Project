@@ -1,6 +1,6 @@
 //version 2.8
 
-//Command Modules
+//Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
 import {HDB} from "./ModulesDatabase/HandleDB.js";
 import {HF} from "./ModulesDatabase/HandleFilters.js";
@@ -15,7 +15,7 @@ import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
 import {HW} from "./ModuleWebsite/HandleWebsite.js";
 import {HUS} from "./ModulesImmediate/HandleUserStats.js";
 import {HR} from "./ModulesDatabase/HandleReminders.js";
-import {HA} from "./ModulesDatabase/HandleAfk.js";
+import {HAFK} from "./ModulesDatabase/HandleAFK.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
@@ -28,7 +28,7 @@ let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGrou
 const botDevs = ["972543293155@c.us", "972586809911@c.us"];
 IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', err => {
     console.log(err);
 });
 
@@ -60,13 +60,13 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.fetchCryptocurrency(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "scan_link").test(bodyText)) {
-        await HURL.stripLinks(client, message, chatID, messageID, groupsDict);
+        await HURL.stripLinks(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "show_profile").test(bodyText)) {
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)) {
-        await HA.afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
+        await HAFK.afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
         usersDict[authorID].commandCounter++;
         /* } else if (HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe").test(bodyText)) {
                await H3T.TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict);
@@ -94,7 +94,7 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
         await HT.showTags(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "show_birthdays").test(bodyText)) {
-        await HB.showBirthdays(client, chatID, messageID, groupsDict, usersDict);
+        await HB.showBirthdays(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (HL.getGroupLang(groupsDict, chatID, "show_group_function_permissions").test(bodyText)) {
         await HP.showGroupFunctionsPermissions(client, chatID, messageID, groupsDict);
@@ -221,7 +221,7 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
     else if (/^!ping$/i.test(bodyText))
         await HAF.ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
     else if (/^\/exec/i.test(bodyText))
-        await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings);
+        await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, HAFK, Group, Person, Strings);
 }
 
 //Main function
@@ -266,7 +266,7 @@ function start(client) {
             }
         }
         //Check reminders
-        await HR.checkReminders(client, usersDict, personsWithReminders, currentDate);
+        await HR.checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate);
     }, 60 * 1000); //in ms; 1 min
     //Send a starting help message when the bot is added to a group
     client.onAddedToGroup(async chat => {
@@ -308,7 +308,7 @@ function start(client) {
             await HT.logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons);
             //Remove a person from afk
             if (afkPersons.includes(authorID) && !(HL.getGroupLang(groupsDict, chatID, "afk_me_pwease").test(bodyText)))
-                await HA.afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
+                await HAFK.afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons);
             //If the group the message was sent in isn't blocked, check for commands
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
@@ -339,7 +339,7 @@ function start(client) {
                         usersDict[authorID].autoBanned = bannedDate;
                         restPersonsCommandSpam.push(authorID);
                         await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "command_spam_reply",
-                            bannedDate.getHours().toString(), bannedDate.getMinutes().toString() > 10 ?
+                            bannedDate.getHours().toString(), bannedDate.getMinutes() > 10 ?
                                 bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()), messageID);
                     }
                 }

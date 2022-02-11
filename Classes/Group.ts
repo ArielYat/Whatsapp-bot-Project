@@ -1,5 +1,6 @@
+// noinspection TypeScriptFieldCanBeMadeReadonly
 export class Group {
-    #groupID;
+    readonly #groupID;
     #filters;
     #tags;
     #groupLanguage;
