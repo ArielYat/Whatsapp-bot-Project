@@ -4,10 +4,10 @@ import {HL} from "./HandleLanguage.js";
 export class HR {
     static async checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate) {
         for (const person of personsWithReminders) {
-            const personID = person.personID;
-            for (const reminder in person.reminders) {
+            const personID = usersDict[person].personID;
+            for (const reminder in usersDict[person].reminders) {
                 if (reminder.toString() === currentDate.toString()) {
-                    const oldReminder = person.reminders[reminder];
+                    const oldReminder = usersDict[person].reminders[reminder];
                     const doRepeat = oldReminder.startsWith("repeatReminder");
                     let stringForSending = doRepeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
@@ -25,13 +25,13 @@ export class HR {
                     }
                     const reminderDate = new Date(reminder);
                     await HDB.delArgsFromDB(personID, reminderDate, "reminders", function () {
-                        person.reminders = ["delete", reminderDate];
+                        usersDict[person].reminders = ["delete", reminderDate];
                     });
                     if (doRepeat) {
                         let newReminderDate = new Date(reminder);
                         newReminderDate.setDate(newReminderDate.getDate() + parseInt(oldReminder.match(/repeatReminder\d/)[0].replace("repeatReminder", "")));
                         await HDB.addArgsToDB(personID, newReminderDate, oldReminder, null, "reminders", function () {
-                            person.reminders = ["add", newReminderDate, oldReminder];
+                            usersDict[person].reminders = ["add", newReminderDate, oldReminder];
                         });
                     }
                 }

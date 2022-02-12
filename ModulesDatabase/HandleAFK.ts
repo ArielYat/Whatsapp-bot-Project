@@ -45,7 +45,9 @@ export class HAFK {
                 }
             }
             const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString();
-            const afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString() + ":" + (person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString());
+            let afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString();
+            afkTime += ":"
+            afkTime += person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString();
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
         }
     }

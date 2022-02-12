@@ -13,7 +13,7 @@ export class HAF {
                 });
             });
         } else if (bodyText.match(/^\/Unban/i)) {
-            if (restPersons.includes(personToBanID)) {
+            if (restPersons.includes(personToBanID) || restPersonsCommandSpam.includes(personToBanID)) {
                 restPersons.splice(restPersons.indexOf(personToBanID), 1);
                 await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
                     HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {

@@ -3,9 +3,6 @@
 <summary>Table of Contents</summary>
 
 - [Description](#Description)
-- [Getting Started](#Getting started)
-  - [Prerequisites](#Prerequisites)
-  - [Usage](#Usage)
 - [Commands and Features the bot responds to](#Commands and Features the bot responds to)
   - [Language](#[Language](ModulesDatabase/HandleLanguage.ts))
   - [Filters](#[Filters](ModulesDatabase/HandleFilters.ts))
@@ -32,34 +29,6 @@ This is a Whatsapp Bot which is built with TypeScript and Node.js.
 It has a lot of different functions and features and is currently in development.
 
 If you have any questions, feel free to contact ArielYat or TheBooker66.
-
-## Getting Started
-
-### Prerequisites
-
-You should have nodejs and npm installed, in order to download the package. For more information about nodejs and npm,
-please visit [nodejs.org](https://nodejs.org/en/).
-
-You should have a MongoDB database running on your local machine at `mongodb://localhost:27017/` via Mongo Compass. For
-more information about MongoDB, please visit [mongodb.org](https://www.mongodb.com/).
-
-Thou shalt also have a WhatsApp account and a mobile phone.
-
-### Usage
-
-With npm installed, run
-> npm install whatsapp-bot
-
-in order to install the package.
-
-Then, in the same directory where you installed the package, run
-> npm run start
-
-After running the command, a chromium window should pop up. Scan the QR code with your cellphone to connect.
-
-Note: There are couple mentions of `apiKeys` in the code, but the code they point to is private, and so you will have to
-either remove them or not use the functions which use them. The aforementioned functions are all at the top of
-[Main.ts](./Main.ts) and in [HandleAPIs.ts](./ModulesImmediate/HandleAPIs.ts).
 
 ## Commands and Features the bot responds to
 
@@ -119,12 +88,12 @@ _Filters can be text, images or videos_
 
 - `Define permission for [permission type] - [Admin/Regular/Muted]` - defines the permission level required for a
   certain type of commands.
-  - For example: Define permission filters - Admin.
-  - Permission types: filters, tags, handle_Filters, handle_Tags, handle_Birthdays, handle_Shows, handle_Other.
-- `Mute [person tag]` - mutes the tagged person so they aren't able to use commands.
-  - For example: Mute @Joseph.
+    - For example: Define permission filters - Admin.
+    - Permission types: filters, tags, handle_Filters, handle_Tags, handle_Birthdays, handle_Shows, handle_Other.
+- `Mute [person tag]` - mutes the tagged person, so they aren't able to use commands.
+    - For example: Mute @Joseph.
 - `Unmute person [person tag]` - unmutes the tagged person.
-  - For example: Unmute @Joseph.
+    - For example: Unmute @Joseph.
 - `Show function permissions` - displays the permissions levels of the different types of commands.
 - `Show people permissions` - displays the permissions levels of the people in the group.
 
@@ -232,16 +201,15 @@ translations.
 
 ## Acknowledgements
 
-[@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing a lot of the bot's functionality
+[@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing most of the bot's functionality
 
 [@TheBooker66](https://github.com/TheBooker66) - Ethan - Developing a lot of the bot's functionality and English support
 
-[@Arbel99](https://github.com/Arbel99) - Arbel - Latin support (whenever she feels like it)
+[@Arbel99](https://github.com/Arbel99) - Arbel - Latin support
 
 Maayan Ranson - French Support
 
 [@Lainad27](https://github.com/Lainad27) - Daniel - Developing the message to a sticker functionality
-
 ## License
 
 This project is licensed under the GPL-3.0 license.

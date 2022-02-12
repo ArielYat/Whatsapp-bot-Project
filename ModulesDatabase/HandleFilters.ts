@@ -13,9 +13,9 @@ export class HF {
                     (index + filter.length >= bodyText.length || (/[\s|,!?]/.test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
                         if (filters[filter].startsWith("image"))
-                            await client.sendImage(chatID, filters[filter].replace("image", ""), null, null, messageID);
+                            await client.sendImage(chatID, filters[filter].replace("image", ""), "test", null, messageID);
                         else if (filters[filter].startsWith("video"))
-                            await client.sendVideoAsGif(chatID, filters[filter].replace("video", ""), null, null, messageID);
+                            await client.sendVideoAsGif(chatID, filters[filter].replace("video", ""), "test", null, messageID);
                         else {
                             try {
                                 await client.sendReplyWithMentions(chatID, filters[filter], messageID);
@@ -137,14 +137,15 @@ export class HF {
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
-            Object.entries(groupsDict[chatID].filters.forEach(await (async ([filter, filterReply]: [string, string]) => {
+            for (const filter in groupsDict[chatID].filters) {
+                const filterReply = groupsDict[chatID].filters[filter]
                 if (filterReply.startsWith("image"))
                     stringForSending += filter + " - " + await HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
                 else if (filterReply.startsWith("video"))
                     stringForSending += filter + " - " + await HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
                 else
                     stringForSending += filter + " - " + filterReply + "\n";
-            })));
+            }
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }

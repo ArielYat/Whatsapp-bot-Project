@@ -12,7 +12,7 @@ export class HURL {
                 setTimeout(resolve, ms);
             });
         }
-        bodyText = message.quotedMsgObj ? message.quotedMsgObj.caption : bodyText;
+        bodyText = message.quotedMsgObj ? message.quotedMsgObj.body : bodyText;
         const urlsInMessage = bodyText.match(/([hH]ttps?:\/\/[^\s]+)/g);
         if (urlsInMessage) {
             for (let url of urlsInMessage) {
