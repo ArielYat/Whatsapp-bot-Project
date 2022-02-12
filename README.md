@@ -1,4 +1,29 @@
-# WhatsApp Bot Project - John the Legendary
+# WhatsApp Bot - John the Legendary
+
+<summary>Table of Contents</summary>
+
+- [Description](#Description)
+- [Getting Started](#Getting started)
+  - [Prerequisites](#Prerequisites)
+  - [Usage](#Usage)
+- [Commands and Features the bot responds to](#Commands and Features the bot responds to)
+  - [Language](#[Language](ModulesDatabase/HandleLanguage.ts))
+  - [Filters](#[Filters](ModulesDatabase/HandleFilters.ts))
+  - [Tags](#[Tags](ModulesDatabase/HandleTags.ts))
+  - [Birthdays](#[Birthdays](ModulesDatabase/HandleBirthdays.ts))
+  - [Permissions](#[Permissions](ModulesDatabase/HandlePermissions.ts))
+  - [Reminders](#[Reminders](ModulesDatabase/HandleReminders.ts))
+  - [Stickers](#[Stickers](ModulesImmediate/HandleStickers.ts))
+  - [Internet Commands](#[Internet Commands](ModulesImmediate/HandleAPIs.ts))
+  - [Miscellaneous Commands](#Miscellaneous Commands)
+  - [Commands limited to the bot developers](#[Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts))
+- [Dependencies and APIs used](#Dependencies and APIs used)
+  - [Dependencies](#Dependencies)
+  - [APIs](#APIs)
+- [Acknowledgements](#Acknowledgements)
+- [License](#License)
+
+---
 
 ## Description
 
@@ -6,9 +31,37 @@ This is a Whatsapp Bot which is built with TypeScript and Node.js.
 
 It has a lot of different functions and features and is currently in development.
 
-If you have any questions, feel free to contact us.
+If you have any questions, feel free to contact ArielYat or TheBooker66.
 
-## Commands
+## Getting Started
+
+### Prerequisites
+
+You should have nodejs and npm installed, in order to download the package. For more information about nodejs and npm,
+please visit [nodejs.org](https://nodejs.org/en/).
+
+You should have a MongoDB database running on your local machine at `mongodb://localhost:27017/` via Mongo Compass. For
+more information about MongoDB, please visit [mongodb.org](https://www.mongodb.com/).
+
+Thou shalt also have a WhatsApp account and a mobile phone.
+
+### Usage
+
+With npm installed, run
+> npm install whatsapp-bot
+
+in order to install the package.
+
+Then, in the same directory where you installed the package, run
+> npm run start
+
+After running the command, a chromium window should pop up. Scan the QR code with your cellphone to connect.
+
+Note: There are couple mentions of `apiKeys` in the code, but the code they point to is private, and so you will have to
+either remove them or not use the functions which use them. The aforementioned functions are all at the top of
+[Main.ts](./Main.ts) and in [HandleAPIs.ts](./ModulesImmediate/HandleAPIs.ts).
+
+## Commands and Features the bot responds to
 
 ### [Language](ModulesDatabase/HandleLanguage.ts)
 
@@ -152,7 +205,9 @@ _All of the commands below have a certain daily limit_
 
 The bot also autotempbans groups or users who are spamming it for a short time period.
 
-## Dependencies used
+## Dependencies and APIs used
+
+### Dependencies
 
 [@open-wa/wa-automate](https://www.npmjs.com/package/@open-wa/wa-automate) for the WhatsApp "link".
 
@@ -166,7 +221,7 @@ The bot also autotempbans groups or users who are spamming it for a short time p
 
 [util](https://www.npmjs.com/package/util) for formatting strings.
 
-## APIs used
+### APIs
 
 [CoinMarketCap](https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest) for checking cryptocurrency prices.
 
@@ -175,7 +230,7 @@ The bot also autotempbans groups or users who are spamming it for a short time p
 [Google Translate](https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=query) for the
 translations.
 
-## Credits
+## Acknowledgements
 
 [@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing a lot of the bot's functionality
 
@@ -186,6 +241,12 @@ translations.
 Maayan Ranson - French Support
 
 [@Lainad27](https://github.com/Lainad27) - Daniel - Developing the message to a sticker functionality
+
+## License
+
+This project is licensed under the GPL-3.0 license.
+
+See [LICENSE](LICENSE) for more information.
 
 ## RIP
 

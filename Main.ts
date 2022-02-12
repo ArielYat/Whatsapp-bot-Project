@@ -1,4 +1,4 @@
-//version 2.8
+//version 2.8.0
 
 //Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -18,6 +18,7 @@ import {HR} from "./ModulesDatabase/HandleReminders.js";
 import {HAFK} from "./ModulesDatabase/HandleAFK.js";
 import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
+import {apiKeys} from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
 import {create, Client, Chat, Message} from "@open-wa/wa-automate";
@@ -25,8 +26,8 @@ import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
     restPersonsCommandSpam = [], personsWithReminders = [], afkPersons = [];
-const botDevs = ["972543293155@c.us", "972586809911@c.us"];
-IsraelSchedule.tz = 'Israel'; //Bot devs' time zone
+const botDevs = apiKeys.botDevs;        //Bot devs' phone numbers
+IsraelSchedule.tz = apiKeys.region;     //Bot devs' time zone
 
 process.on('uncaughtException', err => {
     console.log(err);
@@ -34,7 +35,7 @@ process.on('uncaughtException', err => {
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
+    create({headless: false, useChrome: false, multiDevice: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
