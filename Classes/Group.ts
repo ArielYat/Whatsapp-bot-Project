@@ -1,21 +1,22 @@
 // noinspection TypeScriptFieldCanBeMadeReadonly
+
 import {Person} from "./Person";
 
 export class Group {
-    readonly #groupID: string;
-    #filters: { [key: string]: string };
-    #tags: { [key: string]: object | string };
-    #groupLanguage: string;
-    #personsIn: Person[];
-    #filterCounter: number;
-    #groupAdmins: string[];
-    #functionPermissions: { [key: string]: number };
-    #cryptoCheckedToday: boolean;
-    #translationCounter: number;
-    #autoBanned: Date;
-    #tagStack: string[];
-    #downloadMusicCounter: number;
-    #stockCounter: number;
+    readonly #groupID: string;                          //The group's ID
+    #filters: { [key: string]: string };                //The filters in the group
+    #tags: { [key: string]: object | string };          //The tags in the group
+    #groupLanguage: string;                             //The group's language
+    #personsIn: Person[];                               //The persons in the group
+    #filterCounter: number;                             //The number of filters used in the group (reset every five minutes) - for autobanning
+    #groupAdmins: string[];                             //The group's admins
+    #functionPermissions: { [key: string]: number };    //The group's function's permission levels
+    #cryptoChecked: boolean;                            //Whether the group has checked the crypto today (reset every day)
+    #translationCounter: number;                        //The number of translations used in the group (reset every day)
+    #autoBanned: Date;                                  //The date in which the group was autobanned (if it was)
+    #tagStack: string[];                                //Used for HT.createTagList() & HT.nextPersonInList
+    #downloadMusicCounter: number;                      //The number of music downloads used in the group (reset every day)
+    #stockCounter: number;                              //The number of stock checks used in the group (reset every day)
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -34,7 +35,7 @@ export class Group {
             "handleBirthdays": 1,
         };
         this.#groupAdmins = [];
-        this.#cryptoCheckedToday = false;
+        this.#cryptoChecked = false;
         this.#translationCounter = 0;
         this.#autoBanned = null;
         this.#tagStack = [];
@@ -65,7 +66,7 @@ export class Group {
 
     set tags(tagArray) {
         if (tagArray[0] === "add") { // @ts-ignore
-            this.#tags[(tagArray[1])] = tagArray[2];
+            this.#tags[tagArray[1]] = tagArray[2];
         } else if (tagArray[0] === "delete") { // @ts-ignore
             delete this.#tags[tagArray[1]];
         }
@@ -78,8 +79,7 @@ export class Group {
     set personsIn(authorArray) {
         // @ts-ignore
         if (authorArray[0] === "add")
-            this.#personsIn.push(authorArray[1]);
-        else { // @ts-ignore
+            this.#personsIn.push(authorArray[1]); else { // @ts-ignore
             if (authorArray[0] === "delete")
                 this.#personsIn.splice(this.#personsIn.indexOf(authorArray[1]), 1);
         }
@@ -105,24 +105,24 @@ export class Group {
         return this.#groupAdmins;
     }
 
-    set groupAdmins(groupAdmins) {
-        this.#groupAdmins = groupAdmins;
+    set groupAdmins(groupAdminsIDs) {
+        this.#groupAdmins = groupAdminsIDs;
     }
 
     get functionPermissions() {
         return this.#functionPermissions;
     }
 
-    set functionPermissions(permissionsArray) {
-        this.#functionPermissions[permissionsArray[0]] = permissionsArray[1];
+    set functionPermissions(functionTypeAndPermission) {
+        this.#functionPermissions[functionTypeAndPermission[0]] = functionTypeAndPermission[1];
     }
 
-    get cryptoCheckedToday() {
-        return this.#cryptoCheckedToday;
+    get cryptoChecked() {
+        return this.#cryptoChecked;
     }
 
-    set cryptoCheckedToday(bool) {
-        this.#cryptoCheckedToday = bool;
+    set cryptoChecked(bool) {
+        this.#cryptoChecked = bool;
     }
 
     get translationCounter() {
@@ -131,14 +131,6 @@ export class Group {
 
     set translationCounter(number) {
         this.#translationCounter = number;
-    }
-
-    doesFilterExist(filter) {
-        return this.#filters.hasOwnProperty(filter);
-    }
-
-    doesTagExist(tag) {
-        return this.#tags.hasOwnProperty(tag);
     }
 
     get autoBanned() {
@@ -157,10 +149,6 @@ export class Group {
         this.#tagStack = tagStack;
     }
 
-    addNumberToTagStack(tagNumber) {
-        this.#tagStack.push(tagNumber);
-    }
-
     get downloadMusicCounter() {
         return this.#downloadMusicCounter;
     }
@@ -177,8 +165,20 @@ export class Group {
         this.#stockCounter = number;
     }
 
+    doesFilterExist(filter) {
+        return this.#filters.hasOwnProperty(filter);
+    }
+
+    doesTagExist(tag) {
+        return this.#tags.hasOwnProperty(tag);
+    }
+
+    addNumberToTagStack(tagNumber) {
+        this.#tagStack.push(tagNumber);
+    }
+
     resetCounters() {
-        this.#cryptoCheckedToday = false;
+        this.#cryptoChecked = false;
         this.#translationCounter = 0;
         this.#downloadMusicCounter = 0;
         this.#stockCounter = 0;

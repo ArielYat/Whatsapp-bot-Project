@@ -9,7 +9,7 @@ export class HF {
         for (const filter in filters) {
             if (bodyText.includes(filter)) {
                 const index = bodyText.indexOf(filter);
-                if ((index <= 0 || (/[\s|,!?]/.test(bodyText[index - 1]))) &&
+                if ((index <= 0 || (/[\s|ו]/.test(bodyText[index - 1]))) &&
                     (index + filter.length >= bodyText.length || (/[\s|,!?]/.test(bodyText[index + filter.length])))) {
                     if (groupsDict[chatID].filterCounter < groupFilterLimit) {
                         if (filters[filter].startsWith("image"))
@@ -36,7 +36,7 @@ export class HF {
                         bannedDate.setMilliseconds(0);
                         groupsDict[chatID].autoBanned = bannedDate;
                         restGroupsAuto.push(chatID);
-                        await client.sendText(chatID, HL.getGroupLang(groupsDict, chatID, "filter_spam_reply",
+                        await client.sendText(chatID, await HL.getGroupLang(groupsDict, chatID, "filter_spam_reply",
                             bannedDate.getHours().toString(), bannedDate.getMinutes() > 10 ?
                                 bannedDate.getMinutes().toString() : "0" + bannedDate.getMinutes().toString()));
                     }
@@ -76,9 +76,9 @@ export class HF {
             if (!groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", async function () {
                     groupsDict[chatID].filters = ["add", filter, filterReply];
-                    client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter)), messageID);
+                    client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_filter_reply", filter), messageID);
                 });
-            } else client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, existError)), messageID);
+            } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_filter_already_exists_error", filter, existError), messageID);
         }
     }
 
@@ -89,7 +89,7 @@ export class HF {
             if (groupsDict[chatID].doesFilterExist(filter)) {
                 await HDB.delArgsFromDB(chatID, filter, "filters", async function () {
                     groupsDict[chatID].filters = ["delete", filter];
-                    client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter)), messageID);
+                    client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_filter_reply", filter), messageID);
                 });
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_filter_doesnt_exist_error"), messageID);
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
@@ -127,7 +127,7 @@ export class HF {
                 await HDB.delArgsFromDB(chatID, filter, "filters", function () {
                     HDB.addArgsToDB(chatID, filter, filterReply, null, "filters", async function () {
                         groupsDict[chatID].filters = ["edit", filter, filterReply]
-                        client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter)), messageID);
+                        client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "edit_filter_reply", filter), messageID);
                     });
                 });
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "edit_filter_not_existent_error"), messageID);
@@ -137,17 +137,14 @@ export class HF {
     static async showFilters(client, chatID, messageID, groupsDict) {
         if (Object.keys(groupsDict[chatID].filters).length) {
             let stringForSending = "";
-            for (const [filter, filterReply] of Object.entries(groupsDict[chatID].filters)) {
-                // @ts-ignore
+            Object.entries(groupsDict[chatID].filters.forEach(await (async ([filter, filterReply]: [string, string]) => {
                 if (filterReply.startsWith("image"))
-                    stringForSending += filter + " - " + (await HL.getGroupLang(groupsDict, chatID, "filter_type_image")) + "\n";
-                else { // @ts-ignore
-                    if (filterReply.startsWith("video"))
-                        stringForSending += filter + " - " + (await HL.getGroupLang(groupsDict, chatID, "filter_type_video")) + "\n";
-                    else
-                        stringForSending += filter + " - " + filterReply + "\n";
-                }
-            }
+                    stringForSending += filter + " - " + await HL.getGroupLang(groupsDict, chatID, "filter_type_image") + "\n";
+                else if (filterReply.startsWith("video"))
+                    stringForSending += filter + " - " + await HL.getGroupLang(groupsDict, chatID, "filter_type_video") + "\n";
+                else
+                    stringForSending += filter + " - " + filterReply + "\n";
+            })));
             await client.reply(chatID, stringForSending, messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_filters_error"), messageID);
     }

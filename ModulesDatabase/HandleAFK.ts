@@ -3,11 +3,10 @@ import {HDB} from "./HandleDB.js";
 
 export class HAFK {
     static async afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
-        const person = usersDict[authorID];
-        if (!person.afk && !(afkPersons.includes(authorID))) {
+        if (!usersDict[authorID].afk && !(afkPersons.includes(authorID))) {
             const afkDate = new Date();
             await HDB.addArgsToDB(authorID, afkDate, null, null, "afk", function () {
-                person.afk = afkDate;
+                usersDict[authorID].afk = afkDate;
                 afkPersons.push(authorID);
             });
             await HDB.delArgsFromDB("afkPersons", null, "rested", async function () {
@@ -47,9 +46,8 @@ export class HAFK {
             }
             const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString();
             const afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString() + ":" + (person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString());
-            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
-            return true;
-        } else return false;
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
+        }
     }
 
 }

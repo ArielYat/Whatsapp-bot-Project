@@ -1,5 +1,13 @@
 # WhatsApp Bot Project - John the Legendary
 
+## Description
+
+This is a Whatsapp Bot which is built with TypeScript and Node.js.
+
+It has a lot of different functions and features and is currently in development.
+
+If you have any questions, feel free to contact us.
+
 ## Commands
 
 ### [Language](ModulesDatabase/HandleLanguage.ts)

@@ -3,25 +3,27 @@ import {HL} from "./HandleLanguage.js";
 
 export class HR {
     static async checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate) {
-        for (let i = 0; i < personsWithReminders.length; i++) {
-            const person = usersDict[personsWithReminders[i]];
+        for (const person of personsWithReminders) {
             const personID = person.personID;
             for (const reminder in person.reminders) {
                 if (reminder.toString() === currentDate.toString()) {
-                    const oldReminder = person.reminders[reminder], reminderDate = new Date(reminder);
-                    const doRepeat = !!oldReminder.startsWith("repeatReminder");
+                    const oldReminder = person.reminders[reminder];
+                    const doRepeat = oldReminder.startsWith("repeatReminder");
                     let stringForSending = doRepeat ? oldReminder.replace(/repeatReminder\d/, "") : oldReminder;
                     switch (true) {
                         case stringForSending.startsWith("Video"):
-                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder", HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
+                            await client.sendFile(personID, stringForSending.replace("Video", ""), "reminder",
+                                await HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
                             break;
                         case stringForSending.startsWith("Image"):
-                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder", HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
+                            await client.sendImage(personID, stringForSending.replace("Image", ""), "reminder",
+                                await HL.getGroupLang(groupsDict, personID, "reminder_reminding"));
                             break;
                         default:
                             await client.sendText(personID, stringForSending);
                             break;
                     }
+                    const reminderDate = new Date(reminder);
                     await HDB.delArgsFromDB(personID, reminderDate, "reminders", function () {
                         person.reminders = ["delete", reminderDate];
                     });
@@ -40,13 +42,12 @@ export class HR {
     static async addReminder(client, bodyText, chatID, messageID, person, groupsDict, message, personsWithReminders) {
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "add_reminder"), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "add_reminder"), "").trim();
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
         if (time) {
             time = time[0];
             const timeArray = time.split(":")
-            const hour = parseInt(timeArray[0]);
-            const minutes = parseInt(timeArray[1]);
+            const hour = parseInt(timeArray[0]), minutes = parseInt(timeArray[1]);
             if (hour >= 0 && minutes >= 0 && hour <= 24 && minutes < 60) {
                 const date = new Date();
                 const matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g);
@@ -87,8 +88,8 @@ export class HR {
                 const repeatReminder = (await HL.getGroupLang(groupsDict, chatID, "repeat_reminder")).test(bodyText);
                 const reminder =
                     messageType === "image" ? repeatReminder ? `repeatReminder${reminderInterval}Image` + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
-                        messageType === "video" ? repeatReminder ? `repeatReminder${reminderInterval}Video` + +await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
-                            messageType === "chat" ? repeatReminder ? "repeatReminder" + reminderInterval + bodyText.replace(time, "").trim().replace(HL.getGroupLang(groupsDict, chatID, "repeat_reminder"), "") : bodyText.replace(time, "").trim() :
+                        messageType === "video" ? repeatReminder ? `repeatReminder${reminderInterval}Video` + await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
+                            messageType === "chat" ? repeatReminder ? "repeatReminder" + reminderInterval + bodyText.replace(time, "").trim().replace(await HL.getGroupLang(groupsDict, chatID, "repeat_reminder"), "") : bodyText.replace(time, "").trim() :
                                 null;
                 if (reminder) {
                     if (!person.doesReminderExist(reminderDate)) {
@@ -97,7 +98,7 @@ export class HR {
                             !(personsWithReminders.includes(chatID)) ? personsWithReminders.push(chatID) : {};
                             HDB.delArgsFromDB("personsWithReminders", null, "rested", async function () {
                                 await HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", async function () {
-                                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_reminder_reply", time)), messageID);
+                                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_reminder_reply", time), messageID);
                                 });
                             });
                         });
@@ -108,7 +109,7 @@ export class HR {
     }
 
     static async removeReminder(client, bodyText, chatID, messageID, person, groupsDict, personsWithReminders) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "remove_reminder"), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "remove_reminder"), "").trim();
         let time = bodyText.match(/\d{1,2}:\d{2}/g);
         if (time) {
             const date = new Date();
@@ -147,7 +148,7 @@ export class HR {
             if (person.doesReminderExist(reminderDate)) {
                 await HDB.delArgsFromDB(chatID, reminderDate, "reminders", async function () {
                     person.reminders = ["delete", reminderDate];
-                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time)), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time), messageID);
                     if (Object.keys(person.reminders).length === 0) {
                         personsWithReminders.splice(personsWithReminders.indexOf(chatID), 1);
                         await HDB.delArgsFromDB("personsWithReminders", null, "rested", async function () {
@@ -205,14 +206,14 @@ export class HR {
                 let reminderData = person.reminders[reminder];
                 if (reminderData.startsWith("repeatReminder")) {
                     stringForSending += "*repeat* \n";
-                    reminderData = reminderData.replace(/repeatReminder\d/, "")
+                    reminderData = reminderData.replace(/repeatReminder\d/, "");
                 }
                 const hour = reminderDate.getHours() < 10 ? "0" + reminderDate.getHours() : reminderDate.getHours();
                 const minutes = reminderDate.getMinutes() < 10 ? "0" + reminderDate.getMinutes() : reminderDate.getMinutes();
                 if (reminderData.startsWith("Video"))
-                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
                 else if (reminderData.startsWith("Image"))
-                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
+                    stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
                 else
                     stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${reminderData.trim()}\n`;
             }

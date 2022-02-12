@@ -10,14 +10,13 @@ export class HB {
             if (usersDict[person].birthday[0] === dayToday && usersDict[person].birthday[1] === monthToday) {
                 const age = yearToday - parseInt(usersDict[person].birthday[2]);
                 for (let group in usersDict[person].birthDayGroups) {
-                    let personTag = usersDict[person].personID;
-                    personTag = "@" + personTag.replace("@c.us", "");
-                    let stringForSending = await HL.getGroupLang(groupsDict, usersDict[person].birthDayGroups[group].groupID,
-                        "birthday_wishes_reply", personTag, age)
+                    const personTag = "@" + usersDict[person].personID.replace("@c.us", "");
+                    const stringForSending = await HL.getGroupLang(groupsDict, usersDict[person].birthDayGroups[group].groupID,
+                        "birthday_wishes_reply", personTag, age);
                     try {
-                        await client.sendTextWithMentions(usersDict[person].birthDayGroups[group].groupID, stringForSending)
+                        await client.sendTextWithMentions(usersDict[person].birthDayGroups[group].groupID, stringForSending);
                     } catch (e) {
-                        console.log("error occurred during sending birthday");
+                        console.log("error occurred while sending happy birbday");
                     }
                 }
             }
@@ -35,9 +34,9 @@ export class HB {
                 if (!usersDict[authorID].birthday.length) {
                     await HDB.addArgsToDB(authorID, birthDay, birthMonth, birthYear, "birthday", async function () {
                         usersDict[authorID].birthday = ["add", birthDay, birthMonth, birthYear];
-                        await client.sendReplyWithMentions(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", authorTag)), messageID);
+                        await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "add_birthday_reply", authorTag), messageID);
                     });
-                } else await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error", authorTag), messageID);
+                } else await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "add_birthday_already_exists_error", authorTag), messageID);
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "date_syntax_error"), messageID);
     }
@@ -47,7 +46,7 @@ export class HB {
         if (!!usersDict[authorID].birthday.length) {
             await HDB.delArgsFromDB(authorID, null, "birthday", async function () {
                 usersDict[authorID].birthday = ["delete"];
-                await client.sendReplyWithMentions(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_birthday_reply", authorTag)), messageID);
+                await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_birthday_reply", authorTag), messageID);
             });
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_birthday_doesnt_exist_error"), messageID);
     }

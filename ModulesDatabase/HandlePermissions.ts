@@ -62,7 +62,7 @@ export class HP {
                     await HDB.delArgsFromDB(chatID, personID, "perm", async function () {
                         await HDB.addArgsToDB(chatID, personID, 0, null, "perm", async function () {
                             usersDict[personID].permissionLevel[chatID] = 0;
-                            await client.sendReplyWithMentions(chatID, (await HL.getGroupLang(groupsDict, chatID, "mute_participant_reply"), personTag), messageID);
+                            await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "mute_participant_reply", personTag), messageID);
                         });
                     });
                 } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
@@ -77,7 +77,7 @@ export class HP {
             if ((groupsDict[chatID].personsIn.some((person) => personID === person.personID))) {
                 if (usersDict[authorID].permissionLevel[chatID] > usersDict[personID].permissionLevel[chatID]) {
                     await this.autoAssignPersonPermissions(groupsDict[chatID], usersDict[personID], chatID);
-                    await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "unmute_participant_reply", personTag), messageID);
+                    await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "unmute_participant_reply", personTag), messageID);
                 } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "participant_not_in_group_error"), messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "no_participant_chosen_error"), messageID);
@@ -97,15 +97,14 @@ export class HP {
         for (let permission in groupsDict[chatID].functionPermissions)
             stringForSending += await this.functionTypeToWord(groupsDict, chatID, permission) + " - " +
                 await this.functionPermissionToWord(groupsDict, chatID, groupsDict[chatID].functionPermissions[permission]) + "\n";
-        client.reply(chatID, stringForSending, messageID)
+        client.reply(chatID, stringForSending, messageID);
     }
 
     static async showGroupPersonsPermissions(client, chatID, messageID, groupsDict) {
         let stringForSending = "";
         const group = groupsDict[chatID];
-        for (let i = 0; i < group.personsIn.length; i++) {
-            const person = group.personsIn[i];
-            let tempPhoneNumber = person.personID.replace("@c.us", "")
+        for (const person of group.personsIn) {
+            let tempPhoneNumber = person.personID.replace("@c.us", "");
             if (group.tags.length !== 0) {
                 for (const name in group.tags) {
                     if (group.tags[name] === tempPhoneNumber)
@@ -114,20 +113,20 @@ export class HP {
             }
             stringForSending += tempPhoneNumber + " - " + await this.functionPermissionToWord(groupsDict, chatID, person.permissionLevel[chatID]) + "\n";
         }
-        await client.reply(chatID, stringForSending, messageID)
+        await client.reply(chatID, stringForSending, messageID);
     }
 
     static async functionPermissionToWord(groupsDict, chatID, permissionNumber) {
-        switch (permissionNumber.toString()) {
-            case "4":
+        switch (permissionNumber) {
+            case 4:
                 return await HL.getGroupLang(groupsDict, chatID, "muted_permission_level_replace");
-            case "0":
+            case 0:
                 return await HL.getGroupLang(groupsDict, chatID, "muted_permission_level_replace");
-            case "3":
+            case 3:
                 return await HL.getGroupLang(groupsDict, chatID, "developer_permission_level_replace");
-            case "2":
+            case 2:
                 return await HL.getGroupLang(groupsDict, chatID, "admin_permission_level_replace");
-            case "1":
+            case 1:
                 return await HL.getGroupLang(groupsDict, chatID, "regular_permission_level_replace");
             default:
                 return null;

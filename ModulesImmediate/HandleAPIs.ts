@@ -6,7 +6,7 @@ import fs from "fs";
 
 export class HAPI {
     static async fetchCryptocurrency(client, chatID, messageID, groupsDict) {
-        if (!groupsDict[chatID].cryptoCheckedToday) {
+        if (!groupsDict[chatID].cryptoChecked) {
             try {
                 let response: any = await nodeFetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
                     method: 'GET', headers: {
@@ -17,8 +17,8 @@ export class HAPI {
                 let stringForSending = "";
                 for (let i = 0; i < 10; i++)
                     stringForSending += `1 [${response.data[i].symbol}] = ${response.data[i].quote.USD.price.toFixed(3)}$\n`;
-                groupsDict[chatID].cryptoCheckedToday = true;
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
+                groupsDict[chatID].cryptoChecked = true;
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "crypto_api_error"), messageID);
             }
@@ -26,7 +26,7 @@ export class HAPI {
     }
 
     static async searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "search_in_urban"), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "search_in_urban"), "").trim();
         try {
             const url = `https://api.urbandictionary.com/v0/define?term=${bodyText}`;
             let response: any = await nodeFetch(url, {
@@ -38,7 +38,7 @@ export class HAPI {
             let stringForSending = "";
             if (response.list.length !== 0) {
                 for (let i = 0; i < response.list.length && i < 10; i++)
-                    stringForSending += `*${HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n
+                    stringForSending += `*${await HL.getGroupLang(groupsDict, chatID, "search_in_urban_reply")} ${i + 1}:* \n
                     ${response.list[i].definition.replace(/\[/g, "").replace(/]/g, "")} 
                   \nDefinition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
@@ -50,7 +50,7 @@ export class HAPI {
 
     static async translate(client, message, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].translationCounter < 10) {
-            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
+            bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "translate_to"), "").trim();
             let textToTranslate = message.quotedMsgObj ? message.quotedMsgObj.body : bodyText.replace(bodyText.split(" ")[0], "").trim();
             try {
                 const url = encodeURI(`https://en.wikipedia.org/w/api.php?action=languagesearch&search=${bodyText.split(" ")[0].replace("\n", "")}&format=json`);
@@ -84,7 +84,7 @@ export class HAPI {
 
                         }
                     }
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
                 } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
             } catch (err) {
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);
@@ -126,7 +126,7 @@ export class HAPI {
 
     static async fetchStock(client, bodyText, chatID, messageID, groupsDict) {
         if (groupsDict[chatID].stockCounter < 3) {
-            bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "fetch_stock"), "").trim();
+            bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "fetch_stock"), "").trim();
             try {
                 const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${bodyText}&interval=30min&apikey=${apiKeys.stockAPI}`;
                 let response: any = await nodeFetch(url, {
@@ -141,7 +141,7 @@ export class HAPI {
                 response = JSON.stringify(response);
                 response = response.replace("{", "").replace("}", "").replace(/"/g, "").replace(/:/g, ": ").replace(/,/g, ",\n").trim();
                 groupsDict[chatID].stockCounter++;
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "fetch_stock_reply", bodyText, response), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "fetch_stock_reply", bodyText, response), messageID);
             } catch (err) {
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "fetch_stock_api_error"), messageID);
             }

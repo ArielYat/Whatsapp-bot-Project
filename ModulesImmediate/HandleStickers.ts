@@ -77,16 +77,16 @@ export class HSt {
             return copy.canvas;
         }
 
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "make_sticker"), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "make_sticker"), "").trim();
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         let date = new Date(message.timestamp * 1000);
         let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         let time = hour + ":" + minutes;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
-        const noCrop = !!bodyText.match(HL.getGroupLang(groupsDict, chatID, "crop_sticker"));
-        const highQuality = !!bodyText.match(HL.getGroupLang(groupsDict, chatID, "high_Quality"));
-        const mediumQuality = !!bodyText.match(HL.getGroupLang(groupsDict, chatID, "medium_Quality"));
+        const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText),
+            highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
+            mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
         try {
             if (messageType === "image") {
                 const mediaData = await client.decryptMedia(message);
@@ -175,7 +175,7 @@ export class HSt {
     }
 
     static async createTextSticker(client, bodyText, chatID, messageID, groupsDict) {
-        bodyText = bodyText.replace(HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "create_text_sticker"), "").trim();
         const canvas = createCanvas(150, 150), drawingBoard = canvas.getContext("2d");
         let color, text;
         if (bodyText.includes("-") && bodyText.split("-").length >= 2) {

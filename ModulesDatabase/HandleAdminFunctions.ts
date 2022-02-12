@@ -4,24 +4,26 @@ const startupTime = new Date();
 
 export class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
-        const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
+        const personToBanID = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
         if (bodyText.match(/^\/Ban/i)) {
-            restPersons.push(personToBan);
+            restPersons.push(personToBanID);
             await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
                 HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
                     client.reply(chatID, "The user has been banned. \nMay God have mercy on your soul", messageID);
                 });
             });
         } else if (bodyText.match(/^\/Unban/i)) {
-            restPersons.splice(restPersons.indexOf(personToBan), 1);
-            await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
-                HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
-                    person.autoBanned = null;
-                    person.commandCounter = 0;
-                    restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personToBan), 1);
-                    client.reply(chatID, "The user has been unbanned.", messageID);
+            if (restPersons.includes(personToBanID)) {
+                restPersons.splice(restPersons.indexOf(personToBanID), 1);
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
+                        person.autoBanned = null;
+                        person.commandCounter = 0;
+                        restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personToBanID), 1);
+                        client.reply(chatID, "The user has been unbanned.", messageID);
+                    });
                 });
-            });
+            } else client.reply(chatID, "This user isn't banned.", messageID);
         }
     }
 
@@ -34,15 +36,17 @@ export class HAF {
                 });
             });
         } else if (bodyText.match(/^\/Unblock group/i)) {
-            restGroups.splice(restGroups.indexOf(chatID), 1);
-            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
-                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
-                    group.autoBanned = null;
-                    group.filterCounter = 0;
-                    restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
-                    client.reply(chatID, "The group has been unblocked.", messageID);
+            if (restGroups.includes(chatID)) {
+                restGroups.splice(restGroups.indexOf(chatID), 1);
+                await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
+                        group.autoBanned = null;
+                        group.filterCounter = 0;
+                        restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+                        client.reply(chatID, "The group has been unblocked.", messageID);
+                    });
                 });
-            });
+            } else client.reply(chatID, "This group isn't blocked.", messageID);
         }
     }
 
@@ -80,7 +84,7 @@ export class HAF {
             await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
             await client.reply(chatID, "הפקודה שהרצת בוצעה בהצלחה", messageID);
         } catch (err) {
-            await client.reply(chatID, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, messageID);
+            await client.reply(chatID, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()}`, messageID);
         }
     }
 }

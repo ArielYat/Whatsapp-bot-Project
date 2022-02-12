@@ -3,7 +3,7 @@ import {HL} from "../ModulesDatabase/HandleLanguage"
 export class H3T {
     static async TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict) {
         async function init() {
-            const matched = bodyText.match((await HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe")).test(bodyText));
+            const matched = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "init_tic_tac_toe"));
             if (matched) {
                 const clickedRow = matched[1].trim(), clickedCol = matched[2].trim();
                 board[clickedRow][clickedCol] = 1;
@@ -13,7 +13,7 @@ export class H3T {
         }
 
         async function playerMove(previousMessage, originalMessage) {
-            const catchMessages = async message => !!(message.body.match(await HL.getGroupLang(groupsDict, chatID, "move_tic_tac_toe"))) && message.quotedMsgObj && originalMessageID === message.quotedMsgObj.id;
+            const catchMessages = async message => (await HL.getGroupLang(groupsDict, chatID, "move_tic_tac_toe")).test(message.body) && message.quotedMsgObj && originalMessageID === message.quotedMsgObj.id;
             await client.awaitMessages(chatID, catchMessages, {time: 60000, errors: ['time']})
                 .then(caught => async function () {
                     if (caught[0].value.sender.id.toString() === originalSender.toString() && (previousMessage === null || caught[0].value.quotedMsgObj === previousMessage)) {

@@ -20,7 +20,7 @@ import {Group} from "./Classes/Group.js";
 import {Person} from "./Classes/Person.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-import wa, {Chat, Message} from "@open-wa/wa-automate";
+import {create, Client, Chat, Message} from "@open-wa/wa-automate";
 import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
@@ -34,7 +34,7 @@ process.on('uncaughtException', err => {
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    wa.create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
+    create({headless: false, useChrome: true, multiDevice: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
@@ -75,7 +75,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.downloadMusic(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "create_survey")).test(bodyText)) {
-        await HSu.makeButton(client, bodyText, chatID, messageID, groupsDict);
+        await HSu.makeButtons(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
@@ -225,7 +225,7 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
 }
 
 //Main function
-function start(client) {
+function start(client: Client) {
     //Check if there are birthdays everyday at 5 am
     IsraelSchedule.scheduleJob('0 5 * * *', async () => {
         await HB.checkBirthdays(client, usersDict, groupsDict);

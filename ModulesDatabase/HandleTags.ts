@@ -4,7 +4,7 @@ import {HAFK} from "./HandleAFK.js";
 
 export class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons) {
-        bodyText = bodyText.replace((await HL.getGroupLang(groupsDict, chatID, "tag_person")), "").trim();
+        bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "tag_person"), "").trim();
         const tags = groupsDict[chatID].tags;
         let counter = 0;
         for (const tag in tags) {
@@ -48,7 +48,7 @@ export class HT {
         }
         if (counter !== 0) {
             try {
-                bodyText += (await HL.getGroupLang(groupsDict, chatID, "someone_not_tagged_because_afk_reply"));
+                bodyText += await HL.getGroupLang(groupsDict, chatID, "someone_not_tagged_because_afk_reply");
                 await client.sendReplyWithMentions(chatID, bodyText, quotedMsgID);
             } catch (err) {
                 console.log("error occurred while tagging: " + err);
@@ -73,9 +73,9 @@ export class HT {
                 if (!groupsDict[chatID].doesTagExist(tag)) {
                     await HDB.addArgsToDB(chatID, tag, phoneNumber, null, "tags", async function () {
                         groupsDict[chatID].tags = ["add", tag, phoneNumber];
-                        await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag)), messageID);
+                        await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tag_reply", tag), messageID);
                     });
-                } else await client.reply(chatID, await (HL.getGroupLang(groupsDict, chatID, "add_tag_already_exists_error", tag)), messageID);
+                } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tag_already_exists_error", tag), messageID);
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tag_doesnt_exist_error"), messageID);
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
     }
@@ -87,7 +87,7 @@ export class HT {
             if (groupsDict[chatID].doesTagExist(tag)) {
                 await HDB.delArgsFromDB(chatID, tag, "tags", async function () {
                     groupsDict[chatID].tags = ["delete", tag]
-                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag)), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_tag_reply", tag), messageID);
                 });
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_tag_doesnt_exist_error"), messageID);
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
@@ -141,13 +141,13 @@ export class HT {
         const tagsFound = bodyText.match(/@\d+/g);
         if (tagsFound) {
             for (let tag in tagsFound) {
-                const ID = tagsFound[tag].replace("@", "") + "@c.us";
-                if (ID in usersDict) {
-                    const person = usersDict[ID];
+                const personID = tagsFound[tag].replace("@", "") + "@c.us";
+                if (personID in usersDict) {
+                    const person = usersDict[personID];
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
                     person.messagesTaggedIn[chatID].push(messageID);
-                    await HAFK.afkPersonTagged(client, chatID, messageID, ID, afkPersons, groupsDict, usersDict);
+                    await HAFK.afkPersonTagged(client, chatID, messageID, personID, afkPersons, groupsDict, usersDict);
                     await HDB.delArgsFromDB(chatID, person.personID, "lastTagged", function () {
                         HDB.addArgsToDB(chatID, person.personID, person.messagesTaggedIn[chatID], null, "lastTagged", function () {
                         });
@@ -204,7 +204,7 @@ export class HT {
                             groupsDict[chatID].tags = ["add", tag, phoneNumbersArray];
                             await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_tagging_group_reply", tag)), messageID);
                         });
-                    } else await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_tagging_group_already_exists_error", tag)), messageID);
+                    } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tagging_group_already_exists_error", tag), messageID);
                 } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tagging_group_invalid_phone_numbers_error"), messageID);
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_tagging_group_no_phone_numbers_error"), messageID);
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
@@ -217,14 +217,14 @@ export class HT {
             if (groupsDict[chatID].doesTagExist(tag)) {
                 await HDB.delArgsFromDB(chatID, tag, "tags", async function () {
                     groupsDict[chatID].tags = ["delete", tag]
-                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_tagging_group_reply", tag)), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_tagging_group_reply", tag), messageID);
                 });
             } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_tagging_group_does_not_exist_error"), messageID);
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
     }
 
     static async addPersonToTaggingGroup(client, bodyText, chatID, messageID, groupsDict) {
-        const matched = bodyText.match(HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group"));
+        const matched = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group"));
         if (matched) {
             const tagPersonName = matched[1].trim(), tagGroupName = matched[2].trim();
             if (groupsDict[chatID].tags) {
@@ -235,18 +235,18 @@ export class HT {
                             groupsDict[chatID].tags[tagGroupName].push(phoneNumber);
                             await HDB.delArgsFromDB(chatID, tagGroupName, "tags", async function () {
                                 await HDB.addArgsToDB(chatID, tagGroupName, groupsDict[chatID].tags[tagGroupName], null, "tags", async function () {
-                                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group_reply", tagPersonName, tagGroupName)), messageID);
+                                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group_reply", tagPersonName, tagGroupName), messageID);
                                 });
                             });
-                        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group_already_exists_error", tagPersonName, tagGroupName), messageID);
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_exist_in_this_group_error", tagPersonName), messageID);
-                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tagging_group_group_doesnt_exist_error", tagGroupName), messageID);
+                        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "add_person_to_tagging_group_already_exists_error", tagPersonName, tagGroupName), messageID);
+                    } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "person_doesnt_exist_in_this_group_error", tagPersonName), messageID);
+                } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "tagging_group_group_doesnt_exist_error", tagGroupName), messageID);
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
         }
     }
 
     static async removePersonFromTaggingGroup(client, bodyText, chatID, messageID, groupsDict) {
-        const matched = bodyText.match(HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group"));
+        const matched = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group"));
         if (matched) {
             const tagPersonName = matched[1].trim(), tagGroupName = matched[2].trim();
             if (groupsDict[chatID].tags) {
@@ -258,16 +258,16 @@ export class HT {
                             await HDB.delArgsFromDB(chatID, tagGroupName, "tags", async function () {
                                 if (groupsDict[chatID].tags[tagGroupName].length !== 0) {
                                     await HDB.addArgsToDB(chatID, tagGroupName, groupsDict[chatID].tags[tagGroupName], null, "tags", async function () {
-                                        await client.reply(chatID, await (HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group_reply", tagPersonName, tagGroupName), messageID));
+                                        await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group_reply", tagPersonName, tagGroupName), messageID);
                                     });
                                 } else {
                                     delete groupsDict[chatID].tags[tagGroupName];
-                                    await client.reply(chatID, await (HL.getGroupLang(groupsDict, chatID, "tagging_group_no_more_persons_error", tagGroupName)), messageID);
+                                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "tagging_group_no_more_persons_error", tagGroupName), messageID);
                                 }
                             });
-                        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group_does_not_exist_error", tagPersonName, tagGroupName), messageID);
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "person_doesnt_exist_in_this_group_error", tagPersonName), messageID);
-                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "tagging_group_group_doesnt_exist_error", tagGroupName), messageID);
+                        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "remove_person_from_tagging_group_does_not_exist_error", tagPersonName, tagGroupName), messageID);
+                    } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "person_doesnt_exist_in_this_group_error", tagPersonName), messageID);
+                } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "tagging_group_group_doesnt_exist_error", tagGroupName), messageID);
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "group_doesnt_have_tags_error"), messageID);
 
         }
@@ -291,9 +291,9 @@ export class HT {
         const tagStack = groupsDict[chatID].tagStack;
         if (tagStack.length !== 0) {
             if (tagStack.length === 1)
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);
+                await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "tag_list_last_reply", tagStack.pop()), messageID);
             else if (tagStack.length > 1)
-                await client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "tag_list_next_reply", tagStack.pop(), tagStack[tagStack.length - 1]), messageID)
+                await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "tag_list_next_reply", tagStack.pop(), tagStack[tagStack.length - 1]), messageID)
         }
     }
 }

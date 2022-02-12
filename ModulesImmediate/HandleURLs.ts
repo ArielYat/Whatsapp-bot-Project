@@ -18,7 +18,7 @@ export class HURL {
             for (let url of urlsInMessage) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
                 url = url.charAt(0).toLowerCase() + url.slice(1);
-                await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url)), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "scan_link_checking_reply", url), messageID);
                 defaultTimedInstance.urlLookup(nvt.sha256(url), async function (err, res) {
                     if (err) {
                         defaultTimedInstance.initialScanURL(url, async function (err, res) {
