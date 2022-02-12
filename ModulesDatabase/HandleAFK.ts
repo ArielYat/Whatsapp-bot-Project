@@ -1,17 +1,17 @@
 import {HL} from "./HandleLanguage.js";
 import {HDB} from "./HandleDB.js";
 
-export class HA {
+export class HAFK {
     static async afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
-        const person = usersDict[authorID];
-        if (!person.afk && !(afkPersons.includes(authorID))) {
-            person.afk = new Date();
-            await afkPersons.push(authorID);
-            await HDB.addArgsToDB(authorID, person.afk, null, null, "afk", function () {
+        if (!usersDict[authorID].afk && !(afkPersons.includes(authorID))) {
+            const afkDate = new Date();
+            await HDB.addArgsToDB(authorID, afkDate, null, null, "afk", function () {
+                usersDict[authorID].afk = afkDate;
+                afkPersons.push(authorID);
             });
-            await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
-                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {
-                    client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "afk_reply", authorID.replace("@c.us", "")), messageID);
+            await HDB.delArgsFromDB("afkPersons", null, "rested", async function () {
+                await HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", async function () {
+                    await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_reply", authorID.replace("@c.us", "")), messageID);
                 });
             });
         }
@@ -20,15 +20,15 @@ export class HA {
     static async afkOff(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
         const person = usersDict[authorID];
         if (!!person.afk && afkPersons.includes(authorID)) {
-            person.afk = null;
-            afkPersons.splice(afkPersons.indexOf(authorID), 1);
             await HDB.delArgsFromDB(authorID, null, "afk", function () {
+                person.afk = null;
+                afkPersons.splice(afkPersons.indexOf(authorID), 1);
             });
             await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
-                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {
+                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", async function () {
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "afk_off_reply", person.messagesTaggedIn[chatID].length.toString()), messageID);
+                    client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "afk_off_reply", person.messagesTaggedIn[chatID].length.toString())), messageID);
                 });
             });
         }
@@ -45,8 +45,10 @@ export class HA {
                 }
             }
             const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString();
-            const afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString() + ":" + (person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString());
-            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
+            let afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString();
+            afkTime += ":"
+            afkTime += person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString();
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
         }
     }
 

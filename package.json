@@ -1,0 +1,36 @@
+{
+  "name": "whatsapp-bot",
+  "version": "2.8.0",
+  "description": "WhatsApp Bot - multipurpose for groups and individuals 🌟",
+  "author": "ArielYat & TheBooker66",
+  "contributors": [
+    "ArielYat",
+    "TheBooker66"
+  ],
+  "license": "GPL-3.0",
+  "main": "Main.ts",
+  "repository": {
+    "url": "github:ArielYat/Whatsapp-bot-Project"
+  },
+  "homepage": "https://github.com/ArielYat/Whatsapp-bot-Project#readme",
+  "bugs": {
+    "url": "https://github.com/ArielYat/Whatsapp-bot-Project/issues"
+  },
+  "type": "module",
+  "dependencies": {
+    "@open-wa/wa-automate": "^4.30.11",
+    "canvas": "^2.9.0",
+    "html-entities": "^2.3.2",
+    "mongodb": "^4.3.1",
+    "node-fetch": "^3.2.0",
+    "node-schedule": "^2.1.0",
+    "node-virustotal": "^3.35.0",
+    "puppeteer": "^13.3.1",
+    "youtube-dl-exec": "^2.0.2",
+    "typescript": "^4.4.4",
+    "ts-node": "^10.5.0"
+  },
+  "scripts": {
+    "start": "node --loader ts-node/esm Main.ts"
+  }
+}

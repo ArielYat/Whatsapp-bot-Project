@@ -4,24 +4,26 @@ const startupTime = new Date();
 
 export class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
-        const personToBan = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
+        const personToBanID = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
         if (bodyText.match(/^\/Ban/i)) {
-            restPersons.push(personToBan);
+            restPersons.push(personToBanID);
             await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
                 HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
                     client.reply(chatID, "The user has been banned. \nMay God have mercy on your soul", messageID);
                 });
             });
         } else if (bodyText.match(/^\/Unban/i)) {
-            restPersons.splice(restPersons.indexOf(personToBan), 1);
-            await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
-                HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
-                    person.autoBanned = null;
-                    person.commandCounter = 0;
-                    restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personToBan), 1);
-                    client.reply(chatID, "The user has been unbanned.", messageID);
+            if (restPersons.includes(personToBanID) || restPersonsCommandSpam.includes(personToBanID)) {
+                restPersons.splice(restPersons.indexOf(personToBanID), 1);
+                await HDB.delArgsFromDB("restArrayUsers", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayUsers", restPersons, null, null, "rested", function () {
+                        person.autoBanned = null;
+                        person.commandCounter = 0;
+                        restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personToBanID), 1);
+                        client.reply(chatID, "The user has been unbanned.", messageID);
+                    });
                 });
-            });
+            } else client.reply(chatID, "This user isn't banned.", messageID);
         }
     }
 
@@ -34,15 +36,17 @@ export class HAF {
                 });
             });
         } else if (bodyText.match(/^\/Unblock group/i)) {
-            restGroups.splice(restGroups.indexOf(chatID), 1);
-            await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
-                HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
-                    group.autoBanned = null;
-                    group.filterCounter = 0;
-                    restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
-                    client.reply(chatID, "The group has been unblocked.", messageID);
+            if (restGroups.includes(chatID)) {
+                restGroups.splice(restGroups.indexOf(chatID), 1);
+                await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
+                    HDB.addArgsToDB("restArrayGroups", restGroups, null, null, "rested", function () {
+                        group.autoBanned = null;
+                        group.filterCounter = 0;
+                        restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+                        client.reply(chatID, "The group has been unblocked.", messageID);
+                    });
                 });
-            });
+            } else client.reply(chatID, "This group isn't blocked.", messageID);
         }
     }
 
@@ -59,7 +63,7 @@ export class HAF {
 
     static async ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam) {
         const currentTime = new Date();
-        const timeSinceStartup = new Date(currentTime - startupTime);
+        const timeSinceStartup = new Date(currentTime.getTime() - startupTime.getTime());
         const ping = "זמן התגובה של ג'ון בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString();
         const currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString();
         const totalGroupAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString();
@@ -75,12 +79,12 @@ export class HAF {
     }
 
     // noinspection JSUnusedLocalSymbols
-    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, Group, Person, Strings) {
+    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, HAFK, Group, Person, Strings) {
         try {
             await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
             await client.reply(chatID, "הפקודה שהרצת בוצעה בהצלחה", messageID);
         } catch (err) {
-            await client.reply(chatID, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()} `, messageID);
+            await client.reply(chatID, `שגיאה קרתה במהלך ביצוע הפקודה; להלן השגיאה: \n ${err.toString()}`, messageID);
         }
     }
 }

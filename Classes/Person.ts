@@ -1,13 +1,17 @@
+// noinspection TypeScriptFieldCanBeMadeReadonly
+
+import {Group} from "./Group";
+
 export class Person {
-    #personID;
-    #birthday;
-    #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
-    #birthdayGroups;
-    #commandCounter;
-    #messagesTaggedIn;
-    #autoBanned;
-    #reminders;
-    #afk;
+    readonly #personID: string;                         //The person's ID
+    #birthday: string[];                                //The person's birthday - [day, month, year]
+    #permissionLevel: {};                               //The person's permission level by group (0 - muted, 1 - regular, 2 - group admin, 3 - bot dev)
+    #birthdayGroups: Group[];                           //The groups in which to announce happy birthday
+    #commandCounter: number;                            //The number of commands the person has used (reset every five minutes) - for autobanning
+    #messagesTaggedIn: { [key: string]: string[] };     //The messages the person has been tagged in by chatID
+    #autoBanned: Date;                                  //The date in which the person was autobanned (if it was)
+    #reminders: { [key: string]: string };              //The reminders the person has set
+    #afk: Date;                                         //The date in which the person went AFK (if they are AFK)
 
     constructor(personID) {
         this.#personID = personID;
@@ -20,7 +24,6 @@ export class Person {
         this.#reminders = {};
         this.#afk = null;
     }
-
 
     get personID() {
         return this.#personID;
@@ -50,8 +53,9 @@ export class Person {
     }
 
     set birthDayGroups(birthdayGroupArray) {
+        // @ts-ignore
         if (birthdayGroupArray[0] === "add")
-            this.#birthdayGroups.push(birthdayGroupArray[1]);
+            this.#birthdayGroups.push(birthdayGroupArray[1]); // @ts-ignore
         else if (birthdayGroupArray[0] === "delete")
             this.#birthdayGroups.splice(this.#birthdayGroups.indexOf(birthdayGroupArray[1]), 1);
     }
