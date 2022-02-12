@@ -1,19 +1,21 @@
 // noinspection TypeScriptFieldCanBeMadeReadonly
+import {Person} from "./Person";
+
 export class Group {
-    readonly #groupID;
-    #filters;
-    #tags;
-    #groupLanguage;
-    #personsIn;
-    #filterCounter;
-    #groupAdmins;
-    #functionPermissions;
-    #cryptoCheckedToday;
-    #translationCounter;
-    #autoBanned
-    #tagStack;
-    #downloadMusicCounter;
-    #stockCounter;
+    readonly #groupID: string;
+    #filters: { [key: string]: string };
+    #tags: { [key: string]: object | string };
+    #groupLanguage: string;
+    #personsIn: Person[];
+    #filterCounter: number;
+    #groupAdmins: string[];
+    #functionPermissions: { [key: string]: number };
+    #cryptoCheckedToday: boolean;
+    #translationCounter: number;
+    #autoBanned: Date;
+    #tagStack: string[];
+    #downloadMusicCounter: number;
+    #stockCounter: number;
 
     constructor(groupID) {
         this.#groupID = groupID;
@@ -23,13 +25,13 @@ export class Group {
         this.#personsIn = [];
         this.#filterCounter = 0;
         this.#functionPermissions = {
-            "filters": "1",
-            "tags": "1",
-            "handleOther": "1",
-            "handleShows": "1",
-            "handleFilters": "1",
-            "handleTags": "1",
-            "handleBirthdays": "1",
+            "filters": 1,
+            "tags": 1,
+            "handleOther": 1,
+            "handleShows": 1,
+            "handleFilters": 1,
+            "handleTags": 1,
+            "handleBirthdays": 1,
         };
         this.#groupAdmins = [];
         this.#cryptoCheckedToday = false;
@@ -62,10 +64,11 @@ export class Group {
     }
 
     set tags(tagArray) {
-        if (tagArray[0] === "add")
-            this.#tags[tagArray[1]] = tagArray[2];
-        else if (tagArray[0] === "delete")
+        if (tagArray[0] === "add") { // @ts-ignore
+            this.#tags[(tagArray[1])] = tagArray[2];
+        } else if (tagArray[0] === "delete") { // @ts-ignore
             delete this.#tags[tagArray[1]];
+        }
     }
 
     get personsIn() {
@@ -73,10 +76,13 @@ export class Group {
     }
 
     set personsIn(authorArray) {
+        // @ts-ignore
         if (authorArray[0] === "add")
             this.#personsIn.push(authorArray[1]);
-        else if (authorArray[0] === "delete")
-            this.#personsIn.splice(this.#personsIn.indexOf(authorArray[1]), 1);
+        else { // @ts-ignore
+            if (authorArray[0] === "delete")
+                this.#personsIn.splice(this.#personsIn.indexOf(authorArray[1]), 1);
+        }
     }
 
     get groupLanguage() {

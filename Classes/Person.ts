@@ -1,13 +1,15 @@
 // noinspection TypeScriptFieldCanBeMadeReadonly
+import {Group} from "./Group";
+
 export class Person {
-    readonly #personID;
-    #birthday;
-    #permissionLevel; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
-    #birthdayGroups;
-    #commandCounter;
-    #messagesTaggedIn;
-    #autoBanned;
-    #reminders;
+    readonly #personID: string;
+    #birthday: string[];
+    #permissionLevel: {}; //0 - everyone, 1 - group admin, 2 - group creator, 3 - bot dev
+    #birthdayGroups: Group[];
+    #commandCounter: number;
+    #messagesTaggedIn: { [key: string]: string[] };
+    #autoBanned: Date;
+    #reminders: { [key: string]: string };
     #afk;
 
     constructor(personID) {
@@ -51,10 +53,13 @@ export class Person {
     }
 
     set birthDayGroups(birthdayGroupArray) {
+        // @ts-ignore
         if (birthdayGroupArray[0] === "add")
             this.#birthdayGroups.push(birthdayGroupArray[1]);
-        else if (birthdayGroupArray[0] === "delete")
-            this.#birthdayGroups.splice(this.#birthdayGroups.indexOf(birthdayGroupArray[1]), 1);
+        else { // @ts-ignore
+            if (birthdayGroupArray[0] === "delete")
+                this.#birthdayGroups.splice(this.#birthdayGroups.indexOf(birthdayGroupArray[1]), 1);
+        }
     }
 
     get commandCounter() {

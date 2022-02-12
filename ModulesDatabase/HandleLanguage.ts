@@ -18,6 +18,7 @@ export class HL {
         } else client.reply(chatID, Strings["language_change_error"][groupsDict[chatID].groupLanguage], messageID);
     }
 
+
     static getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null, value3 = null) {
         if (parameter === "add_filter_already_exists_error")
             return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value1, value2);
@@ -32,35 +33,35 @@ export class HL {
 
     static async sendHelpMessage(client, bodyText, chatID, messageID, groupsDict) {
         switch (true) {
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_general"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_general_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_general")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_general_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_language"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_language_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_language")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_language_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_filters"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_filters_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_filters")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_filters_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_tags"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_tags_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_tags")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_tags_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_birthdays"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_birthdays_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_birthdays")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_birthdays_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_permissions"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_permissions_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_permissions")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_permissions_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_reminders"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_reminders_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_reminders")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_reminders_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_stickers"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_stickers_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_stickers")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_stickers_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_internet"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_internet_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_internet")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_internet_reply"), messageID);
                 break;
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "help_others"))):
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "help_others_reply"), messageID);
+            case (await HL.getGroupLang(groupsDict, chatID, "help_others")).test(bodyText):
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_others_reply"), messageID);
                 break;
         }
     }

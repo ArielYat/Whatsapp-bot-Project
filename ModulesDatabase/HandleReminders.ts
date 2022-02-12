@@ -84,7 +84,7 @@ export class HR {
                         year = date.getFullYear();
                 }
                 const reminderDate = new Date(year, month, day, hour, minutes);
-                const repeatReminder = !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "repeat_reminder")));
+                const repeatReminder = (await HL.getGroupLang(groupsDict, chatID, "repeat_reminder")).test(bodyText);
                 const reminder =
                     messageType === "image" ? repeatReminder ? `repeatReminder${reminderInterval}Image` + await client.decryptMedia(message) : "Image" + await client.decryptMedia(message) :
                         messageType === "video" ? repeatReminder ? `repeatReminder${reminderInterval}Video` + +await client.decryptMedia(message) : "Video" + await client.decryptMedia(message) :
@@ -95,16 +95,16 @@ export class HR {
                         await HDB.addArgsToDB(chatID, reminderDate, reminder, null, "reminders", function () {
                             person.reminders = ["add", reminderDate, reminder];
                             !(personsWithReminders.includes(chatID)) ? personsWithReminders.push(chatID) : {};
-                            HDB.delArgsFromDB("personsWithReminders", null, "rested", function () {
-                                HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", function () {
-                                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "add_reminder_reply", time), messageID);
+                            HDB.delArgsFromDB("personsWithReminders", null, "rested", async function () {
+                                await HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", async function () {
+                                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "add_reminder_reply", time)), messageID);
                                 });
                             });
                         });
-                    } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_already_exists_error"), messageID);
+                    } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_already_exists_error"), messageID);
                 }
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
+            } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
     }
 
     static async removeReminder(client, bodyText, chatID, messageID, person, groupsDict, personsWithReminders) {
@@ -145,51 +145,51 @@ export class HR {
             }
             let reminderDate = new Date(year, month, day, hour, minutes);
             if (person.doesReminderExist(reminderDate)) {
-                await HDB.delArgsFromDB(chatID, reminderDate, "reminders", function () {
+                await HDB.delArgsFromDB(chatID, reminderDate, "reminders", async function () {
                     person.reminders = ["delete", reminderDate];
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time), messageID);
+                    await client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "remove_reminder_reply", time)), messageID);
                     if (Object.keys(person.reminders).length === 0) {
                         personsWithReminders.splice(personsWithReminders.indexOf(chatID), 1);
-                        HDB.delArgsFromDB("personsWithReminders", null, "rested", function () {
-                            HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", function () {
+                        await HDB.delArgsFromDB("personsWithReminders", null, "rested", async function () {
+                            await HDB.addArgsToDB("personsWithReminders", personsWithReminders, null, null, "rested", function () {
                             });
                         });
                     }
                 });
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_doesnt_exist_error"), messageID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
+            } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_doesnt_exist_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
     }
 
     static async getDayOfTheWeek(bodyText, groupsDict, chatID) {
         let dayOfTheWeek;
         switch (true) {
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Sunday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Sunday")).test(bodyText):
                 dayOfTheWeek = 1;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Sunday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Sunday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Monday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Monday")).test(bodyText):
                 dayOfTheWeek = 2;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Monday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Monday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Tuesday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Tuesday")).test(bodyText):
                 dayOfTheWeek = 3;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Tuesday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Tuesday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Wednesday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Wednesday")).test(bodyText):
                 dayOfTheWeek = 4;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Wednesday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Wednesday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Thursday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Thursday")).test(bodyText):
                 dayOfTheWeek = 5;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Thursday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Thursday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Friday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Friday")).test(bodyText):
                 dayOfTheWeek = 6;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Friday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Friday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
-            case !!(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Saturday"))):
+            case (await HL.getGroupLang(groupsDict, chatID, "day_Saturday")).test(bodyText):
                 dayOfTheWeek = 7;
-                bodyText = bodyText.replace(bodyText.match(HL.getGroupLang(groupsDict, chatID, "day_Saturday"))[0], "").trim();
+                bodyText = bodyText.replace(bodyText.match(await HL.getGroupLang(groupsDict, chatID, "day_Saturday"))[0], "").trim();
                 return [dayOfTheWeek, bodyText];
             default:
                 dayOfTheWeek = null;
@@ -217,6 +217,6 @@ export class HR {
                     stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${reminderData.trim()}\n`;
             }
             await client.reply(chatID, stringForSending, messageID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);
     }
 }

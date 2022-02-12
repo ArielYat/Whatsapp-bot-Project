@@ -20,9 +20,9 @@ export class HAPI {
                 groupsDict[chatID].cryptoCheckedToday = true;
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_check_reply", stringForSending), messageID);
             } catch (err) {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_api_error"), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "crypto_api_error"), messageID);
             }
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "crypto_limit_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "crypto_limit_error"), messageID);
     }
 
     static async searchUrbanDictionary(client, bodyText, chatID, messageID, groupsDict) {
@@ -42,9 +42,9 @@ export class HAPI {
                     ${response.list[i].definition.replace(/\[/g, "").replace(/]/g, "")} 
                   \nDefinition by: ${response.list[i].author} \n\n`;
                 await client.reply(chatID, stringForSending, messageID);
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "urban_word_not_found_error"), messageID);
+            } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "urban_word_not_found_error"), messageID);
         } catch (err) {
-            client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "urban_api_error"), messageID);
+            client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "urban_api_error"), messageID);
         }
     }
 
@@ -85,11 +85,11 @@ export class HAPI {
                         }
                     }
                     await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_reply", stringForSending, response[2]), messageID);
-                } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
+                } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_language_error"), messageID);
             } catch (err) {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_language_api_error"), messageID);
             }
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "translate_language_limit_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "translate_language_limit_error"), messageID);
     }
 
     static async downloadMusic(client, bodyText, chatID, messageID, groupsDict) {
@@ -98,7 +98,7 @@ export class HAPI {
             let fileName = "";
             if (link) {
                 try {
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_downloading_reply"), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_downloading_reply"), messageID);
                     // noinspection SpellCheckingInspection
                     await youtubeDL(link[0], {
                         format: "bestaudio[filesize<20M]",
@@ -118,10 +118,10 @@ export class HAPI {
                         });
                     }
                 } catch (error) {
-                    await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_unknown_error"), messageID);
+                    await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_unknown_error"), messageID);
                 }
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
+            } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
     }
 
     static async fetchStock(client, bodyText, chatID, messageID, groupsDict) {
@@ -143,8 +143,8 @@ export class HAPI {
                 groupsDict[chatID].stockCounter++;
                 await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "fetch_stock_reply", bodyText, response), messageID);
             } catch (err) {
-                await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "fetch_stock_api_error"), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "fetch_stock_api_error"), messageID);
             }
-        } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "check_stock_limit_error"), messageID);
+        } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "check_stock_limit_error"), messageID);
     }
 }

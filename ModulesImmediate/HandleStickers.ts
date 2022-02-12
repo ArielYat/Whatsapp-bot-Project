@@ -168,7 +168,7 @@ export class HSt {
                         })
                     })
                 })()
-            } else await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
+            } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
         } catch (e) {
             console.log("error occurred at sticker making")
         }
@@ -209,7 +209,7 @@ export class HSt {
             drawingBoard.fillText(finalWord, 75, 75);
             await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול"});
         } catch (err) {
-            await client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
         }
     }
 }

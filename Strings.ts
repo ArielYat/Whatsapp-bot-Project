@@ -273,7 +273,7 @@ export const Strings = {
         "la": "",
         "fr": "Ce filtre était associé à un tag problématique et a donc été supprimé"
     }, "someone_not_tagged_because_afk_reply": {
-        "he": "\n(ייתכן שאדם כלשהו לא תוייג מכיוון שהוא במצב שינה)",
+        "he": "\n(ייתכן שאדם כלשהו לא תויג מכיוון שהוא במצב שינה)",
         "en": "\n(It's possible someone didn't get tagged because he's in hibernation)",
         "la": "",
         "fr": "\n(Il est possible que quelqu'un n'ait pas été tagué parce qu'il est en hibernation)"
@@ -824,7 +824,7 @@ export const Strings = {
     }, "help_others": {
         "he": /^עזרה אחר$/i, "en": /^Help others$/i, "la": "", "fr": /^Aide autre$/i
     }, "help_general_reply": {
-        "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן (972543293155) ואיתן עמירן (972586809911)\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
+        "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן ואיתן עמירן\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help stickers", "Help internet", "Help others"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan (972543293155) and Ethan Amiran (972586809911)\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "la": ``,
         "fr": `_*Liste des commandes en français et aide générale*_\nSi vous souhaitez obtenir de l'aide concernant une commande spécifique, essayez l'une des options suivantes:\n"Aide langue", "Aide filtres", "Aide tags", "Aide anniversaires", "Aide niveaux " "Aide rappels", "Aide autocollant", "Aide internet", "Aide autre"\nSi ce n'est pas le cas, et que vous vouliez simplement voir ce message, n'hésitez pas à rester! \nDéveloppé et maintenu par Ariel Yatskan (972543293155) et Ethan Amiran (972586809911)\nLe référentiel GitHub (le code), pour les curieux: https://github.com/ArielYat/Whatsapp-bot-Project`

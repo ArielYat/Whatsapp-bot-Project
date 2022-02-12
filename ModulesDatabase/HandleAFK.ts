@@ -10,9 +10,9 @@ export class HAFK {
                 person.afk = afkDate;
                 afkPersons.push(authorID);
             });
-            await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
-                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {
-                    client.sendReplyWithMentions(chatID, HL.getGroupLang(groupsDict, chatID, "afk_reply", authorID.replace("@c.us", "")), messageID);
+            await HDB.delArgsFromDB("afkPersons", null, "rested", async function () {
+                await HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", async function () {
+                    await client.sendReplyWithMentions(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_reply", authorID.replace("@c.us", "")), messageID);
                 });
             });
         }
@@ -26,10 +26,10 @@ export class HAFK {
                 afkPersons.splice(afkPersons.indexOf(authorID), 1);
             });
             await HDB.delArgsFromDB("afkPersons", null, "rested", function () {
-                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", function () {
+                HDB.addArgsToDB("afkPersons", afkPersons, null, null, "rested", async function () {
                     if (person.messagesTaggedIn[chatID] === undefined)
                         person.messagesTaggedIn[chatID] = [];
-                    client.reply(chatID, HL.getGroupLang(groupsDict, chatID, "afk_off_reply", person.messagesTaggedIn[chatID].length.toString()), messageID);
+                    client.reply(chatID, (await HL.getGroupLang(groupsDict, chatID, "afk_off_reply", person.messagesTaggedIn[chatID].length.toString())), messageID);
                 });
             });
         }
