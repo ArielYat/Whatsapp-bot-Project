@@ -12,7 +12,7 @@
   - [Reminders](ModulesDatabase/HandleReminders.ts)
   - [Stickers](ModulesImmediate/HandleStickers.ts)
   - [Internet Commands](ModulesImmediate/HandleAPIs.ts)
-  - [Miscellaneous Commands](#Miscellaneous Commands)
+  - [Miscellaneous Commands](#miscellaneous-commands)
   - [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts)
 - [Dependencies and APIs used](#dependencies-and-apis-used)
   - [Dependencies](#Dependencies)
