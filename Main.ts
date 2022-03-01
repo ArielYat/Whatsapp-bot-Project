@@ -1,5 +1,6 @@
 //version 2.8.0
 
+
 //Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
 import {HDB} from "./ModulesDatabase/HandleDB.js";
@@ -35,7 +36,7 @@ process.on('uncaughtException', err => {
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    create({headless: false, multiDevice: true, useChrome: true}).then(client => start(client));
+    create({multiDevice: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {

@@ -1,8 +1,9 @@
 import {Group} from "../Classes/Group.js";
 import {Person} from "../Classes/Person.js";
 import {MongoClient} from "mongodb";
+import {apiKeys} from "../apiKeys";
 
-const url = "mongodb://localhost:27017/";
+const url = apiKeys.DB
 
 export class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
@@ -59,7 +60,7 @@ export class HDB {
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
                 argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
-            client.db("WhatsappBotDB").collection(argType).insertOne(objectToAddToDataBase, function (err) {
+            client.db("Cluster0").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
                     console.log(err + " in addArgsToDB-insertOne");
                     return;
@@ -124,7 +125,7 @@ export class HDB {
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
                 argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
                 argType += "-persons"
-            client.db("WhatsappBotDB").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
+            client.db("Cluster0").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
                     console.log(err + " in delArgsFromDB-deleteOne");
                     return;
@@ -259,7 +260,7 @@ export class HDB {
                 console.log(err + "in initial retrieval of groups from DB");
                 return;
             }
-            const dbo = client.db("WhatsappBotDB");
+            const dbo = client.db("Cluster0");
             dbo.collection("filters-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching filters from db");

@@ -119,6 +119,7 @@ export class HAPI {
                     }
                 } catch (error) {
                     await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_unknown_error"), messageID);
+	      console.log(error.toString());
                 }
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);

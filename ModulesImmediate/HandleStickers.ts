@@ -3,12 +3,11 @@
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
 import pkg from 'canvas';
 import puppeteer from "puppeteer";
-import {fileURLToPath} from 'url';
-import {dirname} from 'path';
 import {encode} from "html-entities";
-
 const {createCanvas, loadImage} = pkg;
-const _dirname = dirname(fileURLToPath(import.meta.url));
+import test from 'require-main-filename'
+import * as path from "path";
+const template = (path.dirname(test()))+ "\\ModulesImmediate" + "\\template.mhtml"
 
 export class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -112,7 +111,15 @@ export class HSt {
                     let messageTime = encode(time);
                     let messageName = encode(message.sender.pushname);
                     let messagePhone = phoneNumber;
-                    const browser = await puppeteer.launch();
+                    const browser = await puppeteer.launch({
+      		headless: true,
+      		args: [
+        			'--no-sandbox',
+       			 '--disable-setuid-sandbox',
+        			'--disable-dev-shm-usage',
+        			'--single-process'
+      		],
+   	 });
                     const page = await browser.newPage();
                     if (highQuality) {
                         await page.setViewport({
@@ -133,7 +140,8 @@ export class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
-                    await page.goto(`file://${_dirname}//template.mhtml`);
+	      console.log(template.toString());
+                    await page.goto(template);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
                         domBody.innerHTML = messageBody
@@ -170,7 +178,7 @@ export class HSt {
                 })()
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
         } catch (e) {
-            console.log("error occurred at sticker making")
+            console.log("error occurred at sticker making" + e.toString())
         }
     }
 
