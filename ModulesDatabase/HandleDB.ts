@@ -1,7 +1,7 @@
 import {Group} from "../Classes/Group.js";
 import {Person} from "../Classes/Person.js";
 import {MongoClient} from "mongodb";
-import {apiKeys} from "../apiKeys";
+import {apiKeys} from "../apiKeys.js";
 
 const url = apiKeys.DB
 

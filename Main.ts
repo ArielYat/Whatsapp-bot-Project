@@ -79,6 +79,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if ((await HL.getGroupLang(groupsDict, chatID, "create_survey")).test(bodyText)) {
         await HSu.makeButtons(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    }else if ((await HL.getGroupLang(groupsDict, chatID, "wordle_game")).test(bodyText)) {
+        await HAPI.wordleGame(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;

@@ -788,6 +788,24 @@ export const Strings = {
         "en": "If you want to win you should consider playing faster, ye donkey",
         "la": "",
         "fr": "Si tu veux gagner, tu devrais envisager de jouer plus vite, tortue"
+    }, //wordle
+    "wordle_game" : {
+        "he": /^הניחוש שלי הוא/i, "en": /^My guess is/i, "la": /null/, "fr": /null/
+    }, "wordle_game_reply": {
+        "he": "המילה שבחרת היא %s\nyour grade is: %s",
+        "en": "The word you choose is %s\nYour grade is: %s",
+        "la": "null",
+        "fr": "null"
+    }, "wordle_game_word_error": {
+        "he": "המילה שבחרת לא קיימת במאגר שלנו",
+        "en": "The word you choose isn't exist on our database",
+        "la": "null",
+        "fr": "null"
+    }, "wordle_game_error": {
+        "he": "המילה חייבת להיות באורך של 5 אותיות",
+        "en": "The word length must be 5 letters",
+        "la": "null",
+        "fr": "null"
     }, //language and help
     "change_language": {
         "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad", "fr": /^Change la langue en/i

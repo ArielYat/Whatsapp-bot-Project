@@ -111,15 +111,7 @@ export class HSt {
                     let messageTime = encode(time);
                     let messageName = encode(message.sender.pushname);
                     let messagePhone = phoneNumber;
-                    const browser = await puppeteer.launch({
-      		headless: true,
-      		args: [
-        			'--no-sandbox',
-       			 '--disable-setuid-sandbox',
-        			'--disable-dev-shm-usage',
-        			'--single-process'
-      		],
-   	 });
+                    const browser = await puppeteer.launch();
                     const page = await browser.newPage();
                     if (highQuality) {
                         await page.setViewport({
