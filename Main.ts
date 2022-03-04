@@ -1,6 +1,5 @@
 //version 2.8.0
 
-
 //Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
 import {HDB} from "./ModulesDatabase/HandleDB.js";
@@ -22,7 +21,7 @@ import {Person} from "./Classes/Person.js";
 import {apiKeys} from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-import {create, Client, Chat, Message} from "@open-wa/wa-automate";
+import {create, Client, Chat, Message, ev} from "@open-wa/wa-automate";
 import IsraelSchedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
@@ -33,10 +32,9 @@ IsraelSchedule.tz = apiKeys.region;     //Bot devs' time zone
 process.on('uncaughtException', err => {
     console.log(err);
 });
-
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    create({multiDevice: true}).then(client => start(client));
+    create({multiDevice: true, sessionData: "e30=", skipSessionSave: true}).then(client => start(client));
 }).then(_ => console.log("Bot started successfully at " + new Date().toString()));
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
