@@ -1,50 +1,44 @@
 // noinspection SpellCheckingInspection
 
 import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import {apiKeys} from "../apiKeys.js";
 import pkg from 'canvas';
 import puppeteer from "puppeteer";
 import {encode} from "html-entities";
+
 const {createCanvas, loadImage} = pkg;
-import test from 'require-main-filename'
-import * as path from "path";
-const template = (path.dirname(test()))+ "\\ModulesImmediate" + "\\template.mhtml"
 
 export class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
         function draw(img, ctx) {
-            let buffer = createCanvas(512, 512)
-            let bufferctx = buffer.getContext('2d');
+            const buffer = createCanvas(512, 512), bufferctx = buffer.getContext('2d');
             bufferctx.drawImage(img, 0, 0);
-            let imageData = bufferctx.getImageData(0, 0, buffer.width, buffer.height);
+            const imageData = bufferctx.getImageData(0, 0, buffer.width, buffer.height);
             let data = imageData.data;
-            let removeBlack = function () {
-                for (let i = 0; i < data.length; i += 4) {
-                    if (data[i] + data[i + 1] + data[i + 2] < 80) {
-                        data[i + 3] = 0; // alpha
-                    }
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i] + data[i + 1] + data[i + 2] < 80) {
+                    data[i + 3] = 0;
                 }
-                ctx.putImageData(imageData, 0, 0);
-            };
-            removeBlack();
+            }
+            ctx.putImageData(imageData, 0, 0);
         }
 
         function trimCanvas(canvas) {
-            let ctx = canvas.getContext('2d'),
+            const ctx = canvas.getContext('2d'),
                 copy = createCanvas(512, 512).getContext('2d'),
-                pixels = ctx.getImageData(0, 0, canvas.width, canvas.height),
-                l = pixels.data.length, i, x, y,
-                bound = {
-                    top: null,
-                    left: null,
-                    right: null,
-                    bottom: null
-                };
+                pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let bound = {
+                top: null,
+                left: null,
+                right: null,
+                bottom: null
+            };
             // Iterate over every pixel to find the highest
             // and where it ends on every axis ()
-            for (i = 0; i < l; i += 4) {
+            for (let i = 0; i < pixels.data.length; i += 4) {
                 if (pixels.data[i + 3] !== 0) {
-                    x = (i / 4) % canvas.width;
-                    y = ~~((i / 4) / canvas.width);
+                    let x = (i / 4) % canvas.width;
+                    let y = Math.floor((i / 4) / canvas.width);
                     if (bound.top === null) {
                         bound.top = y;
                     }
@@ -66,9 +60,8 @@ export class HSt {
                 }
             }
             // Calculate the height and width of the content
-            let trimHeight = bound.bottom - bound.top,
-                trimWidth = bound.right - bound.left,
-                trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
+            const trimHeight = bound.bottom - bound.top, trimWidth = bound.right - bound.left;
+            const trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
             copy.canvas.width = trimWidth;
             copy.canvas.height = trimHeight;
             copy.putImageData(trimmed, 0, 0);
@@ -78,10 +71,6 @@ export class HSt {
 
         bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "make_sticker"), "").trim();
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
-        let date = new Date(message.timestamp * 1000);
-        let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        let time = hour + ":" + minutes;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText),
             highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
@@ -103,14 +92,15 @@ export class HSt {
                 });
             } else if (messageType === "chat") {
                 //written in collaboration with Laniad27
-                let canvas = createCanvas(512, 512)
-                let ctx = canvas.getContext('2d')
+                let canvas = createCanvas(512, 512), ctx = canvas.getContext('2d');
                 let phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
-                await (async () => {
-                    let messageBody = encode(message.body);
-                    let messageTime = encode(time);
-                    let messageName = encode(message.sender.pushname);
-                    let messagePhone = phoneNumber;
+                await (async function () {
+                    const date = new Date(message.timestamp * 1000);
+                    const time = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+                    const messageBody = encode(message.body),
+                        messageTime = encode(time),
+                        messageName = encode(message.sender.pushname),
+                        messagePhone = phoneNumber;
                     const browser = await puppeteer.launch();
                     const page = await browser.newPage();
                     if (highQuality) {
@@ -132,8 +122,7 @@ export class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
-	      console.log(template.toString());
-                    await page.goto(template);
+                    await page.goto(apiKeys.stickerTemplatePath);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
                         domBody.innerHTML = messageBody
@@ -146,31 +135,27 @@ export class HSt {
                         document.querySelector('#app > div > div > div > div > div.hooVq.color-2._1B9Rc').classList.remove('color-2');
                         let random = Math.floor(Math.random() * 21);
                         document.querySelector('#app > div > div > div > div > div.hooVq._1B9Rc').classList.add(`color-${random}`);
-
                     }, messageBody, messageTime, messagePhone, messageName);
-                    let base64 = await page.screenshot({encoding: "base64", fullPage: true, omitBackground: true})
+                    const base64 = await page.screenshot({encoding: "base64", fullPage: true, omitBackground: true})
                     await browser.close();
                     loadImage('data:image/png;base64,' + base64).then((image) => {
-                        draw(image, ctx)
-                        let ntx = trimCanvas(canvas);
-                        loadImage(ntx.toDataURL()).then((image) => {
-                            let canvas = createCanvas(512, 512)
-                            let ctx = canvas.getContext('2d')
-                            if (image.height > image.width) {
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512)
-                            } else {
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width)
-                            }
+                        draw(image, ctx);
+                        loadImage(trimCanvas(canvas).toDataURL()).then((image) => {
+                            const canvas = createCanvas(512, 512), ctx = canvas.getContext('2d');
+                            if (image.height > image.width)
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512);
+                            else
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width);
                             client.sendImageAsSticker(message.chatId, canvas.toDataURL(), {
                                 author: "ג'ון האגדי",
                                 pack: "חצול",
-                            })
-                        })
-                    })
-                })()
+                            });
+                        });
+                    });
+                });
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
-        } catch (e) {
-            console.log("error occurred at sticker making" + e.toString())
+        } catch (err) {
+            console.log("error occurred at sticker making: " + err);
         }
     }
 
@@ -188,28 +173,28 @@ export class HSt {
         }
         try {
             //written by Laniad27
-            let lainadIndex = 0, words = text.split(" "), finalWord = "";
-            while (lainadIndex !== words.length) {
-                if (drawingBoard.measureText(words.slice(0, lainadIndex + 1).join(' ')).width > 100) {
+            let lainadIndex = 0, wordArray = text.split(" "), finalText = "";
+            while (lainadIndex !== wordArray.length) {
+                if (drawingBoard.measureText(wordArray.slice(0, lainadIndex + 1).join(' ')).width > 100) {
                     if (lainadIndex === 0) {
-                        finalWord += words.slice(0, 1).join(' ') + '\n';
-                        words = words.slice(lainadIndex + 1);
+                        finalText += wordArray.slice(0, 1).join(' ') + '\n';
+                        wordArray = wordArray.slice(lainadIndex + 1);
                     } else {
-                        finalWord += words.slice(0, lainadIndex).join(' ') + '\n';
-                        words = words.slice(lainadIndex);
+                        finalText += wordArray.slice(0, lainadIndex).join(' ') + '\n';
+                        wordArray = wordArray.slice(lainadIndex);
                     }
                     lainadIndex = -1;
                 }
                 lainadIndex++;
             }
-            finalWord += words.join(' ');
+            finalText += wordArray.join(' ');
             drawingBoard.font = `16px Sans serif`;
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
-            drawingBoard.fillText(finalWord, 75, 75);
+            drawingBoard.fillText(finalText, 75, 75);
             await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול"});
         } catch (err) {
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID)
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID);
         }
     }
 }

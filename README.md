@@ -137,13 +137,15 @@ _All of the commands below have a certain daily limit_
 - `Download music [link to youtube]` - downloads a song from youtube and sends it as voice message.
 - [`Scan [link]`](ModulesImmediate/HandleURLs.ts) - scans the given link for viruses.
   - For example: Scan https://www.google.com/
+  - Links can be scanned in the message the command is sent in or in a quoted message
 
 ### Miscellaneous Commands
 
-- Links can be scanned in the message the command is sent in or in a quoted message
 - [`Profile`](ModulesImmediate/HandleUserStats.ts) - shows the bot's information about the message's author
 - [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAFK.ts) - sets the the user's status to "afk", which means
-  they won't get pings
+  they won't get pinged.
+- [`My guess is...`](ModulesImmediate/HandleAPIs.ts) - Guesses a word in the game Wordle.
+  - For example: My guess is blush
 - [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.ts):
 - `Create survey Title - [survey title]
   Subtitle - [survey subtitle]
@@ -210,6 +212,7 @@ translations.
 Maayan Ranson - French Support
 
 [@Lainad27](https://github.com/Lainad27) - Daniel - Developing the message to a sticker functionality
+
 ## License
 
 This project is licensed under the GPL-3.0 license.

@@ -1,9 +1,9 @@
 import {Group} from "../Classes/Group.js";
 import {Person} from "../Classes/Person.js";
-import {MongoClient} from "mongodb";
 import {apiKeys} from "../apiKeys.js";
+import {MongoClient} from "mongodb";
 
-const url = apiKeys.DB
+const url = apiKeys.DBurl;
 
 export class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
