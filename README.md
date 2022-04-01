@@ -1,4 +1,4 @@
-# WhatsApp Bot - John the Legendary
+# WhatsApp Bot - Jackson The Immortal
 
 <summary>Table of Contents</summary>
 
