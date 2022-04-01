@@ -35,7 +35,7 @@ process.on('uncaughtException', err => {
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
 await HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    create({headless: false, multiDevice: true})
+    create(apiKeys.configObj)
         .then(client => start(client))
         .then(_ => console.log("Bot started successfully at " + new Date().toString()));
 });
