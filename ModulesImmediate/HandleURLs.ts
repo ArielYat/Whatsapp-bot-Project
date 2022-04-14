@@ -6,14 +6,33 @@ const defaultTimedInstance = nvt.makeAPI();
 defaultTimedInstance.setKey(apiKeys.virusAPI);
 
 export class HURL {
-    static async stripLinks(client, message, bodyText, chatID, messageID, groupsDict) {
+    static async scanLinks(client, message, bodyText, chatID, messageID, groupsDict) {
         async function sleep(ms) {
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
                 setTimeout(resolve, ms);
             });
         }
+
+        async function parseAndSendResults(client, chatID, res, url, messageID, groupsDict) {
+            let prettyAnswerString = "";
+            try {
+                const dataParsed = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.attributes.last_analysis_results;
+                let counter = 0;
+                for (let attribute in dataParsed) {
+                    if (dataParsed[attribute].result !== "clean" && dataParsed[attribute].result !== "unrated") {
+                        prettyAnswerString += (attribute + ": " + dataParsed[attribute].result) + "\n";
+                        counter++;
+                    }
+                }
+                prettyAnswerString += "\n" + await HL.getGroupLang(groupsDict, chatID, "scan_link_result_reply", counter.toString());
+                client.reply(chatID, url + "\n" + prettyAnswerString, messageID);
+            } catch (err) {
+                client.reply(chatID, "" + err, messageID);
+            }
+        }
+
         bodyText = message.quotedMsgObj ? message.quotedMsgObj.body : bodyText;
-        const urlsInMessage = bodyText.match(/([hH]ttps?:\/\/[^\s]+)/g);
+        const urlsInMessage = bodyText.match(/([hH]ttps?:\/\/\S+)/g);
         if (urlsInMessage) {
             for (let url of urlsInMessage) {
                 url.slice(-1) !== "/" ? url += "/" : console.log("moshe");
@@ -32,31 +51,25 @@ export class HURL {
                                     if (err)
                                         await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "scan_link_checking_error"), messageID);
                                     else if (res)
-                                        await HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
+                                        await parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                                 });
                             }
                         });
-                    } else await HURL.parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
+                    } else await parseAndSendResults(client, chatID, res, url, messageID, groupsDict);
                 });
             }
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
     }
 
-    static async parseAndSendResults(client, chatID, res, url, messageID, groupsDict) {
-        let prettyAnswerString = "";
-        try {
-            const dataParsed = JSON.parse(res.toString('utf8').replace(/^\uFFFD/, '')).data.attributes.last_analysis_results;
-            let counter = 0;
-            for (let attribute in dataParsed) {
-                if (dataParsed[attribute].result !== "clean" && dataParsed[attribute].result !== "unrated") {
-                    prettyAnswerString += (attribute + ": " + dataParsed[attribute].result) + "\n";
-                    counter++;
-                }
-            }
-            prettyAnswerString += "\n" + await HL.getGroupLang(groupsDict, chatID, "scan_link_result_reply", counter.toString());
-            client.reply(chatID, url + "\n" + prettyAnswerString, messageID);
-        } catch (err) {
-            client.reply(chatID, "" + err, messageID);
+    static async changeYoutubeLinkType(client, message, bodyText, chatID, messageID, groupsDict) {
+        const urlsInMessage = bodyText.match(/https:\/\/www\.youtube\.com\/shorts\/\S+/g);
+        if (urlsInMessage) {
+            let prettyAnswerString = "";
+            for (let url of urlsInMessage)
+                prettyAnswerString += url.replace("shorts/", "watch?v=") + "\n";
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "change_youtube_link_type_reply", prettyAnswerString), messageID);
+        } else {
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
         }
     }
 }

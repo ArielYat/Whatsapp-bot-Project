@@ -1,4 +1,4 @@
-//version 2.9.0
+//version 2.10.0
 
 //Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -53,6 +53,12 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if ((await HL.getGroupLang(groupsDict, chatID, "translate_to")).test(bodyText)) {
         await HAPI.translate(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "scan_link")).test(bodyText)) {
+        await HURL.scanLinks(client, message, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "change_youtube_link_type")).test(bodyText)) {
+        await HURL.changeYoutubeLinkType(client, message, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "fetch_stock")).test(bodyText)) {
         await HAPI.fetchStock(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -63,7 +69,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.fetchCryptocurrency(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "scan_link")).test(bodyText)) {
-        await HURL.stripLinks(client, message, bodyText, chatID, messageID, groupsDict);
+        await HURL.scanLinks(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_profile")).test(bodyText)) {
         await HUS.ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
