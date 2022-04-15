@@ -1,4 +1,4 @@
-//version 2.10.0
+//version 2.10.1
 
 //Bot Modules Written by the bot devs
 import {HURL} from "./ModulesImmediate/HandleURLs.js";
@@ -21,7 +21,7 @@ import {Person} from "./Classes/Person.js";
 import {apiKeys} from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-import {create, Client, Chat, Message} from "@open-wa/wa-automate";
+import {create, Chat, Message} from "@open-wa/wa-automate";
 import Schedule from "node-schedule";
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
@@ -31,13 +31,6 @@ Schedule.tz = apiKeys.region;           //The bot devs' time zone
 
 process.on('uncaughtException', err => {
     console.log(err);
-});
-
-//Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-await HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
-    create(apiKeys.configObj)
-        .then(client => start(client))
-        .then(_ => console.log("Bot started successfully at " + new Date().toString()));
 });
 
 async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
@@ -56,8 +49,8 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if ((await HL.getGroupLang(groupsDict, chatID, "scan_link")).test(bodyText)) {
         await HURL.scanLinks(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if ((await HL.getGroupLang(groupsDict, chatID, "change_youtube_link_type")).test(bodyText)) {
-        await HURL.changeYoutubeLinkType(client, message, bodyText, chatID, messageID, groupsDict);
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "change_link_type")).test(bodyText)) {
+        await HURL.changeLinkType(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "fetch_stock")).test(bodyText)) {
         await HAPI.fetchStock(client, bodyText, chatID, messageID, groupsDict);
@@ -237,7 +230,7 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
 }
 
 //Main function
-function start(client: Client) {
+function start(client) {
     //Check if there are birthdays everyday at 5 am
     Schedule.scheduleJob('0 5 * * *', async function () {
         await HB.checkBirthdays(client, usersDict, groupsDict);
@@ -364,11 +357,18 @@ function start(client: Client) {
     });
 }
 
+//Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
+await HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
+    create(apiKeys.configObj)
+        .then(client => start(client))
+        .then(_ => console.log("Bot started successfully at " + new Date().toString()));
+});
+
 //TODO: pins
 //TODO: add male/female strings
 //TODO: website
 //TODO: search on ME
 //TODO: stock checking
 //TODO: send bus stop times
-//TODO: chess - lichess API?
+//TODO: chess - Lichess API?
 //TODO: XO against John?

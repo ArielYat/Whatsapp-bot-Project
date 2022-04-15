@@ -61,15 +61,32 @@ export class HURL {
         } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
     }
 
-    static async changeYoutubeLinkType(client, message, bodyText, chatID, messageID, groupsDict) {
-        const urlsInMessage = bodyText.match(/https:\/\/www\.youtube\.com\/shorts\/\S+/g);
-        if (urlsInMessage) {
-            let prettyAnswerString = "";
-            for (let url of urlsInMessage)
+    static async changeLinkType(client, message, bodyText, chatID, messageID, groupsDict) {
+        const urlsInMessageYoutubeShorts = bodyText.match(/https:\/\/www\.youtube\.com\/shorts\/\S+/gi),
+            urlsInMessageYoutube = bodyText.match(/https:\/\/www\.youtube\.com\/watch\?v=\S+/gi),
+            urlsInMessageWikipediaMobile = bodyText.match(/https:\/\/\w{2}\.m\.wikipedia\.org\/wiki\/\S+/gi),
+            urlsInMessageWikipedia = bodyText.match(/https:\/\/\w{2}\.wikipedia\.org\/wiki\/\S+/gi);
+        let prettyAnswerString = "";
+        if (urlsInMessageYoutubeShorts) {
+            for (let url of urlsInMessageYoutubeShorts)
                 prettyAnswerString += url.replace("shorts/", "watch?v=") + "\n";
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "change_youtube_link_type_reply", prettyAnswerString), messageID);
-        } else {
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
         }
+        if (urlsInMessageYoutube) {
+            for (let url of urlsInMessageYoutube)
+                prettyAnswerString += url.replace("watch?v=", "shorts/") + "\n";
+        }
+        if (urlsInMessageWikipediaMobile) {
+            for (let url of urlsInMessageWikipediaMobile)
+                prettyAnswerString += url.replace(".m.wikipedia", ".wikipedia") + "\n";
+        }
+        if (urlsInMessageWikipedia) {
+            for (let url of urlsInMessageWikipedia)
+                prettyAnswerString += url.replace(".wikipedia", ".m.wikipedia") + "\n";
+        }
+
+        if (prettyAnswerString != "")
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "change_link_type_reply", prettyAnswerString), messageID);
+        else
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "link_validity_error"), messageID);
     }
 }

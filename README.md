@@ -144,8 +144,10 @@ _All of the commands below have a certain daily limit_
 - [`Profile`](ModulesImmediate/HandleUserStats.ts) - shows the bot's information about the message's author
 - [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAFK.ts) - sets the the user's status to "afk", which means
   they won't get pinged.
-- [`My guess is...`](ModulesImmediate/HandleAPIs.ts) - Guesses a word in the game Wordle.
+- [`My guess is [guess]`](ModulesImmediate/HandleAPIs.ts) - Guesses a word in the game Wordle.
   - For example: My guess is blush
+- [`Change link type [link]`](ModulesImmediate/HandleURLs.ts) - changes the link type of the given link from a Youtube Shorts or Wikipedia Mobile link to a regular Youtube to Wikipedia link and the opposite
+  - For example: Change link type https://youtu.be/dQw4w9WgXcQ
 - [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.ts):
 - `Create survey Title - [survey title]
   Subtitle - [survey subtitle]
