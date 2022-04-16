@@ -1,9 +1,9 @@
-import {HDB} from "./HandleDB.js";
-import {HL} from "./HandleLanguage.js";
+import HL from "./HandleLanguage.js";
+import HDB from "./HandleDB.js";
 
 const tagRegex = new RegExp('\\[(.*?)\]', "g");
 
-export class HF {
+export default class HF {
     static async checkFilters(client, bodyText, chatID, messageID, groupsDict, groupFilterLimit, restGroupsAuto) {
         const filters = groupsDict[chatID].filters;
         for (const filter in filters) {

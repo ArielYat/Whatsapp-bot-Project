@@ -1,8 +1,8 @@
-import {HDB} from "./HandleDB.js";
+import HDB from "./HandleDB.js";
 
 const startupTime = new Date();
 
-export class HAF {
+export default class HAF {
     static async handleUserRest(client, bodyText, chatID, messageID, quotedMsg, restPersons, restPersonsCommandSpam, person) {
         const personToBanID = quotedMsg ? quotedMsg.author : bodyText.match(/@\d+/i)[0].replace("@", "") + "@c.us";
         if (bodyText.match(/^\/Ban/i)) {

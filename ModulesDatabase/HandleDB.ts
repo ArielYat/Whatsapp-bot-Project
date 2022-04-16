@@ -1,11 +1,11 @@
-import {Group} from "../Classes/Group.js";
-import {Person} from "../Classes/Person.js";
-import {apiKeys} from "../apiKeys.js";
+import Group from "../Classes/Group.js";
+import Person from "../Classes/Person.js";
+import apiKeys from "../apiKeys.js";
 import {MongoClient} from "mongodb";
 
 const url = apiKeys.DBurl;
 
-export class HDB {
+export default class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
         MongoClient.connect(url, function (err, client) {

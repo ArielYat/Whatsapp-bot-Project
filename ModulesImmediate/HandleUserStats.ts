@@ -1,7 +1,7 @@
-import {HL} from "../ModulesDatabase/HandleLanguage.js";
-import {HP} from "../ModulesDatabase/HandlePermissions.js";
+import HL from "../ModulesDatabase/HandleLanguage.js";
+import HP from "../ModulesDatabase/HandlePermissions.js";
 
-export class HUS {
+export default class HUS {
     static async ShowStats(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict) {
         const userTag = "@" + usersDict[authorID].personID.replace("@c.us", "");
         const taggedMessagesAmount = usersDict[authorID].messagesTaggedIn[chatID] === undefined ? "0" : usersDict[authorID].messagesTaggedIn[chatID].length.toString();

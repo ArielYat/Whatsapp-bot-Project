@@ -1,14 +1,14 @@
 // noinspection SpellCheckingInspection
 
-import {HL} from "../ModulesDatabase/HandleLanguage.js";
-import {apiKeys} from "../apiKeys.js";
+import HL from "../ModulesDatabase/HandleLanguage.js";
+import apiKeys from "../apiKeys.js";
 import pkg from 'canvas';
 import puppeteer from "puppeteer";
 import {encode} from "html-entities";
 
 const {createCanvas, loadImage} = pkg;
 
-export class HSt {
+export default class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
         function draw(img, ctx) {
             const buffer = createCanvas(512, 512), bufferctx = buffer.getContext('2d');

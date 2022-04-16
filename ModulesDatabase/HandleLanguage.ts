@@ -1,8 +1,8 @@
-import {HDB} from "./HandleDB.js";
+import HDB from "./HandleDB.js";
 import {Strings} from "../Strings.js";
 import util from "util";
 
-export class HL {
+export default class HL {
     static async changeGroupLang(client, bodyText, chatID, messageID, groupsDict) {
         const lang = bodyText.match(/לעברית/) || bodyText.match(/Hebrew/i) || bodyText.match(/Hébreu/i)
             ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglais/i)

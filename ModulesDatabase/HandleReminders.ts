@@ -1,7 +1,7 @@
-import {HDB} from "./HandleDB.js";
-import {HL} from "./HandleLanguage.js";
+import HL from "./HandleLanguage.js";
+import HDB from "./HandleDB.js";
 
-export class HR {
+export default class HR {
     static async checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate) {
         for (const person of personsWithReminders) {
             const personID = usersDict[person].personID;

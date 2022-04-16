@@ -1,8 +1,8 @@
-import {HDB} from "./HandleDB.js";
-import {HL} from "./HandleLanguage.js";
-import {HAFK} from "./HandleAFK.js";
+import HL from "./HandleLanguage.js";
+import HDB from "./HandleDB.js";
+import HAFK from "./HandleAFK.js";
 
-export class HT {
+export default class HT {
     static async checkTags(client, bodyText, chatID, messageID, authorID, quotedMsgID, groupsDict, usersDict, afkPersons) {
         bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "tag_person"), "").trim();
         const tags = groupsDict[chatID].tags;

@@ -1,24 +1,24 @@
 //version 2.10.1
 
 //Bot Modules Written by the bot devs
-import {HURL} from "./ModulesImmediate/HandleURLs.js";
-import {HDB} from "./ModulesDatabase/HandleDB.js";
-import {HF} from "./ModulesDatabase/HandleFilters.js";
-import {HT} from "./ModulesDatabase/HandleTags.js";
-import {HB} from "./ModulesDatabase/HandleBirthdays.js";
-import {HSt} from "./ModulesImmediate/HandleStickers.js";
-import {HAF} from "./ModulesDatabase/HandleAdminFunctions.js";
-import {HL} from "./ModulesDatabase/HandleLanguage.js";
-import {HSu} from "./ModulesImmediate/HandleSurveys.js";
-import {HP} from "./ModulesDatabase/HandlePermissions.js";
-import {HAPI} from "./ModulesImmediate/HandleAPIs.js";
-import {HW} from "./ModuleWebsite/HandleWebsite.js";
-import {HUS} from "./ModulesImmediate/HandleUserStats.js";
-import {HR} from "./ModulesDatabase/HandleReminders.js";
-import {HAFK} from "./ModulesDatabase/HandleAFK.js";
-import {Group} from "./Classes/Group.js";
-import {Person} from "./Classes/Person.js";
-import {apiKeys} from "./apiKeys.js";
+import HURL from "./ModulesImmediate/HandleURLs.js";
+import HDB from "./ModulesDatabase/HandleDB.js";
+import HF from "./ModulesDatabase/HandleFilters.js";
+import HT from "./ModulesDatabase/HandleTags.js";
+import HB from "./ModulesDatabase/HandleBirthdays.js";
+import HSt from "./ModulesImmediate/HandleStickers.js";
+import HAF from "./ModulesDatabase/HandleAdminFunctions.js";
+import HL from "./ModulesDatabase/HandleLanguage.js";
+import HSu from "./ModulesImmediate/HandleSurveys.js";
+import HP from "./ModulesDatabase/HandlePermissions.js";
+import HAPI from "./ModulesImmediate/HandleAPIs.js";
+import HW from "./ModuleWebsite/HandleWebsite.js";
+import HUS from "./ModulesImmediate/HandleUserStats.js";
+import HR from "./ModulesDatabase/HandleReminders.js";
+import HAFK from "./ModulesDatabase/HandleAFK.js";
+import Group from "./Classes/Group.js";
+import Person from "./Classes/Person.js";
+import apiKeys from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
 import {create, Chat, Message} from "@open-wa/wa-automate";
@@ -246,7 +246,7 @@ function start(client) {
             groupsDict[group].filterCounter = 0;
         for (const person in usersDict)
             usersDict[person].commandCounter = 0;
-    }, 5 * 60 * 1000); //in ms; 5 min
+    }, 5 * 60 * 1000); /* In ms; 5 min */
     //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
     setInterval(async function () {
         const currentDate = new Date();
@@ -272,7 +272,7 @@ function start(client) {
         }
         //Check reminders
         await HR.checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate);
-    }, 60 * 1000); //in ms; 1 min
+    }, 60 * 1000); /* In ms; 1 min */
     //Send a starting help message when the bot is added to a group
     client.onAddedToGroup(async (chat: Chat) => {
         await HL.sendStartMessage(client, chat.id);

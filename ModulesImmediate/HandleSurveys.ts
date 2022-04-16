@@ -1,6 +1,6 @@
-import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import HL from "../ModulesDatabase/HandleLanguage.js";
 
-export class HSu {
+export default class HSu {
     static async makeButtons(client, bodyText, chatID, messageID, groupsDict) {
         let title = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "survey_title")),
             secondTitle = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "survey_subtitle")),

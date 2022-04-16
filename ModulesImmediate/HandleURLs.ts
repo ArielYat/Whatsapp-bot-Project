@@ -1,11 +1,11 @@
-import {HL} from "../ModulesDatabase/HandleLanguage.js";
+import HL from "../ModulesDatabase/HandleLanguage.js";
+import apiKeys from "../apiKeys.js";
 import nvt from "node-virustotal";
-import {apiKeys} from "../apiKeys.js";
 
 const defaultTimedInstance = nvt.makeAPI();
 defaultTimedInstance.setKey(apiKeys.virusAPI);
 
-export class HURL {
+export default class HURL {
     static async scanLinks(client, message, bodyText, chatID, messageID, groupsDict) {
         async function sleep(ms) {
             return new Promise(resolve => {

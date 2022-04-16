@@ -1,7 +1,7 @@
-﻿import {HDB} from "./HandleDB.js";
-import {HL} from "./HandleLanguage.js";
+﻿import HDB from "./HandleDB.js";
+import HL from "./HandleLanguage.js";
 
-export class HB {
+export default class HB {
     static async checkBirthdays(client, usersDict, groupsDict) {
         const today = new Date();
         const dayToday = today.getDate().toString(), monthToday = (today.getMonth() + 1).toString(),

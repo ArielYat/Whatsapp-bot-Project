@@ -1,7 +1,7 @@
-import {HDB} from "./HandleDB.js";
-import {HL} from "./HandleLanguage.js";
+import HDB from "./HandleDB.js";
+import HL from "./HandleLanguage.js";
 
-export class HP {
+export default class HP {
     static async setFunctionPermissionLevel(client, bodyText, chatID, messageID, personPermission, groupFunctionPermissions, groupsDict) {
         bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "set_permissions"), "");
         if (bodyText.includes("-")) {

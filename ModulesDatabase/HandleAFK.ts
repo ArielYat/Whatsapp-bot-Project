@@ -1,7 +1,7 @@
-import {HL} from "./HandleLanguage.js";
-import {HDB} from "./HandleDB.js";
+import HL from "./HandleLanguage.js";
+import HDB from "./HandleDB.js";
 
-export class HAFK {
+export default class HAFK {
     static async afkOn(client, chatID, messageID, authorID, groupsDict, usersDict, afkPersons) {
         if (!usersDict[authorID].afk && !(afkPersons.includes(authorID))) {
             const afkDate = new Date();

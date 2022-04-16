@@ -1,8 +1,8 @@
 // noinspection TypeScriptFieldCanBeMadeReadonly
 
-import {Group} from "./Group";
+import Group from "./Group";
 
-export class Person {
+export default class Person {
     readonly #personID: string;                         //The person's ID
     #birthday: string[];                                //The person's birthday - [day, month, year]
     #permissionLevel: {};                               //The person's permission level by group (0 - muted, 1 - regular, 2 - group admin, 3 - bot dev)

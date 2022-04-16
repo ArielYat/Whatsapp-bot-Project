@@ -1,8 +1,8 @@
 // noinspection TypeScriptFieldCanBeMadeReadonly
 
-import {Person} from "./Person";
+import Person from "./Person";
 
-export class Group {
+export default class Group {
     readonly #groupID: string;                          //The group's ID
     #filters: { [key: string]: string };                //The filters in the group
     #tags: { [key: string]: object | string };          //The tags in the group
