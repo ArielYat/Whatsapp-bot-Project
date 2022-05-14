@@ -1,4 +1,4 @@
-//version 2.10.1
+//version 2.10.2
 
 //Bot Modules Written by the bot devs
 import HURL from "./ModulesImmediate/HandleURLs.js";
@@ -231,6 +231,8 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
 
 //Main function
 function start(client) {
+    //Send a message to the original chat cause of a stupid bug not letting the bot reply to messages before it sent a regular message
+    client.sendText(apiKeys.originalGroup, "Bot started successfully at " + new Date().toString());
     //Check if there are birthdays everyday at 5 am
     Schedule.scheduleJob('0 5 * * *', async function () {
         await HB.checkBirthdays(client, usersDict, groupsDict);
@@ -280,7 +282,7 @@ function start(client) {
     //Check every command each time a message is received
     client.onMessage(async (message: Message) => {
         if (message !== null) {
-            //Define basic message properties: its ID, the ID of its sender and the ID of chat it was sent in
+            //Initialize basic message properties: its ID, the ID of its sender and the ID of chat it was sent in
             const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
             //Define quotedMsgID properties depending on if a message was quoted
             const quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
