@@ -1,4 +1,4 @@
-import {HL} from "../ModulesDatabase/HandleLanguage"
+import HL from "../ModulesDatabase/HandleLanguage"
 
 export class H3T {
     static async TicTacToe(client, bodyText, chatID, messageID, authorID, groupsDict) {
