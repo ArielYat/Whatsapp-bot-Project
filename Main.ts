@@ -1,4 +1,4 @@
-//version 2.10.2
+//version 2.10.3
 
 //Bot Modules Written by the bot devs
 import HURL from "./ModulesImmediate/HandleURLs.js";
@@ -23,11 +23,18 @@ import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
 import {create, Chat, Message} from "@open-wa/wa-automate";
 import Schedule from "node-schedule";
+
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGroupsFilterSpam = [],
     restPersonsCommandSpam = [], personsWithReminders = [], afkPersons = [];
+
+//Global variables
 const botDevs = apiKeys.botDevs;        //The bot devs' phone numbers
 Schedule.tz = apiKeys.region;           //The bot devs' time zone
+
+//Helper type for the Group and Person objects' properties
+export type TillZero<N extends number> = HelpType<N, []>;
+type HelpType<N extends number, A extends unknown[]> = A['length'] extends N ? A[number] : HelpType<N, [A['length'], ...A]>;
 
 process.on('uncaughtException', err => {
     console.log(err);
@@ -293,9 +300,9 @@ function start(client) {
             let checkFilters = true;
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
-                groupsDict[chatID] = await new Group(chatID);
+                groupsDict[chatID] = new Group(chatID);
             if (!(authorID in usersDict))
-                usersDict[authorID] = await new Person(authorID);
+                usersDict[authorID] = new Person(authorID);
             //Add author to group's DB if not already in it
             if (!(groupsDict[chatID].personsIn.some(person => authorID === person.personID))) {
                 await HDB.addArgsToDB(chatID, authorID, null, null, "personIn", function () {

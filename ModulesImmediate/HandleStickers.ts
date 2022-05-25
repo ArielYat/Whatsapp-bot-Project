@@ -188,7 +188,7 @@ export default class HSt {
                 lainadIndex++;
             }
             finalText += wordArray.join(' ');
-            drawingBoard.font = `16px Sans serif`;
+            drawingBoard.font = "16px Sans serif";
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
             drawingBoard.fillText(finalText, 75, 75);

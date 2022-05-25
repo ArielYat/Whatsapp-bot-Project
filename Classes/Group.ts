@@ -1,24 +1,25 @@
-// noinspection TypeScriptFieldCanBeMadeReadonly
-
 import Person from "./Person";
+import {ChatId} from "@open-wa/wa-automate";
+import {ContactId} from "@open-wa/wa-automate/dist/api/model/aliases";
+import {TillZero} from "../Main";
 
 export default class Group {
-    readonly #groupID: string;                          //The group's ID
-    #filters: { [key: string]: string };                //The filters in the group
-    #tags: { [key: string]: object | string };          //The tags in the group
-    #groupLanguage: string;                             //The group's language
-    #personsIn: Person[];                               //The persons in the group
-    #filterCounter: number;                             //The number of filters used in the group (reset every five minutes) - for autobanning
-    #groupAdmins: string[];                             //The group's admins
-    #functionPermissions: { [key: string]: number };    //The group's function's permission levels
-    #cryptoChecked: boolean;                            //Whether the group has checked the crypto today (reset every day)
-    #translationCounter: number;                        //The number of translations used in the group (reset every day)
-    #autoBanned: Date;                                  //The date in which the group was autobanned (if it was)
-    #tagStack: string[];                                //Used for HT.createTagList() & HT.nextPersonInList
-    #downloadMusicCounter: number;                      //The number of music downloads used in the group (reset every day)
-    #stockCounter: number;                              //The number of stock checks used in the group (reset every day)
+    readonly #groupID: ChatId;                              //The group's ID
+    #filters: { [key: string]: string };                    //The filters in the group
+    #tags: { [key: string]: string | ContactId[] };         //The tags in the group
+    #groupLanguage: string;                                 //The group's language
+    #personsIn: Person[];                                   //The persons in the group
+    #filterCounter: TillZero<15>;                           //The number of filters used in the group (reset every five minutes) - for autobanning
+    #groupAdmins: ContactId[];                              //The group's admins
+    #functionPermissions: { [key: string]: 0 | 1 | 2 | 3 }; //The group's function's permission levels
+    #cryptoChecked: boolean;                                //Whether the group has checked the crypto today (reset every day)
+    #translationCounter: TillZero<10>;                      //The number of translations used in the group (reset every day)
+    #autoBanned: Date;                                      //The date in which the group was autobanned (if it was)
+    #tagStack: string[];                                    //Used for HT.createTagList() & HT.nextPersonInList
+    #downloadMusicCounter: TillZero<5>;                     //The number of music downloads used in the group (reset every day)
+    #stockCounter: TillZero<3>;                             //The number of stock checks used in the group (reset every day)
 
-    constructor(groupID) {
+    constructor(groupID: ChatId) {
         this.#groupID = groupID;
         this.#filters = {};
         this.#tags = {};
@@ -43,11 +44,11 @@ export default class Group {
         this.#stockCounter = 0;
     }
 
-    get groupID() {
+    get groupID(): ChatId {
         return this.#groupID;
     }
 
-    get filters() {
+    get filters(): { [key: string]: string } {
         return this.#filters;
     }
 
@@ -60,7 +61,7 @@ export default class Group {
             this.#filters[filterArray[1]] = filterArray[2];
     }
 
-    get tags() {
+    get tags(): { [key: string]: string | ContactId[] } {
         return this.#tags;
     }
 
@@ -72,104 +73,105 @@ export default class Group {
         }
     }
 
-    get personsIn() {
+    get personsIn(): Person[] {
         return this.#personsIn;
     }
 
     set personsIn(authorArray) {
         // @ts-ignore
         if (authorArray[0] === "add")
-            this.#personsIn.push(authorArray[1]); else { // @ts-ignore
+            this.#personsIn.push(authorArray[1]);
+        else { // @ts-ignore
             if (authorArray[0] === "delete")
                 this.#personsIn.splice(this.#personsIn.indexOf(authorArray[1]), 1);
         }
     }
 
-    get groupLanguage() {
+    get groupLanguage(): string {
         return this.#groupLanguage;
     }
 
-    set groupLanguage(langCode) {
+    set groupLanguage(langCode: string) {
         this.#groupLanguage = langCode;
     }
 
-    get filterCounter() {
+    get filterCounter(): TillZero<15> {
         return this.#filterCounter;
     }
 
-    set filterCounter(number) {
+    set filterCounter(number: TillZero<15>) {
         this.#filterCounter = number;
     }
 
-    get groupAdmins() {
+    get groupAdmins(): ContactId[] {
         return this.#groupAdmins;
     }
 
-    set groupAdmins(groupAdminsIDs) {
+    set groupAdmins(groupAdminsIDs: ContactId[]) {
         this.#groupAdmins = groupAdminsIDs;
     }
 
-    get functionPermissions() {
+    get functionPermissions(): { [key: string]: 0 | 1 | 2 | 3 } {
         return this.#functionPermissions;
     }
 
-    set functionPermissions(functionTypeAndPermission) {
+    set functionPermissions(functionTypeAndPermission: { [key: string]: 0 | 1 | 2 | 3 }) {
         this.#functionPermissions[functionTypeAndPermission[0]] = functionTypeAndPermission[1];
     }
 
-    get cryptoChecked() {
+    get cryptoChecked(): boolean {
         return this.#cryptoChecked;
     }
 
-    set cryptoChecked(bool) {
-        this.#cryptoChecked = bool;
+    set cryptoChecked(yeaORnah: boolean) {
+        this.#cryptoChecked = yeaORnah;
     }
 
-    get translationCounter() {
+    get translationCounter(): TillZero<10> {
         return this.#translationCounter;
     }
 
-    set translationCounter(number) {
+    set translationCounter(number: TillZero<10>) {
         this.#translationCounter = number;
     }
 
-    get autoBanned() {
+    get autoBanned(): Date {
         return this.#autoBanned;
     }
 
-    set autoBanned(date) {
+    set autoBanned(date: Date) {
         this.#autoBanned = date;
     }
 
-    get tagStack() {
+    get tagStack(): string[] {
         return this.#tagStack;
     }
 
-    set tagStack(tagStack) {
+    set tagStack(tagStack: string[]) {
         this.#tagStack = tagStack;
     }
 
-    get downloadMusicCounter() {
+    get downloadMusicCounter(): TillZero<5> {
         return this.#downloadMusicCounter;
     }
 
-    set downloadMusicCounter(number) {
+    set downloadMusicCounter(number: TillZero<5>) {
         this.#downloadMusicCounter = number;
     }
 
-    get stockCounter() {
+    get stockCounter(): TillZero<3> {
         return this.#stockCounter;
     }
 
-    set stockCounter(number) {
+    set stockCounter(number: TillZero<3>) {
         this.#stockCounter = number;
     }
 
-    doesFilterExist(filter) {
+    doesFilterExist(filter): boolean {
         return this.#filters.hasOwnProperty(filter);
     }
 
-    doesTagExist(tag) {
+    doesTagExist(tag): boolean {
         return this.#tags.hasOwnProperty(tag);
     }
 
