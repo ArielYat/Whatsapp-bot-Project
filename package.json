@@ -18,7 +18,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@open-wa/wa-automate": "^4.31.7",
+    "@open-wa/wa-automate": "^4.37.2",
     "canvas": "^2.9.0",
     "mongodb": "^4.3.1",
     "node-fetch": "^3.2.0",
