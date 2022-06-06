@@ -78,7 +78,7 @@ export default class HSt {
         try {
             if (messageType === "image") {
                 const mediaData = await client.decryptMedia(message);
-                await client.sendImageAsSticker(chatID, mediaData, {
+                await client.sendImageAsStickerAsReply(chatID, mediaData, messageID, {
                     author: "ג'ון האגדי",
                     pack: "חצול",
                     keepScale: noCrop
@@ -89,7 +89,7 @@ export default class HSt {
                     author: "ג'ון האגדי",
                     pack: "חצול",
                     keepScale: noCrop
-                });
+                }, messageID);
             } else if (messageType === "chat") {
                 //written in collaboration with Laniad27
                 let canvas = createCanvas(512, 512), ctx = canvas.getContext('2d');
@@ -146,7 +146,7 @@ export default class HSt {
                                 ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512);
                             else
                                 ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width);
-                            client.sendImageAsSticker(message.chatId, canvas.toDataURL(), {
+                            client.sendImageAsStickerAsReply(message.chatId, canvas.toDataURL(), messageID, {
                                 author: "ג'ון האגדי",
                                 pack: "חצול",
                             });
@@ -192,7 +192,7 @@ export default class HSt {
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
             drawingBoard.fillText(finalText, 75, 75);
-            await client.sendImageAsSticker(chatID, canvas.toDataURL(), {author: "ג'ון האגדי", pack: "חצול"});
+            await client.sendImageAsStickerAsReply(chatID, canvas.toDataURL(), messageID, {author: "ג'ון האגדי", pack: "חצול"});
         } catch (err) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID);
         }
