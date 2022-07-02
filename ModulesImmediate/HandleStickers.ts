@@ -7,6 +7,10 @@ import puppeteer from "puppeteer";
 import {encode} from "html-entities";
 
 const {createCanvas, loadImage} = pkg;
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -122,6 +126,7 @@ export default class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
+                    console.log(__dirname.toString());
                     await page.goto(apiKeys.stickerTemplatePath);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');

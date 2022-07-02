@@ -1,8 +1,7 @@
 FROM node:16.15.1
 RUN apt-get update || : && apt-get install python -y
-# Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
-# Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
-# installs, work.
+
+# Install latest chrome dev package
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -20,6 +19,9 @@ RUN mkdir /app
 RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get install -y ffmpeg
+
+ENV TZ=Asia/Jerusalem
+RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
 COPY package*.json ./
