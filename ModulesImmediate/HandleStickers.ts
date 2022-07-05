@@ -7,10 +7,6 @@ import puppeteer from "puppeteer";
 import {encode} from "html-entities";
 
 const {createCanvas, loadImage} = pkg;
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -79,6 +75,10 @@ export default class HSt {
         const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText),
             highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
             mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
+        const date = new Date(message.timestamp * 1000);
+        const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        const time = hour + ":" + minutes;
         try {
             if (messageType === "image") {
                 const mediaData = await client.decryptMedia(message);
@@ -96,16 +96,18 @@ export default class HSt {
                 }, messageID);
             } else if (messageType === "chat") {
                 //written in collaboration with Laniad27
-                let canvas = createCanvas(512, 512), ctx = canvas.getContext('2d');
+                let canvas = createCanvas(512, 512)
+                let ctx = canvas.getContext('2d')
                 let phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
-                await (async function () {
-                    const date = new Date(message.timestamp * 1000);
-                    const time = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
-                    const messageBody = encode(message.body),
-                        messageTime = encode(time),
-                        messageName = encode(message.sender.pushname),
-                        messagePhone = phoneNumber;
-                    const browser = await puppeteer.launch();
+                await (async () => {
+                    let messageBody = encode(message.body);
+                    let messageTime = encode(time);
+                    let messageName = encode(message.sender.pushname);
+                    let messagePhone = phoneNumber;
+                    const browser = await puppeteer.launch({
+                        headless: true,
+                        args: ['--no-sandbox','--disable-setuid-sandbox']
+                    })
                     const page = await browser.newPage();
                     if (highQuality) {
                         await page.setViewport({
@@ -126,7 +128,6 @@ export default class HSt {
                             deviceScaleFactor: 1,
                         });
                     }
-                    console.log(__dirname.toString());
                     await page.goto(apiKeys.stickerTemplatePath);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
@@ -140,27 +141,31 @@ export default class HSt {
                         document.querySelector('#app > div > div > div > div > div.hooVq.color-2._1B9Rc').classList.remove('color-2');
                         let random = Math.floor(Math.random() * 21);
                         document.querySelector('#app > div > div > div > div > div.hooVq._1B9Rc').classList.add(`color-${random}`);
+
                     }, messageBody, messageTime, messagePhone, messageName);
-                    const base64 = await page.screenshot({encoding: "base64", fullPage: true, omitBackground: true})
+                    let base64 = await page.screenshot({encoding: "base64", fullPage: true, omitBackground: true})
                     await browser.close();
                     loadImage('data:image/png;base64,' + base64).then((image) => {
-                        draw(image, ctx);
-                        loadImage(trimCanvas(canvas).toDataURL()).then((image) => {
-                            const canvas = createCanvas(512, 512), ctx = canvas.getContext('2d');
-                            if (image.height > image.width)
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512);
-                            else
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width);
-                            client.sendImageAsStickerAsReply(message.chatId, canvas.toDataURL(), messageID, {
+                        draw(image, ctx)
+                        let ntx = trimCanvas(canvas);
+                        loadImage(ntx.toDataURL()).then((image) => {
+                            let canvas = createCanvas(512, 512)
+                            let ctx = canvas.getContext('2d')
+                            if (image.height > image.width) {
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512)
+                            } else {
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width)
+                            }
+                            client.sendImageAsSticker(message.chatId, canvas.toDataURL(), {
                                 author: "ג'ון האגדי",
                                 pack: "חצול",
-                            });
-                        });
-                    });
-                });
+                            })
+                        })
+                    })
+                })()
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
-        } catch (err) {
-            console.log("error occurred at sticker making: " + err);
+        } catch (error) {
+            console.log("error occurred at sticker making" + error);
         }
     }
 
