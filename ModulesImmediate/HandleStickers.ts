@@ -75,7 +75,7 @@ export default class HSt {
         const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText),
             highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
             mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
-        const date = new Date(message.timestamp * 1000);
+        const date = new Date();
         const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         const time = hour + ":" + minutes;
