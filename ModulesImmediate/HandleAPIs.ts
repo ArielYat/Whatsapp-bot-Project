@@ -109,16 +109,20 @@ export default class HAPI {
                     await youtubeDL(link[0], {
                         format: "bestaudio[filesize<20M]",
                         exec: "ffmpeg -i {}  -codec:a libmp3lame -qscale:a 0 {}.mp3",
-                        restrictFilenames: true
-                    }).then((output: any) => fileName = output.match(/ffmpeg -i(.)+-codec/)[0].replace("ffmpeg -i", "").replace("-codec", "").trim());
+                        restrictFilenames: true,
+                    output: "%(id)s.%(ext)s"}).then((output: any) => fileName = output.match(/ffmpeg -i(.)+-codec/)[0].
+                    replace("ffmpeg -i", "").
+                    replace("-codec", "").
+                    replace("/Whatsapp-bot-Project/", "").trim());
                     if (fileName) {
+                        console.log(fileName)
                         groupsDict[chatID].downloadMusicCounter++;
                         await client.sendPtt(chatID, fileName + ".mp3", messageID);
-                        fs.unlink(fileName, (err) => {
+                        fs.unlink(process.cwd().toString() + "\\" + fileName, (err) => {
                             if (err)
                                 console.error("error while deleting music file" + err);
                         });
-                        fs.unlink(fileName + ".mp3", (err) => {
+                        fs.unlink(process.cwd().toString() + "\\" + fileName + ".mp3", (err) => {
                             if (err)
                                 console.error("error while deleting music file" + err);
                         });
