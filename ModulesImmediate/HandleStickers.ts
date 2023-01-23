@@ -62,10 +62,13 @@ export default class HSt {
             // Calculate the height and width of the content
             const trimHeight = bound.bottom - bound.top, trimWidth = bound.right - bound.left;
             const trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
+            // @ts-ignore
             copy.canvas.width = trimWidth;
+            // @ts-ignore
             copy.canvas.height = trimHeight;
             copy.putImageData(trimmed, 0, 0);
             // Return trimmed canvas
+            // @ts-ignore
             return copy.canvas;
         }
 

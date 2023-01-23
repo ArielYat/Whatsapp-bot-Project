@@ -118,11 +118,11 @@ export default class HAPI {
                         console.log(fileName)
                         groupsDict[chatID].downloadMusicCounter++;
                         await client.sendPtt(chatID, fileName + ".mp3", messageID);
-                        fs.unlink(process.cwd().toString() + "\\" + fileName, (err) => {
+                        fs.unlink(process.cwd().toString() + "/" + fileName, (err) => {
                             if (err)
                                 console.error("error while deleting music file" + err);
                         });
-                        fs.unlink(process.cwd().toString() + "\\" + fileName + ".mp3", (err) => {
+                        fs.unlink(process.cwd().toString() + "/" + fileName + ".mp3", (err) => {
                             if (err)
                                 console.error("error while deleting music file" + err);
                         });

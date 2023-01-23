@@ -1,0 +1,19 @@
+version: "3"
+services:
+  login-app:
+    container_name: whatsapp
+    image: latest123/whatsapp
+    build: .
+    links:
+      - mongo
+    devices:
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27018:27017'

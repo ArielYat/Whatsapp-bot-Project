@@ -1,4 +1,4 @@
-FROM node:16.15.1
+FROM node:16.14.0
 RUN apt-get update || : && apt-get install python -y
 
 # Install latest chrome dev package
@@ -27,4 +27,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-CMD [ "npm", "start" ]
+RUN apt-get install -y tmux
+RUN apt-get install -y openvpn
+RUN wget "https://raw.githubusercontent.com/ProtonVPN/scripts/master/update-resolv-conf.sh" -O "/etc/openvpn/update-resolv-conf"
+RUN chmod +x /etc/openvpn/update-resolv-conf
+RUN chmod +x /app/script.sh
+RUN /app/script.sh
+COPY ./entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/bin/sh", "-c", "/app/entrypoint.sh && npm start"]
