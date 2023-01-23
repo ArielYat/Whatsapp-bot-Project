@@ -1,4 +1,4 @@
-# WhatsApp Bot - Jackson The Immortal
+# WhatsApp Bot - Harold The Undertaker
 
 <summary>Table of Contents</summary>
 
@@ -169,12 +169,13 @@ _All of the commands below have a certain daily limit_
 
 ### [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts)
 
-- `/Ban [user]` & `/Unban [user]` - ban a user from using the bot.
-- `/Block group` & `/Unblock group` - block a group's members from using the bot.
+- `/Ban [user]` & `/Unban [user]` - ban/unban a user from using the bot.
+- `/Block group` & `/Unblock group` - block/unblock a group's members from using the bot.
 - `Join [link to Whatsapp group]` - Invite the bot to a group via a link.
 - `!Ping` - shows the ping, the current chat amount, the total chat amount, the total user amount, the current muted
   group amount, the current muted user amount and the time since startup.
 - `/exec [command]` - executes the given command.
+- `Help admin` - shows the admin commands.
 
 The bot also autotempbans groups or users who are spamming it for a short time period.
 
@@ -226,3 +227,5 @@ See [LICENSE](LICENSE) for more information.
 - Moshe
 - Aviram
 - Alexander The Great
+- John The Legendary
+- Jackson The Immortal

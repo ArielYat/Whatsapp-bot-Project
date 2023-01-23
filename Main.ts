@@ -1,4 +1,4 @@
-//version 2.10.3
+//version 2.11.0
 
 //Bot Modules Written by the bot devs
 import HURL from "./ModulesImmediate/HandleURLs.js";
@@ -234,6 +234,8 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
         await HAF.ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
     else if (/^\/exec/i.test(bodyText))
         await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HURL, HF, HT, HB, HSt, HAF, HL, HSu, HP, HAPI, HW, HUS, HR, HAFK, Group, Person, Strings);
+    else if ((await HL.getGroupLang(groupsDict, chatID, "help_admin")).test(bodyText))
+        await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_admin_reply"), messageID);
 }
 
 //Main function

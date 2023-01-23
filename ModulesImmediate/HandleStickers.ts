@@ -2,11 +2,9 @@
 
 import HL from "../ModulesDatabase/HandleLanguage.js";
 import apiKeys from "../apiKeys.js";
-import pkg from 'canvas';
 import puppeteer from "puppeteer";
+import {createCanvas, loadImage} from 'canvas';
 import {encode} from "html-entities";
-
-const {createCanvas, loadImage} = pkg;
 
 export default class HSt {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -86,14 +84,14 @@ export default class HSt {
             if (messageType === "image") {
                 const mediaData = await client.decryptMedia(message);
                 await client.sendImageAsStickerAsReply(chatID, mediaData, messageID, {
-                    author: "ג'ון האגדי",
+                    author: "הרולד האל־מת",
                     pack: "חצול",
                     keepScale: noCrop
                 });
             } else if (messageType === "video") {
                 const mediaData = await client.decryptMedia(message);
                 await client.sendMp4AsSticker(chatID, mediaData, {crop: !noCrop}, {
-                    author: "ג'ון האגדי",
+                    author: "הרולד האל־מת",
                     pack: "חצול",
                     keepScale: noCrop
                 }, messageID);
@@ -160,7 +158,7 @@ export default class HSt {
                                 ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width)
                             }
                             client.sendImageAsSticker(message.chatId, canvas.toDataURL(), {
-                                author: "ג'ון האגדי",
+                                author: "הרולד האל־מת",
                                 pack: "חצול",
                             })
                         })
@@ -205,7 +203,7 @@ export default class HSt {
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
             drawingBoard.fillText(finalText, 75, 75);
-            await client.sendImageAsStickerAsReply(chatID, canvas.toDataURL(), messageID, {author: "ג'ון האגדי", pack: "חצול"});
+            await client.sendImageAsStickerAsReply(chatID, canvas.toDataURL(), messageID, {author: "הרולד האל־מת", pack: "חצול"});
         } catch (err) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID);
         }
