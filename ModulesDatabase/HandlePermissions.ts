@@ -150,10 +150,6 @@ export default class HP {
 
     static async functionTypeToWord(groupsDict, chatID, permissionType) {
         switch (permissionType) {
-            case "filters":
-                return await HL.getGroupLang(groupsDict, chatID, "filters_permission_type_replace")
-            case "tags":
-                return await HL.getGroupLang(groupsDict, chatID, "tags_permission_type_replace");
             case "handleFilters":
                 return await HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type_replace");
             case "handleTags":
@@ -164,6 +160,10 @@ export default class HP {
                 return await HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type_replace");
             case "handleOther":
                 return await HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type_replace");
+            case "filters":
+                return await HL.getGroupLang(groupsDict, chatID, "filters_permission_type_replace")
+            case "tags":
+                return await HL.getGroupLang(groupsDict, chatID, "tags_permission_type_replace");
             default:
                 return null;
         }
@@ -171,10 +171,6 @@ export default class HP {
 
     static async wordToFunctionType(groupsDict, chatID, text) {
         switch (true) {
-            case (await HL.getGroupLang(groupsDict, chatID, "filters_permission_type")).test(text):
-                return "filters"
-            case (await HL.getGroupLang(groupsDict, chatID, "tags_permission_type")).test(text):
-                return "tags"
             case (await HL.getGroupLang(groupsDict, chatID, "handleFilters_permission_type")).test(text):
                 return "handleFilters"
             case (await HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type")).test(text):
@@ -185,6 +181,10 @@ export default class HP {
                 return "handleShows"
             case (await HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type")).test(text):
                 return "handleOther"
+            case (await HL.getGroupLang(groupsDict, chatID, "filters_permission_type")).test(text):
+                return "filters"
+            case (await HL.getGroupLang(groupsDict, chatID, "tags_permission_type")).test(text):
+                return "tags"
             default:
         }
     }
