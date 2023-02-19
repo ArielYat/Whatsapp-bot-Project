@@ -258,12 +258,14 @@ export default class HDB {
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + "in initial retrieval of groups from DB");
+                process.exit();
                 return;
             }
             const dbo = client.db("Cluster0");
             dbo.collection("filters-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching filters from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -272,6 +274,7 @@ export default class HDB {
             dbo.collection("tags-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching tags from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -280,6 +283,7 @@ export default class HDB {
             dbo.collection("birthday-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching birthday from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -288,6 +292,7 @@ export default class HDB {
             dbo.collection("lang-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching lang from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -296,6 +301,7 @@ export default class HDB {
             dbo.collection("groupPermissions-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching groupPermissions from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -304,6 +310,7 @@ export default class HDB {
             dbo.collection("personIn-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching personIn from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -312,6 +319,7 @@ export default class HDB {
             dbo.collection("groupAdmins-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching groupAdmins from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -320,6 +328,7 @@ export default class HDB {
             dbo.collection("perm-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching permission from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -328,6 +337,7 @@ export default class HDB {
             dbo.collection("personBirthdayGroups-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching personBirthdayGroups from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -336,6 +346,7 @@ export default class HDB {
             dbo.collection("lastTagged-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching lastTagged from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -344,6 +355,7 @@ export default class HDB {
             dbo.collection("reminders-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching reminders from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -352,6 +364,7 @@ export default class HDB {
             dbo.collection("afk-persons").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching reminders from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
@@ -360,6 +373,7 @@ export default class HDB {
             dbo.collection("rested").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching rested from db");
+                    process.exit();
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
