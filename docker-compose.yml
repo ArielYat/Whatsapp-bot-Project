@@ -1,8 +1,25 @@
-version: "3"
+version: "3.8"
 services:
+  appban:
+    container_name: appban
+    image: latest123/stable
+    restart: always
+    build: .
+    expose:
+      - 7861
+    links:
+      - login-app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
   login-app:
     container_name: whatsapp
     image: latest123/whatsapp
+    restart: always
     build: .
     links:
       - mongo
@@ -13,7 +30,8 @@ services:
   mongo:
     container_name: mongo
     image: mongo
+    restart: always
+    expose:
+      - 27017
     volumes:
-      - ./data:/data/db
-    ports:
-      - '27018:27017'
+      - ./mongo_data:/data/db

@@ -8,6 +8,7 @@ const url = apiKeys.DBurl;
 export default class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
+        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + " in addArgsToDB");
@@ -72,7 +73,9 @@ export default class HDB {
     }
 
     static async delArgsFromDB(ID, key, argType, callback) {
+        // @ts-ignore
         let objectToDelInDataBase;
+        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + " in delArgsFromDB");
@@ -254,7 +257,7 @@ export default class HDB {
                 usersDict[personID] = new Person(personID);
             usersDict[personID].messagesTaggedIn[chatID] = taggedArray
         }
-
+        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + "in initial retrieval of groups from DB");
