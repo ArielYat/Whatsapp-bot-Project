@@ -5,8 +5,8 @@ services:
     image: latest123/stable
     restart: always
     build: .
-    expose:
-      - 7861
+    ports:
+       - 7861:7860
     links:
       - login-app
     deploy:
