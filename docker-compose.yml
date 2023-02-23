@@ -6,7 +6,7 @@ services:
     restart: always
     build: .
     ports:
-       - 7861:7860
+       - 7860:7860
     links:
       - login-app
     deploy:

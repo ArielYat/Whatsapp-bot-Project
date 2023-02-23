@@ -89,6 +89,9 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if ((await HL.getGroupLang(groupsDict, chatID, "wordle_game")).test(bodyText)) {
         await HAPI.wordleGame(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create")).test(bodyText)) {
+        await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
+        usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;

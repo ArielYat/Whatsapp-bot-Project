@@ -181,4 +181,88 @@ export default class HAPI {
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "wordle_game_word_error"), messageID);
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "wordle_game_error"), messageID);
     }
+    static async stableDiffusion(client, bodyText, chatID, messageID, groupsDict) {
+        let payload = {
+            prompt: undefined,
+            steps: 28,
+            negative_prompt: "",
+            seed: -1,
+            sampler_index: "DPM++ 2M Karras",
+            cfg_scale: 8,
+            override_settings : { "sd_model_checkpoint" : "Realistic_Vision_V1.3.safetensors [c35782bad8]"}
+        };
+        const prompt = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_prompt"));
+        if (prompt !== null) {
+            if((prompt[1].trim().split(" ")).length <= 75){
+                payload.prompt = prompt[1].trim();
+            }
+            else{
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_prompt_length_error"), messageID);
+                return;
+            }
+        }
+        else {
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_prompt_error"), messageID);
+            return;
+        }
+
+        const steps = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_sampling_steps"));
+        if (steps !== null) {
+            if(parseInt(steps[1]) <= 50 && parseInt(steps[1]) >= 28)
+                payload.steps = parseInt(steps[1]);
+            else{
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_sampling_steps_error"), messageID);
+                return;
+            }
+        }
+        const negative_prompt = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_negative_prompt"));
+        if (negative_prompt !== null) {
+            payload.negative_prompt = negative_prompt[1].trim();
+            if((payload.negative_prompt.split(" ")).length > 75){
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_negative_prompt_length_error"), messageID);
+                return;
+            }
+        }
+        const sampling_method = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_sampling_method"));
+        if (sampling_method !== null) {
+            if(sampling_method[1].trim() === "DPM++ 2M Karras" || sampling_method[1].trim() === "Euler a"){
+                payload.sampler_index = sampling_method[1].trim();
+            }
+            else{
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_sampling_method_error"), messageID);
+                return;
+            }
+        }
+        const model = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_model"));
+        if (model !== null) {
+            if(model[1].trim() === "Realistic Vision"){
+                payload.override_settings["sd_model_checkpoint"] = "Realistic Vision V1.3 [c35782bad8]";
+            }
+            else if(model[1].trim() === "Inkpunk_Diffusion"){
+                payload.override_settings["sd_model_checkpoint"] = "Inkpunk_Diffusion.ckpt [2182245415]";
+            }
+            else if(model[1].trim() === "DreamShaper"){
+                payload.override_settings["sd_model_checkpoint"] = "DreamShaper.safetensors [1dceefec07]";
+            }
+            else{
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_model_error"), messageID);
+                return;
+            }
+        }
+        try {
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create_reply_waiting"), messageID);
+            const response = await nodeFetch("http://appban:7860" + "/sdapi/v1/txt2img", {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {'Content-Type': 'application/json'},
+            });
+            const data = await response.json();
+            const image = Buffer.from(data["images"][0], 'base64');
+            await client.sendImage(chatID, image, 'image.png')
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create_reply"), messageID);
+        }
+        catch (e) {
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create_error"), messageID);
+        }
+    }
 }

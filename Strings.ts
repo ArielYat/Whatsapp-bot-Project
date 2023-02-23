@@ -713,7 +713,84 @@ export const Strings = {
         "en": "Sorry bro, the link didn't work...",
         "la": "Paenito frater, sed ligens non oportet...",
         "fr": "Désolé frère, le lien ne fonctionne pas..."
-    },//reminders
+    }, "stable_diffusion_create": {
+        "he": /^צור תמונה /i,
+        "en": /^Create image /i,
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_create_reply_waiting": {
+        "he": "מחכה לקבלת הקובץ...",
+        "en": "Waiting for the file...",
+        "la": "",
+        "fr": ""
+    },"stable_diffusion_create_reply": {
+        "he": "התמונה נוצרה בהצלחה",
+        "en": "The image was created successfully",
+        "la": "",
+        "fr": ""
+    },
+    "stable_diffusion_create_error": {
+        "he": "אני מצטער קיבלתי שגיאה במהלך יצירת התמונה נא נסה שנית מאוחר יותר",
+        "en": "Sorry, I got an error while creating the image, please try again later",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_model": {
+        "he": /מודל (.+)/,
+        "en": /Model (.+)/,
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_model_error": {
+        "he": "אני מצטער אבל המודל שביקשת אינו קיים",
+        "en": "Sorry but the model you requested doesn't exist",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_sampling_method": {
+        "he": /שיטת דגימה (.+)/,
+        "en": /Sampling method (.+)/,
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_sampling_method_error": {
+        "he": "אני מצטער אבל שיטת הדגימה שביקשת אינה קיימת",
+        "en": "Sorry but the sampling method you requested doesn't exist",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_sampling_steps": {
+        "he": /צעדים (.+)/,
+        "en": /Steps (.+)/,
+        "la": "",
+        "fr": ""
+    },"stable_diffusion_sampling_steps_error": {
+        "he": "אני מצטער אבל מספר הצעדים שביקשת אינו תקין",
+        "en": "Sorry but the number of steps you requested is invalid",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_prompt": {
+        "he": /תיאור (.+)/,
+        "en": /Prompt (.+)/,
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_prompt_error": {
+        "he": "אני מצטער אבל תיאור התמונה הוא חובה",
+        "en": "Sorry but the prompt is required",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_prompt_length_error": {
+        "he": "אני מצטער אבל תיאור התמונה הוא עד 75 תווים",
+        "en": "Sorry but the prompt is up to 75 characters",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_negative_prompt": {
+        "he": /תיאור שלילי (.+)/,
+        "en": /Negative prompt (.+)/,
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_negative_prompt_length_error": {
+        "he" : "אני מצטער אבל תיאור התמונה שלילי הוא עד 75 תווים",
+        "en" : "Sorry but the negative prompt is up to 75 characters",
+        "la" : "",
+        "fr" : ""
+    }
+    ,//reminders
     "add_reminder": {
         "he": /^הוסף תזכורת/i, "en": /^Add reminder/i, "la": "", "fr": /^Ajoute un rappel/i
     }, "reminder_reminding": {
