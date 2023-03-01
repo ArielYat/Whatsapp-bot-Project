@@ -90,7 +90,16 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.wordleGame(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create")).test(bodyText)) {
-        await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
+        if(chatID === apiKeys.originalGroup || chatID === apiKeys.secondGroup){
+            await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
+        }
+        else{
+            client.reply(chatID, "הצאט הזה לא מאושר להשתמש ביצירת תמונות", messageID);
+            if(botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3){
+                client.reply(chatID, "הצאט לא מאושר אבל אתה אחד מהבכירים לכן נצור לך מה שרצית", messageID);
+                await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
+            }
+        }
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
