@@ -189,7 +189,7 @@ export default class HAPI {
             seed: -1,
             sampler_index: "DPM++ 2M Karras",
             cfg_scale: 8,
-            override_settings : { "sd_model_checkpoint" : "Realistic_Vision_V1.3.safetensors [c35782bad8]"}
+            override_settings : { "sd_model_checkpoint" : "realisticVisionV13_v13.safetensors [c35782bad8]"}
         };
         const prompt = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_prompt"));
         if (prompt !== null) {
@@ -236,13 +236,13 @@ export default class HAPI {
         const model = bodyText.match(await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_model"));
         if (model !== null) {
             if(model[1].trim() === "Realistic Vision"){
-                payload.override_settings["sd_model_checkpoint"] = "Realistic Vision V1.3 [c35782bad8]";
+                payload.override_settings["sd_model_checkpoint"] = "realisticVisionV13_v13.safetensors [c35782bad8]";
             }
             else if(model[1].trim() === "Inkpunk_Diffusion"){
-                payload.override_settings["sd_model_checkpoint"] = "Inkpunk_Diffusion.ckpt [2182245415]";
+                payload.override_settings["sd_model_checkpoint"] = "Inkpunk_Diffusion.safetensors [7c973d48cc]";
             }
             else if(model[1].trim() === "DreamShaper"){
-                payload.override_settings["sd_model_checkpoint"] = "DreamShaper.safetensors [1dceefec07]";
+                payload.override_settings["sd_model_checkpoint"] = "dreamshaper_331BakedVae.safetensors [1dceefec07]";
             }
             else{
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_model_error"), messageID);

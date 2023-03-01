@@ -714,8 +714,8 @@ export const Strings = {
         "la": "Paenito frater, sed ligens non oportet...",
         "fr": "Désolé frère, le lien ne fonctionne pas..."
     }, "stable_diffusion_create": {
-        "he": /^צור תמונה /i,
-        "en": /^Create image /i,
+        "he": /^צור תמונה/i,
+        "en": /^Create image/i,
         "la": "",
         "fr": ""
     }, "stable_diffusion_create_reply_waiting": {
