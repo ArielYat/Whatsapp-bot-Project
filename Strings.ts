@@ -692,7 +692,7 @@ export const Strings = {
         "la": "",
         "fr": "M. %s est en hibernation de %s à %s et il ne verra donc pas le tag maintenant.\nLorsqu'il se réveillera, il pourra voir qui dérange son sommeil"
     }, "change_link_type": {
-        "he": /^שנה סוג לינק/i, "en": /^Change link type/i, "la": "", "fr":  /^Changer le lien/i
+        "he": /^שנה סוג לינק/i, "en": /^Change link type/i, "la": "", "fr": /^Changer le lien/i
     }, "change_link_type_reply": {
         "he": "הנה הלינק שביקשת: \n%s",
         "en": "Here is the link you requested: \n%s",
@@ -723,15 +723,14 @@ export const Strings = {
         "en": "Waiting for the file...",
         "la": "",
         "fr": ""
-    },"stable_diffusion_create_reply": {
+    }, "stable_diffusion_create_reply": {
         "he": "התמונה נוצרה בהצלחה",
         "en": "The image was created successfully",
         "la": "",
         "fr": ""
-    },
-    "stable_diffusion_create_error": {
-        "he": "אני מצטער קיבלתי שגיאה במהלך יצירת התמונה נא נסה שנית מאוחר יותר",
-        "en": "Sorry, I got an error while creating the image, please try again later",
+    }, "stable_diffusion_create_error": {
+        "he": "אני מצטער; קיבלתי שגיאה במהלך יצירת התמונה. אנא נסה שנית מאוחר יותר.",
+        "en": "I'm sorry; I got an error while creating the image. Please try again later.",
         "la": "",
         "fr": ""
     }, "stable_diffusion_model": {
@@ -740,8 +739,8 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_model_error": {
-        "he": "אני מצטער אבל המודל שביקשת אינו קיים",
-        "en": "Sorry but the model you requested doesn't exist",
+        "he": "אני מצטער אבל המודל שביקשת לא קיים",
+        "en": "I'm sorry but the model you requested doesn't exist",
         "la": "",
         "fr": ""
     }, "stable_diffusion_sampling_method": {
@@ -750,8 +749,8 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_sampling_method_error": {
-        "he": "אני מצטער אבל שיטת הדגימה שביקשת אינה קיימת",
-        "en": "Sorry but the sampling method you requested doesn't exist",
+        "he": "אני מצטער אבל שיטת הדגימה שביקשת לא קיימת",
+        "en": "I'm sorry but the sampling method you requested doesn't exist",
         "la": "",
         "fr": ""
     }, "stable_diffusion_sampling_steps": {
@@ -759,9 +758,9 @@ export const Strings = {
         "en": /Steps (.+)/,
         "la": "",
         "fr": ""
-    },"stable_diffusion_sampling_steps_error": {
+    }, "stable_diffusion_sampling_steps_error": {
         "he": "אני מצטער אבל מספר הצעדים שביקשת אינו תקין",
-        "en": "Sorry but the number of steps you requested is invalid",
+        "en": "I'm sorry but the number of steps you requested is invalid",
         "la": "",
         "fr": ""
     }, "stable_diffusion_prompt": {
@@ -770,13 +769,13 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_prompt_error": {
-        "he": "אני מצטער אבל תיאור התמונה הוא חובה",
-        "en": "Sorry but the prompt is required",
+        "he": "אני מצטער אבל תיאור התמונה דרוש",
+        "en": "I'm sorry but the prompt is required",
         "la": "",
         "fr": ""
     }, "stable_diffusion_prompt_length_error": {
         "he": "אני מצטער אבל תיאור התמונה הוא עד 75 תווים",
-        "en": "Sorry but the prompt is up to 75 characters",
+        "en": "I'm sorry but the prompt is limited to 75 characters",
         "la": "",
         "fr": ""
     }, "stable_diffusion_negative_prompt": {
@@ -785,12 +784,22 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_negative_prompt_length_error": {
-        "he" : "אני מצטער אבל תיאור התמונה שלילי הוא עד 75 תווים",
-        "en" : "Sorry but the negative prompt is up to 75 characters",
-        "la" : "",
-        "fr" : ""
-    }
-    ,//reminders
+        "he": "אני מצטער אבל תיאור התמונה השלילי הוא עד 75 תווים",
+        "en": "I'm sorry but the negative prompt is limited to 75 characters",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_unauthorized_group_error": {
+        "he": "הצ'אט הזה לא מאושר להשתמש בפונקציית יצירת התמונות",
+        "en": "This chat isn't allowed to use the image creation function",
+        "la": "",
+        "fr": ""
+    }, "stable_diffusion_unauthorized_group_error_resolve": {
+        "he": "ה'צאט לא מאושר להשתמש בפונקציית יצירת תמונות אבל אתה אחד מהבכירים לכן התמונה תיווצר לך כפי שרצית",
+        "en": "This chat isn't allowed to use the image creation function but you're high ranking so the image will be created for you as you wish",
+        "la": "",
+        "fr": ""
+    },
+    //reminders
     "add_reminder": {
         "he": /^הוסף תזכורת/i, "en": /^Add reminder/i, "la": "", "fr": /^Ajoute un rappel/i
     }, "reminder_reminding": {
@@ -931,7 +940,7 @@ export const Strings = {
         "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן ואיתן עמירן\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help stickers", "Help internet", "Help others"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan and Ethan Amiran\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "la": ``,
-        "fr": `_*Liste des commandes en français et aide générale*_\nSi vous souhaitez obtenir de l'aide concernant une commande spécifique, essayez l'une des options suivantes:\n"Aide langue", "Aide filtres", "Aide tags", "Aide anniversaires", "Aide niveaux " "Aide rappels", "Aide autocollant", "Aide internet", "Aide autre"\nSi ce n'est pas le cas, et que vous vouliez simplement voir ce message, n'hésitez pas à rester! \nDéveloppé et maintenu par Ariel Yatskan et Ethan Amiran\nLe référentiel GitHub (le code), pour les curieux: https://github.com/ArielYat/Whatsapp-bot-Project`
+        "fr": `_*Liste des commandes en français et aide générale*_\nSi vous souhaitez obtenir de l'aide concernant une commande spécifique, essayez l'une des options suivantes:\n"Aide langue", "Aide filtres", "Assiste tags", "Aide anniversaires", "Assiste niveaux " "Assiste rappels", "Assiste autocollant", "Assiste internet", "Aide autre"\nSi ce n'est pas le cas, et que vous vouliez simplement voir ce message, n'hésitez pas à rester! \nDéveloppé et maintenu par Ariel Yatskan et Ethan Amiran\nLe référentiel GitHub (le code), pour les curieux: https://github.com/ArielYat/Whatsapp-bot-Project`
     }, "help_language_reply": {
         "he": `*שפת הבוט:*\n- "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות\n  - לדוגמה: שנה שפה לאנגלית\n  - אפשר להשתמש בפקודה הזו בכל שפה\n  - שפות שנתמכות כעת: עברית, אנגלית, צרפתית`,
         "en": `*Bot's Language:*\n- "Change language to [language]" - changes the language the bot receives and sends messages in\n  - For example: Change language to Hebrew\n  - This command can be used at all times in every language\n  - Languages currently supported: Hebrew, English, French`,
@@ -956,7 +965,7 @@ export const Strings = {
         "he": `*הרשאות (למנהלי קבוצות בלבד):*\n- "קבע הרשאה ל[סוג הרשאה] - [רמת הרשאה]" - קובע את רמה ההרשאה הנדרשת לסוג פקודות מסוים\n  - לדוגמה: קבע הרשאה לפילטרים - רגיל\n  - סוגי ההרשאות: פילטרים, תיוגים, טיפול_פילטרים, טיפול_תיוגים, טיפול_ימיהולדת, טיפול_הראה, טיפול_שונות\n  - רמות הרשאה אפשריות: מושתק, רגיל ומנהל\n- "השתק [תיוג של אדם]" - משתיק את האדם המתוייג כך שלא יוכל להשתמש בפקודות\nלדוגמה: השתק @יוסי\n- "הסר השתקה [תיוג של אדם]" - מבטל את ההשתקה של האדם המתוייג\nלדוגמה: בטל השתקה @יוסי\n- "הראה הרשאות פונקציות" - מציג את רמות ההרשאות של סוגי הפקודות השונים\n- "הראה הרשאות אנשים" - מציג את רמות ההרשאות של האנשים בקבוצה`,
         "en": `*Permissions (for group admins solely):*\n- "Define permission for [permission type] - [Admin/Regular/Muted]" - defines the permission level required for a certain type of commands\n  - For example: Define permission filters - Regular\n  - Permission types: filters, tags, handle_Filters, handle_Tags, handle_Birthdays, handle_Shows & handle_Other\n- "Mute [person tag]" - mutes the tagged person so they aren't able to use commands\n  - For example: Mute @Joseph\n- "Unmute person [person tag]" - unmutes the tagged person\n  - For example: Unmute @Joseph\n- "Show function permissions" - displays the permission levels of the different types of commands\n- "Show people permissions" - displays the permission levels of the people in the group`,
         "la": ``,
-        "fr": `*Autorisations (pour les admins de groupe uniquement):*\n- "Définis l'autorisation pour [type d'autorisation] - [niveau]" - définit le niveau d'autorisation requis pour un certain type de commandes\n  - Par exemple: Définis les  autorisation pour filtres- Ordinaire \n  - Types d'autorisation:filtres, tags, gérer_Filtres, Gérer_Tags, Gérer_Anniversaires, Gérer_Affiche et Gérer_autre\n  - Niveaux :En sourdine, Ordinaire et Admin\n-"Met en sourdine [Tag de la personne] désactive la personne taguée afin qu'elle ne soit pas capable d'utiliser des commandes\n  - Par exemple: Met en sourdine @Joseph\n- "Réactive la personne [Tag de la personne]" - réactive la personne taguée\n  - Par exemple: Réactive @Joseph\n- "Affiche les niveaux de fonction" - affiche les niveaux des différents types de commandes\n- "Affiche les niveaux des personnes" - affiche les niveaux des personnes du groupe`
+        "fr": `*Autorisations (pour les admins de groupe uniquement):*\n- "Définis l'autorisation pour [type d'autorisation] - [niveau]" - définit le niveau d'autorisation requis pour un certain type de commandes\n  - Par exemple: Définis les  autorisation pour filtres- Ordinaire \n  - Types d'autorisation: filtres, tags, gérer_Filtres, Gérer_Tags, Gérer_Anniversaires, Gérer_Affiche et Gérer_autre\n  - Niveaux :En sourdine, Ordinaire et Admin\n-"Met en sourdine [Tag de la personne] désactive la personne taguée afin qu'elle ne soit pas capable d'utiliser des commandes\n  - Par exemple: Met en sourdine @Joseph\n- "Réactive la personne [Tag de la personne]" - réactive la personne taguée\n  - Par exemple: Réactive @Joseph\n- "Affiche les niveaux de fonction" - affiche les niveaux des différents types de commandes\n- "Affiche les niveaux des personnes" - affiche les niveaux des personnes du groupe`
     }, "help_reminders_reply": {
         "he": `*תזכורות:*\n_כל הפקודות של התזכורות עובדות רק בצ'ט פרטי עם הבוט\nתזכורות יכולות להיות מלל, תמונה או סרטון_\nהתאריך אופציונלי (אם לא קיים ההנחה היא שהתזכורת לאותו יום שבו ההודעה נכתבה) ויכול או לכלול לא לכלול לכלול שנה\n- "הוסף תזכורת [חוזרת] [תאריך/יום בשבוע] [שעה] [טקסט]" - מוסיף תזכורת לכותב ההודעה\n  - לדוגמה: הוסף תזכורת חוזרת 2.5.2023 7:34 להוציא את החתול לטיול\n  - לדוגמה: הוסף תזכורת ליום רביעי 16:52 להוציא את החתול לטיול\n  - הפרמטר האופציונלי "חוזרת" יוצר תזכורת קבועה הפועלת כל יום בשעה הידועה החל מהתאריך המצויין\n- "הסר תזכורת [תאריך] [שעה]" - מסיר את התזכורת המכוונת לזמן המצויין\n  - לדוגמה: הסר תזכורת 7:34\n- "הראה תזכורת" - מראה את כל התזכורות של כותב ההודעה`,
         "en": `*Reminders:*\n_All the reminder related commands work only in a private chat with the bot_\n_Reminders can be text, images or videos_\n_The date in the commands is optional (if no date is inputted the assumption is that the reminder is for the same date the message was written in) and can include or not include a year_\n- "Add reminder [repeat] [date/weekday] [time] [text]" - adds a reminder to the message's author\n  - For example: Add reminder repeat 2.5.2023 7:34 Walk the cat\n  - For example: Add reminder Wednesday 16:52 Walk the cat\n  - The optional parameter "repeat" creates a repeating reminder every day from the first date specified at the specified hour\n- "Remove reminder [date] [hour]" - deletes the reminder set at the specified time\n  - For example: Remove reminder 7:34\n- "Show reminders" - Shows the author's reminders`,

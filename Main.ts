@@ -1,4 +1,4 @@
-//version 2.11.0
+//version 2.12.0
 
 //Bot Modules Written by the bot devs
 import HURL from "./ModulesImmediate/HandleURLs.js";
@@ -21,7 +21,7 @@ import Person from "./Classes/Person.js";
 import apiKeys from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries
-import {create, Chat, Message} from "@open-wa/wa-automate";
+import {create, Chat, Message, Client} from "@open-wa/wa-automate";
 import Schedule from "node-schedule";
 
 //Local storage of data to not require access to the database at all times ("cache")
@@ -90,16 +90,13 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HAPI.wordleGame(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create")).test(bodyText)) {
-        if(chatID === apiKeys.originalGroup || chatID === apiKeys.secondGroup){
+        if (chatID === apiKeys.originalGroup || chatID === apiKeys.secondGroup) {
             await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
-        }
-        else{
-            client.reply(chatID, "הצאט הזה לא מאושר להשתמש ביצירת תמונות", messageID);
-            if(botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3){
-                client.reply(chatID, "הצאט לא מאושר אבל אתה אחד מהבכירים לכן נצור לך מה שרצית", messageID);
-                await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
-            }
-        }
+        } else if (usersDict[authorID].permissionLevel[chatID] === 3) {
+            client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error_resolve"), messageID);
+            await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
+        } else
+            client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
@@ -251,7 +248,7 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
 }
 
 //Main function
-function start(client) {
+function start(client : Client) {
     //Send a message to the original chat cause of a stupid bug not letting the bot reply to messages before it sent a regular message
     client.sendText(apiKeys.originalGroup, "Bot started successfully at " + new Date().toString());
     //Check if there are birthdays everyday at 5 am
