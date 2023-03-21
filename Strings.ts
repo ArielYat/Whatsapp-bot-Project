@@ -717,7 +717,7 @@ export const Strings = {
         "he": /^צור תמונה/i,
         "en": /^Create image/i,
         "la": "",
-        "fr": ""
+        "fr": /null/
     }, "stable_diffusion_create_reply_waiting": {
         "he": "מחכה לקבלת הקובץ...",
         "en": "Waiting for the file...",
