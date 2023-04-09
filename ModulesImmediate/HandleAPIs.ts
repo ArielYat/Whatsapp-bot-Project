@@ -260,7 +260,7 @@ export default class HAPI {
     }
 
     static async aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message, usersDict) {
-        if(usersDict[message.sender.id].voiceTranscriptCounter >= 3) {
+        if(usersDict[message.sender.id].voiceTranscriptCounter >= 2) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_limit_error"), messageID);
             return;
         }
