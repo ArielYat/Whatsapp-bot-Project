@@ -257,6 +257,7 @@ export default class HDB {
                 usersDict[personID] = new Person(personID);
             usersDict[personID].messagesTaggedIn[chatID] = taggedArray
         }
+
         // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {

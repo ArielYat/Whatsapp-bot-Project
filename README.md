@@ -15,7 +15,7 @@
   - [Miscellaneous Commands](#miscellaneous-commands)
   - [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts)
 - [Dependencies and APIs used](#dependencies-and-apis-used)
-  - [Dependencies](#Dependencies)
+  - [Main Dependencies](#Main-dependencies)
   - [APIs](#APIs)
 - [Acknowledgements](#Acknowledgements)
 - [License](#License)
@@ -135,6 +135,7 @@ _All of the commands below have a certain daily limit_
   - For example: Translate to Hebrew chair
   - In the translation text only one sentence can be written due to Google Translate restrictions.
 - `Download music [link to youtube]` - downloads a song from youtube and sends it as voice message.
+- `Transcribe audio` - transcribes the voice message the comment message replied to.
 - [`Scan [link]`](ModulesImmediate/HandleURLs.ts) - scans the given link for viruses.
   - For example: Scan https://www.google.com/
   - Links can be scanned in the message the command is sent in or in a quoted message
@@ -181,19 +182,14 @@ The bot also autotempbans groups or users who are spamming it for a short time p
 
 ## Dependencies and APIs used
 
-### Dependencies
+### Main Dependencies
 
 [@open-wa/wa-automate](https://www.npmjs.com/package/@open-wa/wa-automate) for the WhatsApp "link".
 
 [mongodb](https://www.npmjs.com/package/mongodb) for storing our database.
 
-[node-fetch](https://www.npmjs.com/package/node-fetch) for sending some requests to APIs
+[node-fetch](https://www.npmjs.com/package/node-fetch) for sending some requests to APIs.
 
-[node-schedule](https://www.npmjs.com/package/node-schedule) for timing the birthday checking.
-
-[node-virustotal](https://www.npmjs.com/package/node-virustotal) for scanning links for viruses.
-
-[util](https://www.npmjs.com/package/util) for formatting strings.
 
 ### APIs
 
@@ -201,14 +197,19 @@ The bot also autotempbans groups or users who are spamming it for a short time p
 
 [Urban Dictionary](https://api.urbandictionary.com/v0/define?term=) for Urban dictionary.
 
-[Google Translate](https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=query) for the
-translations.
+[Google Translate](https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=query) for translating texts.
+
+[Alpha Vantage](https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=STOCK&interval=30min&apikey=) for checking stock prices.
+
+[Whisper - OpenAI](https://api.openai.com/v1/audio/transcriptions) for transcribing audio.
+
+Not exactly APIs, but [youtube-dl](https://youtube-dl.org/) and [ffmpeg](https://ffmpeg.org/) for downloading music, and [Stable Diffusion](https://stablediffusionweb.com/) for generating imagery.
 
 ## Acknowledgements
 
 [@ArielYat](https://github.com/ArielYat) - Ariel - Starting the project and developing most of the bot's functionality
 
-[@TheBooker66](https://github.com/TheBooker66) - Ethan - Developing a lot of the bot's functionality and English support
+[@TheBooker66](https://github.com/TheBooker66) - Ethan - Developing a lot of the bot's functionality, code review and order and English support
 
 [@Arbel99](https://github.com/Arbel99) - Arbel - Latin support
 

@@ -13,7 +13,7 @@ export default class Person {
     #autoBanned: Date;                                  //The date in which the person was autobanned (if it was)
     #reminders: { [key: string]: string };              //The reminders the person has set
     #afk: Date;                                         //The date in which the person went AFK (if they are AFK)
-    #voiceTranscriptCounter: TillZero<2>;               //The number of voice transcripts each person used (reset every day)
+    #voiceTranscriptCounter: TillZero<2>;               //The number of voice transcripts the person requested (reset every day)
 
     constructor(personID: ContactId) {
         this.#personID = personID;
@@ -105,9 +105,11 @@ export default class Person {
     set afk(date: Date) {
         this.#afk = date;
     }
+
     get voiceTranscriptCounter(): TillZero<2> {
         return this.#voiceTranscriptCounter;
     }
+
     set voiceTranscriptCounter(number: TillZero<2>) {
         this.#voiceTranscriptCounter = number;
     }
@@ -115,6 +117,7 @@ export default class Person {
     doesReminderExist(date): boolean {
         return this.#reminders.hasOwnProperty(date);
     }
+
     resetCounters() {
         this.#voiceTranscriptCounter = 0;
     }

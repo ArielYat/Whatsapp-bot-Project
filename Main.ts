@@ -1,4 +1,4 @@
-//version 2.12.0
+//version 2.13.0
 
 //Bot Modules Written by the bot devs
 import HURL from "./ModulesImmediate/HandleURLs.js";
@@ -29,8 +29,8 @@ let groupsDict = {}, usersDict = {}, restGroups = [], restPersons = [], restGrou
     restPersonsCommandSpam = [], personsWithReminders = [], afkPersons = [];
 
 //Global variables
-const botDevs = apiKeys.botDevs;        //The bot devs' phone numbers
-Schedule.tz = apiKeys.region;           //The bot devs' time zone
+const botDevs = apiKeys.botDevs;    //The bot devs' phone numbers
+Schedule.tz = apiKeys.region;                 //The bot devs' time zone
 
 //Helper type for the Group and Person objects' properties
 export type TillZero<N extends number> = HelpType<N, []>;
@@ -95,13 +95,12 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         } else if (usersDict[authorID].permissionLevel[chatID] === 3) {
             client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error_resolve"), messageID);
             await HAPI.stableDiffusion(client, bodyText, chatID, messageID, groupsDict);
-        } else
-            client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
+        } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
         usersDict[authorID].commandCounter++;
-    }else if ((await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_create")).test(bodyText)) {
-        await HAPI.aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message, usersDict);
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "transcribe_audio")).test(bodyText)) {
+        await HAPI.transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
-    }else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {
@@ -251,7 +250,7 @@ async function HandleAdminFunction(client, message, bodyText, chatID, authorID, 
 }
 
 //Main function
-function start(client : Client) {
+function start(client: Client) {
     //Send a message to the original chat cause of a stupid bug not letting the bot reply to messages before it sent a regular message
     client.sendText(apiKeys.originalGroup, "Bot started successfully at " + new Date().toString());
     //Check if there are birthdays everyday at 5 am
@@ -260,10 +259,10 @@ function start(client : Client) {
     });
     //Reset all group counters everyday at midnight
     Schedule.scheduleJob('0 0 * * *', async function () {
-        for (const group in groupsDict)
-            groupsDict[group].resetCounters();
-        for(const person in usersDict)
-            usersDict[person].resetCounters();
+        for (const groupID in groupsDict)
+            groupsDict[groupID].resetCounters();
+        for (const personID in usersDict)
+            usersDict[personID].resetCounters();
     });
     //Reset the filter & command counters for all the groups & persons
     setInterval(function () {
@@ -298,6 +297,7 @@ function start(client : Client) {
         //Check reminders
         await HR.checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate);
     }, 60 * 1000); /* In ms; 1 min */
+
     //Send a starting help message when the bot is added to a group
     client.onAddedToGroup(async (chat: Chat) => {
         await HL.sendStartMessage(client, chat.id);

@@ -1,8 +1,8 @@
 {
   "name": "whatsapp-bot",
-  "version": "2.11.0",
+  "version": "2.13.0",
   "description": "WhatsApp Bot - multipurpose: for groups and individuals 🌟",
-  "author": "ArielYat & TheBooker66",
+  "author": "ArielYat",
   "contributors": [
     "ArielYat",
     "TheBooker66"
@@ -19,13 +19,13 @@
   "type": "module",
   "dependencies": {
     "@open-wa/wa-automate": "^4.64.0",
-    "canvas": "^2.11.0",
+    "canvas": "^2.11.2",
     "html-entities": "^2.3.3",
     "mongodb": "^4.13.0",
-    "node-fetch": "^3.3.0",
-    "node-schedule": "^2.1.0",
+    "node-fetch": "^3.3.1",
+    "node-schedule": "^2.1.1",
     "node-virustotal": "^3.35.0",
-    "puppeteer": "^19.4.1",
+    "puppeteer": "^19.8.5",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "youtube-dl-exec": "^2.1.11"
