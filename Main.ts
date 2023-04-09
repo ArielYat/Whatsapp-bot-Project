@@ -98,7 +98,10 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         } else
             client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
         usersDict[authorID].commandCounter++;
-    } else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
+    }else if ((await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_create")).test(bodyText)) {
+        await HAPI.aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message);
+        usersDict[authorID].commandCounter++;
+    }else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {

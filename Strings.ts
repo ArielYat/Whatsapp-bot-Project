@@ -798,6 +798,20 @@ export const Strings = {
         "en": "This chat isn't allowed to use the image creation function but you're high ranking so the image will be created for you as you wish",
         "la": "",
         "fr": ""
+    },"ai_speech_to_text_create": {
+        "he": /^תמלול הודעה/i, "en": /^transcript message/i, "la": "", "fr": /^transcrire le message/i
+    },
+    "ai_speech_to_text_create_reply": {
+        "he": "התמלול נוצר בהצלחה", "en": "The transcript was created successfully", "la": "", "fr": "La transcription a été créée avec succès"
+    },
+    "ai_speech_to_text_quoted_error": {
+        "he" : "אתה חייב לסמן הודעה קולית על מנת להשתמש בתמלול", "en" : "You must quote a voice message in order to use the transcript", "la" : "", "fr" : "Vous devez citer un message vocal pour utiliser la transcription"
+    },
+    "ai_speech_to_text_audio_error": {
+        "he" : "הקובץ שנבחר אינו קובץ אודיו", "en" : "The selected file is not an audio file", "la" : "", "fr" : "Le fichier sélectionné n'est pas un fichier audio"
+    },
+    "ai_speech_to_text_duration_error": {
+        "he" : "האורך של קובץ האודיו צריך להיות פחות מדקה", "en" : "The length of the audio file must be less than a minute", "la" : "", "fr" : "La longueur du fichier audio doit être inférieure à une minute"
     },
     //reminders
     "add_reminder": {
