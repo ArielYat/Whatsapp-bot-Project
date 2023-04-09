@@ -259,7 +259,11 @@ export default class HAPI {
         }
     }
 
-    static async aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message) {
+    static async aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message, usersDict) {
+        if(usersDict[message.sender.id].voiceTranscriptCounter >= 3) {
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_limit_error"), messageID);
+            return;
+        }
         if (message.quotedMsgObj === undefined) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_quoted_error"), messageID);
             return;
@@ -268,7 +272,7 @@ export default class HAPI {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_audio_error"), messageID);
             return;
         }
-        if (message.quotedMsgObj.duration > 60) {
+        if (message.quotedMsgObj.duration > 600) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_duration_error"), messageID);
             return;
         }
@@ -302,6 +306,7 @@ export default class HAPI {
                         name: 'file',
                         filename: audioName,
                     });
+                    usersDict[message.sender.id].voiceTranscriptCounter++;
                     nodeFetch('https://api.openai.com/v1/audio/transcriptions', {
                         method: 'POST',
                         headers: {'Authorization': apiKeys.voiceToken},

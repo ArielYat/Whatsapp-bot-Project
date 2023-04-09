@@ -99,7 +99,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
             client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
         usersDict[authorID].commandCounter++;
     }else if ((await HL.getGroupLang(groupsDict, chatID, "ai_speech_to_text_create")).test(bodyText)) {
-        await HAPI.aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message);
+        await HAPI.aiSpeechToText(client, bodyText, chatID, messageID, groupsDict, message, usersDict);
         usersDict[authorID].commandCounter++;
     }else if ((await HL.getGroupLang(groupsDict, chatID, "show_webpage")).test(bodyText)) {
         await HW.sendLink(client, chatID, groupsDict);
@@ -262,6 +262,8 @@ function start(client : Client) {
     Schedule.scheduleJob('0 0 * * *', async function () {
         for (const group in groupsDict)
             groupsDict[group].resetCounters();
+        for(const person in usersDict)
+            usersDict[person].resetCounters();
     });
     //Reset the filter & command counters for all the groups & persons
     setInterval(function () {

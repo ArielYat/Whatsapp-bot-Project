@@ -799,7 +799,7 @@ export const Strings = {
         "la": "",
         "fr": ""
     },"ai_speech_to_text_create": {
-        "he": /^תמלול הודעה/i, "en": /^transcript message/i, "la": "", "fr": /^transcrire le message/i
+        "he": /^תמלל הודעה/i, "en": /^transcript message/i, "la": "", "fr": /^transcrire le message/i
     },
     "ai_speech_to_text_create_reply": {
         "he": "התמלול נוצר בהצלחה", "en": "The transcript was created successfully", "la": "", "fr": "La transcription a été créée avec succès"
@@ -812,6 +812,9 @@ export const Strings = {
     },
     "ai_speech_to_text_duration_error": {
         "he" : "האורך של קובץ האודיו צריך להיות פחות מדקה", "en" : "The length of the audio file must be less than a minute", "la" : "", "fr" : "La longueur du fichier audio doit être inférieure à une minute"
+    },
+    "ai_speech_to_text_limit_error": {
+        "he" : "הגעת למגבלת התמלולים היומית שלך", "en" : "You've reached your daily transcript limit", "la" : "", "fr" : "Vous avez atteint votre limite de transcription quotidienne"
     },
     //reminders
     "add_reminder": {
