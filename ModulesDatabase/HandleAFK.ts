@@ -40,7 +40,7 @@ export default class HAFK {
             const currentTime = new Date();
                 const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString(),
                 afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString() + ":" + (person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString()),
-                hoursSinceAFK = (currentTime.getTime() - person.afk.getTime()) / 3600;
+                minutesSinceAFK = Math.floor((currentTime.getTime() - person.afk.getTime()) / 60000);
             let tempPhoneNumber = taggedID.replace("@c.us", "");
             if (group.tags.length !== 0) {
                 for (const name in group.tags) {
@@ -50,7 +50,7 @@ export default class HAFK {
                     }
                 }
             }
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, hoursSinceAFK, afkDate, afkTime), messageID);
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, minutesSinceAFK, afkDate, afkTime), messageID);
         }
     }
 }

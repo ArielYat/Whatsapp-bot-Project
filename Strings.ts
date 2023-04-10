@@ -687,10 +687,10 @@ export const Strings = {
         "la": "",
         "fr": "Bon retour d'hibernation jeune homme :D\nVous avez été tagué %s fois pendant que vous dormiez"
     }, "afk_tagged_reply": {
-        "he": "%s נמצא בתרדמת חורף עמוקה כבר %s שעות* ולכן ככל הנראה לא יראה את ההודעה עכשיו. כשיקום האדון המכובד הוא יראה מי הפריע בשנתו (ויבחר אם להתייחס).\n*מ־%s בשעה %s",
-        "en": "%s has been in deep hibernation for %s hours* so they probably won't see the message now. When the respected master wakes up, he will see who disturbed his sleep (and choose whether to address it).\n*From %s at %s",
+        "he": "%s נמצא בתרדמת חורף עמוקה כבר %s דקות* ולכן ככל הנראה לא יראה את ההודעה עכשיו. כשיקום האדון המכובד הוא יראה מי הפריע בשנתו (ויבחר אם להתייחס).\n*מ־%s בשעה %s",
+        "en": "%s has been in deep hibernation for %s minutes* so they probably won't see the message now. When the respected master wakes up, he will see who disturbed his sleep (and choose whether to address it).\n*From %s at %s",
         "la": "",
-        "fr": "%s est en hibernation profonde depuis %s heures* donc il ne verra probablement pas le message maintenant. Lorsque le maître respecté se réveillera, il verra qui a perturbé son sommeil (et choisira de s'y adresser).\n*De %s à %s"
+        "fr": "%s est en hibernation profonde depuis %s minutes* donc il ne verra probablement pas le message maintenant. Lorsque le maître respecté se réveillera, il verra qui a perturbé son sommeil (et choisira de s'y adresser).\n*De %s à %s"
     }, "change_link_type": {
         "he": /^שנה סוג לינק/i, "en": /^Change link type/i, "la": "", "fr": /^Changer le lien/i
     }, "change_link_type_reply": {
