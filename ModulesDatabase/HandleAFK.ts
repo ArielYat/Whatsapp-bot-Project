@@ -37,19 +37,20 @@ export default class HAFK {
     static async afkPersonTagged(client, chatID, messageID, taggedID, afkPersons, groupsDict, usersDict) {
         if (afkPersons.includes(taggedID)) {
             const group = groupsDict[chatID], person = usersDict[taggedID];
+            const currentTime = new Date();
+                const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString(),
+                afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString() + ":" + (person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString()),
+                hoursSinceAFK = (currentTime.getTime() - person.afk.getTime()) / 3600;
             let tempPhoneNumber = taggedID.replace("@c.us", "");
             if (group.tags.length !== 0) {
                 for (const name in group.tags) {
-                    if (group.tags[name] === tempPhoneNumber)
+                    if (group.tags[name] === tempPhoneNumber) {
                         tempPhoneNumber = name;
+                        break;
+                    }
                 }
             }
-            const afkDate = person.afk.getDate().toString() + "." + (person.afk.getMonth() + 1).toString() + "." + person.afk.getFullYear().toString();
-            let afkTime = person.afk.getHours() < 10 ? "0" + person.afk.getHours().toString() : person.afk.getHours().toString();
-            afkTime += ":"
-            afkTime += person.afk.getMinutes() < 10 ? "0" + person.afk.getMinutes().toString() : person.afk.getMinutes().toString();
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, afkDate, afkTime), messageID);
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "afk_tagged_reply", tempPhoneNumber, hoursSinceAFK, afkDate, afkTime), messageID);
         }
     }
-
 }

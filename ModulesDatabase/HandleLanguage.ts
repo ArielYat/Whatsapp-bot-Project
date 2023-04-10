@@ -19,9 +19,11 @@ export default class HL {
     }
 
 
-    static async getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null, value3 = null) {
+    static async getGroupLang(groupDict, chatID, parameter, value1 = null, value2 = null, value3 = null, value4 = null) {
         if (parameter === "add_filter_already_exists_error")
             return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value1, value2);
+        if (value1 && value2 && value3 && value4)
+            return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value2, value3, value4);
         if (value1 && value2 && value3)
             return util.format(Strings[parameter][groupDict[chatID].groupLanguage], value1, value2, value3);
         if (value1 && value2)
