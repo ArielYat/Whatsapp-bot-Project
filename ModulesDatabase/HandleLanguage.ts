@@ -8,14 +8,16 @@ export default class HL {
             ? "he" : bodyText.match(/לאנגלית/) || bodyText.match(/English/i) || bodyText.match(/Anglais/i)
                 ? "en" : bodyText.match(/לצרפתית/) || bodyText.match(/France/i) || bodyText.match(/Français/i)
                     ? "fr" : null;
-        if (lang) {
-            await HDB.delArgsFromDB(chatID, null, "lang", function () {
-                HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
-                    groupsDict[chatID].groupLanguage = lang;
-                    client.sendText(chatID, Strings["language_change_reply"][lang]);
-                });
+        if (!lang) {
+            client.reply(chatID, Strings["language_change_error"][groupsDict[chatID].groupLanguage], messageID);
+            return;
+        }
+        await HDB.delArgsFromDB(chatID, null, "lang", function () {
+            HDB.addArgsToDB(chatID, lang, null, null, "lang", function () {
+                groupsDict[chatID].groupLanguage = lang;
+                client.sendText(chatID, Strings["language_change_reply"][lang]);
             });
-        } else client.reply(chatID, Strings["language_change_error"][groupsDict[chatID].groupLanguage], messageID);
+        });
     }
 
 

@@ -72,6 +72,8 @@ _Filters can be text, images or videos_
 - `Check where I've been tagged` - replies to all the messages in which the author has been tagged, bringing them to the
   front of the chat.
 - `Clear my tags` - clears the saved tags of the message's author.
+- [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAFK.ts) - sets the the user's status to "afk", which means
+  they won't get pinged.
 
 ### [Birthdays](ModulesDatabase/HandleBirthdays.ts)
 
@@ -136,20 +138,18 @@ _All of the commands below have a certain daily limit_
   - In the translation text only one sentence can be written due to Google Translate restrictions.
 - `Download music [link to youtube]` - downloads a song from youtube and sends it as voice message.
 - `Transcribe audio` - transcribes the voice message the comment message replied to.
-- [`Scan [link]`](ModulesImmediate/HandleURLs.ts) - scans the given link for viruses.
+- [`Scan [link]`](ModulesImmediate/HandleAPIs.ts) - scans the given link for viruses.
   - For example: Scan https://www.google.com/
   - Links can be scanned in the message the command is sent in or in a quoted message
 
 ### Miscellaneous Commands
 
-- [`Profile`](ModulesImmediate/HandleUserStats.ts) - shows the bot's information about the message's author
-- [`Activate do not disturb` or `!afk`](ModulesDatabase/HandleAFK.ts) - sets the the user's status to "afk", which means
-  they won't get pinged.
+- [`Profile`](ModulesImmediate/HandleOther.ts) - shows the bot's information about the message's author
+- [`Change link type [link]`](ModulesImmediate/HandleAPIs.ts) - changes the link type of the given link from a Youtube Shorts or Wikipedia Mobile link to a regular Youtube to Wikipedia link and the opposite.
+  - For example: Change link type https://youtu.be/dQw4w9WgXcQ
 - [`My guess is [guess]`](ModulesImmediate/HandleAPIs.ts) - Guesses a word in the game Wordle.
   - For example: My guess is blush
-- [`Change link type [link]`](ModulesImmediate/HandleURLs.ts) - changes the link type of the given link from a Youtube Shorts or Wikipedia Mobile link to a regular Youtube to Wikipedia link and the opposite
-  - For example: Change link type https://youtu.be/dQw4w9WgXcQ
-- [Create a WhatsApp survey](ModulesImmediate/HandleSurveys.ts):
+- [Create a WhatsApp survey](ModulesImmediate/HandleOther.ts):
 - `Create survey Title - [survey title]
   Subtitle - [survey subtitle]
   Third Title - [third title]
@@ -157,7 +157,6 @@ _All of the commands below have a certain daily limit_
   Button 2 - [second option]
   Button 3 - [third option]`
   - (The third title and buttons 1 and 2 aren't required)
-- [`Send link`](ModuleWebsite/HandleWebsite.ts) - sends a link to the bots webpage (work in progress)
 
 <!--
 ### [Deletion from the database](ModulesDatabase/HandleDB.ts)

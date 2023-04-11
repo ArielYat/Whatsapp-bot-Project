@@ -5,10 +5,10 @@ export const Strings = {
         "la": "Certusne tu adhibuisse recte eo iungente te?",
         "fr": "Êtes-vous sûr d'avoir correctement utilisé un tiret?"
     }, "command_spam_reply": {
-        "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך יותר עד %s:%s",
-        "en": "OK kid, calm down with the commands, will you? that's it, I'm not listening to you anymore until %s:%s",
+        "he": "וואי ילד תירגע עם הפקודות. זהו, אני לא מקשיב לך יותר עד %s:%s.",
+        "en": "OK kid, calm down with the commands, will you? that's it, I'm not listening to you anymore until %s:%s.",
         "la": "",
-        "fr": "OK gamin, calme-toi avec les ordres, ça y est, je ne t'écoute plus jusqu'à %s:%s"
+        "fr": "OK gamin, calme-toi avec les ordres, ça y est, je ne t'écoute plus jusqu'à %s:%s."
     }, "filter_spam_reply": {
         "he": "כמה פילטרים שולחים פה? אני הולך לישון עד %s:%s",
         "en": "How many filters are you guys sending here? I'm going to sleep until %s:%s",
@@ -23,7 +23,7 @@ export const Strings = {
         "la": "Invenientem %s creatur feliciter",
         "fr": "Le filtre %s à été ajouté avec succès"
     }, "add_filter_already_exists_error": {
-        "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \nאם אתה רוצה לערוך אותו תכתוב את זה: \nערוך פילטר %s - %s",
+        "he": "הפילטר %s כבר קיים במאגר של קבוצה זו \nאם אתה רוצה לערוך אותו תכתוב את זה: ערוך פילטר %s - %s",
         "en": "The filters %s already exists in this group\n If u want to edit the filters please write this:\n Edit filters %s - %s",
         "la": "Reprehendentem %s iam in systemae est\nScribe 'recense invenientem %s - %s' recensitum reprehendentem",
         "fr": "Le filtre %s existe déjà dans ce groupe\n si vous souhaitez modifier le filtre, écrivez ceci:\n Modifie le filtre %s - %s"
@@ -35,7 +35,7 @@ export const Strings = {
         "la": "Invenientem %s deletur feliciter",
         "fr": "Le filtre %s a été supprimé avec succès"
     }, "remove_filter_doesnt_exist_error": {
-        "he": "רק אלוהים יכול למחוק פילטר לא קיים",
+        "he": "רק אלוהים יכול למחוק פילטר שלא קיים",
         "en": "Only the god of light and all that is good can can delete a filters which doesn't exist",
         "la": "Deus Iupiter solum potest delere invenientem qui non exsistit",
         "fr": "Seul le dieu de la lumière et tout ce qui est bon peut supprimer un filtre qui n'existe pas"
@@ -89,7 +89,7 @@ export const Strings = {
         "la": "Amicum %s additur feliciter",
         "fr": "Le numéro de téléphone de la personne %s a été ajouté avec succès"
     }, "add_tag_already_exists_error": {
-        "he": "האדם %s כבר קיים במאגר של קבוצה זו",
+        "he": "האדם %s כבר קיים בקבוצה זו",
         "en": "The person %s already exists in this group's database",
         "la": "Amicum %s iam exsistet in sistema",
         "fr": "La personne %s existe déjà dans la base de données de ce groupe"
@@ -114,7 +114,7 @@ export const Strings = {
         "la": "Napoleonus solum potest delere amici non exsistentes",
         "fr": "Seul Napoléon peut supprimer des personnes qui n'existent pas"
     }, "group_doesnt_have_tags_error": {
-        "he": "אין תיוגים לקבוצה זו",
+        "he": "אין תיוגים בקבוצה זו",
         "en": "This group doesn't have any tags",
         "la": "Hoc coetus non habet amici",
         "fr": "Ce groupe n'a aucun tags"
@@ -152,7 +152,7 @@ export const Strings = {
         "la": "",
         "fr": "La liste de tags a été créée"
     }, "create_tag_list_empty_error": {
-        "he": "אני לא יכול ליצור רשימת תיוג ריקה",
+        "he": "סליחה כבודו, אני לא יכול ליצור רשימת תיוג ריקה",
         "en": "I simply cannot create an empty tag list",
         "la": "",
         "fr": "Je ne peux tout simplement pas créer une liste de tags vide"
@@ -176,17 +176,17 @@ export const Strings = {
         "la": "",
         "fr": "Le groupe de tags %s a été ajouté avec succès"
     }, "add_tagging_group_already_exists_error": {
-        "he": "קבוצת התיוג %s כבר קיימת במאגר",
+        "he": "קבוצת התיוג %s כבר קיימת בקבוצה",
         "en": "The tagging group %s already exists in the database",
         "la": "",
         "fr": "Le groupe de tags %s existe déjà dans la base de données"
-    }, "add_tagging_group_invalid_phone_numbers_error": {
-        "he": "מבין כל השמות שנתת לי אין אפילו אחד מהם בקבוצה!",
+    }, "add_tagging_group_invalid_people_error": {
+        "he": "מבין כל השמות שנתת לי אין אפילו אחד מהם בקבוצה... מה בדיוק אתה רוצה שאני אעשה?",
         "en": "Out of all the names you've given me, not even one of them is in the group!",
         "la": "",
         "fr": "De tous les noms que vous m'avez donnés, aucun d'entre eux n'est dans le groupe!"
-    }, "add_tagging_group_no_phone_numbers_error": {
-        "he": "תבדוק שהשתמשת בפורמט הנכון להוספת שמות: \nהוסף קבוצת תיוג בננה - משה, יוסי, שלום",
+    }, "add_tagging_group_no_people_error": {
+        "he": "תבדוק שהשתמשת בפורמט הנכון להוספת שמות: הוסף קבוצת תיוג בננה - משה, יוסי, שלום",
         "en": "Check you've used the correct format for adding names: \nAdd tagging group Banana - Moshe, Joseph, Shalom",
         "la": "",
         "fr": "Vérifiez que vous avez utilisé le bon format pour ajouter des noms: \nAjoute un groupe de tags Banane - Moshe, Joseph, Shalom"
@@ -252,23 +252,18 @@ export const Strings = {
         "en": "All the people in the tagging group %s have been deleted so the tagging group has been removed",
         "la": "",
         "fr": "Toutes les personnes du groupe de tags %s ont été supprimées, le groupe de tags a donc été supprimé"
-    }, "tagging_group_does_not_exist_error": {
-        "he": "כבודו, קבוצת התיוג שביקשתך אינה קיימת",
-        "en": "Sir, the tagging group you requested does not exist",
-        "la": "",
-        "fr": "Monsieur, le groupe de tags que vous avez demandé n'existe pas"
     }, "tags_removed_problematic_tag_error": {
         "he": "התיוגים בקבוצה זו נמצאו בעייתיים. בהתאם לכך ואם לזאת, הם כולם נמחקו. יום טוב!",
         "en": "The tags in this group has been found to be troublesome. In accordance, all the tags in this group have been deleted. Good day!",
         "la": "",
         "fr": "Les tags de ce groupe se sont avérés gênants. Conformément, tout les tags de ce groupe ont été supprimés. Bonne journée"
     }, "personIn_removed_problematic_error": {
-        "he": "רשימת האנשים בקבוצה זו נמחקה. תאשימו את החזירים הקפיטליסטים",
+        "he": "רשימת האנשים בקבוצה זו נמחקה. תאשימו את החזירים הקפיטליסטים.",
         "en": "The list of people in this group has been deleted. Blame the Capitalist pigs",
         "la": "",
         "fr": "La liste des personnes de ce groupe a été supprimée. Blâmez les cochons capitalistes"
     }, "filter_removed_problematic_tag_error": {
-        "he": "הפילטר היה מחובר לתיוג בעייתי לכן הוסר",
+        "he": "כתוצאה מכך שהפילטר היה מחובר לתיוג בעייתי, הוא הוסר. יום טוב!",
         "en": "This filter was attached to a problematic tag and as such, was removed",
         "la": "",
         "fr": "Ce filtre était associé à un tag problématique et a donc été supprimé"
@@ -299,10 +294,15 @@ export const Strings = {
         "la": "Natalis dies %s iam exsistet in hoc coetu",
         "fr": "L'anniversaire de %s existe déjà dans ce groupe"
     }, "date_existence_error": {
-        "he": "מה לעזאזל זה השטויות האלה? אתה בטוח שזה תאריך מציאותי?",
+        "he": "מה לעזאזל הן השטויות האלה? אתה בטוח שזה תאריך אמיתי?",
         "en": "Are you sure what you inputted is a date or something along those lines?",
         "la": "Certusne tu hoc natalis dies esse?",
         "fr": "Êtes-vous sûr que ce que vous avez entré est une date ou quelque chose du genre"
+    }, "february_date_error": {
+        "he": "אחי, תזכור שאין בפברואר מעל 29 ימים. תקן את זה וננסה שוב.",
+        "en": "My brother in Christ, remember that there are no more than 29 days in February. Fix that and try again.",
+        "la": "",
+        "fr": "Mon frère en Christ, souviens-toi qu'il n'y a pas plus de 29 jours en février. Corrigez cela et réessayez."
     }, "date_syntax_error": {
         "he": "תראה אתה אמור להשתמש בשתי נקודות כשאתה כותב תאריך אבל מי אני שאשפוט",
         "en": "Yeah that's not how you write a date... You should be using periods",
@@ -329,8 +329,8 @@ export const Strings = {
         "la": "Ostende natalis dies",
         "fr": /^Affiche les anniversaires/i
     }, "group_doesnt_have_birthdays_error": {
-        "he": "אין לקבוצה זו ימי הולדת",
-        "en": "This group don't have any birthday registered",
+        "he": "אין לאנשים קבוצה זו ימי הולדת",
+        "en": "The people in this group don't have any birthdays",
         "la": "Hoc coetus non habet natalis dies",
         "fr": "Ce groupe n'a pas d'anniversaire enregistré"
     }, "add_birthday_to_group": {
@@ -354,18 +354,18 @@ export const Strings = {
         "la": "",
         "fr": /^Supprime le groupe de la liste de diffusion du message d'anniversaire/i
     }, "birthday_removed_from_group_reply": {
-        "he": "הקבוצה הוסרה בהצלחה מרשימת התפוצה של ימי הולדת של אדם זה",
+        "he": "הקבוצה הוסרה בהצלחה מרשימת התפוצה של ימי הולדת שלך",
         "en": "The group has been successfully removed from this person's birthday message broadcast list",
         "la": "",
         "fr": "Le groupe a été supprimé avec succès de la liste de diffusion des messages d'anniversaire de cette personne"
     }, "birthday_removed_from_group_error": {
-        "he": "רק סמי יכול להסיר קבוצות שלא קיימות ברשימת התפוצה שלך",
+        "he": "רק דוקטור דופנשמירץ יכול להסיר קבוצות שלא קיימות ברשימת התפוצה שלך",
         "en": "Only Sam can remove groups which aren't in your birthday message's broadcast",
         "la": "",
         "fr": "Seul Sam peut supprimer les groupes qui ne figurent pas dans la liste de diffusion de votre message d'anniversaire"
     }, "person_doesnt_have_birthday_error": {
         "he": "לבחורצ'יק כאן אין יום הולדת (מוגדר)",
-        "en": "This man does not have a birthday (defined)",
+        "en": "This dude here doesn't have a (defined) birthday",
         "la": "",
         "fr": "Cet homme n'a pas défini d'anniversaire"
     }, //permissions & muting
@@ -380,7 +380,7 @@ export const Strings = {
         "la": "",
         "fr": /^L'autorisation a été modifiée avec succès/i
     }, "set_permissions_error": {
-        "he": "אין לך הרשאה מספיק גבוהה בשביל מה שניסית לעשות",
+        "he": "אין לך הרשאה גבוהה מספיק בשביל מה שניסית לעשות",
         "en": "You don't have a high enough clearance level for what you were trying to do",
         "la": "",
         "fr": "Vous n'avez pas un niveau suffisamment élevé pour ce que vous essayez de faire"
@@ -390,46 +390,46 @@ export const Strings = {
         "la": "",
         "fr": "Seul l'homme, le mythe, la légende Moïse peut sélectionner une option inexistante"
     }, "permission_level_does_not_exist_error": {
-        "he": "רק ביג מוישה יכול לבחור הרשאה שלא קיימת \nבדוק שבחרת אחד מאלה: מנהל/רגיל/מושתק",
-        "en": "Only big Moshe can choose a non-existent\n Check you've chosen one of these: Admin/Regular/Muted",
+        "he": "רק סבתא משה יכולה לבחור רמת הרשאה שלא קיימת. בדוק שבחרת אחד מאלה: מנהל/רגיל/מושתק",
+        "en": "Only Grandma Moshe can choose a non-existent permission level. Check you've chosen one of these: Admin/Regular/Muted",
         "la": "",
         "fr": "Seul le grand Moïse peut choisir un niveau inexistant\n Vérifiez que vous avez choisi l'un de ces éléments: Admin/Ordinaire/En sourdine"
     }, "filters_permission_type": {
-        "he": /פילטרים/i, "en": /filters/i, "la": "", "fr": /^Filtres/i
+        "he": /^פילטרים$/i, "en": /^filters$/i, "la": "", "fr": /^filtres$/i
     }, "tags_permission_type": {
-        "he": /תיוגים/i, "en": /tags/i, "la": "", "fr": /^Tags/i
+        "he": /^תיוגים$/i, "en": /^tags$/i, "la": "", "fr": /^tags$/i
     }, "handleFilters_permission_type": {
-        "he": /ניהול_פילטרים/i, "en": /handle_Filters/i, "la": "", "fr": /^Gérer_Filtres/i
+        "he": /^פקודות_פילטרים$/i, "en": /^handle_Filters$/i, "la": "", "fr": /^gérer_Filtres$/i
     }, "handleTags_permission_type": {
-        "he": /ניהול_תיוגים/i, "en": /handle_Tags/i, "la": "", "fr": /^Gérer_Tags/i
+        "he": /^פקודות_תיוגים$/i, "en": /^handle_Tags$/i, "la": "", "fr": /^gérer_Tags$/i
     }, "handleBirthdays_permission_type": {
-        "he": /ניהול_ימיהולדת/i, "en": /handle_Birthdays/i, "la": "", "fr": /^Gérer_Anniversaires/i
+        "he": /^פקודות_ימיהולדת$/i, "en": /^handle_Birthdays$/i, "la": "", "fr": /^gérer_Anniversaires$/i
     }, "handleShows_permission_type": {
-        "he": /ניהול_הראה/i, "en": /handle_Shows/i, "la": "", "fr": /^Gérer_Affiches/i
+        "he": /^פקודות_הראה$/i, "en": /^handle_Shows$/i, "la": "", "fr": /^gérer_Affiches$/i
     }, "handleOther_permission_type": {
-        "he": /ניהול_שונות/i, "en": /handle_Other/i, "la": "", "fr": /^Gérer_Autre/i
+        "he": /^פקודות_שונות$/i, "en": /^handle_Other$/i, "la": "", "fr": /^gérer_Autre$/i
     }, "filters_permission_type_replace": {
         "he": "פילטרים", "en": "filters", "la": "", "fr": "Filtres"
     }, "tags_permission_type_replace": {
         "he": "תיוגים", "en": "tags", "la": "", "fr": "Tags"
     }, "handleFilters_permission_type_replace": {
-        "he": "ניהול_פילטרים", "en": "handle_Filters", "la": "", "fr": "Gérer_Filtres"
+        "he": "פקודות_פילטרים", "en": "handle_Filters", "la": "", "fr": "Gérer_Filtres"
     }, "handleTags_permission_type_replace": {
-        "he": "ניהול_תיוגים", "en": "handle_Tags", "la": "", "fr": "Gérer_Tags"
+        "he": "פקודות_תיוגים", "en": "handle_Tags", "la": "", "fr": "Gérer_Tags"
     }, "handleBirthdays_permission_type_replace": {
-        "he": "ניהול_ימיהולדת", "en": "handle_Birthdays", "la": "", "fr": "Gérer_Anniversaires"
+        "he": "פקודות_ימיהולדת", "en": "handle_Birthdays", "la": "", "fr": "Gérer_Anniversaires"
     }, "handleShows_permission_type_replace": {
-        "he": "ניהול_הראה", "en": "handle_Shows", "la": "", "fr": "Gérer_affiche"
+        "he": "פקודות_הראה", "en": "handle_Shows", "la": "", "fr": "Gérer_affiche"
     }, "handleOther_permission_type_replace": {
-        "he": "ניהול_שונות", "en": "handle_Other", "la": "", "fr": "Gérer_Autre"
+        "he": "פקודות_שונות", "en": "handle_Other", "la": "", "fr": "Gérer_Autre"
     }, "muted_permission_level": {
-        "he": /מושתק/, "en": /Muted/i, "la": "", "fr": /En sourdine/i
+        "he": /^מושתק$/, "en": /^muted$/i, "la": "", "fr": /^en_sourdine%/i
     }, "regular_permission_level": {
-        "he": /רגיל/, "en": /Regular/i, "la": "", "fr": /Ordinaire/i
+        "he": /^רגיל$/, "en": /^regular$/i, "la": "", "fr": /^ordinaire$/i
     }, "admin_permission_level": {
-        "he": /מנהל/, "en": /Admin/i, "la": "", "fr": /Admin/i
+        "he": /^מנהל$/, "en": /^admin$/i, "la": "", "fr": /^admin$/i
     }, "developer_permission_level": {
-        "he": /כבוד_הרב/, "en": /God/i, "la": "", "fr": /Dieu/i
+        "he": /^כבוד_הרב$/, "en": /^god$/i, "la": "", "fr": /^dieu$/i
     }, "muted_permission_level_replace": {
         "he": "מושתק", "en": "Muted", "la": "", "fr": "En sourdine"
     }, "regular_permission_level_replace": {
@@ -481,7 +481,7 @@ export const Strings = {
         "la": "",
         "fr": "frère, ce n'est pas un lien valide"
     }, "scan_link_checking_reply": {
-        "he": "%s \n בודק...", "en": "%s \n Checking...", "la": "%s \n Examino...", "fr": "%s \n J'examine..."
+            "he": "%s \n בודק...", "en": "%s \n Checking...", "la": "%s \n Examino...", "fr": "%s \n J'examine..."
     }, "scan_link_result_reply": {
         "he": " וואלה אחי בדקתי את הקישור כמו שביקשת ומצאתי ש־%s אנטי וירוסים מצאו אותו סאחי",
         "en": "%s antivirus engines detected this link as malicious",
@@ -519,10 +519,10 @@ export const Strings = {
         "la": "",
         "fr": /^Crée un autocollant de texte/i
     }, "text_sticker_error": {
-        "he": "התרחשה שגיאה ביצירת הסטיקר\nבדוק שבחרת צבע באנגלית ומילה",
-        "en": "An error occurred while making your sticker \nCheck you've chosen a colour in English and at least one word",
+        "he": "התרחשה שגיאה ביצירת הסטיקר; בדוק שבחרת צבע באנגלית ומילה",
+        "en": "An error occurred while making your sticker; Check you've chosen a colour in English and at least one word",
         "la": "",
-        "fr": "Une erreur s'est produite lors de la création de votre autocollant \nVérifiez que vous avez choisi une couleur en anglais et au moins un mot"
+        "fr": "Une erreur s'est produite lors de la création de votre autocollant; Vérifiez que vous avez choisi une couleur en anglais et au moins un mot"
     }, "create_survey": {
         "he": /^צור סקר/i, "en": /^Create survey/i, "la": "Crea census", "fr": /^Crée un sondage/i
     }, "survey_title": {
@@ -568,7 +568,7 @@ export const Strings = {
         "la": "Hoc non est similacrum",
         "fr": "Voici les trucs que vous avez demandé"
     }, "crypto_api_error": {
-        "he": "נתקלתי בבעיה איפהשהו בדרך",
+        "he": "נתקלתי בבעיה איפשהו בדרך",
         "en": "I've ran into a problem somewhere along the way",
         "la": "",
         "fr": "J'ai rencontré un problème quelque part en cours de route"
@@ -729,8 +729,8 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_create_error": {
-        "he": "אני מצטער; קיבלתי שגיאה במהלך יצירת התמונה. אנא נסה שנית מאוחר יותר.",
-        "en": "I'm sorry; I got an error while creating the image. Please try again later.",
+        "he": "אני מצטער; נזרקה שגיאה במהלך יצירת התמונה. אנא נסה שנית מאוחר יותר.",
+        "en": "I'm sorry; An error was thrown while creating the image. Please try again later.",
         "la": "",
         "fr": ""
     }, "stable_diffusion_model": {
@@ -789,22 +789,22 @@ export const Strings = {
         "la": "",
         "fr": ""
     }, "stable_diffusion_unauthorized_group_error": {
-        "he": "הצ'אט הזה לא מאושר להשתמש בפונקציית יצירת התמונות",
+        "he": "הצ'ט הזה לא מאושר להשתמש בפונקציית יצירת התמונות",
         "en": "This chat isn't allowed to use the image creation function",
         "la": "",
         "fr": ""
     }, "stable_diffusion_unauthorized_group_error_resolve": {
-        "he": "ה'צאט לא מאושר להשתמש בפונקציית יצירת תמונות אבל אתה אחד מהבכירים לכן התמונה תיווצר לך כפי שרצית",
+        "he": "ה'צט לא מאושר להשתמש בפונקציית יצירת תמונות אבל אתה אחד מהבכירים לכן התמונה תיווצר לך כפי שרצית",
         "en": "This chat isn't allowed to use the image creation function but you're high ranking so the image will be created for you as you wish",
         "la": "",
         "fr": ""
     }, "transcribe_audio": {
         "he": /^תמלל הודעה/i, "en": /^Transcribe message/i, "la": "", "fr": /^Transcrire le message/i
     }, "transcribe_audio_reply": {
-        "he": "התמלול נוצר בהצלחה",
-        "en": "The transcript was created successfully",
+        "he": "התמלול נוצר בהצלחה:\n%s",
+        "en": "The transcript was created successfully:\n%s",
         "la": "",
-        "fr": "La transcription a été créée avec succès"
+        "fr": "La transcription a été créée avec succès\n%s"
     }, "transcribe_audio_no_audio_error": {
         "he": "אתה חייב להגיב על הודעה קולית על מנת לתמלל",
         "en": "You must reply to a voice message in order to transcribe",
@@ -837,15 +837,15 @@ export const Strings = {
         "la": "",
         "fr": "Le rappel a été défini avec succès à %s"
     }, "reminder_already_exists_error": {
-        "he": "קיימת תזכורת כבר בשעה הזאת",
+        "he": "כבר קיימת תזכורת בשעה הזאת",
         "en": "There already exists a reminder at that time",
         "la": "",
         "fr": "Il existe déjà un rappel à ce moment-là"
     }, "reminder_time_error": {
-        "he": "אני מצטער אבל בימים אלו עדיין אני לא יכול לנחש שעות בעצמי \nתבדוק שכתבת נכון את השעה",
-        "en": "I'm sorry but at this day in age I'm still not able to guess the time on my own \nPlease check you've written it correctly",
+        "he": "אני מצטער אבל בימים אלו אני לא יכול לנחש באיזה שעה אתה רוצה את התזכורת שלך; תבדוק שכתבת נכון את השעה",
+        "en": "I'm sorry but at this day and age I'm still not able to guess at what time you want your reminder; Please check you've written it correctly",
         "la": "",
-        "fr": "Je suis désolé, mais à ce jour, je ne suis toujours pas capable de deviner l'heure par moi-même \nVeuillez vérifier que vous l'avez écrite correctement"
+        "fr": "Je suis désolé, mais à ce jour, je ne suis toujours pas capable de deviner l'heure par moi-même; Veuillez vérifier que vous l'avez écrite correctement"
     }, "remove_reminder": {
         "he": /^הסר תזכורת/i, "en": /^Remove reminder/i, "la": "", "fr": /^Supprime le rappel/i
     }, "remove_reminder_reply": {
@@ -854,7 +854,7 @@ export const Strings = {
         "la": "",
         "fr": "Le rappel défini à %s a été supprimé"
     }, "reminder_doesnt_exist_error": {
-        "he": "עדיין אין לי את היכולת למחוק התראות שלא נקבעו",
+        "he": "עדיין אין לי את היכולת למחוק תזכורת שלא נקבעו",
         "en": "I'm still not able to delete reminders which weren't ever set",
         "la": "",
         "fr": "Je ne parviens toujours pas à supprimer des rappels qui n'ont jamais été définis"
@@ -912,20 +912,20 @@ export const Strings = {
     "wordle_game": {
         "he": /^הניחוש שלי הוא/i, "en": /^My guess is/i, "la": /null/, "fr": /null/
     }, "wordle_game_reply": {
-        "he": "המילה שבחרת היא %s\nyour grade is: %s",
+        "he": "המילה שבחרת היא %s\n הדירוג שלך הוא: %s",
         "en": "The word you choose is %s\nYour grade is: %s",
-        "la": "null",
-        "fr": "null"
-    }, "wordle_game_word_error": {
+        "la": "",
+        "fr": ""
+    }, "wordle_game_word_non_existent_error": {
         "he": "המילה שבחרת לא קיימת במאגר שלנו",
         "en": "The word you choose isn't exist on our database",
-        "la": "null",
-        "fr": "null"
-    }, "wordle_game_error": {
-        "he": "המילה חייבת להיות באורך של 5 אותיות",
-        "en": "The word length must be 5 letters",
-        "la": "null",
-        "fr": "null"
+        "la": "",
+        "fr": ""
+    }, "wordle_game_word_length_error": {
+        "he": "המילה חייבת להיות באורך של בדיוק חמש אותיות",
+        "en": "The word length must be exactly five letters",
+        "la": "",
+        "fr": ""
     }, //language and help
     "change_language": {
         "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad", "fr": /^Change la langue en/i
@@ -962,7 +962,7 @@ export const Strings = {
     }, "help_others": {
         "he": /^עזרה אחר$/i, "en": /^Help others$/i, "la": "", "fr": /^Aide autre$/i
     }, "help_admin": {
-        "he": /^עזרה ניהול$/i, "en": /^Help admin$/i, "la": "", "fr": /^Aide administrateur$/i
+        "he": /^עזרה פיתוח$/i, "en": /^Help admin$/i, "la": "", "fr": /^Aide administrateur$/i
     }, "help_general_reply": {
         "he": `_*רשימת הפקודות ועזרה כללית בעברית*_\nאם נפשיכם חשקה בעזרה ספציפית בנוגע לפקודה כלשהי, היעזרו בפקודות הבאות:\n"עזרה שפה", "עזרה פילטרים", "עזרה תיוגים", "עזרה ימי הולדת", "עזרה הרשאות" "עזרה תזכורות", "עזרה סטיקרים", "עזרה אינטרנט", "עזרה אחר"\nאם לא, וסתם רציתם לראות את ההודעה הזו, תרגישו חופשי להישאר!\nמפותח ומתוחזק על ידי אריאל יצקן ואיתן עמירן\nקישור למאגר הקוד ב־Github (הקוד), לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en": `_*English Command List and General Help*_\nIf you desire help regarding a specific command, try one of the following:\n"Help language", "Help filters", "Help tags", "Help birthdays", "Help permissions" "Help reminders", "Help stickers", "Help internet", "Help others"\nIf not, and you just wanted to see this message, feel free to stick around! \nDeveloped and maintained by Ariel Yatskan and Ethan Amiran\nThe GitHub repository (the code), for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`,
@@ -1022,9 +1022,9 @@ export const Strings = {
         "he_old": `*הוראות בעברית*\n _שפה_: \n - "שנה שפה ל[שפה]" - משנה את בה הבוט מקבל ומגיב לפקודות \n לדוגמה: שנה שפה לאנגלית \n  אפשר להשתמש בפקודה הזו בכל שפה\nשפות שנתמכות כעת: עברית, אנגלית ולטינית  \n  \n _פילטרים_: \n- "הוסף פילטר [פילטר] - [תגובת הבוט]" - מוסיף פילטר לקבוצה  \n לדוגמה: הוסף פילטר אוכל - בננה \n  אפשר להוסיף פילטר של טקסט, תמונה או סרטון\n- "הסר פילטר [פילטר]" - מסיר את הפילטר המצויין מהקבוצה  \n לדוגמה: הסר פילטר אוכל \n- "ערוך פילטר [פילטר קיים] - [תשובה חדשה]" - עורך פילטר קיים בקבוצה  \n לדוגמה: ערוך פילטר אוכל - אפרסק \n- "הראה פילטרים" - מציג את רשימת הפילטרים הקיימים כעת בקבוצה  \n  \n _תיוגים_: \n- "תייג [אדם]" - מתייג אדם כך שיקבל התראה גם אם הקבוצה מושתקת אצלו  \n לדוגמה: תייג יוסי \n- "הוסף חבר לתיוג [אדם] - [מספר טלפון בפורמט בין לאומי]" - מוסיף אדם לתיוג בקבוצה  \n לדוגמה: הוסף חבר לתיוג יוסי - 972501234567 \n- "הסר חבר מתיוג [אדם]" - מסיר אדם מתיוג בקבוצה  \n לדוגמה: הסר חבר מתיוג יוסי \n- "תייג כולם" - מתייג את כל האנשים שנמצאים בקבוצה  \n- "הראה רשימת חברים לתיוג" - מציג את רשימת החברים לתיוג שמוגדרים בקבוצה  \n  - "בדוק היכן תייגוני" - מראה את ההודעה האחרונה בה כותב ההודעה תויג, ניתן לשימוש כמה פעמים\n  - "נקה תיוגיי" - מנקה את התיוגים השמורים של כותב ההודעה\n  \n _ימי הולדת_: \n  - "הוסף יום הולדת - [תאריך מנוקד בפורמט בינלאומי הפוך]" - מוסיף יום הולדת לכותב ההודעה\n  לדוגמה: הוסף יום הולדת 1.11.2011\n  - "הסר יום הולדת" - מסיר את יום ההולדת של כותב ההודעה\n  - "הוסף קבוצה להודעת יום ההולדת" - מוסיף את הקבוצה בה נשלחה ההודעה לרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הסר קבוצה מהודעת יום ההולדת" - מסיר את הקבוצה בה נשלחה ההודעה מרשימת התפוצה של הודעת יום ההולדת של כותב ההודעה\n  - "הראה ימי הולדת" - מציג את ימי ההולדת של כל חברי הקבוצה\n  \n  _הרשאות והשתקות_:\n  - "קבע הרשאה ל[סוג הרשאה] - [מספר מ־0 עד 2]" - קובע את רמה ההרשאה הנדרשת לסוג פקודות מסוים\n  לדוגמה: קבע הרשאה לפילטרים - רגיל\n  סוגי ההרשאות: פילטרים, תיוגים, טיפול-פילטרים, טיפול-תיוגים, טיפול-ימיהולדת, טיפול-הראה, טיפול-שונות\n  רמות הרשאה אפשריות: מושתק, רגיל ומנהל\n  - "השתק [תיוג של אדם]" - משתיק את האדם המתוייג כך שלא יוכל להשתמש בפקודות\n  לדוגמה: השתק @יוסי\n  - "הסר השתקה [תיוג של אדם]" - מבטל את ההשתקה של האדם המתוייג\n  לדוגמה: בטל השתקה @יוסי\n  - "הראה הרשאות פונקציות" - מציג את רמות ההרשאות של סוגי הפקודות השונים\n  - "הראה הרשאות אנשים" - מציג את רמות ההרשאות של האנשים בקבוצה\n  \n _פונקציות נוספות_ \n - "הפוך לסטיקר [ללא חיתוך/-]" - הופך הודעת מדיה לסטיקר ושולח אותו \n ניתן להשתמש בפקודה גם בהודעה בה שולחים את התמונה/סרטון וגם בתור תגובה אליה \n  ללא חיתוך הוא פרמטר שלא חייבים לשים, הוא יוצר סטיקר לא חתוך\n  - "בדוק קריפטו" - שולח הודעה עם שערי המטבע של מטבעות קריפטו שונים לעומת הדולר\n  - "הגדרת אינטרנט [מילה באנגלית]" - מחפש את המילה באתר Urban Dictionary ומחזיר את תוצאות החיפוש\n  לדוגמה: הגדרת אינטרנט Chair\n  - "תרגם ל[שפה כלשהי] [מילים]" - מתרגם את רצף המילים לשפה הנתונה באמצעות גוגל תרגום\n  לדוגמה: תרגם לאנגלית כיסא\n  בתרגום ניתן לכתוב רק משפט אחד בגלל מגבלות של גוגל תרגום\n  - "סרוק [קישור]" - סורק קישור לוירוסים\n  לדוגמה: סרוק https://www.google.com/\n - "שלח קישור" - שולח קישור לאתר של הבוט (בתהליך עבודה) \n  - יצירת סקר של וואטסאפ:\n "צור סקר \n כותרת - [כותרת סקר] \n כותרת משנה - [כותרת משנה] \n כותרת שלישית - [כותרת שלישית] \n כפתור 1 - [אופציה ראשונה] \n כפתור 2 - [אופציה שנייה] \n כפתור 3 - [אופציה שלישית]" \n (הכותרת השלישית והכפתורים השני והשלישי אופציונליים) \n  \n _טיפ מיוחד!_ \n בהוספת פילטר אפשר גם להשתמש ב[שם] בשביל לתייג מישהו כשהפילטר נקרא \n  לדוגמה: "הוסף פילטר אוכל - [יוסי]" יגרום לבוט לתייג את יוסי כשנאמר "אוכל"\n\n  _קרדיטים_\n  מפותח ומתוחזק על ידי אריאל יצקן ואיתן עמירן\n  קישור ל־Github Repository, לסקרנים: https://github.com/ArielYat/Whatsapp-bot-Project`,
         "en_old": `*English Instructions* \n  _Language_:\n  - "Change language to [language]" - changes the language the bot receives and sends messages in\n  For example: Change language to Hebrew\n  This command can be used at all times in every language\n  Languages currently supported: Hebrew, English & Latin\n  \n  _Filters_:\n  - "Add filter [filter] - [bot reply]" - adds a filter to the group\n  For example: Add filter food - banana\n  Filters can be text, an image or a video\n  - "Remove filter [filter]" - removes the specified filter from the group\n  For example: Remove filter food\n  - "Edit filter [existing filter] - [new reply]" - edits the specified filter\n  For example: Edit filter food - peach\n  - "Show filters" - displays the list of all filter and their replies in the group\n  \n  _Tags_:\n  - "Tag [person]" - tags someone so that they get a notification even if the group is muted on their phone\n  For example: Tag Joseph\n  - "Add tag buddy [name] - [phone number in international format]" - adds the person to the list of taggable people\n  For example: Add tagging buddy Joseph - 972501234567\n  - "Remove tag buddy [name]" - removes the person from the list of taggable people\n  For example: Remove tagging buddy Joseph\n  - "Tag everyone" - tags all people in the group\n  - "Show tag buddies" - displays the list of all taggable people in the group\n  - "Check where I've been tagged" - shows the last message in which the message author's been tagged, can be used multiple times\n  - "Clear my tags" - clears the saved tags of the message's author\n  \n  _Birthdays_:\n  - "Add birthday [date in reverse international format with periods]" - adds a birthday for message's author\n  For example: Add birthday 1.11.2011\n  - "Remove birthday" - removes the author's birthday\n  - "Add group to birthday message" - adds the group the message was sent in to the author's birthday message broadcast\n  - "Remove group from birthday message" - removes the group the message was sent in from the author's birthday message broadcast\n  -"Show birthdays" - displays the birthdays of the group members  \n  \n  _Permissions & Muting_:\n  "Define permission for [permission type] - [number from 0 to 2]" - defines the permission level required for a certain type of commands\n  For example: Define permission filters - Regular\n  Permission types: filters, tags, handle-Filters, handle-Tags, handle-Birthdays, handle-Shows, handle-Other\n  Permission levels: Muted, Regular & Admin\n  - "Mute [person tag]" - mutes the tagged person so they aren't able to use commands\n  For example: Mute @Joseph\n  - "Unmute person [person tag]" - unmutes the tagged person\n  For example: Unmute @Joseph  \n  - "Show function permissions" - displays the permission levels of the different types of commands\n  - "Show people permissions" - displays the permission levels of the people in the group\n  \n  _Miscellaneous_:\n  - "Create sticker [without cropping/-]" - creates a sticker out of a media file and sends it\n  This command can be used in the message the media was sent in and as a reply to it\n  "without cropping" is an optional parameter which creates the sticker without cropping it  \n  - "Check Crypto" - sends a message with the exchange rates of ten different cryptocurrencies compared to the Dollar\n  - "Internet definition [work]" - searches for the word on the website Urban Dictionary and returns the search result\n  For example: Internet definition chair\n  - "Translate to [some language] [words]" - translates the words to the given language via Google Translate\n  For example: Translate to Hebrew chair\n  In the translation text only one sentence can be written due to Google Translate restrictions\n  - "Scan [link]" - scans the given link for viruses\n  For example: Scan https://www.google.com/\n  - "Send link" - sends a link to the bots webpage (work in progress)\n  - Create a WhatsApp survey:\n  "Create survey\n  Title - [survey title]\n  Subtitle - [survey subtitle]\n  Third Title - [third title]\n  Button 1 - [first option]\n  Button 2 - [second option]\n  Button 3 - [third option]"\n  (The third title and buttons 1 and 2 aren't required)\n    \n  _Special tip!_\n  When adding a filter you can use [name] to tag someone when the filter is invoked\n  For example: "Add filter food - [Joseph]" will make the bot tag Joseph whenever "food" is said\n  \n  _Deletion from the database_\n  - "Delete this group from the database" - deletes all of the group's information from the database\n  - "Delete me from the database" - deletes all of the author's information from the database\n  *Use these commands with caution, their effects are irreversible*\n  \n  _Credits_\n  Developed and maintained by Ariel Yatskan and Ethan Amiran\n  The GitHub repository, for the curious: https://github.com/ArielYat/Whatsapp-bot-Project`
     }, "start_message": {
-        "he": `שלום, אני ג'ון!\nכדי להציג את הודעת העזרה עם כל הפקודות ועוד מידע כתבו "עזרה" בשפה הפעילה.\nכדי לשנות שפה כתבו "שנה שפה ל[שפה שאתם רוצים לשנות לה]".\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית וצרפתית.`,
-        "en": `Hello, I'm John!\nTo display the help message with all the commands send "Help" in the active language.\nTo change language type "Change language to [language you want to change to]".\nThe default language is Hebrew, and the currently available languages are Hebrew, English and French.`,
-        "la": `Salve amici, John sum!\nPropter auxilium, scriba "Auxilium" in mea lingua.\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.`,
-        "fr": `Bonjour, je m'appelle John!\nPour afficher le message de type aide tapez "Aide" dans la langue active.\nPour changer de langue, saisissez "Change la langue en [langue souhaitée]".\nLa langue par défaut est l'hébreu, et les langues actuellement disponibles sont l'hébreu, l'anglais et le Français.`,
+        "he": `שלום, אני הרולד!\nכדי להציג את הודעת העזרה עם כל הפקודות ועוד מידע כתבו "עזרה" בשפה הפעילה.\nכדי לשנות שפה כתבו "שנה שפה ל[שפה שאתם רוצים לשנות לה]".\nהשפה בררת המחדל היא עברית, והשפות האפשריות כעת הן עברית, אנגלית וצרפתית.`,
+        "en": `Hello, I'm Harold!\nTo display the help message with all the commands send "Help" in the active language.\nTo change language type "Change language to [language you want to change to]".\nThe default language is Hebrew, and the currently available languages are Hebrew, English and French.`,
+        "la": `Salve amici, Harold sum!\nPropter auxilium, scriba "Auxilium" in mea lingua.\nMea lingua mutatum, scriba "Muta lingua ad [lingua quam desideras]".\nLingua Hebraica defalta est, et in sistema Linguae Anglica et Latina sunt.`,
+        "fr": `Bonjour, je m'appelle Harold!\nPour afficher le message de type aide tapez "Aide" dans la langue active.\nPour changer de langue, saisissez "Change la langue en [langue souhaitée]".\nLa langue par défaut est l'hébreu, et les langues actuellement disponibles sont l'hébreu, l'anglais et le Français.`,
     }
 }

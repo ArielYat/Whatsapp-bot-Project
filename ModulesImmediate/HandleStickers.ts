@@ -6,7 +6,7 @@ import puppeteer from "puppeteer";
 import {createCanvas, loadImage} from 'canvas';
 import {encode} from "html-entities";
 
-export default class HSt {
+export default class HS {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
         function draw(img, ctx) {
             const buffer = createCanvas(512, 512), bufferctx = buffer.getContext('2d');
@@ -60,13 +60,10 @@ export default class HSt {
             // Calculate the height and width of the content
             const trimHeight = bound.bottom - bound.top, trimWidth = bound.right - bound.left;
             const trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
-            // @ts-ignore
             copy.canvas.width = trimWidth;
-            // @ts-ignore
             copy.canvas.height = trimHeight;
             copy.putImageData(trimmed, 0, 0);
             // Return trimmed canvas
-            // @ts-ignore
             return copy.canvas;
         }
 
@@ -101,14 +98,14 @@ export default class HSt {
                 let ctx = canvas.getContext('2d')
                 let phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
                 await (async () => {
-                    let messageBody = encode(message.body);
-                    let messageTime = encode(time);
-                    let messageName = encode(message.sender.pushname);
-                    let messagePhone = phoneNumber;
+                    let messageBody = encode(message.body),
+                        messageTime = encode(time),
+                        messageName = encode(message.sender.pushname),
+                        messagePhone = phoneNumber;
                     const browser = await puppeteer.launch({
                         headless: true,
-                        args: ['--no-sandbox','--disable-setuid-sandbox']
-                    })
+                        args: ['--no-sandbox', '--disable-setuid-sandbox']
+                    });
                     const page = await browser.newPage();
                     if (highQuality) {
                         await page.setViewport({
@@ -147,26 +144,26 @@ export default class HSt {
                     let base64 = await page.screenshot({encoding: "base64", fullPage: true, omitBackground: true})
                     await browser.close();
                     loadImage('data:image/png;base64,' + base64).then((image) => {
-                        draw(image, ctx)
+                        draw(image, ctx);
                         let ntx = trimCanvas(canvas);
                         loadImage(ntx.toDataURL()).then((image) => {
-                            let canvas = createCanvas(512, 512)
-                            let ctx = canvas.getContext('2d')
+                            let canvas = createCanvas(512, 512);
+                            let ctx = canvas.getContext('2d');
                             if (image.height > image.width) {
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512)
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 256 - 256 * image.width / image.height, 0, 512 * image.width / image.height, 512);
                             } else {
-                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width)
+                                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 256 - 256 * image.height / image.width, 512, 512 * image.height / image.width);
                             }
                             client.sendImageAsSticker(message.chatId, canvas.toDataURL(), {
                                 author: "הרולד האל־מת",
                                 pack: "חצול",
-                            })
-                        })
-                    })
-                })()
+                            });
+                        });
+                    });
+                })();
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
         } catch (error) {
-            console.log("error occurred at sticker making" + error);
+            console.log("error occurred at sticker creation" + error);
         }
     }
 
@@ -203,9 +200,13 @@ export default class HSt {
             drawingBoard.fillStyle = color;
             drawingBoard.textAlign = "center";
             drawingBoard.fillText(finalText, 75, 75);
-            await client.sendImageAsStickerAsReply(chatID, canvas.toDataURL(), messageID, {author: "הרולד האל־מת", pack: "חצול"});
+            await client.sendImageAsStickerAsReply(chatID, canvas.toDataURL(), messageID, {
+                author: "הרולד האל־מת",
+                pack: "חצול"
+            });
         } catch (err) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "text_sticker_error"), messageID);
+            console.log("error occurred at text sticker creation" + err);
         }
     }
 }
