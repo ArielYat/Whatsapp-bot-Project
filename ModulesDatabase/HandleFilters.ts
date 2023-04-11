@@ -19,7 +19,7 @@ export default class HF {
                     else {
                         try {
                             await client.sendReplyWithMentions(chatID, filters[filter], messageID);
-                        } catch (e) {
+                        } catch (err) {
                             console.log("error occurred on filter reply");
                             await HDB.delArgsFromDB(chatID, filter, "filters", async function () {
                                 groupsDict[chatID].filters = ["delete", filter];

@@ -162,8 +162,8 @@ export default class HS {
                     });
                 })();
             } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "not_sticker_material_error"), messageID);
-        } catch (error) {
-            console.log("error occurred at sticker creation" + error);
+        } catch (err) {
+            console.log("error occurred at sticker creation" + err);
         }
     }
 

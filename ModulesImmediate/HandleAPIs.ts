@@ -198,9 +198,9 @@ export default class HAPI {
                 if (err)
                     console.error("error while deleting music file" + err);
             });
-        } catch (error) {
+        } catch (err) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_unknown_error"), messageID);
-            console.log(error.toString());
+            console.log(err.toString());
         }
     }
 
