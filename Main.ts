@@ -12,7 +12,7 @@ import HP from "./ModulesDatabase/HandlePermissions.js";
 import HAPI from "./ModulesImmediate/HandleAPIs.js";
 import HR from "./ModulesDatabase/HandleReminders.js";
 import HAFK from "./ModulesDatabase/HandleAFK.js";
-import HO from "./ModulesImmediate/HandleOther"
+import HO from "./ModulesImmediate/HandleOther.js";
 import Group from "./Classes/Group.js";
 import Person from "./Classes/Person.js";
 import apiKeys from "./apiKeys.js";
