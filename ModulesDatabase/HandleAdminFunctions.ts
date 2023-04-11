@@ -69,7 +69,7 @@ export default class HAF {
     static async ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam) {
         const currentTime = new Date();
         const timeSinceStartup = new Date(currentTime.getTime() - startupTime.getTime()),
-            ping = "זמן התגובה של הרולד בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString(),
+            ping = "זמן התגובה של הרולד - שיתגדל לחיים ארוכים כמו ג'ון האגדי ז\"ל :( בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString(),
             currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString(),
             totalGroupAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString(),
             totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString(),
