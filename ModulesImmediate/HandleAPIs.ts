@@ -170,7 +170,9 @@ export default class HAPI {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
             return;
         }
-        const link = bodyText.match(/https?:\/\/(.)+\.youtube\.com\/(.)+/);
+        let link = bodyText.match(/https?:\/\/(.)+\.youtube\.com\/(.)+/);
+        link = link ? link : bodyText.match(/https?:\/\/(.)+\.youtu\.be\/(.)+/);
+        link = link ? link : bodyText.match(/https?:\/\/(.)+\.music\.youtube\.com\/(.)+/);
         let fileName = "";
         if (!link) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
@@ -296,7 +298,7 @@ export default class HAPI {
             }
 
             try {
-                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create_reply_waiting"), messageID);
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create_waiting_reply"), messageID);
                 const response = await nodeFetch("http://appban:7860" + "/sdapi/v1/txt2img", {
                     method: 'POST',
                     body: JSON.stringify(payload),
@@ -325,7 +327,7 @@ export default class HAPI {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_limit_error"), messageID);
             return;
         }
-        if (message.quotedMsgObj === undefined) {
+        if (message.quotedMsgObj === null) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_no_audio_error"), messageID);
             return;
         }

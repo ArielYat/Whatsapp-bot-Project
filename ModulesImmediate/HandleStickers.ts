@@ -92,10 +92,10 @@ export default class HS {
                     pack: "חצול",
                     keepScale: noCrop
                 }, messageID);
-            } else if (messageType === "chat") {
+            } else if (messageType === "chat" && message.quotedMsgObj) {
                 //written in collaboration with Laniad27
-                let canvas = createCanvas(512, 512)
-                let ctx = canvas.getContext('2d')
+                let canvas = createCanvas(512, 512);
+                let ctx = canvas.getContext('2d');
                 let phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
                 await (async () => {
                     let messageBody = encode(message.body),

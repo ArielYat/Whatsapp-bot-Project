@@ -69,7 +69,7 @@ export default class HAF {
     static async ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam) {
         const currentTime = new Date();
         const timeSinceStartup = new Date(currentTime.getTime() - startupTime.getTime()),
-            ping = "זמן התגובה של הרולד - שיתגדל לחיים ארוכים כמו ג'ון האגדי (ז\"ל) :( בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString(),
+            ping = "זמן התגובה של הרולד האל־מת - שיזכה לחיים ארוכים כמו ג'ון האגדי ולעושר ואושר כמו אלכסנדר הגדול (ז\"ל) :( - בשניות בקירוב: " + ((currentTime.getTime() / 1000) - message.timestamp.toString()).toFixed(3).toString(),
             currentChatAmount = "כמות צ'טים נוכחית: " + (await client.getAllChats()).length.toString(),
             totalGroupAmount = "כמות צ'טים סך הכל: " + (Object.keys(groupsDict).length).toString(),
             totalPersonAmount = "כמות משתמשים סך הכל: " + (Object.keys(usersDict).length).toString(),
@@ -84,7 +84,7 @@ export default class HAF {
     }
 
     // noinspection JSUnusedLocalSymbols
-    static async execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HDB, HF, HT, HB, HS, HAF, HL, HP, HAPI, HR, HAFK, HO, Group, Person, Strings) {
+    static async execute(client, bodyText, message, chatID, messageID, authorID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, afkPersons, botDevs, HDB, HF, HT, HB, HS, HAF, HL, HP, HAPI, HR, HAFK, HO, Group, Person, Strings) {
         try {
             await eval("(async () => {" + bodyText.replace("/exec", "") + "})()");
             await client.reply(chatID, "הפקודה שהרצת בוצעה בהצלחה", messageID);

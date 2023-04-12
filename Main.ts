@@ -1,4 +1,4 @@
-//version 2.13.0
+//version 2.14.0
 
 //Bot Modules Written by the bot devs
 import HDB from "./ModulesDatabase/HandleDB.js";
@@ -23,13 +23,15 @@ import {ChatId, ContactId} from "@open-wa/wa-automate/dist/api/model/aliases";
 import Schedule from "node-schedule";
 
 //Local storage of data to not require access to the database at all times ("cache")
-let groupsDict: { [key: ChatId]: Group } = {}, usersDict: { [key: ContactId]: Person } = {},
-    restGroups: ChatId[] = [], restPersons: ContactId[] = [], restGroupsFilterSpam: ChatId[] = [],
-    restPersonsCommandSpam: ContactId[] = [], personsWithReminders: ContactId[] = [], afkPersons: ContactId[] = [];
+let groupsDict: { [key: ChatId]: Group } = {}, usersDict: { [key: ContactId]: Person } = {};
+let restGroups: ChatId[] = [], restPersons: ContactId[] = [],
+    restGroupsFilterSpam: ChatId[] = [], restPersonsCommandSpam: ContactId[] = [];
+let personsWithReminders: ContactId[] = [], afkPersons: ContactId[] = [];
 
-//Global variables
-const botDevs = apiKeys.botDevs;    //The bot devs' phone numbers
-Schedule.tz = apiKeys.region;                 //The bot devs' time zone
+//The bot devs' phone numbers
+const botDevs = apiKeys.botDevs;
+//The bot devs' time zone
+Schedule.tz = apiKeys.region;
 
 //Helper type for the Group and Person objects' properties
 export type TillZero<N extends number> = HelpType<N, []>;
@@ -46,7 +48,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     } else if ((await HL.getGroupLang(groupsDict, chatID, "create_text_sticker")).test(bodyText)) {
         await HS.createTextSticker(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
-    } else if ((await HL.getGroupLang(groupsDict, chatID, "help_me_pwease")).test(bodyText)) {
+    } else if (bodyText.match(Strings["help_me_pwease"]["he"]) || bodyText.match(Strings["help_me_pwease"]["en"]) || bodyText.match(Strings["help_me_pwease"]["la"]) || bodyText.match(Strings["help_me_pwease"]["fr"])) {
         await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "translate_to")).test(bodyText)) {
@@ -232,7 +234,7 @@ async function HandleAdminFunctions(client, message, bodyText, chatID, authorID,
     else if (/^!ping$/i.test(bodyText))
         await HAF.ping(client, message, bodyText, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam);
     else if (/^\/exec/i.test(bodyText))
-        await HAF.execute(client, bodyText, message, chatID, messageID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, botDevs, HDB, HF, HT, HB, HS, HAF, HL, HP, HAPI, HR, HAFK, HO, Group, Person, Strings);
+        await HAF.execute(client, bodyText, message, chatID, messageID, authorID, groupsDict, usersDict, restGroups, restPersons, restGroupsFilterSpam, restPersonsCommandSpam, afkPersons, botDevs, HDB, HF, HT, HB, HS, HAF, HL, HP, HAPI, HR, HAFK, HO, Group, Person, Strings);
     else if ((await HL.getGroupLang(groupsDict, chatID, "help_admin")).test(bodyText))
         await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_admin_reply"), messageID);
 }
@@ -372,7 +374,7 @@ function start(client: Client) {
 }
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-await HDB.GetAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
+await HDB.getAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
     create(apiKeys.configObj)
         .then(client => start(client))
         .then(_ => console.log("Bot started successfully at " + new Date().toString()));

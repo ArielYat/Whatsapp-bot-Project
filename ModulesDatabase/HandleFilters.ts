@@ -57,20 +57,22 @@ export default class HF {
             filterReply = "video" + await client.decryptMedia(message);
             existError = await HL.getGroupLang(groupsDict, chatID, "filter_type_video");
         } else if (messageType === "chat") {
-            if (bodyText.includes("-")) {
-                bodyText = bodyText.split("-");
-                filter = bodyText[0].trim();
-                filterReply = bodyText[1].trim();
-                existError = filterReply;
-                const regexMatch = filterReply.match(tagRegex);
-                if (regexMatch) {
-                    for (let j = 0; j < regexMatch.length; j++) {
-                        let testTag = regexMatch[j].replace("[", "").replace("]", "");
-                        if (testTag in groupsDict[chatID].tags)
-                            filterReply = filterReply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
-                    }
+            if (!bodyText.includes("-")) {
+                client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+                return;
+            }
+            bodyText = bodyText.split("-");
+            filter = bodyText[0].trim();
+            filterReply = bodyText[1].trim();
+            existError = filterReply;
+            const regexMatch = filterReply.match(tagRegex);
+            if (regexMatch) {
+                for (let j = 0; j < regexMatch.length; j++) {
+                    let testTag = regexMatch[j].replace("[", "").replace("]", "");
+                    if (testTag in groupsDict[chatID].tags)
+                        filterReply = filterReply.replace(regexMatch[j], "@" + groupsDict[chatID].tags[testTag]);
                 }
-            } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+            }
         }
 
         if (!filterReply) return;
@@ -105,22 +107,24 @@ export default class HF {
         else if (messageType === "video")
             filterReply = "video" + await client.decryptMedia(message);
         else if (messageType === "chat") {
-            if (bodyText.includes("-")) {
-                bodyText = bodyText.split("-");
-                filter = bodyText[0].trim();
-                filterReply = bodyText[1].trim();
-                if (groupsDict[chatID].filters) {
-                    let regexTemp = filterReply.match(tagRegex);
-                    if (regexTemp != null) {
-                        for (let j = 0; j < regexTemp.length; j++) {
-                            let regexTempTest = regexTemp[j].replace("[", "");
-                            regexTempTest = regexTempTest.replace("]", "");
-                            if (regexTempTest in groupsDict[chatID].tags)
-                                filterReply = filterReply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
-                        }
+            if (!bodyText.includes("-")) {
+                client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+                return;
+            }
+            bodyText = bodyText.split("-");
+            filter = bodyText[0].trim();
+            filterReply = bodyText[1].trim();
+            if (groupsDict[chatID].filters) {
+                let regexTemp = filterReply.match(tagRegex);
+                if (regexTemp != null) {
+                    for (let j = 0; j < regexTemp.length; j++) {
+                        let regexTempTest = regexTemp[j].replace("[", "");
+                        regexTempTest = regexTempTest.replace("]", "");
+                        if (regexTempTest in groupsDict[chatID].tags)
+                            filterReply = filterReply.replace(regexTemp[j], "@" + groupsDict[chatID].tags[regexTempTest]);
                     }
                 }
-            } else client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "hyphen_reply"), messageID);
+            }
         }
         if (!filterReply) return;
         if (groupsDict[chatID].doesFilterExist(filter)) {

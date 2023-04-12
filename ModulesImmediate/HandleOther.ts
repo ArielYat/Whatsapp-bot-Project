@@ -42,6 +42,7 @@ export default class HO {
     }
 
     static async changeLinkType(client, message, bodyText, chatID, messageID, groupsDict) {
+        bodyText = message.quotedMsgObj ? message.quotedMsgObj.text : bodyText;
         const urlsInMessageYoutubeShorts = bodyText.match(/https:\/\/www\.youtube\.com\/shorts\/\S+/gi),
             urlsInMessageYoutube = bodyText.match(/https:\/\/www\.youtube\.com\/watch\?v=\S+/gi),
             urlsInMessageWikipediaMobile = bodyText.match(/https:\/\/\w{2}\.m\.wikipedia\.org\/wiki\/\S+/gi),

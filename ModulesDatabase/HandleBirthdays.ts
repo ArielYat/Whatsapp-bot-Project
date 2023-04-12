@@ -37,7 +37,7 @@ export default class HB {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "date_existence_error"), messageID);
             return;
         }
-        if (!(birthMonth == 2 && birthDay <= 29)) {
+        if (birthMonth == 2 && birthDay > 29) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "february_date_error"), messageID);
             return;
         }

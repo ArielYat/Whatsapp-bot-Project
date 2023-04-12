@@ -8,7 +8,6 @@ const url = apiKeys.DBurl;
 export default class HDB {
     static async addArgsToDB(ID, value1, value2, value3, argType, callback) {
         let objectToAddToDataBase;
-        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + " in addArgsToDB");
@@ -73,9 +72,7 @@ export default class HDB {
     }
 
     static async delArgsFromDB(ID, key, argType, callback) {
-        // @ts-ignore
         let objectToDelInDataBase;
-        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + " in delArgsFromDB");
@@ -139,7 +136,7 @@ export default class HDB {
         });
     }
 
-    static async GetAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
+    static async getAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -147,7 +144,7 @@ export default class HDB {
             groupsDict[chatID].filters = ["add", filter, filterReply];
         }
 
-        function creatGroupAdmins(object) {
+        function createGroupAdmins(object) {
             let chatID = object.ID, adminsArray = object.adminsArray;
             if (!(chatID in groupsDict))
                 groupsDict[chatID] = new Group(chatID);
@@ -258,7 +255,6 @@ export default class HDB {
             usersDict[personID].messagesTaggedIn[chatID] = taggedArray
         }
 
-        // @ts-ignore
         MongoClient.connect(url, function (err, client) {
             if (err) {
                 console.log(err + "in initial retrieval of groups from DB");
@@ -327,7 +323,7 @@ export default class HDB {
                     return;
                 }
                 for (let i = 0; i < result.length; i++)
-                    creatGroupAdmins(result[i]);
+                    createGroupAdmins(result[i]);
             });
             dbo.collection("perm-persons").find({}).toArray(function (err, result) {
                 if (err) {
