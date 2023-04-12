@@ -48,17 +48,17 @@ export default class HDB {
                     objectToAddToDataBase = {ID: ID, personID: value1, taggedArray: value2};
                     break;
                 case "reminders":
-                    objectToAddToDataBase = {personID: ID, reminderDate: value1, reminderMessage: value2};
+                    objectToAddToDataBase = {groupID: ID, reminderDate: value1, reminderMessage: value2};
                     break;
                 case "afk":
                     objectToAddToDataBase = {personID: ID, dateOfAFk: value1};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "reminders" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "afk")
                 argType += "-persons"
             client.db("Cluster0").collection(argType).insertOne(objectToAddToDataBase, function (err) {
                 if (err) {
@@ -113,17 +113,17 @@ export default class HDB {
                     objectToDelInDataBase = {ID: ID, personID: key};
                     break;
                 case "reminders":
-                    objectToDelInDataBase = {personID: ID, reminderDate: key};
+                    objectToDelInDataBase = {groupID: ID, reminderDate: key};
                     break;
                 case "afk":
                     objectToDelInDataBase = {personID: ID};
                     break;
             }
-            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "groupPermissions" ||
+            if (argType === "filters" || argType === "tags" || argType === "lang" || argType === "reminders" || argType === "groupPermissions" ||
                 argType === "personIn" || argType === "groupAdmins")
                 argType += "-groups";
             else if (argType === "name" || argType === "birthday" || argType === "perm" ||
-                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "reminders" || argType === "afk")
+                argType === "personBirthdayGroups" || argType === "lastTagged" || argType === "afk")
                 argType += "-persons"
             client.db("Cluster0").collection(argType).deleteOne(objectToDelInDataBase, function (err) {
                 if (err) {
@@ -136,7 +136,7 @@ export default class HDB {
         });
     }
 
-    static async getAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, personsWithReminders, afkPersons, callback) {
+    static async getAllGroupsFromDB(groupsDict, usersDict, restUsers, restGroups, chatsWithReminders, afkPersons, callback) {
         function createGroupFilter(object) {
             let chatID = object.ID, filter = object.filter, filterReply = object.filter_reply;
             if (!(chatID in groupsDict))
@@ -206,11 +206,11 @@ export default class HDB {
         }
 
         function createReminders(document) {
-            let personID = document.personID, reminderDate = document.reminderDate,
+            let groupID = document.groupID, reminderDate = document.reminderDate,
                 reminderMessage = document.reminderMessage;
-            if (!(personID in usersDict))
-                usersDict[personID] = new Person(personID);
-            usersDict[personID].reminders = ["add", reminderDate, reminderMessage];
+            if (!(groupID in groupsDict))
+                groupsDict[groupID] = new Group(groupID);
+            groupsDict[groupID].reminders = ["add", reminderDate, reminderMessage];
         }
 
         function createAfk(document) {
@@ -233,9 +233,9 @@ export default class HDB {
                         restGroups.push(restArray[i])
                     }
                     break;
-                case ("personsWithReminders"):
+                case ("chatsWithReminders"):
                     for (let i = 0; i < restArray.length; i++) {
-                        personsWithReminders.push(restArray[i]);
+                        chatsWithReminders.push(restArray[i]);
                     }
                     break;
                 case ("afkPersons"):
@@ -352,7 +352,7 @@ export default class HDB {
                 for (let i = 0; i < result.length; i++)
                     createLastTagged(result[i]);
             });
-            dbo.collection("reminders-persons").find({}).toArray(function (err, result) {
+            dbo.collection("reminders-groups").find({}).toArray(function (err, result) {
                 if (err) {
                     console.log(err + " in fetching reminders from db");
                     process.exit();
@@ -363,7 +363,7 @@ export default class HDB {
             });
             dbo.collection("afk-persons").find({}).toArray(function (err, result) {
                 if (err) {
-                    console.log(err + " in fetching reminders from db");
+                    console.log(err + " in fetching afk from db");
                     process.exit();
                     return;
                 }
