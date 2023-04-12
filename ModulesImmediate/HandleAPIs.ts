@@ -170,9 +170,7 @@ export default class HAPI {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_limit_error"), messageID);
             return;
         }
-        let link = bodyText.match(/https?:\/\/(.)+\.youtube\.com\/(.)+/);
-        link = link ? link : bodyText.match(/https?:\/\/(.)+\.youtu\.be\/(.)+/);
-        link = link ? link : bodyText.match(/https?:\/\/(.)+\.music\.youtube\.com\/(.)+/);
+        let link = bodyText.match(/https?:\/\/(.)*\.*(youtube\.com|youtu\.be)\/(.)+/);
         let fileName = "";
         if (!link) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);

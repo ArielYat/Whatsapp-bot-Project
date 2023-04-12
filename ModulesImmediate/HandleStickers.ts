@@ -68,15 +68,13 @@ export default class HS {
         }
 
         bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "make_sticker"), "").trim();
-        const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
-        message = message.quotedMsgObj ? message.quotedMsgObj : message;
-        const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText),
-            highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
-            mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
-        const date = new Date();
-        const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        const time = hour + ":" + minutes;
+        let quotedMsg = false;
+        if (message.quotedMsgObj) {
+            message = message.quotedMsgObj
+            quotedMsg = true;
+        }
+        const messageType = message.type;
+        const noCrop = (await HL.getGroupLang(groupsDict, chatID, "crop_sticker")).test(bodyText);
         try {
             if (messageType === "image") {
                 const mediaData = await client.decryptMedia(message);
@@ -92,16 +90,22 @@ export default class HS {
                     pack: "חצול",
                     keepScale: noCrop
                 }, messageID);
-            } else if (messageType === "chat" && message.quotedMsgObj) {
+            } else if (messageType === "chat" && quotedMsg) {
                 //written in collaboration with Laniad27
+                const highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
+                    mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
+                const date = new Date(message.timestamp);
+                const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+                    minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                const time = hour + ":" + minutes;
+
                 let canvas = createCanvas(512, 512);
                 let ctx = canvas.getContext('2d');
-                let phoneNumber = message.sender.formattedName.replace("⁦", "").replace("⁩", "");
                 await (async () => {
                     let messageBody = encode(message.body),
                         messageTime = encode(time),
                         messageName = encode(message.sender.pushname),
-                        messagePhone = phoneNumber;
+                        messagePhone = encode(message.sender.formattedName.replace("⁦", "").replace("⁩", ""));
                     const browser = await puppeteer.launch({
                         headless: true,
                         args: ['--no-sandbox', '--disable-setuid-sandbox']
