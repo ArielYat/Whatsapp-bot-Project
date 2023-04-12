@@ -132,7 +132,7 @@ export default class HP {
         await client.reply(chatID, stringForSending, messageID);
     }
 
-    static async functionPermissionToWord(groupsDict, chatID, permissionNumber: TillZero<5>): Promise<string> | null {
+    static async functionPermissionToWord(groupsDict, chatID, permissionNumber: TillZero<5>): Promise<string | null> {
         switch (permissionNumber) {
             case 0:
             case 4:
@@ -148,9 +148,7 @@ export default class HP {
         }
     }
 
-    x
-
-    static async wordToFunctionPermission(groupsDict, chatID, text: string): Promise<TillZero<5>> | null {
+    private static async wordToFunctionPermission(groupsDict, chatID, text: string): Promise<TillZero<5> | null> {
         switch (true) {
             case (await HL.getGroupLang(groupsDict, chatID, "muted_permission_level")).test(text):
                 return 4;
@@ -165,7 +163,7 @@ export default class HP {
         }
     }
 
-    static async functionTypeToWord(groupsDict, chatID, permissionType): Promise<string> | null {
+    private static async functionTypeToWord(groupsDict, chatID, permissionType): Promise<string | null> {
         switch (permissionType) {
             case "filters":
                 return await HL.getGroupLang(groupsDict, chatID, "filters_permission_type_replace")
@@ -186,7 +184,7 @@ export default class HP {
         }
     }
 
-    static async wordToFunctionType(groupsDict, chatID, text): Promise<string> | null {
+    private static async wordToFunctionType(groupsDict, chatID, text): Promise<string | null> {
         switch (true) {
             case (await HL.getGroupLang(groupsDict, chatID, "filters_permission_type")).test(text):
                 return "filters";

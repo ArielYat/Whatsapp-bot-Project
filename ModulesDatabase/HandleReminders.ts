@@ -239,12 +239,16 @@ export default class HR {
                 stringForSending += "*repeat* \n";
                 reminderData = reminderData.replace(/repeatReminder\d/, "");
             }
-            const hour = reminderDate.getHours() < 10 ? "0" + reminderDate.getHours() : reminderDate.getHours();
-            const minutes = reminderDate.getMinutes() < 10 ? "0" + reminderDate.getMinutes() : reminderDate.getMinutes();
+            const hour = reminderDate.getHours() < 10 ? "0" + reminderDate.getHours() : reminderDate.getHours().toString();
+            const minutes = reminderDate.getMinutes() < 10 ? "0" + reminderDate.getMinutes() : reminderDate.getMinutes().toString();
             if (reminderData.startsWith("Video"))
                 stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
             else if (reminderData.startsWith("Image"))
                 stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
+            else if (reminderData.startsWith("Audio"))
+                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_audio")}\n`;
+            else if (reminderData.startsWith("Sticker"))
+                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_sticker")}\n`;
             else
                 stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${reminderData.trim()}\n`;
         }

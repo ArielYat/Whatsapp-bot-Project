@@ -70,6 +70,10 @@ export const Strings = {
         "he": "[תמונה]", "en": "[Image]", "la": "", "fr": "[Image]"
     }, "filter_type_video": {
         "he": "[וידאו]", "en": "[Video]", "la": "", "fr": "[Video]"
+    }, "filter_type_audio": {
+        "he": "[שמע]", "en": "[Audio]", "la": "", "fr": "[Audio]"
+    }, "filter_type_sticker": {
+        "he": "[סטיקר]", "en": "[Sticker]", "la": "", "fr": "[Sticker]"
     }, //tags
     "tag_person": {
         "he": /^תייג /i, "en": /^Tag /i, "la": "Clama ad ", "fr": /^Tag /i
