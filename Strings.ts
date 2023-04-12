@@ -841,6 +841,11 @@ export const Strings = {
         "en": "There already exists a reminder at that time",
         "la": "",
         "fr": "Il existe déjà un rappel à ce moment-là"
+    }, "reminder_invalid_error": {
+        "he": "כבודו אתה לא יכול להזכיר כלום",
+        "en": "You can't remind yourself of nothing",
+        "la": "",
+        "fr": "Vous ne pouvez pas vous rappeler de rien"
     }, "reminder_time_error": {
         "he": "אני מצטער אבל בימים אלו אני לא יכול לנחש באיזה שעה אתה רוצה את התזכורת שלך; תבדוק שכתבת נכון את השעה",
         "en": "I'm sorry but at this day and age I'm still not able to guess at what time you want your reminder; Please check you've written it correctly",

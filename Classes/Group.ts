@@ -16,6 +16,7 @@ export default class Group {
     #translationCounter: TillZero<10>;                      //The number of translations used in the group (reset every day)
     #autoBanned: Date;                                      //The date in which the group was autobanned (if it was)
     #tagStack: string[];                                    //Used for HT.createTagList() & HT.nextPersonInList
+    #reminders: { [key: string]: string };              //The reminders the person has set
     #downloadMusicCounter: TillZero<5>;                     //The number of music downloads used in the group (reset every day)
     #stockCounter: TillZero<3>;                             //The number of stock checks used in the group (reset every day)
 
@@ -40,6 +41,7 @@ export default class Group {
         this.#translationCounter = 0;
         this.#autoBanned = null;
         this.#tagStack = [];
+        this.#reminders = {};
         this.#downloadMusicCounter = 0;
         this.#stockCounter = 0;
     }
@@ -151,6 +153,17 @@ export default class Group {
         this.#tagStack = tagStack;
     }
 
+    get reminders(): { [key: string]: string } {
+        return this.#reminders;
+    }
+
+    set reminders(reminderArray: { [key: string]: string }) {
+        if (reminderArray[0] === "add")
+            this.#reminders[reminderArray[1]] = reminderArray[2];
+        else if (reminderArray[0] === "delete")
+            delete this.#reminders[reminderArray[1]];
+    }
+
     get downloadMusicCounter(): TillZero<5> {
         return this.#downloadMusicCounter;
     }
@@ -173,6 +186,10 @@ export default class Group {
 
     doesTagExist(tag): boolean {
         return this.#tags.hasOwnProperty(tag);
+    }
+
+    doesReminderExist(date): boolean {
+        return this.#reminders.hasOwnProperty(date);
     }
 
     addNumberToTagStack(tagNumber) {

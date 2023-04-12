@@ -22,14 +22,15 @@ import {create, Chat, Message, Client} from "@open-wa/wa-automate";
 import {ChatId, ContactId} from "@open-wa/wa-automate/dist/api/model/aliases";
 import Schedule from "node-schedule";
 
+//The bot devs' phone numbers
+const botDevs: ContactId[] = apiKeys.botDevs;
+
 //Local storage of data to not require access to the database at all times ("cache")
 let groupsDict: { [key: ChatId]: Group } = {}, usersDict: { [key: ContactId]: Person } = {};
 let restGroups: ChatId[] = [], restPersons: ContactId[] = [],
     restGroupsFilterSpam: ChatId[] = [], restPersonsCommandSpam: ContactId[] = [];
-let personsWithReminders: ContactId[] = [], afkPersons: ContactId[] = [];
+let chatsWithReminders: ChatId[] = [], afkPersons: ContactId[] = [];
 
-//The bot devs' phone numbers
-const botDevs = apiKeys.botDevs;
 //The bot devs' time zone
 Schedule.tz = apiKeys.region;
 
@@ -208,22 +209,20 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
     }
 }
 
-async function HandleReminders(client, bodyText, chatID, messageID, authorID, message) {
-    if (chatID === authorID) {
-        if ((await HL.getGroupLang(groupsDict, chatID, "add_reminder")).test(bodyText)) {
-            await HR.addReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, message, personsWithReminders);
-            usersDict[authorID].commandCounter++;
-        } else if ((await HL.getGroupLang(groupsDict, chatID, "remove_reminder")).test(bodyText)) {
-            await HR.removeReminder(client, bodyText, chatID, messageID, usersDict[authorID], groupsDict, personsWithReminders);
-            usersDict[authorID].commandCounter++;
-        } else if ((await HL.getGroupLang(groupsDict, chatID, "show_reminders")).test(bodyText)) {
-            await HR.showReminders(client, usersDict[authorID], groupsDict, messageID, chatID);
-            usersDict[authorID].commandCounter++;
-        }
+async function HandleReminders(client, message, bodyText, chatID, messageID, authorID) {
+    if ((await HL.getGroupLang(groupsDict, chatID, "add_reminder")).test(bodyText)) {
+        await HR.addReminder(client, message, bodyText, chatID, messageID, groupsDict, chatsWithReminders);
+        usersDict[authorID].commandCounter++;
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "remove_reminder")).test(bodyText)) {
+        await HR.removeReminder(client, bodyText, chatID, messageID, groupsDict, chatsWithReminders);
+        usersDict[authorID].commandCounter++;
+    } else if ((await HL.getGroupLang(groupsDict, chatID, "show_reminders")).test(bodyText)) {
+        await HR.showReminders(client, groupsDict, messageID, chatID);
+        usersDict[authorID].commandCounter++;
     }
 }
 
-async function HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict) {
+async function HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID) {
     usersDict[authorID].permissionLevel[chatID] = 3;
     if (/^\/Ban/i.test(bodyText) || /^\/Unban/i.test(bodyText))
         await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restPersons, restPersonsCommandSpam, usersDict[authorID]);
@@ -283,7 +282,7 @@ function start(client: Client) {
             }
         }
         //Check reminders
-        await HR.checkReminders(client, usersDict, groupsDict, personsWithReminders, currentDate);
+        await HR.checkReminders(client, groupsDict, chatsWithReminders, currentDate);
     }, 60 * 1000); /* In ms; 1 min */
 
     //Send a message to the original chat cause of a stupid bug not letting the bot reply to messages before it sent a regular message
@@ -324,7 +323,7 @@ function start(client: Client) {
                 await HP.autoAssignPersonPermissions(groupsDict[chatID], usersDict[authorID], chatID);
             //Handle bot developer functions if the author is a dev
             if (botDevs.includes(authorID) || usersDict[authorID].permissionLevel[chatID] === 3)
-                await HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
+                await HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID);
             //Log messages with tags for later use in HT.whichMessagesTaggedIn()
             await HT.logMessagesWithTags(client, message, bodyText, chatID, messageID, usersDict, groupsDict, afkPersons);
             //Remove a person from afk
@@ -335,7 +334,7 @@ function start(client: Client) {
                 //If the user who sent the message isn't blocked, check for commands
                 if (!restPersons.includes(authorID) && !restPersonsCommandSpam.includes(authorID)) {
                     //Check if you user handled a reminder in a DM
-                    await HandleReminders(client, bodyText, chatID, messageID, authorID, message);
+                    await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
                     //Check all functions for commands if the user has a high enough permission level to use them
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
@@ -374,7 +373,7 @@ function start(client: Client) {
 }
 
 //Start the bot - get all the groups from mongoDB (cache) and make an instance of every group object in every group
-await HDB.getAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, personsWithReminders, afkPersons, async function () {
+await HDB.getAllGroupsFromDB(groupsDict, usersDict, restPersons, restGroups, chatsWithReminders, afkPersons, async function () {
     create(apiKeys.configObj)
         .then(client => start(client))
         .then(_ => console.log("Bot started successfully at " + new Date().toString()));

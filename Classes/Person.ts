@@ -11,7 +11,6 @@ export default class Person {
     #commandCounter: TillZero<15>;                      //The number of commands the person has used (reset every five minutes) - for autobanning
     #messagesTaggedIn: { [key: ChatId]: MessageId[] };  //The messages the person has been tagged in by chatID
     #autoBanned: Date;                                  //The date in which the person was autobanned (if it was)
-    #reminders: { [key: string]: string };              //The reminders the person has set
     #afk: Date;                                         //The date in which the person went AFK (if they are AFK)
     #voiceTranscriptCounter: TillZero<2>;               //The number of voice transcripts the person requested (reset every day)
 
@@ -24,7 +23,6 @@ export default class Person {
         this.#voiceTranscriptCounter = 0;
         this.#messagesTaggedIn = {};
         this.#autoBanned = null;
-        this.#reminders = {};
         this.#afk = null;
     }
 
@@ -87,17 +85,6 @@ export default class Person {
         this.#autoBanned = date;
     }
 
-    get reminders(): { [key: string]: string } {
-        return this.#reminders;
-    }
-
-    set reminders(reminderArray: { [key: string]: string }) {
-        if (reminderArray[0] === "add")
-            this.#reminders[reminderArray[1]] = reminderArray[2];
-        else if (reminderArray[0] === "delete")
-            delete this.#reminders[reminderArray[1]];
-    }
-
     get afk(): Date {
         return this.#afk;
     }
@@ -112,10 +99,6 @@ export default class Person {
 
     set voiceTranscriptCounter(number: TillZero<2>) {
         this.#voiceTranscriptCounter = number;
-    }
-
-    doesReminderExist(date): boolean {
-        return this.#reminders.hasOwnProperty(date);
     }
 
     resetCounters() {
