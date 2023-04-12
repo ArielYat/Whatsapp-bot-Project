@@ -94,7 +94,8 @@ export default class HS {
                 //written in collaboration with Laniad27
                 const highQuality = (await HL.getGroupLang(groupsDict, chatID, "high_Quality")).test(bodyText),
                     mediumQuality = (await HL.getGroupLang(groupsDict, chatID, "medium_Quality")).test(bodyText);
-                const date = new Date(message.timestamp);
+                const date = new Date(0);
+                date.setUTCSeconds(message.timestamp);
                 const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
                     minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
                 const time = hour + ":" + minutes;
