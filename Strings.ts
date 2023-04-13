@@ -408,6 +408,8 @@ export const Strings = {
         "he": /^פקודות_תיוגים$/i, "en": /^handle_Tags$/i, "la": "", "fr": /^gérer_Tags$/i
     }, "handleBirthdays_permission_type": {
         "he": /^פקודות_ימיהולדת$/i, "en": /^handle_Birthdays$/i, "la": "", "fr": /^gérer_Anniversaires$/i
+    }, "HandleReminders_permission_type": {
+        "he": /^פקודות_תזכורות$/i, "en": /^handle_Reminders$/i, "la": "", "fr": /^gérer_Rappels$/i
     }, "handleShows_permission_type": {
         "he": /^פקודות_הראה$/i, "en": /^handle_Shows$/i, "la": "", "fr": /^gérer_Affiches$/i
     }, "handleOther_permission_type": {

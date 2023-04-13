@@ -51,7 +51,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         await HS.createTextSticker(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } else if (bodyText.match(Strings["help_me_pwease"]["he"]) || bodyText.match(Strings["help_me_pwease"]["en"]) || bodyText.match(Strings["help_me_pwease"]["la"]) || bodyText.match(Strings["help_me_pwease"]["fr"])) {
+    } else if ((Strings["help_me_pwease"]["he"]).test(bodyText) || (Strings["help_me_pwease"]["en"]).test(bodyText) || (Strings["help_me_pwease"]["la"]).test(bodyText) || (Strings["help_me_pwease"]["fr"]).test(bodyText)) {
         await HL.sendHelpMessage(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
