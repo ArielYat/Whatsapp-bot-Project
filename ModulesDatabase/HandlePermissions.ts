@@ -36,17 +36,6 @@ export default class HP {
         } else await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "set_permissions_error"), messageID);
     }
 
-    static async checkGroupUsersPermissionLevels(groupsDict, chatID) {
-        const developerPerm = 3, mutedPerm = 0;
-        for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
-            if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === undefined ||
-                (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
-                    groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== mutedPerm.toString())) {
-                await this.autoAssignPersonPermissions(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
-            }
-        }
-    }
-
     static async autoAssignPersonPermissions(group, person, chatID) {
         if (group.groupAdmins.includes(person.personID)) {
             await HDB.delArgsFromDB(chatID, person.personID, "perm", async function () {
@@ -103,7 +92,15 @@ export default class HP {
         groupsDict[chatID].groupAdmins = await client.getGroupAdmins(chatID);
         await HDB.delArgsFromDB(chatID, null, "groupAdmins", async function () {
             await HDB.addArgsToDB(chatID, groupsDict[chatID].groupAdmins, null, null, "groupAdmins", async function () {
-                await HP.checkGroupUsersPermissionLevels(groupsDict, chatID);
+                const developerPerm = 3, mutedPerm = 0;
+                for (let i = 0; i < groupsDict[chatID].personsIn.length; i++) {
+                    if (groupsDict[chatID].personsIn[i].permissionLevel[chatID] === undefined ||
+                        (groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== developerPerm.toString() &&
+                            groupsDict[chatID].personsIn[i].permissionLevel[chatID].toString() !== mutedPerm.toString())) {
+                        await HP.autoAssignPersonPermissions(groupsDict[chatID], groupsDict[chatID].personsIn[i], chatID);
+                    }
+                }
+
             });
         });
     }
@@ -175,6 +172,8 @@ export default class HP {
                 return await HL.getGroupLang(groupsDict, chatID, "handleTags_permission_type_replace");
             case "handleBirthdays":
                 return await HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type_replace");
+            case "HandleReminders":
+                return await HL.getGroupLang(groupsDict, chatID, "HandleReminders_permission_type_replace");
             case "handleShows":
                 return await HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type_replace");
             case "handleOther":
@@ -196,6 +195,8 @@ export default class HP {
                 return "handleTags";
             case (await HL.getGroupLang(groupsDict, chatID, "handleBirthdays_permission_type")).test(text):
                 return "handleBirthdays";
+            case (await HL.getGroupLang(groupsDict, chatID, "HandleReminders_permission_type")).test(text):
+                return "HandleReminders";
             case (await HL.getGroupLang(groupsDict, chatID, "handleShows_permission_type")).test(text):
                 return "handleShows";
             case (await HL.getGroupLang(groupsDict, chatID, "handleOther_permission_type")).test(text):

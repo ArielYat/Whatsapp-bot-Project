@@ -34,7 +34,8 @@ export default class Group {
             "handleShows": 1,
             "handleFilters": 1,
             "handleTags": 1,
-            "handleBirthdays": 1,
+            "HandleReminders": 1,
+            "handleBirthdays": 1
         };
         this.#groupAdmins = [];
         this.#cryptoChecked = false;

@@ -387,8 +387,6 @@ function start(client: Client) {
             if (!restGroups.includes(chatID)) {
                 //If the user who sent the message isn't blocked, check for commands
                 if (!restPersons.includes(authorID) && !restPersonsCommandSpam.includes(authorID)) {
-                    //Check if you user handled a reminder in a DM
-                    await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
                     //Check all functions for commands if the user has a high enough permission level to use them
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["tags"])
                         checkCommands = await Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID);
@@ -400,6 +398,8 @@ function start(client: Client) {
                         [checkCommands, checkFilters] = await HandleFilters(client, message, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"] && checkCommands)
                         checkCommands = await HandleTags(client, bodyText, chatID, authorID, messageID);
+                    if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["HandleReminders"] && checkCommands)
+                        checkCommands = await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"] && checkCommands)
                         checkCommands = await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= 2 && checkCommands)
