@@ -188,7 +188,7 @@ export default class HR {
         });
     }
 
-    static async getDayOfTheWeek(bodyText, groupsDict, chatID): Promise<[number, string] | [null, string]> {
+    private static async getDayOfTheWeek(bodyText, groupsDict, chatID): Promise<[number, string] | [null, string]> {
         let dayOfTheWeek;
         switch (true) {
             case (await HL.getGroupLang(groupsDict, chatID, "day_Sunday")).test(bodyText):
@@ -226,31 +226,35 @@ export default class HR {
     }
 
     static async showReminders(client, groupsDict, messageID, chatID) {
-        let stringForSending = "";
         if (!Object.keys(groupsDict[chatID].reminders).length) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "show_reminder_error"), messageID);
             return;
         }
 
+        let stringForSending = "";
         for (let reminder in groupsDict[chatID].reminders) {
             const reminderDate = new Date(reminder);
             let reminderData = groupsDict[chatID].reminders[reminder];
-            if (reminderData.startsWith("repeatReminder")) {
-                stringForSending += "*repeat* \n";
-                reminderData = reminderData.replace(/repeatReminder\d/, "");
-            }
+
             const hour = reminderDate.getHours() < 10 ? "0" + reminderDate.getHours() : reminderDate.getHours().toString();
             const minutes = reminderDate.getMinutes() < 10 ? "0" + reminderDate.getMinutes() : reminderDate.getMinutes().toString();
+            stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} `;
+
+            if (reminderData.startsWith("repeatReminder")) {
+                stringForSending += `${await HL.getGroupLang(groupsDict, chatID, "repeat_reminder_replace", reminderData.match(/repeatReminder\d/)[0].replace("repeatReminder", ""))} `;
+                reminderData = reminderData.replace(/repeatReminder\d/, "");
+            }
+
             if (reminderData.startsWith("Video"))
-                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
+                stringForSending += `- ${await HL.getGroupLang(groupsDict, chatID, "filter_type_video")}\n`;
             else if (reminderData.startsWith("Image"))
-                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
+                stringForSending += `- ${await HL.getGroupLang(groupsDict, chatID, "filter_type_image")}\n`;
             else if (reminderData.startsWith("Audio"))
-                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_audio")}\n`;
+                stringForSending += `- ${await HL.getGroupLang(groupsDict, chatID, "filter_type_audio")}\n`;
             else if (reminderData.startsWith("Sticker"))
-                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${await HL.getGroupLang(groupsDict, chatID, "filter_type_sticker")}\n`;
+                stringForSending += `- ${await HL.getGroupLang(groupsDict, chatID, "filter_type_sticker")}\n`;
             else
-                stringForSending += `${reminderDate.getDate()}.${reminderDate.getMonth() + 1}.${reminderDate.getFullYear()} ${hour}:${minutes} - ${reminderData.trim()}\n`;
+                stringForSending += `- ${reminderData.trim()}\n`;
         }
         await client.reply(chatID, stringForSending, messageID);
     }
