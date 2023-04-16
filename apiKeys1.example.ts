@@ -8,8 +8,8 @@ export default class apiKeys {
     static stockAPI = ""; //API key for AlphaVantage
     static transcriptionAPI = "Bearer "; // API key for Open-AI Whisper
     static botDevs: ContactId[] = [<ContactId>"", <ContactId>""]; //People who can use the bot's admin commands
-    static originalGroup: ChatId = <ChatId>""; //Some chat the bot can send a message to when it's turned on to fix a bug with replying and notify people it's online
-    static secondGroup: ChatId = <ChatId>""; //Not really needed, but if you want to send a message to a second group when the bot is turned on, you can
+    static originalGroup: ChatId = <ChatId>""; //Some chat the bot can send a message to when it's turned on to fix a bug with replying and notify people it's online. people in this group are allowed to use the stable diffusion commands
+    static secondGroup: ChatId = <ChatId>""; //people in this group are allowed to use the stable diffusion commands
     static region = ""; //For the schedule library, the region of the bot's users
     static DBurl = ""; //URL for the MongoDB database (can be local or remote)
     static configObj: ConfigObject = {
