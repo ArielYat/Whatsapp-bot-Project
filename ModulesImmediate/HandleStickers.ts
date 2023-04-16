@@ -1,10 +1,11 @@
 // noinspection SpellCheckingInspection
 
 import HL from "../ModulesDatabase/HandleLanguage.js";
-import apiKeys from "../apiKeys.js";
 import puppeteer from "puppeteer";
 import {createCanvas, loadImage} from 'canvas';
 import {encode} from "html-entities";
+
+const stickerTemplatePath = "file://" + process.cwd() + "/ModulesImmediate/template.mhtml";
 
 export default class HS {
     static async handleStickers(client, message, bodyText, chatID, messageID, groupsDict) {
@@ -131,7 +132,7 @@ export default class HS {
                             deviceScaleFactor: 1,
                         });
                     }
-                    await page.goto(apiKeys.stickerTemplatePath);
+                    await page.goto(stickerTemplatePath);
                     await page.evaluate(function (messageBody, messageTime, messagePhone, messageName) {
                         let domBody = document.querySelector('#app > div > div > div > div > div._2jGOb.copyable-text > div > span.i0jNr.selectable-text.copyable-text > span');
                         domBody.innerHTML = messageBody

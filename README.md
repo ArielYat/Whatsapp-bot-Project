@@ -24,9 +24,9 @@
 
 ## Description
 
-This is a Whatsapp Bot which is built with TypeScript and Node.js.
+This is a Whatsapp Bot which is built with TypeScript and Node.js with a MongoDB database.
 
-It has a lot of different functions and features and is currently in development.
+It has a lot of different functions and features and is currently not really in development.
 
 If you have any questions, feel free to contact ArielYat or TheBooker66.
 
