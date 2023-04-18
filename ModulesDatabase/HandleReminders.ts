@@ -61,7 +61,9 @@ export default class HR {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "reminder_time_error"), messageID);
             return;
         }
-
+        const repeatReminder = (await HL.getGroupLang(groupsDict, chatID, "repeat_reminder")).test(bodyText);
+        if(repeatReminder)
+            bodyText = bodyText.replace(await HL.getGroupLang(groupsDict, chatID, "repeat_reminder"), "").trim();
         const date = new Date(),
             matchedDateWithYear = bodyText.match(/^\d{1,2}\.\d{1,2}\.\d{4}/g),
             matchedDateWithoutYear = bodyText.match(/^\d{1,2}\.\d{1,2}/g),
@@ -98,7 +100,6 @@ export default class HR {
                 year = date.getFullYear();
         }
         const reminderDate = new Date(year, month, day, hour, minutes);
-        const repeatReminder = (await HL.getGroupLang(groupsDict, chatID, "repeat_reminder")).test(bodyText);
         const messageType = message.quotedMsgObj ? message.quotedMsgObj.type : message.type;
         message = message.quotedMsgObj ? message.quotedMsgObj : message;
         const reminder =

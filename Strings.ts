@@ -879,7 +879,7 @@ export const Strings = {
         "la": "",
         "fr": "Vous n'avez aucun rappel actif"
     }, "repeat_reminder": {
-        "he": /^חוזרת/i, "en": /Repeat/i, "la": "", "fr": /Répète/i
+        "he": /^חוזרת/i, "en": /^Repeat/i, "la": "", "fr": /^Répète/i
     }, "day_Sunday": {
         "he": /ליום ראשון/i, "en": /Sunday/i, "la": "", "fr": /Dimanche/i
     }, "day_Monday": {
