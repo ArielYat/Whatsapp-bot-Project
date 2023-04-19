@@ -311,31 +311,33 @@ function start(client: Client) {
             usersDict[personID].commandCounter = 0;
     }, 5 * 60 * 1000); /* In ms; 5 min */
     //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
-    setInterval(async function () {
-        const currentDate = new Date();
-        currentDate.setSeconds(0);
-        currentDate.setMilliseconds(0);
-        //Remove users from command rest list
-        for (let i = 0; i < restPersonsCommandSpam.length; i++) {
-            const personID = restPersonsCommandSpam[i];
-            if (usersDict[personID].autoBanned.toString() === currentDate.toString()) {
-                usersDict[personID].autoBanned = null;
-                usersDict[personID].commandCounter = 0;
-                restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
+    setTimeout(function() {
+        setInterval(async function () {
+            const currentDate = new Date();
+            currentDate.setSeconds(0);
+            currentDate.setMilliseconds(0);
+            //Remove users from command rest list
+            for (let i = 0; i < restPersonsCommandSpam.length; i++) {
+                const personID = restPersonsCommandSpam[i];
+                if (usersDict[personID].autoBanned.toString() === currentDate.toString()) {
+                    usersDict[personID].autoBanned = null;
+                    usersDict[personID].commandCounter = 0;
+                    restPersonsCommandSpam.splice(restPersonsCommandSpam.indexOf(personID), 1);
+                }
             }
-        }
-        //Remove groups from filters rest list
-        for (let i = 0; i < restGroupsFilterSpam.length; i++) {
-            const chatID = restGroupsFilterSpam[i];
-            if (groupsDict[chatID].autoBanned.toString() === currentDate.toString()) {
-                groupsDict[chatID].autoBanned = null;
-                groupsDict[chatID].filterCounter = 0;
-                restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+            //Remove groups from filters rest list
+            for (let i = 0; i < restGroupsFilterSpam.length; i++) {
+                const chatID = restGroupsFilterSpam[i];
+                if (groupsDict[chatID].autoBanned.toString() === currentDate.toString()) {
+                    groupsDict[chatID].autoBanned = null;
+                    groupsDict[chatID].filterCounter = 0;
+                    restGroupsFilterSpam.splice(restGroupsFilterSpam.indexOf(chatID), 1);
+                }
             }
-        }
-        //Check reminders
-        await HR.checkReminders(client, groupsDict, chatsWithReminders, currentDate);
-    }, 60 * 1000); /* In ms; 1 min */
+            //Check reminders
+            await HR.checkReminders(client, groupsDict, chatsWithReminders, currentDate);
+        }, 60 * 1000); /* In ms; 1 min */
+    }, 60000 - (new Date().getTime() % 60000)); /* to make it run at the start of every minute */
 
     //Send a message to the original chat cause of a stupid bug not letting the bot reply to messages before it sent a regular message
     client.sendText(apiKeys.originalGroup, "Bot started successfully at " + new Date().toString());
