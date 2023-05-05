@@ -334,13 +334,11 @@ export default class HAPI {
             return;
         }
         if (message.quotedMsgObj.duration > 600) {
-            if(botDevs.includes(authorID)){
-                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_dev_response"), messageID);
-            }
-            else {
+            if (!botDevs.includes(authorID)) {
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_error"), messageID);
                 return;
             }
+            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_dev_response"), messageID);
         }
 
         const buffer = Buffer.from((await client.decryptMedia(message.quotedMsgObj)).split('base64,')[1], 'base64');

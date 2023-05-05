@@ -828,11 +828,11 @@ export const Strings = {
         "en": "The length of the voice message must be less than ten minutes",
         "la": "",
         "fr": "La durée du message vocal doit être inférieure à dix minutes"
-    }, "transcribe_audio_duration_dev_response": {
-        "he": "האורך של ההודעה הקולית צריך להיות פחות מעשר דקות אך אתה ברשימת המנהלים ולכן לפנים משורת הדין תוכל לתמלל את ההודעה",
-        "en": "The length of the voice message must be less than ten minutes but you're in the admin list and therefore you can transcribe the message",
+    }, "transcribe_audio_duration_dev_reply": {
+        "he": "האורך של ההודעה הקולית צריך להיות פחות מעשר דקות אך אתה מפתח ולכן לפנים משורת הדין ההודעה תתומלל",
+        "en": "The length of the voice message must be less than ten minutes but you're a bot developer and therefore the message will be transcribed",
         "la": "",
-        "fr": "La durée du message vocal doit être inférieure à dix minutes mais vous êtes dans la liste des administrateurs et vous pouvez donc transcrire le message"
+        "fr": "La durée du message vocal doit être inférieure à dix minutes mais vous êtes un développeur de bot et donc le message sera retranscrit"
     }, "transcribe_audio_limit_error": {
         "he": "הגעת למגבלת התמלולים היומית שלך",
         "en": "You've reached your daily transcript limit",
