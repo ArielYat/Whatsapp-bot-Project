@@ -2,6 +2,7 @@ _IGNORE_session
 session.data.json
 package-lock.json
 apiKeys.ts
+mainServer.ts
 /node_modules
 /.idea
 /logs/

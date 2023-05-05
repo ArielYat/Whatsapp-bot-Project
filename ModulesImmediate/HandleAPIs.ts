@@ -320,7 +320,7 @@ export default class HAPI {
             client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_unauthorized_group_error"), messageID);
     }
 
-    static async transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict) {
+    static async transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict, botDevs) {
         if (usersDict[authorID].voiceTranscriptCounter >= 2) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_limit_error"), messageID);
             return;
@@ -334,8 +334,13 @@ export default class HAPI {
             return;
         }
         if (message.quotedMsgObj.duration > 600) {
-            await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_error"), messageID);
-            return;
+            if(botDevs.includes(authorID)){
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_dev_response"), messageID);
+            }
+            else {
+                await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_duration_error"), messageID);
+                return;
+            }
         }
 
         const buffer = Buffer.from((await client.decryptMedia(message.quotedMsgObj)).split('base64,')[1], 'base64');

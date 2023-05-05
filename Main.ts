@@ -108,14 +108,15 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
         return false;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "transcribe_audio")).test(bodyText)) {
-        await HAPI.transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict);
+        await HAPI.transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict, botDevs);
         usersDict[authorID].commandCounter++;
         return false;
     } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandleShows(client, bodyText, chatID, authorID, messageID) {
@@ -139,7 +140,8 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
         await HP.showGroupPersonsPermissions(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) {
@@ -163,7 +165,8 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
         await HT.nextPersonInList(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandleFilters(client, message, bodyText, chatID, authorID, messageID) {
@@ -179,7 +182,8 @@ async function HandleFilters(client, message, bodyText, chatID, authorID, messag
         await HF.editFilter(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return [false, false];
-    } return [true, true];
+    }
+    return [true, true];
 }
 
 async function HandleTags(client, bodyText, chatID, authorID, messageID) {
@@ -211,7 +215,8 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
         await HT.removePersonFromTaggingGroup(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
@@ -231,7 +236,8 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
         await HB.remCurrentGroupFromBirthDayBroadcastList(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
@@ -248,7 +254,8 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
         await HP.unmuteParticipant(client, bodyText, chatID, messageID, authorID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandleReminders(client, message, bodyText, chatID, messageID, authorID) {
@@ -264,7 +271,8 @@ async function HandleReminders(client, message, bodyText, chatID, messageID, aut
         await HR.showReminders(client, groupsDict, messageID, chatID);
         usersDict[authorID].commandCounter++;
         return false;
-    } return true;
+    }
+    return true;
 }
 
 async function HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID) {
@@ -287,7 +295,8 @@ async function HandleAdminFunctions(client, message, bodyText, chatID, authorID,
     } else if ((await HL.getGroupLang(groupsDict, chatID, "help_admin")).test(bodyText)) {
         await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_admin_reply"), messageID);
         return false;
-    } return true;
+    }
+    return true;
 }
 
 //Main function
@@ -311,7 +320,7 @@ function start(client: Client) {
             usersDict[personID].commandCounter = 0;
     }, 5 * 60 * 1000); /* In ms; 5 min */
     //Check if a group/person need to be freed from prison (if 15 minutes passed) and check reminders
-    setTimeout(function() {
+    setTimeout(function () {
         setInterval(async function () {
             const currentDate = new Date();
             currentDate.setSeconds(0);

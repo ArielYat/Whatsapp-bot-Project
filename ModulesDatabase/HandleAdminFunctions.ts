@@ -13,6 +13,7 @@ export default class HAF {
                 });
             });
         } else if (bodyText.match(/^\/Unban/i)) {
+            person.resetCounters();
             if (!(restPersons.includes(personToBanID) || restPersonsCommandSpam.includes(personToBanID))) {
                 client.reply(chatID, "This user isn't banned", messageID);
                 return;
@@ -38,8 +39,10 @@ export default class HAF {
                 });
             });
         } else if (bodyText.match(/^\/Unblock group/i)) {
+            group.resetCounters();
             if (!restGroups.includes(chatID)) {
                 client.reply(chatID, "This group isn't blocked", messageID);
+                return;
             }
             restGroups.splice(restGroups.indexOf(chatID), 1);
             await HDB.delArgsFromDB("restArrayGroups", null, "rested", function () {
