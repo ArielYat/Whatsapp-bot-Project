@@ -325,7 +325,7 @@ export default class HAPI {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_limit_error"), messageID);
             return;
         }
-        if (message.quotedMsgObj === null) {
+        if (message.quotedMsgObj === null || message.quotedMsgObj === undefined) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "transcribe_audio_no_audio_error"), messageID);
             return;
         }
