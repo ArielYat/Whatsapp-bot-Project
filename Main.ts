@@ -17,10 +17,11 @@ import Group from "./Classes/Group.js";
 import Person from "./Classes/Person.js";
 import apiKeys from "./apiKeys.js";
 import {Strings} from "./Strings.js";
-//Open-Whatsapp and Schedule libraries
+//Open-Whatsapp and Schedule libraries and child_process library
 import {create, Chat, Message, Client} from "@open-wa/wa-automate";
 import {ChatId, ContactId} from "@open-wa/wa-automate/dist/api/model/aliases";
 import Schedule from "node-schedule";
+import childProcess from "child_process";
 
 //The bot devs' phone numbers
 const botDevs: ContactId[] = apiKeys.botDevs;
@@ -301,6 +302,16 @@ async function HandleAdminFunctions(client, message, bodyText, chatID, authorID,
 
 //Main function
 function start(client: Client) {
+    //Check if VPN is on
+    childProcess.exec("sh /app/checkVpn.sh",async (err,stdout) => {
+        if(stdout.includes("1")){
+            console.log("VPN is on");
+        }
+        else{
+            console.log("VPN is off");
+            process.exit();
+        }
+    });
     //Check if there are birthdays everyday at 5 am
     Schedule.scheduleJob('0 5 * * *', async function () {
         await HB.checkBirthdays(client, usersDict, groupsDict);
