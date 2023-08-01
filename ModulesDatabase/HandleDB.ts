@@ -66,7 +66,7 @@ export default class HDB {
                     return;
                 }
                 callback();
-                client.close();
+                setTimeout(() => {client.close()}, 500)
             });
         });
     }
@@ -131,7 +131,7 @@ export default class HDB {
                     return;
                 }
                 callback()
-                client.close();
+                setTimeout(() => {client.close()}, 500)
             });
         });
     }
@@ -379,7 +379,7 @@ export default class HDB {
                 for (let i = 0; i < result.length; i++)
                     createRested(result[i]);
                 callback();
-                client.close();
+                setTimeout(() => {client.close()}, 1500)
             });
         });
     }

@@ -31,7 +31,7 @@
     "youtube-dl-exec": "^2.1.11"
   },
   "scripts": {
-    "start": "node --max_old_space_size=2560 --loader ts-node/esm Main.ts",
+    "start": "node --max_old_space_size=4000 --loader ts-node/esm Main.ts",
     "build": "tsc"
   }
 }
