@@ -1,4 +1,4 @@
-//version 2.14.0
+//version 2.15.0
 
 //Bot Modules Written by the bot devs
 import HDB from "./ModulesDatabase/HandleDB.js";
@@ -19,7 +19,7 @@ import apiKeys from "./apiKeys.js";
 import {Strings} from "./Strings.js";
 //Open-Whatsapp and Schedule libraries and child_process library
 import {create, Chat, Message, Client} from "@open-wa/wa-automate";
-import {ChatId, ContactId} from "@open-wa/wa-automate/dist/api/model/aliases";
+import {ChatId, ContactId, MessageId} from "@open-wa/wa-automate/dist/api/model/aliases";
 import Schedule from "node-schedule";
 import childProcess from "child_process";
 
@@ -32,8 +32,12 @@ let restGroups: ChatId[] = [], restPersons: ContactId[] = [],
     restGroupsFilterSpam: ChatId[] = [], restPersonsCommandSpam: ContactId[] = [];
 let chatsWithReminders: ChatId[] = [], afkPersons: ContactId[] = [];
 
-//The bot devs' time zone
-Schedule.tz = apiKeys.region;
+//Scheduling tasks
+let scheduleRule = new Schedule.RecurrenceRule();
+scheduleRule.tz = apiKeys.region;
+scheduleRule.second = 0;
+scheduleRule.minute = 0;
+scheduleRule.hour = 0;
 
 //Helper type for the Group and Person objects' properties
 export type TillZero<N extends number> = HelpType<N, []>;
@@ -43,7 +47,7 @@ process.on('uncaughtException', err => {
     console.log(err);
 });
 
-async function HandleImmediate(client, message, bodyText, chatID, authorID, messageID) {
+async function HandleImmediate(client: Client, message: Message, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "make_sticker")).test(bodyText)) {
         await HS.handleStickers(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -105,14 +109,14 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
         usersDict[authorID].commandCounter++;
         return false;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "stable_diffusion_create")).test(bodyText)) {
-        await HAPI.stableDiffusion(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
+        await HAPI.stableDiffusion(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
         return false;
     } else if ((await HL.getGroupLang(groupsDict, chatID, "transcribe_audio")).test(bodyText)) {
         await HAPI.transcribeAudio(client, message, chatID, authorID, messageID, groupsDict, usersDict, botDevs);
         usersDict[authorID].commandCounter++;
         return false;
-    } else if (bodyText.match(Strings["change_language"]["he"]) || bodyText.match(Strings["change_language"]["en"]) || bodyText.match(Strings["change_language"]["la"]) || bodyText.match(Strings["change_language"]["fr"])) {
+    } else if (Strings["change_language"]["he"].test(bodyText) || Strings["change_language"]["en"].test(bodyText) || Strings["change_language"]["la"].test(bodyText) || Strings["change_language"]["fr"].test(bodyText)) {
         await HL.changeGroupLang(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
         return false;
@@ -120,7 +124,7 @@ async function HandleImmediate(client, message, bodyText, chatID, authorID, mess
     return true;
 }
 
-async function HandleShows(client, bodyText, chatID, authorID, messageID) {
+async function HandleShows(client: Client, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "show_filters")).test(bodyText)) {
         await HF.showFilters(client, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -145,7 +149,7 @@ async function HandleShows(client, bodyText, chatID, authorID, messageID) {
     return true;
 }
 
-async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) {
+async function Tags(client: Client, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId, quotedMsgID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "tag_all")).test(bodyText)) {
         await HT.tagEveryone(client, bodyText, chatID, quotedMsgID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -170,7 +174,7 @@ async function Tags(client, bodyText, chatID, authorID, messageID, quotedMsgID) 
     return true;
 }
 
-async function HandleFilters(client, message, bodyText, chatID, authorID, messageID) {
+async function HandleFilters(client: Client, message: Message, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "add_filter")).test(bodyText)) {
         await HF.addFilter(client, message, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -187,7 +191,7 @@ async function HandleFilters(client, message, bodyText, chatID, authorID, messag
     return [true, true];
 }
 
-async function HandleTags(client, bodyText, chatID, authorID, messageID) {
+async function HandleTags(client: Client, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "add_tag")).test(bodyText)) {
         await HT.addTag(client, bodyText, chatID, messageID, groupsDict);
         usersDict[authorID].commandCounter++;
@@ -220,7 +224,7 @@ async function HandleTags(client, bodyText, chatID, authorID, messageID) {
     return true;
 }
 
-async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
+async function HandleBirthdays(client: Client, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "add_birthday")).test(bodyText)) {
         await HB.addBirthday(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict);
         usersDict[authorID].commandCounter++;
@@ -241,7 +245,7 @@ async function HandleBirthdays(client, bodyText, chatID, authorID, messageID) {
     return true;
 }
 
-async function HandlePermissions(client, bodyText, chatID, authorID, messageID) {
+async function HandlePermissions(client: Client, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "set_permissions")).test(bodyText)) {
         await HP.updateGroupAdmins(client, chatID, groupsDict);
         await HP.setFunctionPermissionLevel(client, bodyText, chatID, messageID, usersDict[authorID].permissionLevel[chatID], groupsDict[chatID].functionPermissions, groupsDict);
@@ -259,7 +263,7 @@ async function HandlePermissions(client, bodyText, chatID, authorID, messageID) 
     return true;
 }
 
-async function HandleReminders(client, message, bodyText, chatID, messageID, authorID) {
+async function HandleReminders(client: Client, message: Message, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     if ((await HL.getGroupLang(groupsDict, chatID, "add_reminder")).test(bodyText)) {
         await HR.addReminder(client, message, bodyText, chatID, messageID, groupsDict, chatsWithReminders);
         usersDict[authorID].commandCounter++;
@@ -276,7 +280,7 @@ async function HandleReminders(client, message, bodyText, chatID, messageID, aut
     return true;
 }
 
-async function HandleAdminFunctions(client, message, bodyText, chatID, authorID, messageID) {
+async function HandleAdminFunctions(client: Client, message: Message, bodyText: string, chatID: ChatId, authorID: ContactId, messageID: MessageId) {
     usersDict[authorID].permissionLevel[chatID] = 3;
     if (/^\/Ban/i.test(bodyText) || /^\/Unban/i.test(bodyText)) {
         await HAF.handleUserRest(client, bodyText, chatID, messageID, message.quotedMsgObj, restPersons, restPersonsCommandSpam, usersDict[authorID]);
@@ -303,21 +307,20 @@ async function HandleAdminFunctions(client, message, bodyText, chatID, authorID,
 //Main function
 function start(client: Client) {
     //Check if VPN is on
-    childProcess.exec("sh /app/checkVpn.sh",async (err,stdout) => {
-        if(stdout.includes("1")){
+    childProcess.exec("sh /app/checkVpn.sh", async (_, stdout) => {
+        if (stdout.includes("1")) {
             console.log("VPN is on");
-        }
-        else{
+        } else {
             console.log("VPN is off");
             process.exit();
         }
     });
-    //Check if there are birthdays everyday at 5 am
-    Schedule.scheduleJob('0 5 * * *', async function () {
+    //Check if there are birthdays everyday at midnight
+    Schedule.scheduleJob(scheduleRule, async function () {
         await HB.checkBirthdays(client, usersDict, groupsDict);
     });
     //Reset all group counters everyday at midnight
-    Schedule.scheduleJob('0 0 * * *', async function () {
+    Schedule.scheduleJob(scheduleRule, async function () {
         for (const groupID in groupsDict)
             groupsDict[groupID].resetCounters();
         for (const personID in usersDict)
@@ -368,17 +371,20 @@ function start(client: Client) {
     //Check every command each time a message is received
     client.onMessage(async (message: Message) => {
         if (message !== null) {
-            //Initialize basic message properties: its ID, the ID of its sender and the ID of chat it was sent in
-            const chatID = message.chat.id, authorID = message.sender.id, messageID = message.id;
+            //Initialize basic message properties: its ID, the ID of its sender and the ID of the chat it was sent in
+            const chatID: ChatId = message.chat.id,
+                authorID: ContactId = message.sender.id,
+                messageID: MessageId = message.id;
             //Define quotedMsgID properties depending on if a message was quoted
-            const quotedMsgID = message.quotedMsg ? message.quotedMsg.id : message.id;
-            //Define bodeText depending on if the message a text message or a media message
-            let bodyText = message.type === "image" || message.type === "video" ? message.caption : message.text;
-            bodyText = bodyText === undefined ? message.text : bodyText;
+            const quotedMsgID: MessageId = message.quotedMsg ? message.quotedMsg.id : message.id;
+            //Define bodyText depending on if the message a text message or a media message
+            let bodyText: string =
+                message.type === "image" || message.type === "video" ? message.caption : message.text;
+            bodyText = bodyText === undefined || bodyText === null || bodyText === "" ? message.text : bodyText;
             //Boolean to check if commands were used to maximize performance
-            let checkCommands = true;
+            let checkCommands: boolean = true;
             //Boolean to check if a filter altering command was used and if not check if the message contains filters
-            let checkFilters = true;
+            let checkFilters: boolean = true;
             //Create new group/person if they don't exist in the DB
             if (!(chatID in groupsDict))
                 groupsDict[chatID] = new Group(chatID);
@@ -421,7 +427,7 @@ function start(client: Client) {
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleTags"] && checkCommands)
                         checkCommands = await HandleTags(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["HandleReminders"] && checkCommands)
-                        checkCommands = await HandleReminders(client, message, bodyText, chatID, messageID, authorID);
+                        checkCommands = await HandleReminders(client, message, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= groupsDict[chatID].functionPermissions["handleBirthdays"] && checkCommands)
                         checkCommands = await HandleBirthdays(client, bodyText, chatID, authorID, messageID);
                     if (usersDict[authorID].permissionLevel[chatID] >= 2 && checkCommands)

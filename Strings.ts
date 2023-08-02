@@ -948,7 +948,7 @@ export const Strings = {
         "fr": ""
     }, //language and help
     "change_language": {
-        "he": /^שנה שפה/i, "en": /^Change language to/i, "la": "Muta lingua ad", "fr": /^Change la langue en/i
+        "he": /^שנה שפה/i, "en": /^Change language to/i, "la": /^Muta lingua ad/i, "fr": /^Change la langue en/i
     }, "language_change_reply": {
         "he": "השפה שונתה בהצלחה",
         "en": "Language successfully changed",

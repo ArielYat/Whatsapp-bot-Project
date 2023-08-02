@@ -107,9 +107,8 @@ export default class HS {
                     let messageBody = encode(message.body),
                         messageTime = encode(time),
                         messageName = encode(message.sender.pushname),
-                        messagePhone = encode(message.sender.formattedName.replace("⁦", "").replace("⁩", ""));
+                        messagePhone = encode("+" + message.sender.id.replace("@c.us", ""));
                     const browser = await puppeteer.launch({
-                        headless: true,
                         args: ['--no-sandbox', '--disable-setuid-sandbox']
                     });
                     const page = await browser.newPage();

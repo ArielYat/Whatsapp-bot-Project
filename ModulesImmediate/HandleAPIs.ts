@@ -171,7 +171,7 @@ export default class HAPI {
             return;
         }
         let link = bodyText.match(/https?:\/\/(.)*\.*(youtube\.com|youtu\.be)\/(.)+/);
-        let fileName = "";
+        let fileName = messageID;
         if (!link) {
             await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "download_music_not_found_error"), messageID);
             return;
@@ -184,9 +184,8 @@ export default class HAPI {
                 format: "bestaudio[filesize<20M]",
                 exec: "ffmpeg -i {}  -codec:a libmp3lame -qscale:a 0 {}.mp3",
                 restrictFilenames: true,
-                output: "%(id)s.%(ext)s"
-            }).then((output: any) => fileName = output.match(/ffmpeg -i(.)+-codec/)[0].replace("ffmpeg -i", "").replace("-codec", "").replace("/Whatsapp-bot-Project/", "").trim());
-            if (!fileName) return;
+                output: messageID
+            });
 
             groupsDict[chatID].downloadMusicCounter++;
             await client.sendPtt(chatID, fileName + ".mp3", messageID);
@@ -230,7 +229,7 @@ export default class HAPI {
         }
     }
 
-    static async stableDiffusion(client, message, bodyText, chatID, authorID, messageID, groupsDict, usersDict) {
+    static async stableDiffusion(client, bodyText, chatID, authorID, messageID, groupsDict, usersDict) {
         async function generateImage(client, bodyText, chatID, messageID, groupsDict) {
             let payload = {
                 prompt: undefined,
