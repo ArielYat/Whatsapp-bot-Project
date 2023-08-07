@@ -37,7 +37,7 @@ export default class HL {
 
     static async sendHelpMessage(client, bodyText, chatID, messageID, groupsDict) {
         switch (true) {
-            case (await HL.getGroupLang(groupsDict, chatID, "help_general")).test(bodyText):
+            case Strings["help_general"]["he"].test(bodyText) || Strings["help_general"]["en"].test(bodyText) || Strings["help_general"]["la"].test(bodyText) || Strings["help_general"]["fr"].test(bodyText):
                 await client.reply(chatID, await HL.getGroupLang(groupsDict, chatID, "help_general_reply"), messageID);
                 break;
             case (await HL.getGroupLang(groupsDict, chatID, "help_language")).test(bodyText):
