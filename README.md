@@ -3,6 +3,9 @@
 <summary>Table of Contents</summary>
 
 - [Description](#Description)
+- [Running the Bot](#running-the-bot)
+  - [Prerequisites](#prerequisites)
+  - [Actually Running it](#actually-running-it)
 - [Commands and Features the bot responds to](#commands-and-features-the-bot-responds-to)
   - [Language](ModulesDatabase/HandleLanguage.ts)
   - [Filters](ModulesDatabase/HandleFilters.ts)
@@ -15,20 +18,40 @@
   - [Miscellaneous Commands](#miscellaneous-commands)
   - [Commands limited to the bot developers](ModulesDatabase/HandleAdminFunctions.ts)
 - [Dependencies and APIs used](#dependencies-and-apis-used)
-  - [Main Dependencies](#Main-dependencies)
-  - [APIs](#APIs)
-- [Acknowledgements](#Acknowledgements)
-- [License](#License)
+  - [Main Dependencies](#main-dependencies)
+  - [APIs](#apis)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
 ---
 
 ## Description
 
-This is a Whatsapp Bot which is built with TypeScript and Node.js with a MongoDB database.
+This is a Whatsapp Bot built with TypeScript and Node.js with a MongoDB database.
 
 It has a lot of different functions and features and is currently not really in development.
 
 If you have any questions, feel free to contact ArielYat or TheBooker66.
+
+## Running the Bot
+
+**Note: the @open-wa/wa-automate library has been sent a cease and desist by WhatsApp and stopped development. This means that a lot of features may break following WhatsApp updates.**
+
+### Prerequisites
+- A machine with node.js and mongoDB with a good amount of RAM (4GB+ recommended).
+- A configured apiKeys.ts file (you need to create it following the explanations and examples in [apiKeys.example.ts](apiKeys.example.ts)). Not all the fields have to be satisfied, but for the bot to work correctly it is recommended to complete all of them (all the services needed for the API keys are free or offer a long free trial). We recommend leaving the configObj as it is.
+- Note: the Stable Diffusion commands will not work without a docker container configured very meticulously like ours running Stable Diffusion (basically don't use them).
+
+### Actually Running it
+
+- Run `npm install` in a terminal in the main folder of the project (only needs to be done the first time the bot is ran to download all the packages according to [package.json](package.json)).
+- Start the mongoDB server by using one of the these options:
+  - [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and configuring the localhost URL in apiKeys.ts;
+  - [MongoDB Shell](https://www.mongodb.com/docs/v4.4/mongo/) and configuring the localhost URL in apiKeys.ts;
+  - [MongoDB Atlas](https://www.mongodb.com/atlas/database) and configuring the remote URL in apiKeys.ts.
+- If you want to run the bot without Docker and a VPN, running `npm run start` in the terminal after commenting out lines 309-317 in [Main.ts](Main.ts) (to removed the VPN check) should work. After the bot starts, scan the QR in the ternimal with your phone's camera to link the WhatsApp account and enjoy the bot.
+- If you want to run the bot using Docker and a VPN, good luck.
+- If you want to add another language to the bot, do it in Strings.ts following the pattern and using RegExs where needed. If you actually do this, we'd love for you to send us a pull request to add the language to the official bot.
 
 ## Commands and Features the bot responds to
 
